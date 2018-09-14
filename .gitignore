@@ -3,16 +3,12 @@ client_secret.json
 credentials.json
 
 # environment variables file
-src/environments/environment.prod.ts
-secret_files.tar
 .env
 .prod.env
 
 # Mongo Login
 connect-db.sh
 credentials.csv
-
-###### Angular Defaults ######
 
 # Logs
 logs
@@ -36,53 +32,8 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
-# Bower dependency directory (https://bower.io/)
-bower_components
-
-# node-waf configuration
-.lock-wscript
-
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
-
-# Dependency directories
-
-jspm_packages/
-
-# Typescript v1 declaration files
-typings/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# FrontEnd Ignores
-
-# compiled output
-/public
-/dist
-/dist-server
-/tmp
-/out-tsc
-/docs
-
 # dependencies
 node_modules/
-site/node_modules/
 
 # IDEs and editors
 /.idea
@@ -100,21 +51,6 @@ site/node_modules/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-src/firebase_media
-
-# e2e
-/e2e/*.js
-/e2e/*.map
 
 # System Files
 .DS_Store

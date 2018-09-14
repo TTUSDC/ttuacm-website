@@ -16,8 +16,6 @@ mongoose.Promise = global.Promise;
 // Express Routing and App setup
 const app = express();
 
-// Where the views will be
-app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config({ path: path.join(__dirname, '/.env') });
 
 // Production/Development Set up
@@ -80,14 +78,6 @@ app.use('/api/users', usersRoute);
 app.use('/api/events', eventsRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/contacts', contactsRoute);
-
-/**
- * During production, this should redirect everyone that puts
- * in a weird url to the index page. Uncomment when deploying for production
- */
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/index.html'));
-});
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
