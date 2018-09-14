@@ -1,29 +1,19 @@
-# TTUACM Website [![Build Status](https://travis-ci.org/ynigoreyes/TTUACM_Website.svg?branch=master)](https://travis-ci.org/ynigoreyes/TTUACM_Website)
+# TTUACM Backend
 ### Tech Stack
-This is source code for the ACM: Texas Tech University website
+This is source code for the ACM: Texas Tech University Backend
 
 
-It is built off of the MEAN stack technologies which include but are not limited to
+* Tech Stack
+1) Express (A middleware framework for Nodejs)
 
-1) MongoDB (A NoSQL database)
-
-2) Express (A middleware framework for Nodejs)
-
-3) Angular 5 (A framework for component-based front-end development)
-
-4) Nodejs (A JavaScript runtime on the server that lets JavaScript to be run on a server)
+2) Nodejs (A JavaScript runtime on the server that lets JavaScript to be run on a server)
 
 Other technologies that are included in this project are...
 
-<ul>
-  <li>Docker, Compose and Docker Hub Webhooks</li>
-  <li>Travis CI</li>
-  <li>EsDoc</li>
-</ul>
+* Docker, Compose and Docker Hub Webhooks
+* Travis CI
+* EsDoc
 
 
 ### Contributing:
-
-  Documentation can be found at <https://ynigoreyes.github.io/TTUACM_Website/>
-
   Please contact us at [acmtexastech@gmail.com](mailto:acmtexastech@gmail.com) for more information on how to contribute to this project.
