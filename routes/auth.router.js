@@ -22,7 +22,7 @@ authRouter.get('/google/redirect', passport.authenticate('google'), AuthCtrl.oau
 authRouter.get(
   '/github',
   passport.authenticate('github', {
-    scope: ['user']
+    scope: ['read:user']
   })
 );
 
