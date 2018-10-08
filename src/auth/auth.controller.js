@@ -1,14 +1,16 @@
 const jwt = require('jsonwebtoken');
 const querystring = require('querystring');
 const bcrypt = require('bcryptjs');
-const { google } = require('googleapis');
+const AuthModel = require('./auth.model')
+const ErrorMessages = require('./auth.errors')
+const { generateHexToken } = require('../utils/generate-hex')
 
 // Bcrypt options
 const saltRounds = 10;
 
 class AuthController {
   constructor() {
-    // TODO: initialize OAuth
+    this.DB = new AuthModel()
   }
 
   /**
@@ -31,29 +33,32 @@ class AuthController {
   register(user) {
     return new Promise((resolve, reject) => {
       // If the email is available, continue with the proccess
+      this.DB.findUserByEmail(user.email)
+        .then((foundUser) => {
+          if (foundUser !== null) reject(ErrorMessages.DuplicateAccount())
+        })
+        .catch((err) => {
+          console.error(err)
+          resolve(ErrorMessages.UnknownServerError())
+        })
+
       // Generates the salt used for hashing
-      User.findOne({ email: user.email }, (err, user) => {
-        if (err) reject(err);
-        if (user) reject(new Error('unavailable'));
-      });
-      bcrypt.hash(user.password, saltRounds, async (err, hash) => {
-        if (err) reject(err);
-        const token = await generateHexToken();
+      bcrypt.hash(user.password, saltRounds)
+        .then((hash) => {
+          const newUser = user
+          const token = generateHexToken();
 
-        user.password = hash;
-        user.confirmEmailToken = token;
-        user.verified = false;
+          newUser.password = hash;
+          newUser.confirmEmailToken = token;
+          newUser.verified = false;
 
-        // New User Object from the mongoose User Schema
-        const newUser = new User(user);
-
-        // Saves the new user
-        newUser.save((err, user) => {
-          if (err) reject(err);
-          resolve(user);
-        });
-      });
-    });
+          this.DB.createNewUser(newUser)
+        })
+        .catch((err) => {
+          console.error(err)
+          reject(ErrorMessages.HashingErr)
+        })
+    })
   }
 
   /**
