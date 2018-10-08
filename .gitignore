@@ -1,3 +1,7 @@
+# Firebase Configurations
+.firebaserc
+.runtimeconfig.json
+
 # API Credentials and Keys
 client_secret.json
 credentials.json

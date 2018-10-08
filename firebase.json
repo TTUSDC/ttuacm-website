@@ -1,6 +1,11 @@
 {
   "functions": {
-    "source": "src"
+    "source": ".",
+    "ignore": [
+      ".git",
+      ".github",
+      "node_modules"
+    ]
   },
   "storage": {
     "rules": "storage.rules"
