@@ -1,3 +1,3 @@
-const email = require('./email.app')
+const email = require('./email.app');
 
-module.exports = email
+module.exports = email;

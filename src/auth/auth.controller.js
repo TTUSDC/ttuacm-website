@@ -129,13 +129,13 @@ class AuthController {
    * @param {string} token - HEX token associated with an account (resetPasswordToken)
    * @returns {Promise.<token, Error>} Resolves: HEX Token, Rejects: an error
    */
-   resetToken(token) {
+  resetToken(token) {
     return new Promise((resolve, reject) => {
       if (!token) reject(new Error('No Token Passed to Endpoint'));
       User.findOne(
         {
           resetPasswordToken: token,
-          resetPasswordExpires: { $gt: Date.now() }
+          resetPasswordExpires: { $gt: Date.now() },
         },
         (err, user) => {
           if (err) {
@@ -150,7 +150,7 @@ class AuthController {
             // The token we are passing is the same token that is in the database
             resolve(token);
           }
-        }
+        },
       );
     });
   }
@@ -195,20 +195,20 @@ class AuthController {
         User.findOneAndUpdate(
           {
             resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() }
+            resetPasswordExpires: { $gt: Date.now() },
           },
           {
             // Need to encrypt the password first
             password: hash,
             resetPasswordToken: undefined,
-            resetPasswordExpires: undefined
+            resetPasswordExpires: undefined,
           },
           { new: true },
           (err, user) => {
             if (err) reject(err);
             if (!user) reject(new Error('No User Found'));
             resolve(user);
-          }
+          },
         );
       });
     });
@@ -225,11 +225,11 @@ class AuthController {
   confirmToken(token) {
     return new Promise((resolve, reject) => {
       const query = {
-        confirmEmailToken: token
+        confirmEmailToken: token,
       };
       const update = {
         confirmEmailToken: '',
-        verified: true
+        verified: true,
       };
       User.findOneAndUpdate(query, update, { new: true }, (err, user) => {
         if (err || user === null) reject(err);
@@ -252,7 +252,7 @@ class AuthController {
     });
 
     const qs = querystring.stringify({
-      token: `JWT ${token}`
+      token: `JWT ${token}`,
     });
 
     // The port should change depending on the environment
@@ -260,4 +260,4 @@ class AuthController {
   }
 }
 
-module.exports = AuthController
+module.exports = AuthController;

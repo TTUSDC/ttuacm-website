@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const querystring = require('querystring');
 
-const  { membersOnlyRoute }  = require('../utils/protected-route')
+const { membersOnlyRoute } = require('../utils/protected-route');
 
 const router = express.Router();
 
@@ -10,8 +10,8 @@ const router = express.Router();
 const controller = require('./profile.controller');
 
 router.get('/test', (req, res) => {
-  res.send('Profile App Works')
-})
+  res.send('Profile App Works');
+});
 
 /**
  * Gets the user's profile to fill in a profile page
@@ -79,8 +79,8 @@ router.put('/update-user', membersOnlyRoute, (req, res) => {
         {
           user: payload.user,
           token: payload.token,
-          err: null
-        }
+          err: null,
+        },
       );
     })
     .catch((err) => {
@@ -89,8 +89,8 @@ router.put('/update-user', membersOnlyRoute, (req, res) => {
         {
           user: null,
           token: null,
-          err
-        }
+          err,
+        },
       );
     });
 });

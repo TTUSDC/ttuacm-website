@@ -39,7 +39,7 @@ class EventsController {
           calendarId,
           timeMin: new Date().toISOString(),
           singleEvents: true,
-          orderBy: 'startTime'
+          orderBy: 'startTime',
         },
         (err, { data }) => {
           if (err) {
@@ -47,7 +47,7 @@ class EventsController {
           } else {
             resolve(data.items || []);
           }
-        }
+        },
       );
     });
   }
@@ -76,7 +76,7 @@ class EventsController {
             'Wednesday',
             'Thursday',
             'Friday',
-            'Saturday'
+            'Saturday',
           ];
           events.map((event, i) => {
             const start = event.start.dateTime || event.start.date;
@@ -93,7 +93,7 @@ class EventsController {
               description: event.description || '',
               attendees: event.attendees || [],
               eventId: event.id, // Event ID according to Google
-              allDayEvent: event.start.date !== undefined
+              allDayEvent: event.start.date !== undefined,
             });
             return resolve(eventsList);
           });
@@ -121,7 +121,7 @@ class EventsController {
       calendar.events.get(
         {
           calendarId,
-          eventId
+          eventId,
         },
         (err, { data }) => {
           if (err) {
@@ -129,7 +129,7 @@ class EventsController {
           } else {
             resolve(data.attendees || []);
           }
-        }
+        },
       );
     });
   }
@@ -165,9 +165,7 @@ class EventsController {
       try {
         if (currentAttendees.length === 0) throw new Error('No attendees found');
         const originalAttendees = currentAttendees;
-        currentAttendees = currentAttendees.filter((each) => {
-          return each.email !== email.toLowerCase();
-        });
+        currentAttendees = currentAttendees.filter(each => each.email !== email.toLowerCase());
         if (originalAttendees.length === currentAttendees.length) {
           throw new Error('No user found');
         }
@@ -200,8 +198,8 @@ class EventsController {
           calendarId,
           eventId,
           resource: {
-            attendees
-          }
+            attendees,
+          },
         },
         (err, { data }) => {
           if (err) {
@@ -209,11 +207,11 @@ class EventsController {
           } else {
             resolve(data);
           }
-        }
+        },
       );
     });
   }
 }
 
 
-module.exports = EventsController
+module.exports = EventsController;

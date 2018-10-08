@@ -1,7 +1,7 @@
-const express = require('express')
-const router = require('./contacts.router')
+const express = require('express');
+const router = require('./contacts.router');
 
-const app = express()
-app.use('/api/v2', router)
+const app = express();
+app.use('/api/v2', router);
 
-module.exports = app
+module.exports = app;

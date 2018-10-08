@@ -5,7 +5,7 @@ const userSchema = mongoose.Schema({
   googleId: { type: String, default: '' },
   facebookId: { type: String, default: '' },
   githubId: { type: String, default: '' },
-  profileImage: {type: String, default: ''}, // Remove
+  profileImage: { type: String, default: '' }, // Remove
   resume: { type: String, default: '' }, // Remove
   email: { type: String, required: true },
   password: { type: String, required: false, default: null },
@@ -72,13 +72,11 @@ User.findAllUsers = (callback) => {
     if (err) {
       callback(({ success: false, user: null }));
     } else {
-      data = users.map((users) => {
-        return {
-          firstName: users.firstName,
-          lastName: users.lastName,
-          classification: users.classification
-        };
-      });
+      data = users.map(users => ({
+        firstName: users.firstName,
+        lastName: users.lastName,
+        classification: users.classification,
+      }));
       callback(({ success: true, user: users }));
     }
     return null;

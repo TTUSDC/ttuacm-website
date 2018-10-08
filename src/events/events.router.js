@@ -10,11 +10,11 @@ const router = express.Router();
  * If errors occur, it is probably because front-end is not sending
  * JWT along with their requests
  */
-const { membersOnlyRoute } = require('../utils/protected-route')
+const { membersOnlyRoute } = require('../utils/protected-route');
 
 router.get('/test', (req, res) => {
-  res.send('Email App Works!')
-})
+  res.send('Email App Works!');
+});
 
 /**
  * Gets all the events (formatted) in ACM Google Calendar using an OAuth2 Object

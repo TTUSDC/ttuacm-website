@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const userSchema = mongoose.Schema({
-  profileImage: {type: String, default: ''},
+const profileSchema = mongoose.Schema({
+  profileImage: { type: String, default: '' },
   resume: { type: String, default: '' },
   email: { type: String, required: true },
   firstName: { type: String, required: true },
@@ -11,4 +11,6 @@ const userSchema = mongoose.Schema({
   blocked: { type: Boolean, default: false },
 });
 
-const Profile = module.exports = mongoose.model('Profiles', userSchema);
+class Profile {}
+
+module.exports = Profile;

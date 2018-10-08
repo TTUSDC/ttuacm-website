@@ -25,7 +25,7 @@ module.exports = (passport) => {
   // JWT Strategy
   const jwtOpts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
-    secretOrKey: process.env.session_secret
+    secretOrKey: process.env.session_secret,
   };
   passport.use(
     new JwtStrategy(jwtOpts, (jwtPayload, done) => {
@@ -38,7 +38,7 @@ module.exports = (passport) => {
         }
         return done(null, false);
       });
-    })
+    }),
   );
 
   // Google Strategy
@@ -48,7 +48,7 @@ module.exports = (passport) => {
     // Change this callback URL in production
     callbackURL: '/api/auth/google/redirect',
     clientID: googleClientID,
-    clientSecret: googleClientSecret
+    clientSecret: googleClientSecret,
   };
   passport.use(
     new GoogleStrategy(googleOpts, (accessToken, refreshToken, profile, done) => {
@@ -63,7 +63,7 @@ module.exports = (passport) => {
               email: profile.email,
               firstName: profile.displayName.split(' ')[0],
               lastName: profile.displayName.split(' ')[1],
-              verified: true
+              verified: true,
             };
             User.mergeAccounts(profile, data, 'googleId', (err, user) => {
               done(err, user);
@@ -74,7 +74,7 @@ module.exports = (passport) => {
           console.log(err);
           done(err, null);
         });
-    })
+    }),
   );
 
   // GitHub Strategy
@@ -83,7 +83,7 @@ module.exports = (passport) => {
   const githubOpts = {
     callbackURL: '/api/auth/github/redirect',
     clientID: githubClientID,
-    clientSecret: githubClientSecret
+    clientSecret: githubClientSecret,
   };
   passport.use(
     new GitHubStrategy(githubOpts, (accessToken, refreshToken, profile, done) => {
@@ -100,7 +100,7 @@ module.exports = (passport) => {
               email: emailData,
               firstName: profile.displayName.split(' ')[0],
               lastName: profile.displayName.split(' ')[1],
-              verified: true
+              verified: true,
             };
             User.mergeAccounts(profile, data, 'githubId', (err, user) => {
               done(err, user);
@@ -111,7 +111,7 @@ module.exports = (passport) => {
           console.error(err);
           done(err, null);
         });
-    })
+    }),
   );
   // Facebook Strategy
   const facebookClientID = process.env.facebook_clientID;
@@ -120,7 +120,7 @@ module.exports = (passport) => {
     callbackURL: '/api/auth/facebook/redirect',
     clientID: facebookClientID,
     clientSecret: facebookClientSecret,
-    profileFields: ['id', 'emails', 'name']
+    profileFields: ['id', 'emails', 'name'],
   };
   passport.use(
     new FacebookStrategy(facebookOpts, (accessToken, refreshToken, profile, done) => {
@@ -137,7 +137,7 @@ module.exports = (passport) => {
               email: emailData,
               firstName: profile._json.first_name,
               lastName: profile._json.last_name,
-              verified: true
+              verified: true,
             };
             User.mergeAccounts(profile, data, 'facebookId', (err, user) => {
               done(err, user);
@@ -148,6 +148,6 @@ module.exports = (passport) => {
           console.error(err);
           done(err, null);
         });
-    })
+    }),
   );
 };

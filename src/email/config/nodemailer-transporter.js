@@ -7,12 +7,12 @@ exports.generateTestTransporter = () => {
     port: 587,
     auth: {
       user: 'fr3yjbymylwvbkc6@ethereal.email',
-      pass: 'sCvgzSPfhssNBEH3TQ'
+      pass: 'sCvgzSPfhssNBEH3TQ',
     },
     tls: {
       // do not fail on invalid certs
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   });
   global.smtpTransporter = smtpTransporter;
 };
@@ -22,12 +22,12 @@ exports.generateProdTransporter = () => {
     service: 'Gmail',
     auth: {
       user: process.env.email_username,
-      pass: process.env.email_password
+      pass: process.env.email_password,
     },
     tls: {
       // do not fail on invalid certs
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   });
   global.smtpTransporter = smtpTransporter;
   console.log('Running production');

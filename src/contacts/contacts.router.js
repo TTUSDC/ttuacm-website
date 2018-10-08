@@ -1,14 +1,14 @@
-const express = require('express')
-const { membersOnlyRoute } = require('../utils/protected-route')
+const express = require('express');
+const { membersOnlyRoute } = require('../utils/protected-route');
 
 // Controller
-const ctrl = require('./contacts.controller')
+const ctrl = require('./contacts.controller');
 
-const router = express.Router()
+const router = express.Router();
 
 router.get('/test', (req, res) => {
-  res.send('Contacts App Works!')
-})
+  res.send('Contacts App Works!');
+});
 
 /**
  * Single Endpoint for front end
@@ -27,13 +27,13 @@ router.get('/test', (req, res) => {
  */
 router.put('/', membersOnlyRoute, async (req, res) => {
   try {
-    const { email, topics, otherTopic } = req.body
+    const { email, topics, otherTopic } = req.body;
     // if (!email || !topics || !otherTopic) throw new Error('Missing required variable')
-    await ctrl.addUserToGoogleContacts(email, topics, otherTopic)
-    res.status(200).end()
+    await ctrl.addUserToGoogleContacts(email, topics, otherTopic);
+    res.status(200).end();
   } catch (err) {
-    console.error(err.errors[0].message)
-    res.status(err.code || 404).json({ err: err.message })
+    console.error(err.errors[0].message);
+    res.status(err.code || 404).json({ err: err.message });
   }
 });
 

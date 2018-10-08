@@ -3,11 +3,11 @@ const passport = require('passport');
 
 const authRouter = express.Router();
 
-const controller = require('./auth.controller')
+const controller = require('./auth.controller');
 
 authRouter.get('/test', (req, res) => {
-  res.send('Auth App Works!')
-})
+  res.send('Auth App Works!');
+});
 
 /* GETS the Google Login Screen */
 authRouter.get(
@@ -15,24 +15,24 @@ authRouter.get(
   passport.authenticate('google', {
     scope: [
       'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email'
-    ]
-  })
+      'https://www.googleapis.com/auth/userinfo.email',
+    ],
+  }),
 );
 
 /* Callback URL for Google */
 authRouter.get('/google/redirect', passport.authenticate('google'), (req, res) => {
   // controller.oauth2
   // TODO: stop the redirect, it is a really bad hack - Fix all OAuth routes
-  res.end()
+  res.end();
 });
 
 /* GETS the GitHub Login Screen */
 authRouter.get(
   '/github',
   passport.authenticate('github', {
-    scope: ['read:user']
-  })
+    scope: ['read:user'],
+  }),
 );
 
 /* Callback URL for GitHub */
@@ -42,20 +42,20 @@ authRouter.get(
 authRouter.get(
   '/facebook',
   passport.authenticate('facebook', {
-    scope: ['public_profile', 'email']
-  })
+    scope: ['public_profile', 'email'],
+  }),
 );
 
 /* Callback URL for Facebook */
 authRouter.get(
   '/facebook/redirect',
   passport.authenticate('facebook', {
-    failureRedirect: '/login'
+    failureRedirect: '/login',
   }),
   // controller.oauth2
   (req, res) => {
-    res.end()
-  }
+    res.end();
+  },
 );
 
 /**
@@ -77,7 +77,7 @@ authRouter.post('/register', async (req, res) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     classification: req.body.classification,
-    confirmEmailToken: null
+    confirmEmailToken: null,
   };
   try {
     const createdUser = await controller.register(user);
@@ -234,10 +234,10 @@ authRouter.get('/reset/:token', (req, res) => {
 authRouter.post('/reset/:token', (req, res) => {
   controller.resetPassword(req.params.token, req.body.password)
     .then((user) => {
-      res.status(200).json({user});
+      res.status(200).json({ user });
     })
     .catch((err) => {
-      res.status(404).json({user: null});
+      res.status(404).json({ user: null });
     });
 });
 

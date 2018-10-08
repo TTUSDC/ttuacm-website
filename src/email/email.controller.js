@@ -21,7 +21,7 @@ class EmailController {
             req.protocol
           }://${
             req.headers.host
-          }/api/users/reset/${token}</a>\n\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\n`
+          }/api/users/reset/${token}</a>\n\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\n`,
         };
         global.smtpTransporter.sendMail(mailOptions, (err) => {
           if (err) reject(err);
@@ -47,8 +47,8 @@ class EmailController {
           from: process.env.email_username,
           subject: 'Your password has been changed',
           text:
-            'Hello,\n\n' +
-            'This is a confirmation that the password for your account has been changed.\n'
+            'Hello,\n\n'
+            + 'This is a confirmation that the password for your account has been changed.\n',
         };
         global.smtpTransporter.sendMail(mailOptions, (err) => {
           if (err) reject(err);
@@ -80,7 +80,7 @@ class EmailController {
           subject: 'ACM Question',
           text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
             options.topic
-          }\n\nMessage: ${options.message}\n`
+          }\n\nMessage: ${options.message}\n`,
         };
         global.smtpTransporter.sendMail(mailOptions, (err) => {
           if (err) {
@@ -114,7 +114,7 @@ class EmailController {
             req.protocol
           }://${
             req.headers.host
-          }/api/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`
+          }/api/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`,
         };
         global.smtpTransporter.sendMail(mailOptions, (err) => {
           if (err) reject(err);
