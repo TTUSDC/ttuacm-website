@@ -2,10 +2,6 @@
 client_secret.json
 credentials.json
 
-# environment variables file
-.env
-.prod.env
-
 # Mongo Login
 connect-db.sh
 credentials.csv
