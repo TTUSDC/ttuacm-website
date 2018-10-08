@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "source": "src"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

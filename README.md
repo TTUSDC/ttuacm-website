@@ -1,5 +1,12 @@
-# Warning: Still in the process of migration
+# Disclaimer: Still in the process of migration
 # TTUACM Backend
+
+### Getting Started
+```
+$ cd src
+$ yarn --ignore-engines
+$ yarn serve
+```
 
 ### Contributing:
   Please contact us at [acmtexastech@gmail.com](mailto:acmtexastech@gmail.com) for more information on how to contribute to this project.
