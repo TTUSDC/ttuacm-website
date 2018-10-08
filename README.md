@@ -1,7 +1,6 @@
 # Disclaimer: Still in the process of migration
 # TTUACM Backend
 ```
-$ cd src
 $ yarn --ignore-engines
 $ yarn serve
 ```

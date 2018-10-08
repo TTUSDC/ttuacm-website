@@ -1,6 +1,10 @@
 {
   "functions": {
-    "source": "src"
+    "source": ".",
+    "ignore": [
+      ".git",
+      ".github"
+    ]
   },
   "storage": {
     "rules": "storage.rules"
