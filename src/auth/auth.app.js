@@ -6,6 +6,7 @@ const passport = require('passport')
 const router = require('./auth.router')
 
 process.env = functions.config().config
+
 const app = express()
 app.use('/api/v2', router)
 

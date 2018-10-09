@@ -6,7 +6,6 @@ const { ExtractJwt } = require('passport-jwt')
 
 const User = require('../auth.model')
 
-
 /**
  * Uses a JWT stategy to verify the token
  *

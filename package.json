@@ -4,14 +4,11 @@
   "license": "MIT",
   "description": "ACM TTU Backend",
   "scripts": {
-    "deploy-test": "firebase deploy --only functions:test",
-    "deploy-helloWorld": "firebase deploy --only functions:helloWorld",
     "deploy": "firebase deploy --only functions",
     "serve": "nodemon --exec firebase serve --only functions",
-    "lint": "eslint auth contacts email events profile",
+    "lint": "eslint src",
     "set-env": "firebase functions:config:set",
     "env-config": "firebase functions:config:get > .runtimeconfig.json",
-    "start": "yarn serve",
     "logs": "firebase functions:log",
     "docs": "esdoc -c esdoc.json"
   },

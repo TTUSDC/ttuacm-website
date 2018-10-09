@@ -26,23 +26,28 @@ class OAuthHandler {
 
   createAPI(option) {
     return new Promise(async (resolve, reject) => {
-      await this._authorize(JSON.parse())
+      try {
+        await this._authorize(JSON.parse())
 
-      let api
-      // Create all the Google API Objects
-      switch(option) {
-        case('calendar'):
-          api = google.calendar({ version: 'v3', auth: global.oAuth2Client });
-          break
-        case('contacts'):
-          api = google.people({ version: 'v1', auth: global.oAuth2Client });
-          break
-        default:
-          reject(ErrorMessages.InvalidAPIOption)
-          break
+        let api
+        // Create all the Google API Objects
+        switch(option) {
+          case('calendar'):
+            api = google.calendar({ version: 'v3', auth: this.oAuth2Client });
+            break
+          case('contacts'):
+            api = google.people({ version: 'v1', auth: this.oAuth2Client });
+            break
+          default:
+            reject(ErrorMessages.InvalidAPIOption())
+            break
+        }
+
+        resolve(api)
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.OAuthError())
       }
-
-      resolve(api)
     })
   }
 

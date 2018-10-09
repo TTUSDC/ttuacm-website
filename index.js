@@ -1,9 +1,5 @@
 const functions = require('firebase-functions')
 
-const admin = require('firebase-admin')
-
-admin.initializeApp()
-
 // Here is a list of all the functions by themselves
 
 const profileApp = require('./src/profile')
