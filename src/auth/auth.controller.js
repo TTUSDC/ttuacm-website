@@ -1,14 +1,17 @@
-const jwt = require('jsonwebtoken');
-const querystring = require('querystring');
-const bcrypt = require('bcryptjs');
-const { google } = require('googleapis');
+const jwt = require('jsonwebtoken')
+const querystring = require('querystring')
+const bcrypt = require('bcryptjs')
+const AuthModel = require('./auth.model')
+const ErrorMessages = require('./auth.errors')
+const { generateHexToken } = require('../utils/generate-hex')
+const { generateJWTToken } = require('../utils/generate-jwt')
 
 // Bcrypt options
-const saltRounds = 10;
+const saltRounds = 10
 
 class AuthController {
   constructor() {
-    // TODO: initialize OAuth
+    this.DB = new AuthModel()
   }
 
   /**
@@ -29,31 +32,27 @@ class AuthController {
    * @returns {Promise.<Object, Error>} Resolves with a user objectand rejects with an error
    */
   register(user) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       // If the email is available, continue with the proccess
-      // Generates the salt used for hashing
-      User.findOne({ email: user.email }, (err, user) => {
-        if (err) reject(err);
-        if (user) reject(new Error('unavailable'));
-      });
-      bcrypt.hash(user.password, saltRounds, async (err, hash) => {
-        if (err) reject(err);
-        const token = await generateHexToken();
+      try {
+        const foundUser = await this.DB.findUserByEmail(user.email)
+        if (foundUser !== null) reject(ErrorMessages.DuplicateAccount())
+        // Generates the salt used for hashing
+        const hash = await bcrypt.hash(user.password, saltRounds)
+        const newUser = user
+        const token = generateHexToken()
 
-        user.password = hash;
-        user.confirmEmailToken = token;
-        user.verified = false;
+        newUser.password = hash
+        newUser.confirmEmailToken = token
+        newUser.verified = false
 
-        // New User Object from the mongoose User Schema
-        const newUser = new User(user);
-
-        // Saves the new user
-        newUser.save((err, user) => {
-          if (err) reject(err);
-          resolve(user);
-        });
-      });
-    });
+        await this.DB.createNewUser(newUser)
+        resolve()
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.UnknownServerError())
+      }
+    })
   }
 
   /**
@@ -67,34 +66,29 @@ class AuthController {
    * @returns {Promise.<token, Error>} Resolves with a JWT and rejects with an error
    */
   login(email, password) {
-    return new Promise((resolve, reject) => {
-      User.getUserByEmail(email, (err, foundUser) => {
-        // Internal Server Error
-        if (err) {
-          reject(err);
-          // If the user has not been verified
-        } else if (!foundUser) {
-          reject(new Error('User Not Found'));
+    return new Promise(async (resolve, reject) => {
+      try {
+        const foundUser = await this.DB.getUserByAttribute('email', email)
+
+        if (!foundUser) {
+          reject(ErrorMessages.NotFoundErr())
         } else if (!foundUser.verified) {
-          reject(new Error('User Not Verified'));
-          // If the user has a signed up using a local auth strategy
+          reject(ErrorMessages.UserNotVerified())
         } else if (foundUser !== null && foundUser.password !== null) {
-          bcrypt.compare(password, foundUser.password, async (err, response) => {
-            if (err) {
-              reject(err);
-            } else if (response) {
-              const token = await generateJWTToken(foundUser);
-              resolve({ token, foundUser });
-            } else {
-              reject(new Error('Invalid Login'));
-            }
-          });
-        } else {
-          // If the was no user found with that user name
-          reject(new Error('Internal Server Error'));
+          // If the user has a signed up using a local auth strategy
+          const validPassword = await bcrypt.compare(password, foundUser.password)
+          if (validPassword) {
+            const token = generateJWTToken(foundUser)
+            resolve({ token, foundUser })
+          } else {
+            reject(ErrorMessages.InvalidLogin())
+          }
         }
-      });
-    });
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.UnknownServerError())
+      }
+    })
   }
 
   /**
@@ -104,22 +98,25 @@ class AuthController {
    * @returns {Promise.<null, Object>} Resolves: object containg a HEX and a user, Rejects: error
    */
   forgotLogin(email) {
-    return new Promise((resolve, reject) => {
-      User.findOne({ email }, (err, user) => {
-        if (user === null) {
-          reject(new Error('User not found'));
-        } else if (err) {
-          reject(err);
-        } else {
-          user.resetPasswordToken = token = generateHexToken();
-          user.resetPasswordExpires = Date.now() + 3 * 60 * 60 * 1000; // 3 Hours
-          user.save((err) => {
-            if (err) reject(err);
-            resolve({ token, user });
-          });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const query = { email }
+        const update = {
+          resetPasswordToken: generateHexToken(),
+          resetPasswordExpires: Date.now() + 3 * 60 * 60 * 1000, // 3 Hours
         }
-      });
-    });
+
+        const updatedUser = await this.DB.updateUserByAttribute(query, update)
+        if (updatedUser === null) {
+          reject(ErrorMessages.NotFoundErr())
+        } else {
+          resolve({ user: updatedUser })
+        }
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.UnknownServerError())
+      }
+    })
   }
 
   /**
@@ -129,54 +126,28 @@ class AuthController {
    * @param {string} token - HEX token associated with an account (resetPasswordToken)
    * @returns {Promise.<token, Error>} Resolves: HEX Token, Rejects: an error
    */
-  resetToken(token) {
+  resetToken(resetPasswordToken) {
     return new Promise((resolve, reject) => {
-      if (!token) reject(new Error('No Token Passed to Endpoint'));
-      User.findOne(
-        {
-          resetPasswordToken: token,
-          resetPasswordExpires: { $gt: Date.now() },
-        },
-        (err, user) => {
-          if (err) {
-            reject(new Error('Invalid token'));
-          } else if (!user) {
-            // User was not found or the token was expired, either way...
-            // Signals the front end to tell the user that their token was invalid
-            // and that they may need to send another email
-            reject(new Error('No User found'));
-          } else {
-            // The token is valid and will signal front end to render the login page
-            // The token we are passing is the same token that is in the database
-            resolve(token);
-          }
-        },
-      );
-    });
-  }
-
-  /**
-   * Resets the user password
-   *
-   * TODO: Purify function - remove sendChangedPasswordEmail
-   *
-   * @param {string} req.params.token - HEX Token passed through the URL
-   * @param {string} password - new password that will replace the old one
-   *
-   * @returns {Promise.<null, Error>} - Rejects with an error
-   * from verifyUser or sendChangedPasswordEmail
-   */
-  resetPassword(token, password) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const user = await verifyUser(token, password);
-        await sendChangedPasswordEmail(user.email);
-        resolve(user);
-      } catch (err) {
-        console.log(err);
-        reject(err);
+      if (!resetPasswordToken) reject(ErrorMessages.MissingToken())
+      const query = {
+        resetPasswordToken,
+        resetPasswordExpires: { $gt: Date.now() },
       }
-    });
+      this.DB.getUserByAttribute(query)
+        .then((user) => {
+          // User was not found or the token was expired, either way...
+          // Signals the front end to tell the user that their token was invalid
+          // and that they may need to send another email
+          if (!user) reject(ErrorMessages.NotFoundErr())
+          // The token is valid and will signal front end to render the login page
+          // The token we are passing is the same token that is in the database
+          resolve(resetPasswordToken)
+        })
+        .catch((err) => {
+          console.error(err)
+          reject(ErrorMessages.InvalidToken())
+        })
+    })
   }
 
   /**
@@ -189,29 +160,27 @@ class AuthController {
    * an error from bcrypt or finding a document in Mongo
    */
   verifyUser(token, passwordAttempt) {
-    return new Promise((resolve, reject) => {
-      bcrypt.hash(passwordAttempt, saltRounds, (err, hash) => {
-        if (err) reject(err);
-        User.findOneAndUpdate(
-          {
-            resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() },
-          },
-          {
-            // Need to encrypt the password first
-            password: hash,
-            resetPasswordToken: undefined,
-            resetPasswordExpires: undefined,
-          },
-          { new: true },
-          (err, user) => {
-            if (err) reject(err);
-            if (!user) reject(new Error('No User Found'));
-            resolve(user);
-          },
-        );
-      });
-    });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const hash = await bcrypt.hash(passwordAttempt, saltRounds)
+        const query = {
+          resetPasswordToken: token,
+          resetPasswordExpires: { $gt: Date.now() },
+        }
+        const update = {
+          // Need to encrypt the password first
+          password: hash,
+          resetPasswordToken: undefined,
+          resetPasswordExpires: undefined,
+        }
+        const updatedUser = await this.DB.updateUserByAttribute(query, update)
+        if (!updatedUser) reject(ErrorMessages.NotFoundErr())
+        resolve(updatedUser)
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.NotFoundErr())
+      }
+    })
   }
 
   /**
@@ -222,20 +191,21 @@ class AuthController {
    * @param {string} token - HEX Token
    * @returns {Promise.<null, Error>} Rejects: an error
    */
-  confirmToken(token) {
+  confirmToken(confirmEmailToken) {
     return new Promise((resolve, reject) => {
-      const query = {
-        confirmEmailToken: token,
-      };
+      const query = { confirmEmailToken }
       const update = {
         confirmEmailToken: '',
         verified: true,
-      };
-      User.findOneAndUpdate(query, update, { new: true }, (err, user) => {
-        if (err || user === null) reject(err);
-        resolve(user);
-      });
-    });
+      }
+
+      this.DB.updateUserByAttribute(query, update)
+        .then(user => resolve(user))
+        .catch((err) => {
+          console.error(err)
+          reject(ErrorMessages.NotFoundErr())
+        })
+    })
   }
 
   /**
@@ -246,18 +216,18 @@ class AuthController {
    *
    * TODO: Move OAuth to client
    */
-  oauth2(req, res) {
+  static oauth2(req, res) {
     const token = jwt.sign({ data: req.user }, process.env.session_secret, {
       expiresIn: 604800, // 1 week
-    });
+    })
 
     const qs = querystring.stringify({
       token: `JWT ${token}`,
-    });
+    })
 
     // The port should change depending on the environment
-    res.redirect(`${process.env.CLIENT || ''}/?${qs}`);
+    res.redirect(`${process.env.CLIENT || ''}/?${qs}`)
   }
 }
 
-module.exports = AuthController;
+module.exports = AuthController
