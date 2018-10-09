@@ -4,6 +4,9 @@ const bp = require('body-parser')
 const cors = require('cors')
 const passport = require('passport')
 const router = require('./auth.router')
+const { connectDB } = require('../utils/db-connect')
+
+connectDB() // Open connection to the database
 
 process.env = functions.config().config
 

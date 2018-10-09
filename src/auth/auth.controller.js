@@ -1,3 +1,4 @@
+const functions = require('firebase-functions')
 const jwt = require('jsonwebtoken')
 const querystring = require('querystring')
 const bcrypt = require('bcryptjs')
@@ -5,6 +6,8 @@ const AuthModel = require('./auth.model')
 const ErrorMessages = require('./auth.errors')
 const { generateHexToken } = require('../utils/generate-hex')
 const { generateJWTToken } = require('../utils/generate-jwt')
+
+process.env = functions.config().config
 
 // Bcrypt options
 const saltRounds = 10
@@ -35,19 +38,21 @@ class AuthController {
     return new Promise(async (resolve, reject) => {
       // If the email is available, continue with the proccess
       try {
-        const foundUser = await this.DB.findUserByEmail(user.email)
-        if (foundUser !== null) reject(ErrorMessages.DuplicateAccount())
+        const query = { email: user.email }
+        const foundUser = await this.DB.getUserByAttribute(query)
+        if (foundUser !== undefined) reject(ErrorMessages.DuplicateAccount())
         // Generates the salt used for hashing
-        const hash = await bcrypt.hash(user.password, saltRounds)
-        const newUser = user
-        const token = generateHexToken()
+        bcrypt.hash(user.password, saltRounds, async (err, hash) => {
+          const newUser = user
+          const token = generateHexToken()
 
-        newUser.password = hash
-        newUser.confirmEmailToken = token
-        newUser.verified = false
+          newUser.password = hash
+          newUser.confirmEmailToken = token
+          newUser.verified = false
 
-        await this.DB.createNewUser(newUser)
-        resolve()
+          const createdUser = await this.DB.createNewUser(newUser)
+          resolve(createdUser)
+        })
       } catch (err) {
         console.error(err)
         reject(ErrorMessages.UnknownServerError())
@@ -68,7 +73,8 @@ class AuthController {
   login(email, password) {
     return new Promise(async (resolve, reject) => {
       try {
-        const foundUser = await this.DB.getUserByAttribute('email', email)
+        const query = { email }
+        const foundUser = await this.DB.getUserByAttribute(query)
 
         if (!foundUser) {
           reject(ErrorMessages.NotFoundErr())
@@ -76,13 +82,17 @@ class AuthController {
           reject(ErrorMessages.UserNotVerified())
         } else if (foundUser !== null && foundUser.password !== null) {
           // If the user has a signed up using a local auth strategy
-          const validPassword = await bcrypt.compare(password, foundUser.password)
-          if (validPassword) {
-            const token = generateJWTToken(foundUser)
-            resolve({ token, foundUser })
-          } else {
-            reject(ErrorMessages.InvalidLogin())
-          }
+          bcrypt.compare(password, foundUser.password, async (err, validPassword) => {
+            if (err) {
+              console.error(err)
+              reject(ErrorMessages.UnknownServerError())
+            } else if (validPassword) {
+              const token = generateJWTToken(foundUser)
+              resolve({ token, foundUser })
+            } else {
+              reject(ErrorMessages.InvalidLogin())
+            }
+          })
         }
       } catch (err) {
         console.error(err)
@@ -211,13 +221,11 @@ class AuthController {
   /**
    * Redirects user to homepage after logging in with OAuth2
    *
-   * @param {object} req request object
-   * @param {object} res response object
-   *
-   * TODO: Move OAuth to client
+   * @param {object} user - user object
+   * @returns {string} a query string to add to a redirect
    */
-  static oauth2(req, res) {
-    const token = jwt.sign({ data: req.user }, process.env.session_secret, {
+  static oauth2(user) {
+    const token = jwt.sign({ data: user }, process.env.session_secret, {
       expiresIn: 604800, // 1 week
     })
 
@@ -225,8 +233,7 @@ class AuthController {
       token: `JWT ${token}`,
     })
 
-    // The port should change depending on the environment
-    res.redirect(`${process.env.CLIENT || ''}/?${qs}`)
+    return qs
   }
 }
 
