@@ -35,19 +35,21 @@ class AuthController {
     return new Promise(async (resolve, reject) => {
       // If the email is available, continue with the proccess
       try {
-        const foundUser = await this.DB.findUserByEmail(user.email)
-        if (foundUser !== null) reject(ErrorMessages.DuplicateAccount())
+        const query = { email: user.email }
+        const foundUser = await this.DB.getUserByAttribute(query)
+        if (foundUser !== undefined) reject(ErrorMessages.DuplicateAccount())
         // Generates the salt used for hashing
-        const hash = await bcrypt.hash(user.password, saltRounds)
-        const newUser = user
-        const token = generateHexToken()
+        bcrypt.hash(user.password, saltRounds, async (err, hash) => {
+          const newUser = user
+          const token = generateHexToken()
 
-        newUser.password = hash
-        newUser.confirmEmailToken = token
-        newUser.verified = false
+          newUser.password = hash
+          newUser.confirmEmailToken = token
+          newUser.verified = false
 
-        await this.DB.createNewUser(newUser)
-        resolve()
+          const createdUser = await this.DB.createNewUser(newUser)
+          resolve(createdUser)
+        })
       } catch (err) {
         console.error(err)
         reject(ErrorMessages.UnknownServerError())

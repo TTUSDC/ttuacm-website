@@ -14,16 +14,17 @@ const studentSchema = mongoose.Schema({
   verified: { type: Boolean },
 })
 
+function filterUser(user) {
+  const filteredUser = user
+  // Delete unwanted data here using delete
+  return filteredUser
+}
+
 class AuthModel {
   constructor() {
     this.DB = mongoose.model('Students', studentSchema)
   }
 
-  static _filterUser(user) {
-    const filteredUser = user
-    // Delete unwanted data here using delete
-    return filteredUser
-  }
 
   /**
    * Updates the user by their email address
@@ -50,13 +51,17 @@ class AuthModel {
    * @param {object} user - user object
    */
   createNewUser(user) {
-    const newUser = new this.DB(user)
-    newUser.save()
-      .then(createdUser => createdUser)
-      .catch((err) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const newUser = new this.DB(user)
+        newUser.save().then((createdUser) => {
+          resolve(createdUser)
+        })
+      } catch (err) {
         console.error(err)
-        return ErrorMessages.CreateUserError
-      })
+        reject(ErrorMessages.CreateUserError())
+      }
+    })
   }
 
   /**
@@ -66,7 +71,7 @@ class AuthModel {
   getUserById(id) {
     this.DB.findById(id)
       .then((user) => {
-        if (user !== null) return this._filterUser(user)
+        if (user !== null) return filterUser(user)
         throw new Error() // A User was not found
       })
       .catch((err) => {
@@ -80,15 +85,19 @@ class AuthModel {
    * @param {object} query - A query to the database
    */
   getUserByAttribute(query) {
-    this.DB.findOne(query)
-      .then((user) => {
-        if (user !== null) return this._filterUser(user)
-        throw new Error() // A User was not found
-      })
-      .catch((err) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const user = await this.DB.findOne(query).exec()
+        if (user !== null) {
+          const filteredUser = filterUser(user)
+          resolve(filteredUser)
+        }
+        resolve()
+      } catch (err) {
         console.error(err)
-        return ErrorMessages.NotFoundErr()
-      })
+        reject(ErrorMessages.NotFoundErr())
+      }
+    })
   }
 
   /**
