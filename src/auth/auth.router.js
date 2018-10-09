@@ -72,14 +72,13 @@ authRouter.get(
  *
  * @typedef {function} UserRouter-register
  *
+ * TODO: Recognize that not all of the user's form data goes here
+ *
  */
 authRouter.post('/register', async (req, res) => {
   const user = {
     email: req.body.email,
     password: req.body.password,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    classification: req.body.classification,
     confirmEmailToken: null,
   }
   try {
