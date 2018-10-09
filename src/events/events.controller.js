@@ -8,22 +8,6 @@ class EventsController {
     // TODO: initialize OAuth2
   }
 
-  /**
-   * Create the Calendar Object for the rest of the functions to use
-   * @requires oAuth2Client to be defined and valid. This can be acheived by running
-   * ```
-   require('</path/to/>oauth2.config.js').loadCredentials().```
-   */
-  createCalendar() {
-    return new Promise(async (resolve, reject) => {
-      try {
-        calendar = google.calendar({ version: 'v3', auth: global.oAuth2Client });
-        resolve(calendar);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
 
   /**
    * Gets the raw events object

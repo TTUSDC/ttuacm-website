@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+const functions = require('firebase-functions')
 
 const admin = require('firebase-admin')
 
@@ -17,7 +17,3 @@ exports.auth = functions.https.onRequest(authApp)
 exports.email = functions.https.onRequest(emailApp)
 exports.events = functions.https.onRequest(eventsApp)
 exports.contacts = functions.https.onRequest(contactsApp)
-
-process.env = functions.config().config
-process.env.AVAILABLE_FUNCTIONS = new Set(Object.keys(exports))
-console.log(process.env)
