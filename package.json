@@ -8,8 +8,7 @@
     "serve": "nodemon --exec firebase serve --only functions",
     "test": "jest",
     "lint": "eslint src",
-    "set-env": "firebase functions:config:set",
-    "env-config": "firebase functions:config:get > .runtimeconfig.json",
+    "env-config": "./env-config.sh",
     "logs": "firebase functions:log",
     "docs": "esdoc -c esdoc.json"
   },
