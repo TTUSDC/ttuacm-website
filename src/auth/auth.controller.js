@@ -32,33 +32,26 @@ class AuthController {
    * @returns {Promise.<Object, Error>} Resolves with a user objectand rejects with an error
    */
   register(user) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       // If the email is available, continue with the proccess
-      this.DB.findUserByEmail(user.email)
-        .then((foundUser) => {
-          if (foundUser !== null) reject(ErrorMessages.DuplicateAccount())
-        })
-        .catch((err) => {
-          console.error(err)
-          resolve(ErrorMessages.UnknownServerError())
-        })
+      try {
+        const foundUser = await this.DB.findUserByEmail(user.email)
+        if (foundUser !== null) reject(ErrorMessages.DuplicateAccount())
+        // Generates the salt used for hashing
+        const hash = await bcrypt.hash(user.password, saltRounds)
+        const newUser = user
+        const token = generateHexToken()
 
-      // Generates the salt used for hashing
-      bcrypt.hash(user.password, saltRounds)
-        .then((hash) => {
-          const newUser = user
-          const token = generateHexToken()
+        newUser.password = hash
+        newUser.confirmEmailToken = token
+        newUser.verified = false
 
-          newUser.password = hash
-          newUser.confirmEmailToken = token
-          newUser.verified = false
-
-          this.DB.createNewUser(newUser)
-        })
-        .catch((err) => {
-          console.error(err)
-          reject(ErrorMessages.HashingErr)
-        })
+        await this.DB.createNewUser(newUser)
+        resolve()
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.UnknownServerError())
+      }
     })
   }
 
