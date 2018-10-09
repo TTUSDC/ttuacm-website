@@ -1,3 +1,4 @@
+const functions = require('firebase-functions')
 const jwt = require('jsonwebtoken')
 const querystring = require('querystring')
 const bcrypt = require('bcryptjs')
@@ -5,6 +6,8 @@ const AuthModel = require('./auth.model')
 const ErrorMessages = require('./auth.errors')
 const { generateHexToken } = require('../utils/generate-hex')
 const { generateJWTToken } = require('../utils/generate-jwt')
+
+process.env = functions.config().config
 
 // Bcrypt options
 const saltRounds = 10
@@ -70,7 +73,8 @@ class AuthController {
   login(email, password) {
     return new Promise(async (resolve, reject) => {
       try {
-        const foundUser = await this.DB.getUserByAttribute('email', email)
+        const query = { email }
+        const foundUser = await this.DB.getUserByAttribute(query)
 
         if (!foundUser) {
           reject(ErrorMessages.NotFoundErr())
@@ -78,13 +82,17 @@ class AuthController {
           reject(ErrorMessages.UserNotVerified())
         } else if (foundUser !== null && foundUser.password !== null) {
           // If the user has a signed up using a local auth strategy
-          const validPassword = await bcrypt.compare(password, foundUser.password)
-          if (validPassword) {
-            const token = generateJWTToken(foundUser)
-            resolve({ token, foundUser })
-          } else {
-            reject(ErrorMessages.InvalidLogin())
-          }
+          bcrypt.compare(password, foundUser.password, async (err, validPassword) => {
+            if (err) {
+              console.error(err)
+              reject(ErrorMessages.UnknownServerError())
+            } else if (validPassword) {
+              const token = generateJWTToken(foundUser)
+              resolve({ token, foundUser })
+            } else {
+              reject(ErrorMessages.InvalidLogin())
+            }
+          })
         }
       } catch (err) {
         console.error(err)

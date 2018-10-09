@@ -110,11 +110,11 @@ class AuthModel {
     return new Promise((resolve, reject) => {
       try {
         const user = this.DB.findOneAndUpdate(query, update, { new: true }).exec()
-        if (user !== null) resolve(this._filterUser(user))
-        throw new Error() // A User was not found
+        if (user !== null) resolve(filterUser(user))
+        resolve()
       } catch (err) {
         console.error(err)
-        reject(ErrorMessages.NotFoundErr())
+        reject(ErrorMessages.UnknownServerError())
       }
     })
   }
