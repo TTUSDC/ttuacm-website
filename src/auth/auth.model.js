@@ -6,22 +6,15 @@ const studentSchema = mongoose.Schema({
   googleId: { type: String, default: '' },
   facebookId: { type: String, default: '' },
   githubId: { type: String, default: '' },
-  profileImage: { type: String, default: '' }, // Remove
-  resume: { type: String, default: '' }, // Remove
   email: { type: String, required: true },
   password: { type: String, required: false, default: null },
-  firstName: { type: String, required: true }, // Remove
-  lastName: { type: String, required: false }, // Remove
-  classification: { type: String, required: true, default: 'Other' }, // Remove
   confirmEmailToken: { type: String, default: '' },
   resetPasswordToken: { type: String, default: '' },
   resetPasswordExpires: { type: Date, default: null },
-  hasPaidDues: { type: Boolean, default: false }, // Remove
   verified: { type: Boolean },
-  blocked: { type: Boolean, default: false }, // Remove
 })
 
-class UserModel {
+class AuthModel {
   constructor() {
     this.DB = mongoose.model('Students', studentSchema)
   }
@@ -32,6 +25,30 @@ class UserModel {
     return filteredUser
   }
 
+  /**
+   * Updates the user by their email address
+   * @param {string} email - user email
+   * @param {string} targetAttr - attribute to change
+   * @param {string} finalAttr - value of target attribute after changes
+   */
+  updateUserByEmail(email, targetAttr, finalAttr) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const foundUser = await this.DB.findOne({ email }).exec()
+        foundUser[targetAttr] = finalAttr
+        const updatedUser = await foundUser.save().exec()
+        resolve(updatedUser)
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.CreateUserError)
+      }
+    })
+  }
+
+  /**
+   * Creates a new user
+   * @param {object} user - user object
+   */
   createNewUser(user) {
     const newUser = new this.DB(user)
     newUser.save()
@@ -60,11 +77,10 @@ class UserModel {
 
   /**
    * This will find the user by the email
-   * @param {string} email The email we are going to find
-   * @param {done} done (err, user)
+   * @param {object} query - A query to the database
    */
-  getUserByEmail(email) {
-    this.DB.findOne({ email })
+  getUserByAttribute(query) {
+    this.DB.findOne(query)
       .then((user) => {
         if (user !== null) return this._filterUser(user)
         throw new Error() // A User was not found
@@ -76,8 +92,26 @@ class UserModel {
   }
 
   /**
+   * This will find the user by the email
+   * @param {string} attribute - the attribute to search
+   * @param {string} value - the attribute value to match
+   * @param {object} update - the attribute(s) to update
+   */
+  updateUserByAttribute(query, update) {
+    return new Promise((resolve, reject) => {
+      try {
+        const user = this.DB.findOneAndUpdate(query, update, { new: true }).exec()
+        if (user !== null) resolve(this._filterUser(user))
+        throw new Error() // A User was not found
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.NotFoundErr())
+      }
+    })
+  }
+
+  /**
    * Gives a list of all the users in the database as an object
-   * @param {boolean, object} callback (err, user)
    */
   findAllUsers() {
     this.DB.find()
@@ -140,4 +174,4 @@ class UserModel {
   }
 }
 
-module.exports = UserModel
+module.exports = AuthModel

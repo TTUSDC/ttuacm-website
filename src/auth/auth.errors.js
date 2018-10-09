@@ -46,8 +46,36 @@ function UnknownServerError() {
   return err
 }
 
+function InvalidLogin() {
+  const err = new Error('Invalid Login')
+  err.code = 404
+  return err
+}
+
+function UserNotVerified() {
+  const err = new Error('User has not been verified')
+  err.code = 404
+  return err
+}
+
+function MissingToken() {
+  const err = new Error('Not Token passed to endpoint')
+  err.code = 404
+  return err
+}
+
+function InvalidToken() {
+  const err = new Error('Not Token passed to endpoint')
+  err.code = 404
+  return err
+}
+
 module.exports = {
   InvalidAPIOption,
+  InvalidLogin,
+  InvalidToken,
+  MissingToken,
+  UserNotVerified,
   HashingErr,
   CreateUserError,
   UnknownServerError,
