@@ -211,13 +211,11 @@ class AuthController {
   /**
    * Redirects user to homepage after logging in with OAuth2
    *
-   * @param {object} req request object
-   * @param {object} res response object
-   *
-   * TODO: Move OAuth to client
+   * @param {object} user - user object
+   * @returns {string} a query string to add to a redirect
    */
-  static oauth2(req, res) {
-    const token = jwt.sign({ data: req.user }, process.env.session_secret, {
+  static oauth2(user) {
+    const token = jwt.sign({ data: user }, process.env.session_secret, {
       expiresIn: 604800, // 1 week
     })
 
@@ -225,8 +223,7 @@ class AuthController {
       token: `JWT ${token}`,
     })
 
-    // The port should change depending on the environment
-    res.redirect(`${process.env.CLIENT || ''}/?${qs}`)
+    return qs
   }
 }
 
