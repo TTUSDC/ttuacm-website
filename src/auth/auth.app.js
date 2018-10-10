@@ -8,7 +8,11 @@ const { connectDB } = require('../utils/db-connect')
 
 connectDB() // Open connection to the database
 
-process.env = functions.config().config
+// Env Variables from the Configs
+process.env = functions.config().auth
+process.env.NODE_ENV = functions.config().environment.env
+
+console.log('local', process.env)
 
 const app = express()
 app.use('/api/v2', router)
