@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const functions = require('firebase-functions')
 
 /**
  * Generates a JWT
@@ -7,7 +8,7 @@ const jwt = require('jsonwebtoken')
  */
 module.exports.generateJWTToken = (payload) => {
   const token = jwt.sign({ data: payload },
-    process.env.session_secret, {
+    functions.config().auth.session_secret, {
       expiresIn: 604800, // 1 week
     });
 

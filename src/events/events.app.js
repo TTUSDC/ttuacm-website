@@ -3,7 +3,9 @@ const express = require('express');
 const router = require('./events.router');
 
 const app = express();
-process.env = functions.config().config
+const { environment, events } = functions.config()
+process.env = events
+process.env.NODE_ENV = environment.env
 
 // Middleware
 app.use('/api/v2', router);

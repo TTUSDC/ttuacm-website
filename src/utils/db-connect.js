@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
-module.exports.connectDB = () => {
+module.exports.connectDB = (connection) => {
   mongoose.connect(
-    process.env.db || 'mongodb://localhost:27017/development',
+    connection,
     {
       useNewUrlParser: true,
     },
@@ -12,7 +12,8 @@ module.exports.connectDB = () => {
     console.log('Connected to MongoDB')
   })
   mongoose.connection.on('error', (err) => {
-    console.log(`Error Connecting to database... \n${err}`);
+    console.error(`Error Connecting to database... \n${err}`);
+    console.error(`Tried connecting to ${process.env.db}`)
     process.exit(1);
   });
 };

@@ -17,9 +17,15 @@ console.log('Skip the clientID and secrets\n')
 
 // Map of all the services and their environment variables
 const SERVICES = new Map([
-  ['environment', ['env']],
+  [
+    'environment', [
+      'init',
+      'env',
+    ],
+  ],
   [
     'auth', [
+      'init',
       'session_secret',
       'db',
       'google_clientid',
@@ -33,21 +39,29 @@ const SERVICES = new Map([
   ],
   [
     'email', [
+      'init',
       'email_username',
       'email_password',
     ],
   ],
   [
-    'profile', [],
+    'profile', [
+      'init',
+    ],
   ],
   [
-    'events', [],
+    'events', [
+      'init',
+    ],
   ],
   [
-    'contacts', [],
+    'contacts', [
+      'init',
+    ],
   ],
 ])
 
+// Looks through the map to find environment variables
 function getEnvVaribales(services, name) {
   let choices = 0
   process.stdout.write(`${services[choices]}: `)
@@ -70,6 +84,7 @@ function getEnvVaribales(services, name) {
   })
 }
 
+// Asks the user what environment [dev/prod] that they want to setup
 function setup() {
   return new Promise((resolve) => {
     rl.question('What environment would you like to set up? [dev/prod] ', (ans) => {
@@ -84,20 +99,20 @@ function setup() {
       } else {
         console.log(`Setting up ${ans} environment...`)
         shell(`firebase functions:config:set environment.env=${ans}`)
-        console.log('Success!')
       }
       resolve()
     })
   })
 }
 
+// Asks the user to pick what service they want to configure
 function chooseService() {
-  rl.question('What service you you like to configure?\n>> ', (ans) => {
-    console.log(ans)
+  rl.question('What service you you like to configure?  ', (ans) => {
     if(ans === '') {
       process.exit(0)
     } else if(!SERVICES.has(ans)) {
       console.log(`Sorry, we do not support ${ans} at the moment`)
+      process.exit(0)
     } else {
       console.log(`Setting up variables for ${ans} service`)
       const envVars = SERVICES.get(ans)
@@ -106,6 +121,7 @@ function chooseService() {
   })
 }
 
+// Start
 setup().then(() => {
   chooseService()
 })
