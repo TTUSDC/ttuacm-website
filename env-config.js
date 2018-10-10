@@ -80,6 +80,7 @@ function setup() {
         shell('firebase functions:config:set environment.env=dev')
       } else if (!CHOICES.has(ans)) {
         console.log('Invalid Option. You must pick either dev or prod')
+        process.exit(0)
       } else {
         console.log(`Setting up ${ans} environment...`)
         shell(`firebase functions:config:set environment.env=${ans}`)
