@@ -10,7 +10,7 @@
     "lint": "eslint src",
     "env-config": "./env-config.sh",
     "logs": "firebase functions:log",
-    "docs": "esdoc -c esdoc.json"
+    "docs": "esdoc -c .esdoc.js"
   },
   "dependencies": {
     "axios": "~0.18.0",
@@ -37,6 +37,8 @@
     "bcrypt": "3",
     "chai": "4.2.0",
     "cross-env": "~5.2.0",
+    "esdoc": "1.1.0",
+    "esdoc-standard-plugin": "1.0.0",
     "eslint": "5.6.1",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.14.0",
