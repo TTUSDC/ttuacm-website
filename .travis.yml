@@ -13,6 +13,8 @@ jobs:
       yarn: true
       directories:
       - node_modules
+    script:
+      - ls
 
   - stage: deploy
     install:
@@ -26,7 +28,7 @@ jobs:
         message: "Deployed to firebase functions"
         on:
           branch: master
-        provider: pages
+      - provider: pages
         skip_cleanup: true
         github_token: "$GITHUB_TOKEN"
         keep-history: true
