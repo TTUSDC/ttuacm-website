@@ -27,19 +27,17 @@ describe('Auth Unit Tests', () => {
     mockgoose.helper.reset().then(err => done(err))
   })
 
-  it('[register] should save a new user to the database', (done) => {
+  it('[register] should save a new user to the database', () => {
     const testUser = {
       email: 'email@gmail.com',
       password: 'password',
     }
 
-    ctrl.register(testUser)
+    return ctrl.register(testUser)
       .then((createdUser) => {
         expect(createdUser.email).to.equal('email@gmail.com')
         expect(createdUser.password).not.to.equal('password')
-        done()
       })
-      .catch(err => done(err))
   })
 
   it('[register] should reject a new user to the database if they share an email', async () => {
