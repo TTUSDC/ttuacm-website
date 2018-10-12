@@ -12,7 +12,8 @@ jobs:
       directories:
       - node_modules
     script:
-      - ls
+      - yarn lint
+      - yarn test
 
   - stage: deploy
     install:
