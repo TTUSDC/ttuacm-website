@@ -19,21 +19,20 @@ jobs:
     - yarn add -DE esdoc@1.1.0 esdoc-standard-plugin@1.0.0
     script:
     - yarn docs
-    deploy:
-      provider: pages
-      skip_cleanup: true
-      github_token: "$GITHUB_TOKEN"
-      keep-history: true
-      local_dir: docs/
-      on:
-        branch: master
 
     deploy:
-      provider: firebase
-      secure: KNvbljzDJlwqTP8lgtAGhP6t9K0F8GOH+8uYsr512YyIcdH9dbSUnti4FTg0DKSrqjlSLyZJemF0yZjhGgWTVXX6hfuGfJML5uIvuhvIhRFaY2GBQBJSJxbXVSMhDHkJ76s61v9fZIq6pomcs7DS8lVsrajImdvd94aQnjzbQOJ+hgbqTPAGmOJ0Ny1CSZZOtUQPaPLF+oMHyHH7RNQVHPpYLgOoyjRvIVBRkNTGF0bSnH4MlgTdW6Fk3Vv7A6Q03/Z4RlzxoUbrAz4cxxn+V6efUXIUSKcRRMxnqJeO0ZuVpUYzDTNYnWmlwo4RJpt516L3OxICxVcTz2kuUZUW/9PDlXd1YpCVtUDqmo//c9U84SCQoEv5D2wqBxBmP+XHVgjKdnDVaYlkaqvpczK7KZSg3pLrq6M2YlDcasPLmwZHHfNQPd7wJ/oj3bfldcWKoslxQO3OKzA+ek28KzeCbzG05iFR9wysbqn+hLU3uCgqLgquePHb91V8KSCVeg6Vc/y1Ez8x79CceSv7pvthpmMEK/tZyUFoEbyuHaiE/jqsSc6tHuEkKs/HgxQ4rkQtc5fkmwtI6QSGZ8vqDBiQdXklnK5If8kHfmOWD1NwgNhEbi2aUInGnH6ysEEwroP6NtyLfQmVh5wMZJml8ysPr6rdbf692Xb3NTLs7uaw5eE=
-      message: "Deployed to firebase functions"
-      on:
-        branch: master
+      - provider: firebase
+        secure: KNvbljzDJlwqTP8lgtAGhP6t9K0F8GOH+8uYsr512YyIcdH9dbSUnti4FTg0DKSrqjlSLyZJemF0yZjhGgWTVXX6hfuGfJML5uIvuhvIhRFaY2GBQBJSJxbXVSMhDHkJ76s61v9fZIq6pomcs7DS8lVsrajImdvd94aQnjzbQOJ+hgbqTPAGmOJ0Ny1CSZZOtUQPaPLF+oMHyHH7RNQVHPpYLgOoyjRvIVBRkNTGF0bSnH4MlgTdW6Fk3Vv7A6Q03/Z4RlzxoUbrAz4cxxn+V6efUXIUSKcRRMxnqJeO0ZuVpUYzDTNYnWmlwo4RJpt516L3OxICxVcTz2kuUZUW/9PDlXd1YpCVtUDqmo//c9U84SCQoEv5D2wqBxBmP+XHVgjKdnDVaYlkaqvpczK7KZSg3pLrq6M2YlDcasPLmwZHHfNQPd7wJ/oj3bfldcWKoslxQO3OKzA+ek28KzeCbzG05iFR9wysbqn+hLU3uCgqLgquePHb91V8KSCVeg6Vc/y1Ez8x79CceSv7pvthpmMEK/tZyUFoEbyuHaiE/jqsSc6tHuEkKs/HgxQ4rkQtc5fkmwtI6QSGZ8vqDBiQdXklnK5If8kHfmOWD1NwgNhEbi2aUInGnH6ysEEwroP6NtyLfQmVh5wMZJml8ysPr6rdbf692Xb3NTLs7uaw5eE=
+        message: "Deployed to firebase functions"
+        on:
+          branch: master
+        provider: pages
+        skip_cleanup: true
+        github_token: "$GITHUB_TOKEN"
+        keep-history: true
+        local_dir: docs/
+        on:
+          branch: master
 
 notifications:
   email: false
