@@ -7,10 +7,9 @@ const functions = require('firebase-functions')
  * @param {object} payload all the data that will be stored into the token
  */
 module.exports.generateJWTToken = (payload) => {
+  const secret = process.env.CI ? functions.config().auth.session_secret : 'CISecret!'
   const token = jwt.sign({ data: payload },
-    functions.config().auth.session_secret, {
-      expiresIn: 604800, // 1 week
-    });
+    secret, { expiresIn: 604800 }) // 1 week
 
   return token !== '' ? token : new Error('Empty JWT Payload')
 }
