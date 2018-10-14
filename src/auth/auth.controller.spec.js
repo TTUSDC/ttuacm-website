@@ -22,8 +22,8 @@ describe('Auth Unit Tests', () => {
     ctrl = new Controller()
   })
 
-  afterEach((done) => {
-    mongoose.connection.dropCollection('students', (err) => done(err))
+  afterEach(() => {
+    mongoose.connection.dropCollection('students')
   })
 
   it('[register] should save a new user to the database', () => {
