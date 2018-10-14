@@ -3,7 +3,6 @@ node_js:
 - '8'
 jobs:
   include:
-
   - stage: test
     services:
     - mongodb
@@ -12,15 +11,13 @@ jobs:
       directories:
       - node_modules
     script:
-      - yarn lint
-      - yarn test --ci --forceExit --detectOpenHandles --maxWorkers=10
-
+    - yarn lint
+    - yarn test --ci --forceExit --detectOpenHandles --maxWorkers=10
   - stage: deploy
     install:
     - yarn add -DE esdoc@1.1.0 esdoc-standard-plugin@1.0.0
     script:
     - yarn docs
-
     deploy:
     - provider: pages
       skip_cleanup: true
@@ -31,9 +28,9 @@ jobs:
     - provider: firebase
       skip_cleanup: true
       token:
-        secure: "KNvbljzDJlwqTP8lgtAGhP6t9K0F8GOH+8uYsr512YyIcdH9dbSUnti4FTg0DKSrqjlSLyZJemF0yZjhGgWTVXX6hfuGfJML5uIvuhvIhRFaY2GBQBJSJxbXVSMhDHkJ76s61v9fZIq6pomcs7DS8lVsrajImdvd94aQnjzbQOJ+hgbqTPAGmOJ0Ny1CSZZOtUQPaPLF+oMHyHH7RNQVHPpYLgOoyjRvIVBRkNTGF0bSnH4MlgTdW6Fk3Vv7A6Q03/Z4RlzxoUbrAz4cxxn+V6efUXIUSKcRRMxnqJeO0ZuVpUYzDTNYnWmlwo4RJpt516L3OxICxVcTz2kuUZUW/9PDlXd1YpCVtUDqmo//c9U84SCQoEv5D2wqBxBmP+XHVgjKdnDVaYlkaqvpczK7KZSg3pLrq6M2YlDcasPLmwZHHfNQPd7wJ/oj3bfldcWKoslxQO3OKzA+ek28KzeCbzG05iFR9wysbqn+hLU3uCgqLgquePHb91V8KSCVeg6Vc/y1Ez8x79CceSv7pvthpmMEK/tZyUFoEbyuHaiE/jqsSc6tHuEkKs/HgxQ4rkQtc5fkmwtI6QSGZ8vqDBiQdXklnK5If8kHfmOWD1NwgNhEbi2aUInGnH6ysEEwroP6NtyLfQmVh5wMZJml8ysPr6rdbf692Xb3NTLs7uaw5eE="
-      project: "ttuacm-backend"
-      message: "Deployed to firebase functions"
+        secure: "btZkVTCN/i/DyKv1VdkgyhTKrrSPaBfgY2/Lf4vttswLttT8swGo0SLirROVecqfh056USjYTJPQKu5+TMXJ46hzGni1xD0Hc13F92z5a0VAoeXAiB/Fz1ChoFx9SyCHSmb7fI/tdUcZbg5JVonmf6Cnb1KSPiUUQa9BiaL4SeBsSjw80vy3xuL2DqI1gHtQfIleugFFw7Z46SjY5HVqhhggBkT5NIFAL7Ihi3ryz01DMdnf4PA8b2cfQehUWC02szNqbTV7Hqp2uH2WNi6QKVlhpmYyYsBdLL+bBcP5YZQHgtp4K0aOlM+63/35YwjFOzU5mTeeCBEMb5EfzTHV7ufUKrk/QOs86nM1N7v2YCA8rxNqP0XyDN5fgWNyGDNxBh4W4t/Lgnlk1PDAhCFFgcBLTkj+EFlMfUuNnHCEaI0sUpMJg8neQO0rMqPv195X8vOAJnbTqeDYndLP9lyXmdTWGKKKGdgFBw6AIbtQ+0yvmVxg2VfHNsQAOgtuy8NmmU6nhDXrb1lqcuUgKJBeyGhciZIdnWTQdCucc2FZLG/if4JBPwr84uApossOCzV1XD7UvaPLrUmUGz83RHOMsCurCosXX3DEE/BEokXUEGFuGR8Oa/jsvg0YLuJYJzmqpxKZUzG1vg2mWRfirZ5gtnNXlA2nSOpUeM4hEx6bHyE="
+      project: ttuacm-backend
+      message: Deployed to firebase functions
       on:
         branch: master
 
