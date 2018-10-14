@@ -5,6 +5,8 @@ module.exports = {
     "mocha": true
   },
   "rules": {
+    "no-restricted-syntax": 0,
+    "no-await-in-loop": 0,
     "no-unused-expressions": 0,
     "no-control-regex": 0,
     "keyword-spacing": 0,

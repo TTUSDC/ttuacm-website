@@ -259,11 +259,11 @@ class ContactsModel {
    * @return {Promise<Object, Error>} returns the resourceName for the group
    */
   findGroupByName(name) {
-    const formattedName = formattedName(name);
+    const formattedName = formatGroupName(name);
     return new Promise(async (resolve, reject) => {
       try {
         // Check for existing group
-        const { data } = await ContactsAPI.contactGroups.list();
+        const { data } = await this.API.contactGroups.list();
         // The list of Groups
         const { contactGroups: listOfGroups } = data;
         // Check for existing name
