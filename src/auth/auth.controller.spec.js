@@ -6,25 +6,25 @@ const { Mockgoose } = require('mockgoose')
 const Controller = require('./auth.controller')
 const ErrorMessages = require('./auth.errors')
 
-const mockgoose = new Mockgoose(mongoose)
 const { expect } = chai
 
 describe('Auth Unit Tests', () => {
   let ctrl
   // eslint-disable-next-line
   beforeAll((done) => {
-    mockgoose.prepareStorage().then(() => {
-      mongoose.connect('mongodb://localhost:27017/testing', {
-        useNewUrlParser: true,
-      }, (err) => {
-        done(err)
-      })
+    mongoose.connect('mongodb://localhost:27017/testing', {
+      useNewUrlParser: true,
+    }, (err) => {
+      done(err)
     })
   })
 
-  beforeEach((done) => {
+  beforeEach(() => {
     ctrl = new Controller()
-    mockgoose.helper.reset().then(err => done(err))
+  })
+
+  afterEach((done) => {
+    mongoose.connection.dropCollection('students', (err) => done(err))
   })
 
   it('[register] should save a new user to the database', () => {
