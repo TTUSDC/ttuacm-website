@@ -1,5 +1,10 @@
+const ProfileModel = require('./profile.model')
+const { generateJWTToken } = require('../utils/generate-jwt')
+
 class ProfileController {
-  constructor() { }
+  constructor() {
+    this.DB = new ProfileModel()
+  }
 
   /**
    * Updates the complete user object
@@ -12,7 +17,7 @@ class ProfileController {
   updateUser(newUser) {
     return new Promise(async (resolve, reject) => {
       try {
-        const user = await Profile.findByIdAndUpdate(newUser._id, newUser, { new: true }).exec()
+        const user = await this.DB.findByIdAndUpdate(newUser._id, newUser, { new: true }).exec()
         if (!user) reject(new Error('Profile Not Found'))
         const token = await generateJWTToken(user)
         const response = { user, token }
@@ -31,7 +36,7 @@ class ProfileController {
    */
   getProfile(email) {
     return new Promise((resolve, reject) => {
-      Profile.findOne({ email })
+      this.DB.findOne({ email })
         .then((user) => {
           if (!user) reject(new Error('Email Not Found'))
           resolve(user)
