@@ -2,7 +2,6 @@ require('firebase-functions-test')()
 
 const chai = require('chai')
 const mongoose = require('mongoose')
-const { Mockgoose } = require('mockgoose')
 const Controller = require('./auth.controller')
 const ErrorMessages = require('./auth.errors')
 

@@ -1,5 +1,34 @@
+const nodemailer = require('nodemailer');
+
 class EmailController {
-  constructor() { }
+  constructor() {
+    if (process.env.NODE_ENV !== 'prod') {
+      this.smtpTransporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        auth: {
+          user: 'fr3yjbymylwvbkc6@ethereal.email',
+          pass: 'sCvgzSPfhssNBEH3TQ',
+        },
+        tls: {
+          // do not fail on invalid certs
+          rejectUnauthorized: false,
+        },
+      })
+    } else {
+      this.smtpTransporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: process.env.email_username,
+          pass: process.env.email_password,
+        },
+        tls: {
+          // do not fail on invalid certs
+          rejectUnauthorized: false,
+        },
+      });
+    }
+  }
 
   /**
    * Send the reset email to the user
@@ -12,24 +41,20 @@ class EmailController {
    */
   sendResetEmail(token, email, req) {
     return new Promise((resolve, reject) => {
-      if (process.env.NODE_ENV !== 'test') {
-        const mailOptions = {
-          to: email,
-          from: 'Texas Tech ACM',
-          subject: 'TTU ACM Password Reset',
-          html: `<p>You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n</p>\n\n<a>${
-            req.protocol
-          }://${
-            req.headers.host
-          }/api/users/reset/${token}</a>\n\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\n`,
-        };
-        global.smtpTransporter.sendMail(mailOptions, (err) => {
-          if (err) reject(err);
-          resolve();
-        });
-      } else {
+      const mailOptions = {
+        to: email,
+        from: 'Texas Tech ACM',
+        subject: 'TTU ACM Password Reset',
+        html: `<p>You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n</p>\n\n<a>${
+          req.protocol
+        }://${
+          req.headers.host
+        }/api/users/reset/${token}</a>\n\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\n`,
+      };
+      this.smtpTransporter.sendMail(mailOptions, (err) => {
+        if (err) reject(err);
         resolve();
-      }
+      });
     });
   }
 
@@ -41,22 +66,18 @@ class EmailController {
    */
   sendChangedPasswordEmail(email) {
     return new Promise((resolve, reject) => {
-      if (process.env.NODE_ENV !== 'test') {
-        const mailOptions = {
-          to: email,
-          from: process.env.email_username,
-          subject: 'Your password has been changed',
-          text:
-            'Hello,\n\n'
-            + 'This is a confirmation that the password for your account has been changed.\n',
-        };
-        global.smtpTransporter.sendMail(mailOptions, (err) => {
-          if (err) reject(err);
-          resolve();
-        });
-      } else {
+      const mailOptions = {
+        to: email,
+        from: process.env.email_username,
+        subject: 'Your password has been changed',
+        text:
+          'Hello,\n\n'
+          + 'This is a confirmation that the password for your account has been changed.\n',
+      };
+      this.smtpTransporter.sendMail(mailOptions, (err) => {
+        if (err) reject(err);
         resolve();
-      }
+      });
     });
   }
 
@@ -73,25 +94,21 @@ class EmailController {
    */
   contactUs(options) {
     return new Promise((resolve, reject) => {
-      if (process.env.NODE_ENV !== 'test') {
-        const mailOptions = {
-          from: options.email,
-          to: process.env.email_username,
-          subject: 'ACM Question',
-          text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
-            options.topic
-          }\n\nMessage: ${options.message}\n`,
-        };
-        global.smtpTransporter.sendMail(mailOptions, (err) => {
-          if (err) {
-            console.log(err);
-            reject(err);
-          }
-          resolve();
-        });
-      } else {
+      const mailOptions = {
+        from: options.email,
+        to: process.env.email_username,
+        subject: 'ACM Question',
+        text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
+          options.topic
+        }\n\nMessage: ${options.message}\n`,
+      };
+      this.smtpTransporter.sendMail(mailOptions, (err) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        }
         resolve();
-      }
+      });
     });
   }
 
@@ -105,25 +122,23 @@ class EmailController {
    */
   sendConfirmationEmail(email, token, req) {
     return new Promise((resolve, reject) => {
-      if (process.env.NODE_ENV !== 'test') {
-        const mailOptions = {
-          to: email,
-          from: 'Texas Tech ACM',
-          subject: 'Welcome to ACM: TTU',
-          html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
-            req.protocol
-          }://${
-            req.headers.host
-          }/api/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`,
-        };
-        global.smtpTransporter.sendMail(mailOptions, (err) => {
-          if (err) reject(err);
-          resolve();
-          console.log(`Email send to ${email}`);
-        });
-      } else {
+      const mailOptions = {
+        to: email,
+        from: 'Texas Tech ACM',
+        subject: 'Welcome to ACM: TTU',
+        html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
+          req.protocol
+        }://${
+          req.headers.host
+        }/api/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`,
+      };
+      this.smtpTransporter.sendMail(mailOptions, (err) => {
+        if (err) reject(err);
         resolve();
-      }
+        console.log(`Email send to ${email}`);
+      });
     });
   }
 }
+
+exports = EmailController

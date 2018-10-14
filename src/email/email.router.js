@@ -26,18 +26,24 @@ router.post('/contact-us', (req, res) => {
   };
   controller.contactUs(emailInfo)
     .then(() => res.status(200).json())
-    .catch(err => res.status(404).json());
+    .catch(err => {
+      console.error(err)
+      res.status(404).json()
+    });
 });
 
 router.post('/confirm-email', (res, req) => {
+  console.log(req.body)
   res.send('confirm-email');
 });
 
 router.post('/reset-email', (res, req) => {
+  console.log(req.body)
   res.send('reset-email');
 });
 
 router.post('/change-password', (res, req) => {
+  console.log(req.body)
   res.send('change-password');
 });
 
