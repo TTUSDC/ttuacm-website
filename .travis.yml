@@ -13,7 +13,7 @@ jobs:
       - node_modules
     script:
       - yarn lint
-      - yarn test --ci
+      - yarn test --ci --forceExit --detectOpenHandles --maxWorkers=10
 
   - stage: deploy
     install:
