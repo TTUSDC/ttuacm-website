@@ -1,6 +1,4 @@
 const express = require('express');
-const passport = require('passport');
-const querystring = require('querystring');
 
 const { membersOnlyRoute } = require('../utils/protected-route');
 

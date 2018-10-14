@@ -10,6 +10,7 @@ class ProfileController {
    * Updates the complete user object
    *
    * TODO: Have this depend on the Auth service
+   * TODO: Abstract the mongoosejs calls with better higher level methods
    *
    * @param {object} newUser new user object
    * @returns {Promise.<object, Error>} Resolves: a new user object and token  Rejects: Error

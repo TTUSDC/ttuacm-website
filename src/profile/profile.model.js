@@ -11,6 +11,10 @@ const profileSchema = mongoose.Schema({
   blocked: { type: Boolean, default: false },
 });
 
-class Profile {}
+class Profile {
+  constructor() {
+    this.DB = profileSchema.model('Profiles', profileSchema)
+  }
+}
 
 module.exports = Profile;
