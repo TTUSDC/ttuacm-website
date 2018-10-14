@@ -1,11 +1,12 @@
-const { google } = require('googleapis');
 
-let calendar;
-const calendarId = 'primary';
 
 class EventsController {
   constructor() {
     // TODO: initialize OAuth2
+    console.log('We need to grab the OAuth2 Provider by making a call to the Auth Service')
+    this.calendar = null
+    this.currentAttendees = []
+    this.calendarId = 'primary'
   }
 
 
@@ -18,9 +19,9 @@ class EventsController {
    */
   getRawEvents() {
     return new Promise((resolve, reject) => {
-      calendar.events.list(
+      this.calendar.events.list(
         {
-          calendarId,
+          calendarId: this.calendarId,
           timeMin: new Date().toISOString(),
           singleEvents: true,
           orderBy: 'startTime',
@@ -47,11 +48,11 @@ class EventsController {
    */
   listEvents() {
     return new Promise(async (resolve, reject) => {
-      getRawEvents()
+      this.getRawEvents()
         .then((events) => {
           // console.log(events);
           // Will store all of the events and return
-          eventsList = [];
+          const eventsList = [];
           // Maps all of the numbers to days
           const weekday = [
             'Sunday',
@@ -102,9 +103,9 @@ class EventsController {
   getAttendees(eventId) {
     return new Promise((resolve, reject) => {
       console.log(eventId);
-      calendar.events.get(
+      this.calendar.events.get(
         {
-          calendarId,
+          calendarId: this.calendarId,
           eventId,
         },
         (err, { data }) => {
@@ -126,11 +127,11 @@ class EventsController {
    * @param {string} email the user's email
    * @returns {Array<Object>} updated attendee list
    */
-  addAttendee(currentAttendees, email) {
+  addAttendee(email) {
     return new Promise(async (resolve, reject) => {
       try {
-        currentAttendees.push({ email, responseStatus: 'accepted' });
-        resolve(currentAttendees);
+        this.currentAttendees.push({ email, responseStatus: 'accepted' });
+        resolve(this.currentAttendees);
       } catch (err) {
         reject(err);
       }
@@ -144,16 +145,16 @@ class EventsController {
    * @param {string} email the user's email
    * @returns {Array<Object>} updated attendee list
    */
-  removeAttendee(currentAttendees, email) {
+  removeAttendee(email) {
     return new Promise(async (resolve, reject) => {
       try {
-        if (currentAttendees.length === 0) throw new Error('No attendees found');
-        const originalAttendees = currentAttendees;
-        currentAttendees = currentAttendees.filter(each => each.email !== email.toLowerCase());
-        if (originalAttendees.length === currentAttendees.length) {
+        if (this.currentAttendees.length === 0) throw new Error('No attendees found');
+        const originalAttendees = this.currentAttendees;
+        this.currentAttendees = this.currentAttendees.filter(each => each.email !== email.toLowerCase());
+        if (originalAttendees.length === this.currentAttendees.length) {
           throw new Error('No user found');
         }
-        resolve(currentAttendees);
+        resolve(this.currentAttendees);
       } catch (err) {
         reject(err);
       }
@@ -177,9 +178,9 @@ class EventsController {
    */
   updateAttendee(eventId, attendees) {
     return new Promise(async (resolve, reject) => {
-      calendar.events.patch(
+      this.calendar.events.patch(
         {
-          calendarId,
+          calendarId: this.calendarId,
           eventId,
           resource: {
             attendees,
