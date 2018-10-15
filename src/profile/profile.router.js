@@ -1,15 +1,15 @@
-const express = require('express');
+const express = require('express')
 
-const { membersOnlyRoute } = require('../utils/protected-route');
+const { membersOnlyRoute } = require('../utils/protected-route')
 
-const router = express.Router();
+const router = express.Router()
 
 // Controller
-const controller = require('./profile.controller');
+const controller = require('./profile.controller')
 
 router.get('/test', (req, res) => {
-  res.send(`Profile App Works: ${process.env.NODE_ENV}`);
-});
+  res.send(`Profile App Works: ${process.env.NODE_ENV}`)
+})
 
 /**
  * Gets the user's profile to fill in a profile page
@@ -26,13 +26,13 @@ router.get('/test', (req, res) => {
 router.get('/profile', membersOnlyRoute, (req, res) => {
   controller.getProfile(req.user.email)
     .then((user) => {
-      res.status(200).json({ user, err: null });
+      res.status(200).json({ user, err: null })
     })
     .catch((err) => {
-      console.error(err);
-      res.status(404).json({ user: null, err });
-    });
-});
+      console.error(err)
+      res.status(404).json({ user: null, err })
+    })
+})
 
 /**
  * Updates the user's resume
@@ -49,13 +49,13 @@ router.get('/profile', membersOnlyRoute, (req, res) => {
 router.put('/update-resume', membersOnlyRoute, (req, res) => {
   controller.updateResume(req.user._id, req.body.path)
     .then((user) => {
-      res.status(200).json({ user, err: null });
+      res.status(200).json({ user, err: null })
     })
     .catch((err) => {
-      console.error(err);
-      res.status(404).json({ user: null, err });
-    });
-});
+      console.error(err)
+      res.status(404).json({ user: null, err })
+    })
+})
 
 /**
  * Updates the user's information completely
@@ -79,18 +79,18 @@ router.put('/update-user', membersOnlyRoute, (req, res) => {
           token: payload.token,
           err: null,
         },
-      );
+      )
     })
     .catch((err) => {
-      console.error(err);
+      console.error(err)
       res.status(404).json(
         {
           user: null,
           token: null,
           err,
         },
-      );
-    });
-});
+      )
+    })
+})
 
-module.exports = router;
+module.exports = router
