@@ -2,6 +2,11 @@ module.exports = {
   "source": ".",
   "destination": "./docs",
   "includes": ["^src"],
+  "excludes": [
+    "client_secret.json",
+    "credentials.json",
+    "README.md"
+  ],
   "unexportIdentifier": true,
   "undocumentIdentifier": false,
   "title": "TTUACM Backend",
