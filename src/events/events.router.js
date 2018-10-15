@@ -4,13 +4,16 @@ const controller = require('./events.controller');
 
 const router = express.Router();
 
-/**
- * Middleware for route guarding
- * If errors occur, it is probably because front-end is not sending
- * JWT along with their requests
- */
 const { membersOnlyRoute } = require('../utils/protected-route');
 
+/**
+ * Test Route
+ *
+ * - Endpoint: `/events/api/v2/test`
+ * - GET
+ *
+ * @typedef {function} EventsRouter
+ */
 router.get('/test', (req, res) => {
   res.send('Email App Works!');
 });
@@ -18,7 +21,7 @@ router.get('/test', (req, res) => {
 /**
  * Gets all the events (formatted) in ACM Google Calendar using an OAuth2 Object
  *
- * - Endpoint: `/api/events`
+ * - Endpoint: `/events/api/v2/`
  * - GET
  *
  * @typedef {function} EventsRouter-listEvents
@@ -38,7 +41,7 @@ router.get('/', (req, res) => {
 /**
  * Gets all attendees for an event
  *
- * - Endpoint `/api/events/attendee`
+ * - Endpoint `/events/api/v2/attendee?id=userId`
  * - Verb: GET
  *
  * @typedef {function} EventsRouter-getAttendees
@@ -58,7 +61,7 @@ router.get('/attendee/:id', (req, res) => {
 /**
  * Adds an attendee to the event
  *
- * - Endpoint `/api/events/attendee`
+ * - Endpoint `/events/api/v2/attendee?id=userId`
  * - Verb: PATCH
  *
  * @param {string} req.body.email - user's email
@@ -81,13 +84,13 @@ router.patch('/attendee/:id', membersOnlyRoute, async (req, res) => {
 /**
  * Deletes an attendee for an event
  *
- * - Endpoint `/api/events/remove-attendee`
- * - Verb: patch
+ * - Endpoint `/events/api/v2/attendee?id=userId`
+ * - Verb: DELETE
  *
  * @param {string} req.params.id event ID
  * @typedef {function} EventsRouter-removeAttendee
  */
-router.patch('/remove-attendee/:id', async (req, res) => {
+router.delete('/remove-attendee/:id', async (req, res) => {
   console.log('Remove Route');
   try {
     const eventId = req.params.id;
@@ -104,7 +107,7 @@ router.patch('/remove-attendee/:id', async (req, res) => {
 /**
  * Gets all raw event objects: Mainly used for testing
  *
- * - Endpoint `/api/events/raw`
+ * - Endpoint `/events/api/v2/raw/`
  * - Verb: GET
  *
  * @typedef {function} EventsRouter-getRawEvents
