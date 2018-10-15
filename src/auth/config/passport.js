@@ -1,8 +1,13 @@
-const JwtStrategy = require('passport-jwt').Strategy
-const GoogleStrategy = require('passport-google-oauth2').Strategy
-const GitHubStrategy = require('passport-github').Strategy
-const FacebookStrategy = require('passport-facebook').Strategy
+const passportJwt = require('passport-jwt')
 const { ExtractJwt } = require('passport-jwt')
+const passportGoogle = require('passport-google-oauth2')
+const passportGitHub = require('passport-github')
+const passportFacebook = require('passport-facebook')
+
+const JwtStrategy = passportJwt.Strategy
+const GoogleStrategy = passportGoogle.Strategy
+const GitHubStrategy = passportGitHub.Strategy
+const FacebookStrategy = passportFacebook.Strategy
 
 const User = require('../auth.model')
 
