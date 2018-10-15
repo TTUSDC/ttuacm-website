@@ -76,11 +76,15 @@ function getEnvVaribales(services, name) {
     choices += 1
     if (choices >= services.length) {
       console.log('Saving changes...')
-      shell('firebase functions:config:get > .runtimeconfig.json')
-      console.log('Done!')
-      process.exit(0)
+      rl.question('Would you like to save those settings for local development? [Y/n] ', (ans) => {
+        if (ans === 'Y' || ans === 'y') {
+          shell('firebase functions:config:get > .runtimeconfig.json')
+        }
+        process.exit(0)
+      })
+    } else {
+      process.stdout.write(`${services[choices]}: `)
     }
-    process.stdout.write(`${services[choices]}: `)
   })
 }
 

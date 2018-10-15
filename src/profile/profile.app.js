@@ -6,7 +6,7 @@ const app = express();
 
 const { environment, profile } = functions.config()
 process.env = profile
-process.env.NODE_ENV = environment.env
+process.env.NODE_ENV = environment.env || 'dev'
 
 // Middleware
 app.use('/api/v2', router);
