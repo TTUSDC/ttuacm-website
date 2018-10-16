@@ -5,7 +5,7 @@ const crypto = require('crypto')
  *
  * @returns {string} JWT Token
  */
-const generateHexToken = () => {
+function generateHexToken() {
   const token = crypto.randomBytes(20);
   return token.toString('hex');
 }

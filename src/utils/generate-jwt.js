@@ -9,7 +9,7 @@ const secret = process.env.CI ? 'CISecret' : functions.config().auth.session_sec
  * @param {object} payload all the data that will be stored into the token
  * @returns {string} JWT Token
  */
-const generateJWTToken = (payload) => {
+function generateJWTToken(payload) {
   const token = jwt.sign({ data: payload },
     secret, { expiresIn: 604800 }) // 1 week
 

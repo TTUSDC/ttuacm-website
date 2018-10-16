@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 
-const connectDB = (connection) => {
+/**
+ * Connects the API to it's MongoDB database
+ *
+ * @param {string} connection the url of the mongodb instance
+ */
+function connectDB(connection) {
   mongoose.connect(
     connection,
     {
