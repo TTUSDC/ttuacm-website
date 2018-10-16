@@ -41,7 +41,6 @@
     "cross-env": "~5.2.0",
     "esdoc": "0.5.2",
     "esdoc-node": "1.0.2",
-    "esdoc-standard-plugin": "1.0.0",
     "eslint": "5.6.1",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-config-prettier": "^3.1.0",
