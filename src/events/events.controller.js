@@ -1,11 +1,28 @@
-
-
+/**
+ * Handles Google Calendar Events Controller
+ */
 class EventsController {
+  /**
+   * Grabs the OAuth2 Provider from Auth Service and creates a calendar object
+   */
   constructor() {
     // TODO: initialize OAuth2
-    console.log('We need to grab the OAuth2 Provider by making a call to the Auth Service')
+    // We need to grab the OAuth2 Provider by making a call to the Auth Service
+
+    /**
+     * Calendar Object
+     * @type {object}
+     */
     this.calendar = null
+    /**
+     * Current Attendees for any particular event
+     * @type {Array<object>}
+     */
     this.currentAttendees = []
+    /**
+     * Calendar of choice from ACM
+     * @type {string}
+     */
     this.calendarId = 'primary'
   }
 
@@ -50,7 +67,6 @@ class EventsController {
     return new Promise(async (resolve, reject) => {
       this.getRawEvents()
         .then((events) => {
-          // console.log(events);
           // Will store all of the events and return
           const eventsList = [];
           // Maps all of the numbers to days
@@ -79,30 +95,27 @@ class EventsController {
               attendees: event.attendees || [],
               eventId: event.id, // Event ID according to Google
               allDayEvent: event.start.date !== undefined,
-            });
+            })
             return resolve(eventsList);
-          });
+          })
         })
         .catch((err) => {
-          reject(err);
-        });
-    });
+          reject(err)
+        })
+    })
   }
 
   /**
    * Lists all attendees for an event
    *
-   * Rejects with an error
-   *
-   * Resolves with an array with a null email if empty or the list of attendees
+   * - OnSuccess: Resolves with an array with a null email if empty or the list of attendees
+   * - OnFailure: Rejects with an Error
    *
    * @param {string} eventId Event ID
-   * @requires oAuth2Client - Configurations can be found in oauth2.config
    * @returns {Promise.<Array<Object>>} A Promise
    */
   getAttendees(eventId) {
     return new Promise((resolve, reject) => {
-      console.log(eventId);
       this.calendar.events.get(
         {
           calendarId: this.calendarId,
@@ -110,13 +123,13 @@ class EventsController {
         },
         (err, { data }) => {
           if (err) {
-            reject(err);
+            reject(err)
           } else {
-            resolve(data.attendees || []);
+            resolve(data.attendees || [])
           }
         },
-      );
-    });
+      )
+    })
   }
 
   /**
@@ -125,13 +138,16 @@ class EventsController {
    * @param {string} eventId the event ID
    * @param {Array} currentAttendees the current attendees for the event
    * @param {string} email the user's email
-   * @returns {Array<Object>} updated attendee list
+   * @returns {Promise.<null>} A Promise
+   *
+   * - OnSuccess: Resolves
+   * - OnFailure: Rejects with an Error
    */
-  addAttendee(email) {
+  addAttendee(eventId, email) {
     return new Promise(async (resolve, reject) => {
       try {
         this.currentAttendees.push({ email, responseStatus: 'accepted' });
-        resolve(this.currentAttendees);
+        resolve();
       } catch (err) {
         reject(err);
       }
@@ -141,7 +157,6 @@ class EventsController {
   /**
    * Removes the attendee by their email
    *
-   * @param {Array} currentAttendees the attendees list to remove from
    * @param {string} email the user's email
    * @returns {Array<Object>} updated attendee list
    */

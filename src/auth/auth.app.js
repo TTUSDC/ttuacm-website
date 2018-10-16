@@ -3,6 +3,7 @@ const express = require('express')
 const bp = require('body-parser')
 const cors = require('cors')
 const passport = require('passport')
+const passportConfig = require('./config/passport')
 const router = require('./auth.router')
 const { connectDB } = require('../utils/db-connect')
 
@@ -24,6 +25,6 @@ app.use(cors({ origin: true }))
 
 app.use(passport.initialize())
 app.use(passport.session())
-require('./config/passport')(passport)
+passportConfig(passport)
 
 module.exports = app

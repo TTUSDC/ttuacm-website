@@ -70,7 +70,14 @@ function InvalidToken() {
   return err
 }
 
+function ErrorTestUtil() {
+  const err = new Error('should have thrown an error')
+  err.code = 404
+  return err
+}
+
 module.exports = {
+  ErrorTestUtil,
   InvalidAPIOption,
   InvalidLogin,
   InvalidToken,

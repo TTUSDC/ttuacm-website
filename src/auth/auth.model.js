@@ -12,7 +12,7 @@ const studentSchema = mongoose.Schema({
   resetPasswordToken: { type: String, default: '' },
   resetPasswordExpires: { type: Date, default: null },
   verified: { type: Boolean },
-})
+}, { autoCreate: true })
 
 function filterUser(user) {
   const filteredUser = user
@@ -20,11 +20,16 @@ function filterUser(user) {
   return filteredUser
 }
 
+/**
+ * Model that manages the students collection
+ */
 class AuthModel {
+  /**
+   * Creates a DB instance of the students collection
+   */
   constructor() {
     this.DB = mongoose.model('Students', studentSchema)
   }
-
 
   /**
    * Updates the user by their email address
@@ -54,9 +59,8 @@ class AuthModel {
     return new Promise(async (resolve, reject) => {
       try {
         const newUser = new this.DB(user)
-        newUser.save().then((createdUser) => {
-          resolve(createdUser)
-        })
+        const createdUser = await newUser.save()
+        resolve(createdUser)
       } catch (err) {
         console.error(err)
         reject(ErrorMessages.CreateUserError())
