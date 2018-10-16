@@ -1,14 +1,15 @@
 require('firebase-functions-test')()
-
 const chai = require('chai')
 const mongoose = require('mongoose')
 const Controller = require('./auth.controller')
+const Model = require('./auth.model')
 const ErrorMessages = require('./auth.errors')
 
 const { expect } = chai
 
 describe('Auth Unit Tests', () => {
   let ctrl
+  let model
   // eslint-disable-next-line
   beforeAll((done) => {
     mongoose.connect('mongodb://localhost:27017/testing', {
@@ -20,9 +21,12 @@ describe('Auth Unit Tests', () => {
 
   beforeEach(() => {
     ctrl = new Controller()
+    model = new Model()
   })
 
   afterEach(() => {
+    // Make sure to at least create one user for each test
+    // or this will error out
     mongoose.connection.dropCollection('students')
   })
 
@@ -48,7 +52,7 @@ describe('Auth Unit Tests', () => {
     try {
       await ctrl.register(testUser)
       await ctrl.register(testUser)
-      throw new Error('should not have gone through without an error')
+      throw ErrorMessages.ErrorTestUtil()
     } catch(err) {
       const targetError = ErrorMessages.DuplicateAccount()
       expect(err.message).to.equal(targetError.message)
@@ -95,6 +99,7 @@ describe('Auth Unit Tests', () => {
     const testUser = {
       email: 'email@gmail',
       password: 'password',
+      verified: true
     }
 
     const newUser = await ctrl.register(testUser)
@@ -114,12 +119,12 @@ describe('Auth Unit Tests', () => {
     const testUser = {
       email: 'email@gmail',
       password: 'password',
+      confirmEmailToken: '',
+      verified: true
     }
 
-    const newUser = await ctrl.register(testUser)
-
     try {
-      await ctrl.confirmToken(newUser.confirmEmailToken)
+      await model.createNewUser(testUser)
       const { user } = await ctrl.forgotLogin(testUser.email)
       expect(user.resetPasswordExpires).to.exist
       expect(user.resetPasswordToken).to.exist
@@ -132,14 +137,125 @@ describe('Auth Unit Tests', () => {
     const testUser = {
       email: 'email@gmail',
       password: 'password',
+      verified: true
     }
 
-    const newUser = await ctrl.register(testUser)
+    try {
+      await model.createNewUser(testUser)
+      await ctrl.forgotLogin('NotAValidEmail')
+      throw ErrorMessages.ErrorTestUtil()
+    } catch (err) {
+      const targetError = ErrorMessages.NotFoundErr()
+      expect(err.message).to.equal(targetError.message)
+      expect(err.code).to.equal(targetError.code)
+    }
+  })
+
+  it('[resetToken] should throw an error if a reset token was not passed', async () => {
+    try {
+      await model.createNewUser({ email: 'email' })
+      await ctrl.resetToken()
+      throw ErrorMessages.ErrorTestUtil()
+    } catch (err) {
+      const targetError = ErrorMessages.MissingToken()
+      expect(err.message).to.equal(targetError.message)
+      expect(err.code).to.equal(targetError.code)
+    }
+  })
+
+  it('[resetToken] should throw an error if an invalid token was passed', async () => {
+    try {
+      await model.createNewUser({ email: 'email' })
+      await ctrl.resetToken('Bad Token')
+      throw ErrorMessages.ErrorTestUtil()
+    } catch (err) {
+      const targetError = ErrorMessages.NotFoundErr()
+      expect(err.message).to.equal(targetError.message)
+      expect(err.code).to.equal(targetError.code)
+    }
+  })
+
+  it('[resetToken] should resolve with the user\'s token', async () => {
+    const testUser = {
+      email: 'email@gmail.com',
+      password: 'password',
+      resetPasswordToken: 'Token',
+      resetPasswordExpires: Date.now() + 1000000
+    }
 
     try {
-      await ctrl.confirmToken(newUser.confirmEmailToken)
-      await ctrl.forgotLogin('NotAValidEmail')
-      throw new Error('should have thrown an error')
+      await model.createNewUser(testUser)
+      const successToken = await ctrl.resetToken('Token')
+      expect(successToken).to.exist
+    } catch (err) {
+      expect(err).not.to.exist
+    }
+  })
+
+  it('[verifyUser] should throw an error when the user passes a bad JWT', async () => {
+    const testUser = {
+      email: 'email@gmail.com',
+      password: 'password',
+      resetPasswordToken: 'Token',
+      resetPasswordExpires: Date.now() + 1000000
+    }
+
+    try {
+      await model.createNewUser(testUser)
+      await ctrl.verifyUser('Bad Token', 'password')
+      throw ErrorMessages.ErrorTestUtil()
+    } catch (err) {
+      const targetError = ErrorMessages.NotFoundErr()
+      expect(err.message).to.equal(targetError.message)
+      expect(err.code).to.equal(targetError.code)
+    }
+  })
+
+  it('[verifyUser] should update the found user they pass a JWT', async () => {
+    const testUser = {
+      email: 'email@gmail.com',
+      password: 'password',
+      resetPasswordToken: 'Token',
+      resetPasswordExpires: Date.now() + 1000000
+    }
+
+    try {
+      await model.createNewUser(testUser)
+      const updatedUser = await ctrl.verifyUser('Token', 'password')
+      expect(updatedUser).to.exist
+    } catch (err) {
+      expect(err).not.to.exist
+    }
+  })
+
+  it('[confirmToken] should correctly compare two matching tokens', async () => {
+    const testUser = {
+      email: 'email@gmail.com',
+      password: 'password',
+      confirmEmailToken: 'Token'
+    }
+
+    try {
+      await model.createNewUser(testUser)
+      const updatedUser = await ctrl.confirmToken('Token')
+      expect(updatedUser.confirmEmailToken).to.equal('')
+      expect(updatedUser.verified).to.equal(true)
+    } catch (err) {
+      expect(err).not.to.exist
+    }
+  })
+
+  it('[confirmToken] should throw error for two mismatching tokens', async () => {
+    const testUser = {
+      email: 'email@gmail.com',
+      password: 'password',
+      confirmEmailToken: 'Token'
+    }
+
+    try {
+      await model.createNewUser(testUser)
+      await ctrl.confirmToken('Bad Token')
+      throw ErrorMessages.ErrorTestUtil()
     } catch (err) {
       const targetError = ErrorMessages.NotFoundErr()
       expect(err.message).to.equal(targetError.message)

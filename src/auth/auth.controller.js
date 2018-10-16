@@ -4,8 +4,8 @@ const querystring = require('querystring')
 const bcrypt = require('bcryptjs')
 const AuthModel = require('./auth.model')
 const ErrorMessages = require('./auth.errors')
-const { generateHexToken } = require('../utils/generate-hex')
-const { generateJWTToken } = require('../utils/generate-jwt')
+const generateHexToken = require('../utils/generate-hex')
+const generateJWTToken = require('../utils/generate-jwt')
 
 process.env = functions.config().config
 
@@ -137,26 +137,28 @@ class AuthController {
    * @returns {Promise.<token, Error>} Resolves: HEX Token, Rejects: an error
    */
   resetToken(resetPasswordToken) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       if (!resetPasswordToken) reject(ErrorMessages.MissingToken())
-      const query = {
-        resetPasswordToken,
-        resetPasswordExpires: { $gt: Date.now() },
+      try {
+        const query = {
+          resetPasswordToken,
+          resetPasswordExpires: { $gt: Date.now() },
+        }
+
+        const user = await this.DB.getUserByAttribute(query)
+
+        // User was not found or the token was expired, either way...
+        // Signals the front end to tell the user that their token was invalid
+        // and that they may need to send another email
+        if (!user) reject(ErrorMessages.NotFoundErr())
+
+        // The token is valid and will signal front end to render the login page
+        // The token we are passing is the same token that is in the database
+        resolve(resetPasswordToken)
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.InvalidToken())
       }
-      this.DB.getUserByAttribute(query)
-        .then((user) => {
-          // User was not found or the token was expired, either way...
-          // Signals the front end to tell the user that their token was invalid
-          // and that they may need to send another email
-          if (!user) reject(ErrorMessages.NotFoundErr())
-          // The token is valid and will signal front end to render the login page
-          // The token we are passing is the same token that is in the database
-          resolve(resetPasswordToken)
-        })
-        .catch((err) => {
-          console.error(err)
-          reject(ErrorMessages.InvalidToken())
-        })
     })
   }
 
@@ -172,20 +174,25 @@ class AuthController {
   verifyUser(token, passwordAttempt) {
     return new Promise(async (resolve, reject) => {
       try {
-        const hash = await bcrypt.hash(passwordAttempt, saltRounds)
-        const query = {
-          resetPasswordToken: token,
-          resetPasswordExpires: { $gt: Date.now() },
-        }
-        const update = {
-          // Need to encrypt the password first
-          password: hash,
-          resetPasswordToken: undefined,
-          resetPasswordExpires: undefined,
-        }
-        const updatedUser = await this.DB.updateUserByAttribute(query, update)
-        if (!updatedUser) reject(ErrorMessages.NotFoundErr())
-        resolve(updatedUser)
+        bcrypt.hash(passwordAttempt, saltRounds, async (err, hash) => {
+          if (err) {
+            console.error(err)
+            reject(ErrorMessages.UnknownServerError())
+          }
+          const query = {
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() },
+          }
+          const update = {
+            // Need to encrypt the password first
+            password: hash,
+            resetPasswordToken: undefined,
+            resetPasswordExpires: undefined,
+          }
+          const updatedUser = await this.DB.updateUserByAttribute(query, update)
+          if (!updatedUser) reject(ErrorMessages.NotFoundErr())
+          resolve(updatedUser)
+        })
       } catch (err) {
         console.error(err)
         reject(ErrorMessages.NotFoundErr())
@@ -202,19 +209,21 @@ class AuthController {
    * @returns {Promise.<null, Error>} Rejects: an error
    */
   confirmToken(confirmEmailToken) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const query = { confirmEmailToken }
       const update = {
         confirmEmailToken: '',
         verified: true,
       }
 
-      this.DB.updateUserByAttribute(query, update)
-        .then(user => resolve(user))
-        .catch((err) => {
-          console.error(err)
-          reject(ErrorMessages.NotFoundErr())
-        })
+      try {
+        const user = await this.DB.updateUserByAttribute(query, update)
+        if (!user) reject(ErrorMessages.NotFoundErr())
+        resolve(user)
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.NotFoundErr())
+      }
     })
   }
 

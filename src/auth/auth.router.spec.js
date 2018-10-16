@@ -1,7 +1,8 @@
-require('firebase-functions-test')()
+const test = require('firebase-functions-test')
 const chai = require('chai')
 
 const { expect } = chai
+test()
 
 describe('Auth Integration Tests', () => {
   it('should run a test', () => {
