@@ -11,7 +11,7 @@ const controller = require('./email.controller')
  * - Endpoint: `/email/api/v2`
  * - Verb: GET
  *
- * @typedef {function} UserRouter
+ * @typedef {function} EmailRouter
  */
 router.get('/', (req, res) => {
   res.send('Email App Works!')
@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
  * - Endpoint: `/email/api/v2/contact-us`
  * - Verb: POST
  *
- * @typedef {function} UserRouter-contactUs
+ * @typedef {function} EmailRouter-contactUs
  */
 router.post('/contact-us', (req, res) => {
   const emailInfo = {
@@ -48,7 +48,7 @@ router.post('/contact-us', (req, res) => {
  * - Endpoint: `/email/api/v2/confirm-email`
  * - Verb: POST
  *
- * @typedef {function} UserRouter-sendConfirmationEmail
+ * @typedef {function} EmailRouter-sendConfirmationEmail
  */
 router.post('/confirm-email', (res, req) => {
   console.log(req.body)
@@ -64,7 +64,7 @@ router.post('/confirm-email', (res, req) => {
  * - Endpoint: `/email/api/v2/reset-password`
  * - Verb: POST
  *
- * @typedef {function} UserRouter-sendResetEmail
+ * @typedef {function} EmailRouter-sendResetEmail
  */
 router.post('/reset-email', (res, req) => {
   console.log(req.body)
@@ -77,7 +77,7 @@ router.post('/reset-email', (res, req) => {
  * - Endpoint: `/email/api/v2/change-password-notif`
  * - Verb: POST
  *
- * @typedef {function} UserRouter-sendChangedPasswordNotification
+ * @typedef {function} EmailRouter-sendChangedPasswordNotification
  */
 router.post('/change-password-notif', (res, req) => {
   console.log(req.body)
