@@ -7,14 +7,14 @@ const router = express.Router();
 const { membersOnlyRoute } = require('../utils/protected-route');
 
 /**
- * Test Route
+ * Testing route for the Events Service
  *
  * - Endpoint: `/events/api/v2/test`
  * - GET
  *
  * @typedef {function} EventsRouter
  */
-router.get('/test', (req, res) => {
+router.get('/', (req, res) => {
   res.send('Email App Works!');
 });
 
