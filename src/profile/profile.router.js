@@ -7,7 +7,7 @@ const router = express.Router()
 // Controller
 const controller = require('./profile.controller')
 
-router.get('/test', (req, res) => {
+router.get('/', (req, res) => {
   res.send(`Profile App Works: ${process.env.NODE_ENV}`)
 })
 

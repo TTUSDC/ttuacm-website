@@ -2,16 +2,24 @@ const express = require('express')
 const passport = require('passport')
 const querystring = require('querystring')
 
-const authRouter = express.Router()
+const router = express.Router()
 
 const Controller = require('./auth.controller')
 
-authRouter.get('/test', (req, res) => {
+/**
+ * Testing route for the Auth Service
+ *
+ * - Endpoint: `/auth/api/v2`
+ * - Verb: GET
+ *
+ * @typedef {function} ContactsRouter
+ */
+router.get('/', (req, res) => {
   res.send('Auth App Works!')
 })
 
 /* GETS the Google Login Screen */
-authRouter.get(
+router.get(
   '/google',
   passport.authenticate('google', {
     scope: [
@@ -22,13 +30,13 @@ authRouter.get(
 )
 
 /* Callback URL for Google */
-authRouter.get('/google/redirect', passport.authenticate('google'), (req, res) => {
+router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
   const qs = Controller.oauth2(req.user)
   res.redirect(`${req.body.redirectURL}/?${qs}`)
 })
 
 /* GETS the GitHub Login Screen */
-authRouter.get(
+router.get(
   '/github',
   passport.authenticate('github', {
     scope: ['read:user'],
@@ -36,13 +44,13 @@ authRouter.get(
 )
 
 /* Callback URL for GitHub */
-authRouter.get('/github/redirect', passport.authenticate('github'), (req, res) => {
+router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
   const qs = Controller.oauth2(req.user)
   res.redirect(`${req.body.redirectURL}/?${qs}`)
 })
 
 /* GETS the Facebook Login Screen */
-authRouter.get(
+router.get(
   '/facebook',
   passport.authenticate('facebook', {
     scope: ['public_profile', 'email'],
@@ -50,7 +58,7 @@ authRouter.get(
 )
 
 /* Callback URL for Facebook */
-authRouter.get(
+router.get(
   '/facebook/redirect',
   passport.authenticate('facebook', {
     failureRedirect: '/login',
@@ -75,7 +83,7 @@ authRouter.get(
  * TODO: Recognize that not all of the user's form data goes here
  *
  */
-authRouter.post('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
   const user = {
     email: req.body.email,
     password: req.body.password,
@@ -103,7 +111,7 @@ authRouter.post('/register', async (req, res) => {
  *
  * @typedef {function} UserRouter-login
  */
-authRouter.post('/login', (req, res) => {
+router.post('/login', (req, res) => {
   const ctrl = new Controller()
   const { email } = req.body
   const inputPassword = req.body.password
@@ -130,7 +138,7 @@ authRouter.post('/login', (req, res) => {
  * @typedef {function} UserRouter-confirmToken
  * @param {querystring} token - HEX token saved in confirmEmailToken
  */
-authRouter.get('/confirm/:token', (req, res) => {
+router.get('/confirm/:token', (req, res) => {
   const ctrl = new Controller()
   const { token } = req.params
   const { redirectURL } = req.body
@@ -157,7 +165,7 @@ authRouter.get('/confirm/:token', (req, res) => {
  * @typedef {function} UserRouter-forgotLogin
  * @param {string} req.body.email - Email for the account that needs to change passwords
  */
-authRouter.post('/forgot', async (req, res) => {
+router.post('/forgot', async (req, res) => {
   try {
     const ctrl = new Controller()
     const { email } = req.body
@@ -182,7 +190,7 @@ authRouter.post('/forgot', async (req, res) => {
  * @typedef {function} UserRouter-resetToken
  * @param {string} token - A string that contains the HEX code/Reset token of a lost account
  */
-authRouter.get('/reset/:token', (req, res) => {
+router.get('/reset/:token', (req, res) => {
   const ctrl = new Controller()
   const { token } = req.params
   const { redirectURL } = req.body
@@ -208,7 +216,7 @@ authRouter.get('/reset/:token', (req, res) => {
  *
  * @typedef {function} UserRouter-verifyUser
  */
-authRouter.post('/reset/:token', async (req, res) => {
+router.post('/reset/:token', async (req, res) => {
   try {
     const ctrl = new Controller()
     const { token } = req.params
@@ -222,4 +230,4 @@ authRouter.post('/reset/:token', async (req, res) => {
   }
 })
 
-module.exports = authRouter
+module.exports = router

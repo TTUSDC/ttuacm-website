@@ -6,7 +6,7 @@ const router = express.Router()
 const Controller = require('./email.controller')
 
 /**
- * Testing route for the Events Service
+ * Testing route for the Email Service
  *
  * - Endpoint: `/email/api/v2`
  * - Verb: GET
