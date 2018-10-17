@@ -13,7 +13,9 @@ jobs:
     script:
     - yarn lint
     - yarn test --ci --forceExit --detectOpenHandles --maxWorkers=10
+
   - stage: deploy
+    if: branch = master
     install:
     - yarn add -DE esdoc@0.5.2 esdoc-node@1.0.2
     script:
@@ -23,16 +25,12 @@ jobs:
       skip_cleanup: true
       github_token: "$GITHUB_TOKEN"
       local_dir: docs/
-      on:
-        branch: master
     - provider: firebase
       skip_cleanup: true
       token:
         secure: "btZkVTCN/i/DyKv1VdkgyhTKrrSPaBfgY2/Lf4vttswLttT8swGo0SLirROVecqfh056USjYTJPQKu5+TMXJ46hzGni1xD0Hc13F92z5a0VAoeXAiB/Fz1ChoFx9SyCHSmb7fI/tdUcZbg5JVonmf6Cnb1KSPiUUQa9BiaL4SeBsSjw80vy3xuL2DqI1gHtQfIleugFFw7Z46SjY5HVqhhggBkT5NIFAL7Ihi3ryz01DMdnf4PA8b2cfQehUWC02szNqbTV7Hqp2uH2WNi6QKVlhpmYyYsBdLL+bBcP5YZQHgtp4K0aOlM+63/35YwjFOzU5mTeeCBEMb5EfzTHV7ufUKrk/QOs86nM1N7v2YCA8rxNqP0XyDN5fgWNyGDNxBh4W4t/Lgnlk1PDAhCFFgcBLTkj+EFlMfUuNnHCEaI0sUpMJg8neQO0rMqPv195X8vOAJnbTqeDYndLP9lyXmdTWGKKKGdgFBw6AIbtQ+0yvmVxg2VfHNsQAOgtuy8NmmU6nhDXrb1lqcuUgKJBeyGhciZIdnWTQdCucc2FZLG/if4JBPwr84uApossOCzV1XD7UvaPLrUmUGz83RHOMsCurCosXX3DEE/BEokXUEGFuGR8Oa/jsvg0YLuJYJzmqpxKZUzG1vg2mWRfirZ5gtnNXlA2nSOpUeM4hEx6bHyE="
       project: "acm-texas-tech-web-app-2"
       message: "Deployed to firebase functions"
-      on:
-        branch: master
 
 notifications:
   email: false

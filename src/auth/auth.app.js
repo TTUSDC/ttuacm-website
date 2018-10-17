@@ -5,7 +5,7 @@ const cors = require('cors')
 const passport = require('passport')
 const passportConfig = require('./config/passport')
 const router = require('./auth.router')
-const { connectDB } = require('../utils/db-connect')
+const connectDB = require('../utils/db-connect')
 
 // Env Variables from the Configs
 const { environment, auth } = functions.config()
