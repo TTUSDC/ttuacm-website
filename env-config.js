@@ -11,7 +11,7 @@ shell('clear')
 console.log('Thank You for contributing to ACM!')
 console.log('We will begin by setting up the environment variables')
 console.log('')
-console.log('For email username and password, I recomment going to etherial.mail')
+console.log('For email username and password, I recommend going to etherial.mail')
 console.log('')
 console.log('Skip the clientID and secrets\n')
 
