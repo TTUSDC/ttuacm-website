@@ -12,13 +12,20 @@ const Controller = require('./auth.controller')
  * - Endpoint: `/auth/api/v2`
  * - Verb: GET
  *
- * @typedef {function} ContactsRouter
+ * @typedef {function} AuthRouter
  */
 router.get('/', (req, res) => {
   res.send('Auth App Works!')
 })
 
-/* GETS the Google Login Screen */
+/**
+ * Gets the Google Login Screen
+ *
+ * - Endpoint: `/auth/api/v2/google`
+ * - Verb: GET
+ *
+ * @typedef {function} AuthRouter-GoogleAuth
+ */
 router.get(
   '/google',
   passport.authenticate('google', {
@@ -29,13 +36,27 @@ router.get(
   }),
 )
 
-/* Callback URL for Google */
+/**
+ * Callback for Google OAuth2
+ *
+ * - Endpoint: `/auth/api/v2/google/redirect`
+ * - Verb: GET
+ *
+ * @typedef {function} AuthRouter-GoogleAuthRedirect
+ */
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
   const qs = Controller.oauth2(req.user)
   res.redirect(`${req.body.redirectURL}/?${qs}`)
 })
 
-/* GETS the GitHub Login Screen */
+/**
+ * Gets the GitHub Login Screen
+ *
+ * - Endpoint: `/auth/api/v2/github`
+ * - Verb: GET
+ *
+ * @typedef {function} AuthRouter-GitHubAuth
+ */
 router.get(
   '/github',
   passport.authenticate('github', {
@@ -43,13 +64,27 @@ router.get(
   }),
 )
 
-/* Callback URL for GitHub */
+/**
+ * Callback for GitHub OAuth2
+ *
+ * - Endpoint: `/auth/api/v2/github/redirect`
+ * - Verb: GET
+ *
+ * @typedef {function} AuthRouter-GitHubuthRedirect
+ */
 router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
   const qs = Controller.oauth2(req.user)
   res.redirect(`${req.body.redirectURL}/?${qs}`)
 })
 
-/* GETS the Facebook Login Screen */
+/**
+ * Gets the Facebook Login Screen
+ *
+ * - Endpoint: `/auth/api/v2/facebook`
+ * - Verb: GET
+ *
+ * @typedef {function} AuthRouter-FacebookAuth
+ */
 router.get(
   '/facebook',
   passport.authenticate('facebook', {
@@ -57,7 +92,14 @@ router.get(
   }),
 )
 
-/* Callback URL for Facebook */
+/**
+ * Callback for Facebook OAuth2
+ *
+ * - Endpoint: `/auth/api/v2/facebook/redirect`
+ * - Verb: GET
+ *
+ * @typedef {function} AuthRouter-GitHubuthRedirect
+ */
 router.get(
   '/facebook/redirect',
   passport.authenticate('facebook', {
@@ -70,18 +112,16 @@ router.get(
 )
 
 /**
- * Registers the user and saved them as a unverified user
+ * Registers the user and saves them as a unverified user
+ * It then sends an email to that user to verify
  *
- * - endpoint: `/users/register`
+ * - Endpoint: `/auth/api/v2/register`
  * - Verb: POST
  *
- * OnFailure: Sends an error message
- * OnSuccess: Sends the user back as JSON
+ * - OnFailure: Sends an error message
+ * - OnSuccess: Sends the user back as JSON
  *
- * @typedef {function} UserRouter-register
- *
- * TODO: Recognize that not all of the user's form data goes here
- *
+ * @typedef {function} AuthRouter-Register
  */
 router.post('/register', async (req, res) => {
   const user = {
@@ -103,13 +143,13 @@ router.post('/register', async (req, res) => {
  * JWT Login/Authentication
  * User must not have signed up using OAuth2
  *
- * - endpoint: `/users/login`
+ * - Endpoint: `/auth/api/v2/login`
  * - Verb: POST
  *
- * OnFailure: Sends an error message
- * OnSuccess: Sends the JWT Token of the user
+ * - OnFailure: Sends an error message
+ * - OnSuccess: Sends the JWT Token of the user
  *
- * @typedef {function} UserRouter-login
+ * @typedef {function} AuthRouter-Login
  */
 router.post('/login', (req, res) => {
   const ctrl = new Controller()
@@ -129,13 +169,13 @@ router.post('/login', (req, res) => {
 /**
  * Confirms the user has a valid email account
  *
- * - endpoint: `users/confirm/:token`
- * - VERB: GET
+ * - Endpoint: `/auth/api/v2/confirm/:token`
+ * - Verb: GET
  *
- * OnFailure: Redirects to error page
- * OnSuccess: Redirects to the login page with querystring to signal a notification
+ * - OnFailure: Redirects to error page
+ * - OnSuccess: Redirects to the login page with querystring to signal a notification
  *
- * @typedef {function} UserRouter-confirmToken
+ * @typedef {function} AuthRouter-ConfirmToken
  * @param {querystring} token - HEX token saved in confirmEmailToken
  */
 router.get('/confirm/:token', (req, res) => {
@@ -156,13 +196,13 @@ router.get('/confirm/:token', (req, res) => {
 /**
  * Verifies that the user is resetting the password of an account they own
  *
- * - endpoint: `/users/forgot`
+ * - Endpoint: `/auth/api/v2/forgot`
  * - Verb: POST
  *
- * OnFailure: Sends an internal server error message
- * OnSuccess: Sends the user that the email was sent to
+ * - OnFailure: Sends an internal server error message
+ * - OnSuccess: Sends the user that the email was sent to
  *
- * @typedef {function} UserRouter-forgotLogin
+ * @typedef {function} AuthRouter-ForgotLogin
  * @param {string} req.body.email - Email for the account that needs to change passwords
  */
 router.post('/forgot', async (req, res) => {
@@ -181,13 +221,13 @@ router.post('/forgot', async (req, res) => {
  * This endpoint is hit by an email to reset a user password
  * This endpoint is hit first in the sequence
  *
- * - endpoint: `/users/reset/:token`
+ * - Endpoint: `/auth/api/v2/reset/:token`
  * - Verb: GET
  *
- * OnFailure: Redirects to the login screen with an error in query string
- * OnSuccess: Redirects to the forgot-redirect page to change password
+ * - OnFailure: Redirects to the login screen with an error in query string
+ * - OnSuccess: Redirects to the forgot-redirect page to change password
  *
- * @typedef {function} UserRouter-resetToken
+ * @typedef {function} AuthRouter-ResetToken
  * @param {string} token - A string that contains the HEX code/Reset token of a lost account
  */
 router.get('/reset/:token', (req, res) => {
@@ -208,13 +248,13 @@ router.get('/reset/:token', (req, res) => {
 /**
  * Client hits this endpoint with a token and a new password to update the account with
  *
- * - Endpoint: `/users/reset/:token`
+ * - Endpoint: `/auth/api/v2/reset/:token`
  * - Verb: POST
  *
- * OnFailure: Sends a success status code
- * OnSuccess: Sends a error status code
+ * - OnFailure: Sends a success status code
+ * - OnSuccess: Sends a error status code
  *
- * @typedef {function} UserRouter-verifyUser
+ * @typedef {function} AuthRouter-VerifyUser
  */
 router.post('/reset/:token', async (req, res) => {
   try {
