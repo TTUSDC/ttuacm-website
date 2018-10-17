@@ -91,8 +91,8 @@ function getEnvVaribales(services, name) {
 // Asks the user what environment [dev/prod] that they want to setup
 function setup() {
   return new Promise((resolve) => {
-    rl.question('What environment would you like to set up? [dev/prod] ', (ans) => {
-      const CHOICES = new Set(['dev', 'prod'])
+    rl.question('What environment would you like to set up? [dev/staging/prod] ', (ans) => {
+      const CHOICES = new Set(['dev', 'staging', 'prod'])
 
       if(ans === '') {
         console.log('defaulting to dev')
