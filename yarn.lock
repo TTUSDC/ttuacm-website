@@ -2168,94 +2168,10 @@ escodegen@^1.6.1, escodegen@^1.9.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-esdoc-accessor-plugin@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/esdoc-accessor-plugin/-/esdoc-accessor-plugin-1.0.0.tgz#791ba4872e6c403515ce749b1348d6f0293ad9eb"
-  integrity sha1-eRukhy5sQDUVznSbE0jW8Ck62es=
-
-esdoc-brand-plugin@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/esdoc-brand-plugin/-/esdoc-brand-plugin-1.0.1.tgz#7c0e1ae90e84c30b2d3369d3a6449f9dc9f8d511"
-  integrity sha512-Yv9j3M7qk5PSLmSeD6MbPsfIsEf8K43EdH8qZpE/GZwnJCRVmDPrZJ1cLDj/fPu6P35YqgcEaJK4E2NL/CKA7g==
-  dependencies:
-    cheerio "0.22.0"
-
-esdoc-coverage-plugin@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/esdoc-coverage-plugin/-/esdoc-coverage-plugin-1.1.0.tgz#3869869cd7f87891f972625787695a299aece45c"
-  integrity sha1-OGmGnNf4eJH5cmJXh2laKZrs5Fw=
-
-esdoc-external-ecmascript-plugin@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/esdoc-external-ecmascript-plugin/-/esdoc-external-ecmascript-plugin-1.0.0.tgz#78f565d4a0c5185ac63152614dce1fe1a86688db"
-  integrity sha1-ePVl1KDFGFrGMVJhTc4f4ahmiNs=
-  dependencies:
-    fs-extra "1.0.0"
-
-esdoc-integrate-manual-plugin@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/esdoc-integrate-manual-plugin/-/esdoc-integrate-manual-plugin-1.0.0.tgz#1854a6aa1c081035d7c8c51e3bdd4fb65aa4711c"
-  integrity sha1-GFSmqhwIEDXXyMUeO91PtlqkcRw=
-
-esdoc-integrate-test-plugin@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/esdoc-integrate-test-plugin/-/esdoc-integrate-test-plugin-1.0.0.tgz#e2d0d00090f7f0c35e5d2f2c033327a79e53e409"
-  integrity sha1-4tDQAJD38MNeXS8sAzMnp55T5Ak=
-
-esdoc-lint-plugin@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/esdoc-lint-plugin/-/esdoc-lint-plugin-1.0.2.tgz#4962930c6dc5b25d80cf6eff1b0f3c24609077f7"
-  integrity sha512-24AYqD2WbZI9We02I7/6dzAa7yUliRTFUaJCZAcYJMQicJT5gUrNFVaI8XmWEN/mhF3szIn1uZBNWeLul4CmNw==
-
 esdoc-node@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/esdoc-node/-/esdoc-node-1.0.2.tgz#3e21e2e05f9f3522060001e638b652f30ab1ab12"
   integrity sha1-PiHi4F+fNSIGAAHmOLZS8wqxqxI=
-
-esdoc-publish-html-plugin@^1.0.0:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/esdoc-publish-html-plugin/-/esdoc-publish-html-plugin-1.1.2.tgz#bdece7bc7a0a3e419933503252db7a6772879dab"
-  integrity sha512-hG1fZmTcEp3P/Hv/qKiMdG1qSp8MjnVZMMkxL5P5ry7I2sX0HQ4P9lt2lms+90Lt0r340HHhSuVx107UL7dphg==
-  dependencies:
-    babel-generator "6.11.4"
-    cheerio "0.22.0"
-    escape-html "1.0.3"
-    fs-extra "1.0.0"
-    ice-cap "0.0.4"
-    marked "0.3.19"
-    taffydb "2.7.2"
-
-esdoc-standard-plugin@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/esdoc-standard-plugin/-/esdoc-standard-plugin-1.0.0.tgz#661201cac7ef868924902446fdac1527253c5d4d"
-  integrity sha1-ZhIBysfvhokkkCRG/awVJyU8XU0=
-  dependencies:
-    esdoc-accessor-plugin "^1.0.0"
-    esdoc-brand-plugin "^1.0.0"
-    esdoc-coverage-plugin "^1.0.0"
-    esdoc-external-ecmascript-plugin "^1.0.0"
-    esdoc-integrate-manual-plugin "^1.0.0"
-    esdoc-integrate-test-plugin "^1.0.0"
-    esdoc-lint-plugin "^1.0.0"
-    esdoc-publish-html-plugin "^1.0.0"
-    esdoc-type-inference-plugin "^1.0.0"
-    esdoc-undocumented-identifier-plugin "^1.0.0"
-    esdoc-unexported-identifier-plugin "^1.0.0"
-
-esdoc-type-inference-plugin@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/esdoc-type-inference-plugin/-/esdoc-type-inference-plugin-1.0.2.tgz#916e3f756de1d81d9c0dbe1c008e8dafd322cfaf"
-  integrity sha512-tMIcEHNe1uhUGA7lT1UTWc9hs2dzthnTgmqXpmeUhurk7fL2tinvoH+IVvG/sLROzwOGZQS9zW/F9KWnpMzLIQ==
-
-esdoc-undocumented-identifier-plugin@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/esdoc-undocumented-identifier-plugin/-/esdoc-undocumented-identifier-plugin-1.0.0.tgz#82e05d371c32d12871140f1d5c81ec99fd9cc2c8"
-  integrity sha1-guBdNxwy0ShxFA8dXIHsmf2cwsg=
-
-esdoc-unexported-identifier-plugin@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/esdoc-unexported-identifier-plugin/-/esdoc-unexported-identifier-plugin-1.0.0.tgz#1f9874c6a7c2bebf9ad397c3ceb75c9c69dabab1"
-  integrity sha1-H5h0xqfCvr+a05fDzrdcnGnaurE=
 
 esdoc@0.5.2:
   version "0.5.2"
@@ -2762,7 +2678,7 @@ find-up@^2.0.0, find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-firebase-admin@~6.0.0:
+firebase-admin@6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-6.0.0.tgz#6a4be9e38b523ad7b4397b9b35853e4412e135ae"
   integrity sha512-ai7ensTAZx9iF6z/lMn7JzFJYSl6+uXYm53GGhWlph+npnQli10FF9YB97OjcVUghapDEWzmb6J0VMtB965nsw==
@@ -2785,10 +2701,10 @@ firebase-functions-test@0.1.3:
     "@types/lodash" "^4.14.104"
     lodash "^4.17.5"
 
-firebase-functions@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-2.0.3.tgz#f45ad388f93ee2c15c5614f765171a1a6ec21e47"
-  integrity sha512-6Y6jxX8OnBs7TlK25mBXiLpXZXQX4OPaH++Hb5SHvQ97hgD0y8YgZ876GpIzJBxYgT3gQJ84rHMD19aCwjE0DQ==
+firebase-functions@2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-2.0.5.tgz#61b085e6bdd5f0feda4f1942549fe78530b3933e"
+  integrity sha512-XedOTdaej68I/AmJyeDIKL2Cw6MwI7Ugov5QoEsOU9bh25iAseZmFKFQeqimW5Wb9wKLAli2Wq8ld+FtdOwdvQ==
   dependencies:
     "@types/cors" "^2.8.1"
     "@types/express" "^4.11.1"
@@ -4765,11 +4681,6 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
-
-marked@0.3.19:
-  version "0.3.19"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.19.tgz#5d47f709c4c9fc3c216b6d46127280f40b39d790"
-  integrity sha512-ea2eGWOqNxPcXv8dyERdSr/6FmzvWwzjMxpfGB/sbMccXoct+xY+YukPD+QTUZwyvK7BZwcr4m21WBOW41pAkg==
 
 marked@0.3.6:
   version "0.3.6"

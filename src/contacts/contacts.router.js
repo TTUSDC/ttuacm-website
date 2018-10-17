@@ -6,7 +6,15 @@ const ctrl = require('./contacts.controller');
 
 const router = express.Router();
 
-router.get('/test', (req, res) => {
+/**
+ * Testing route for the Email Service
+ *
+ * - Endpoint: `/contacts/api/v2`
+ * - Verb: GET
+ *
+ * @typedef {function} ContactsRouter
+ */
+router.get('/', (req, res) => {
   res.send('Contacts App Works!');
 });
 
