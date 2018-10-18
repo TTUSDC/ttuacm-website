@@ -8,7 +8,10 @@ const router = express.Router()
 const Controller = require('./auth.controller')
 
 /**
- * Testing route for the Auth Service
+ * This router handles all of the authentication services
+ * whether it be through OAuth or local sign up. This service
+ * provides a way for the other services to create their OAuth2
+ * instances
  *
  * - Endpoint: `/auth/api/v2`
  * - Verb: GET
