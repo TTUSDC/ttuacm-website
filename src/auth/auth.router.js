@@ -1,13 +1,17 @@
 const express = require('express')
 const passport = require('passport')
 const querystring = require('querystring')
+const OAuthHandler = require('./config/oauth2')
 
 const router = express.Router()
 
 const Controller = require('./auth.controller')
 
 /**
- * Testing route for the Auth Service
+ * This router handles all of the authentication services
+ * whether it be through OAuth or local sign up. This service
+ * provides a way for the other services to create their OAuth2
+ * instances
  *
  * - Endpoint: `/auth/api/v2`
  * - Verb: GET
@@ -16,6 +20,26 @@ const Controller = require('./auth.controller')
  */
 router.get('/', (req, res) => {
   res.send('Auth App Works!')
+})
+
+/**
+ * Creates and sends back the Google API of choice
+ *
+ * - Endpoint: `/auth/api/v2/google-api/:api`
+ * - Verb: GET
+ *
+ * @typedef {function} AuthRouter-GoogleAPIs
+ */
+router.get('/google-api/:api', async (req, res) => {
+  try {
+    const { api } = req.params
+    const OAuth = new OAuthHandler()
+    const instance = await OAuth.createAPI(api)
+    res.status(200).json({ api: instance })
+  } catch (err) {
+    console.error(err)
+    res.status(404).json({ err })
+  }
 })
 
 /**

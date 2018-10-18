@@ -1,3 +1,4 @@
+const Request = require('../utils/request')
 /**
  * Handles Google Calendar Events Controller
  */
@@ -6,33 +7,42 @@ class EventsController {
    * Grabs the OAuth2 Provider from Auth Service and creates a calendar object
    */
   constructor() {
-    // TODO: initialize OAuth2
-    // We need to grab the OAuth2 Provider by making a call to the Auth Service
-
-    /**
-     * Calendar Object
-     * @type {object}
-     */
-    this.calendar = null
-    /**
-     * Current Attendees for any particular event
-     * @type {Array<object>}
-     */
-    this.currentAttendees = []
-    /**
-     * Calendar of choice from ACM
-     * @type {string}
-     */
-    this.calendarId = 'primary'
+		this.calendar
+    this.currentAttendees
+    this.calendarId
+     new Request('v2', 'auth')
+      .params({ api: 'calendar' })
+      .path('google-api')
+      .end().then((res) => {
+         /**
+         * Calendar Object
+         * @type {object}
+         */
+        this.calendar = res.data.api
+         /**
+         * Current Attendees for any particular event
+         * @type {Array<object>}
+         */
+        this.currentAttendees = []
+        /**
+         * Calendar of choice from ACM
+         * @type {string}
+         */
+        this.calendarId = 'primary'
+      }).catch((err) => {
+        console.error(err)
+        throw err
+      })
   }
 
 
   /**
    * Gets the raw events object
    *
-   * Rejects with an Error
-   * Resolves with a list of (raw) events (an empty array if nore are found[])
-   * @returns { Promise.<Array, Error> } a Promise
+   * - OnSuccess: Resolves with a list of (raw) events (an empty array if nore are found[])
+   * - OnFailure: Rejects with an Error
+   *
+   * @returns { Promise.<Array, Error> }
    */
   getRawEvents() {
     return new Promise((resolve, reject) => {
@@ -45,30 +55,29 @@ class EventsController {
         },
         (err, { data }) => {
           if (err) {
-            reject(err);
+            reject(err)
           } else {
-            resolve(data.items || []);
+            resolve(data.items || [])
           }
         },
-      );
-    });
+      )
+    })
   }
 
   /**
-   * Lists the next 10 events on the user's primary calendar.
+   * Lists the events on the user's primary calendar.
    *
-   * Rejects with an Error
+   * - OnSuccess: Resolves with a list(10) events
+   * - OnFailure: Rejects with an Error
    *
-   * Resolves with a list(10) events
-   *
-   * @requires oAuth2Client - Configurations can be found in oauth2.config
+   * @requires oAuth2Client
    */
   listEvents() {
     return new Promise(async (resolve, reject) => {
       this.getRawEvents()
         .then((events) => {
           // Will store all of the events and return
-          const eventsList = [];
+          const eventsList = []
           // Maps all of the numbers to days
           const weekday = [
             'Sunday',
@@ -78,10 +87,10 @@ class EventsController {
             'Thursday',
             'Friday',
             'Saturday',
-          ];
+          ]
           events.map((event, i) => {
-            const start = event.start.dateTime || event.start.date;
-            const end = event.end.dateTime || event.end.date;
+            const start = event.start.dateTime || event.start.date
+            const end = event.end.dateTime || event.end.date
             // Event Object
             eventsList.push({
               id: i + 1,
@@ -96,7 +105,7 @@ class EventsController {
               eventId: event.id, // Event ID according to Google
               allDayEvent: event.start.date !== undefined,
             })
-            return resolve(eventsList);
+            return resolve(eventsList)
           })
         })
         .catch((err) => {
@@ -108,7 +117,7 @@ class EventsController {
   /**
    * Lists all attendees for an event
    *
-   * - OnSuccess: Resolves with an array with a null email if empty or the list of attendees
+   * - OnSuccess: Resolves
    * - OnFailure: Rejects with an Error
    *
    * @param {string} eventId Event ID
@@ -135,27 +144,30 @@ class EventsController {
   /**
    * Adds an attendee to an event
    *
+   * - OnSuccess: Resolves
+   * - OnFailure: Rejects with an Error
+   *
    * @param {string} eventId the event ID
    * @param {Array} currentAttendees the current attendees for the event
    * @param {string} email the user's email
    * @returns {Promise.<null>} A Promise
-   *
-   * - OnSuccess: Resolves
-   * - OnFailure: Rejects with an Error
    */
   addAttendee(eventId, email) {
     return new Promise(async (resolve, reject) => {
       try {
-        this.currentAttendees.push({ email, responseStatus: 'accepted' });
-        resolve();
+        this.currentAttendees.push({ email, responseStatus: 'accepted' })
+        resolve()
       } catch (err) {
-        reject(err);
+        reject(err)
       }
-    });
+    })
   }
 
   /**
    * Removes the attendee by their email
+   *
+   * - OnSuccess: Resolves with the current attendees
+   * - OnFailure: Rejects with an Error
    *
    * @param {string} email the user's email
    * @returns {Array<Object>} updated attendee list
@@ -163,33 +175,31 @@ class EventsController {
   removeAttendee(email) {
     return new Promise(async (resolve, reject) => {
       try {
-        if (this.currentAttendees.length === 0) throw new Error('No attendees found');
-        const originalAttendees = this.currentAttendees;
-        this.currentAttendees = this.currentAttendees.filter(each => each.email !== email.toLowerCase());
+        if (this.currentAttendees.length === 0) throw new Error('No attendees found')
+        const originalAttendees = this.currentAttendees
+        this.currentAttendees = this.currentAttendees.filter(each => each.email !== email.toLowerCase())
         if (originalAttendees.length === this.currentAttendees.length) {
-          throw new Error('No user found');
+          throw new Error('No user found')
         }
-        resolve(this.currentAttendees);
+        resolve(this.currentAttendees)
       } catch (err) {
-        reject(err);
+        reject(err)
       }
-    });
+    })
   }
 
   /**
    * Replaces the event's attendees with the attendees list
-   * Rejects with an Error
-   * Resolves with the new event object
+   *
+   * - OnSuccess: Resolves with the new event object
+   * - OnFailure: Rejects with an Error
    *
    * Fun Fact: Google's API deletes duplicates by default
    *
-   * This functionality is already tested by Google.
-   * DO NOT test this function as it interacts with real google calendars
-   *
-   * @requires oAuth2Client - Configurations can be found in oauth2.config
+   * @requires oAuth2Client
    * @param {string} eventId user's event ID
    * @param {Array<Object>} attendees array of attendees
-   * @returns {Promise<Array<Object>>} A Promise
+   * @returns {Promise<Array<Object>>}
    */
   updateAttendee(eventId, attendees) {
     return new Promise(async (resolve, reject) => {
@@ -203,15 +213,15 @@ class EventsController {
         },
         (err, { data }) => {
           if (err) {
-            reject(err);
+            reject(err)
           } else {
-            resolve(data);
+            resolve(data)
           }
         },
-      );
-    });
+      )
+    })
   }
 }
 
 
-module.exports = EventsController;
+module.exports = EventsController
