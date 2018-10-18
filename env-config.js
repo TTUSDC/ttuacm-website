@@ -55,6 +55,13 @@ const SERVICES = new Map([
     ],
   ],
   [
+    'connections', [
+      'init',
+      'protocol',
+      'host',
+    ],
+  ],
+  [
     'contacts', [
       'init',
     ],
