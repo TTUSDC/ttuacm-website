@@ -5,92 +5,70 @@ const { membersOnlyRoute } = require('../utils/protected-route')
 const router = express.Router()
 
 // Controller
-const controller = require('./profile.controller')
+const Controller = require('./profile.controller')
 
+/**
+ * This service handles all of the users public information.
+ * Anything having to do with their name, classification or
+ * their dues goes through this service
+ *
+ * @typedef {function} ProfileRouter
+ */
 router.get('/', (req, res) => {
-  res.send(`Profile App Works: ${process.env.NODE_ENV}`)
+  res.send(`Profile App Works`)
 })
 
 /**
  * Gets the user's profile to fill in a profile page
  * This route requires authentication
  *
- * - endpoint: `/users/profile`
+ * - Endpoint: `/profile/api/v2/profile`
  * - Verb: GET
  *
- * OnFailure: Sends an error statuscode
  * OnSuccess: Sends a success statuscode with an user Object
- *
- * @typedef {function} UserRouter-getProfile
- */
-router.get('/profile', membersOnlyRoute, (req, res) => {
-  controller.getProfile(req.user.email)
-    .then((user) => {
-      res.status(200).json({ user, err: null })
-    })
-    .catch((err) => {
-      console.error(err)
-      res.status(404).json({ user: null, err })
-    })
-})
-
-/**
- * Updates the user's resume
- * This route requires authentication
- *
- * - endpoint: `/users/update-resume`
- * - Verb: PUT
- *
  * OnFailure: Sends an error statuscode
- * OnSuccess: Sends a success statuscode with an user Object
- * @deprecated - Use `/users/update-user`
- * @typedef {function} UserRouter-updateResume
- */
-router.put('/update-resume', membersOnlyRoute, (req, res) => {
-  controller.updateResume(req.user._id, req.body.path)
-    .then((user) => {
-      res.status(200).json({ user, err: null })
-    })
-    .catch((err) => {
-      console.error(err)
-      res.status(404).json({ user: null, err })
-    })
-})
-
-/**
- * Updates the user's information completely
- * This route requires authentication
  *
- * - endpoint: `/users/update-user`
- * - Verb: PUT
- *
- * OnFailure: Sends an error statuscode
- * OnSuccess: Sends a success statuscode with an user Object
- *
- * @typedef {function} UserRouter-updateUser
+ * @typedef {function} ProfileRouter-GetProfileByEmail
  * @param {object} req.body.user A New User object with a ObjectID
  */
-router.put('/update-user', membersOnlyRoute, (req, res) => {
-  controller.updateUser(req.body.user)
-    .then((payload) => {
-      res.status(200).json(
-        {
-          user: payload.user,
-          token: payload.token,
-          err: null,
-        },
-      )
-    })
-    .catch((err) => {
-      console.error(err)
-      res.status(404).json(
-        {
-          user: null,
-          token: null,
-          err,
-        },
-      )
-    })
+router.get('/profile', membersOnlyRoute, async (req, res) => {
+  const { email } = req.user
+
+  try {
+    const ctrl = new Controller()
+    const profile = await ctrl.getProfileByEmail(email)
+    res.status(200).json({ profile })
+  } catch (err) {
+    console.error(err)
+    res.status(err.code).json({ err })
+  }
+})
+
+/**
+ * Updates the profile's information completely
+ * This route requires authentication
+ *
+ * - Endpoint: `/profile/api/v2/profile`
+ * - Verb: PUT
+ *
+ * - OnSuccess: Sends a success statuscode with an profile Object
+ * - OnFailure: Sends an error statuscode
+ *
+ * @typedef {function} ProfileRouter-UpdateProfile
+ * @param {string} req.body.email profile email
+ * @param {object} req.body.update update to use against database
+ */
+router.put('/profile', membersOnlyRoute, async (req, res) => {
+  const { email, update } = req.body
+
+  try {
+    const ctrl = new Controller()
+    const updatedProfile = await ctrl.updatedProfile({ email }, update)
+    res.status(200).json(updatedProfile)
+  } catch (err) {
+    console.error(err)
+    res.status(err.code).json({ err })
+  }
 })
 
 module.exports = router
