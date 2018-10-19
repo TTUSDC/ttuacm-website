@@ -7,14 +7,14 @@ class ProfileController {
   }
 
   /**
-   * Updates the user
+   * Updates the profile
    *
    * - OnSuccess: Resolves with the updated profile
    * - OnFailure: Rejects with a Create User Error
    *
    * @param {object} query mongoose query
    * @param {object} update fields to update
-   * @returns {Promise.<string, Error>} Resolves: a new user object and token  Rejects: Error
+   * @returns {Promise.<string, Error>}
    */
   updateProfile(query, update) {
     return new Promise(async (resolve, reject) => {
@@ -33,13 +33,38 @@ class ProfileController {
   }
 
   /**
+   * Creates a new profile. Will error out if there is a user already there
+   *
+   * - OnSuccess: Resolves with the new profile
+   * - OnFailure: Reject with an error
+   *
+   * @param {object} profile profile object to save into the database
+   * @returns {Promise.<string, Error>}
+   */
+  createProfile(profile) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const userExists = await this.DB.checkForExistingUser({ email: profile.email })
+        if (userExists) throw ErrorMessages.DuplicateAccount()
+
+        const newProfile = await this.DB.createNewProfile(profile)
+
+        resolve(newProfile)
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.CreateProfileError())
+      }
+    })
+  }
+
+  /**
    * Fetches the user's profile
    *
    * - OnSuccess: Resolves with the profile
    * - OnFailure: Rejects with a Not Found Error
    *
    * @param {string} email - user's unique email
-   * @returns {Promise.<object, Error>} Resolves: a user object  Rejects: Error
+   * @returns {Promise.<object, Error>}
    */
   getProfileByEmail(email) {
     return new Promise(async (resolve, reject) => {
