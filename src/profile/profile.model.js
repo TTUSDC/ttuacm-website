@@ -2,18 +2,42 @@ const mongoose = require('mongoose');
 const ErrorMessages = require('./profile.errors')
 
 const profileSchema = mongoose.Schema({
-  profileImage: { type: String, default: '' },
-  email: { type: String, required: true, unique: true },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: false },
-  classification: { type: String, required: true, default: 'Other' },
-  hasPaidDues: { type: Boolean, default: false },
-  blocked: { type: Boolean, default: false },
+  profileImage: {
+    type: String,
+    default: ''
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: false
+  },
+  classification: {
+    type: String,
+    required: true,
+    enum: ['Freshman', 'Sophomore', 'Junior', 'Senios', 'Graduate', 'PhD', 'Other'],
+    default: 'Other'
+  },
+  hasPaidDues: {
+    type: Boolean,
+    default: false
+  },
+  blocked: {
+    type: Boolean,
+    default: false
+  },
 });
 
 class Profile {
   constructor() {
-    this.DB = profileSchema.model('Profiles', profileSchema)
+    this.DB = mongoose.model('Profiles', profileSchema)
   }
 
   /**
@@ -64,20 +88,19 @@ class Profile {
    * Searches for a user using a matching query
    *
    * - OnSuccess: Resolves with a true value
-   * - OnFailure: Rejects with a Duplicate Account Error
+   * - OnFailure: Rejects with a Unknown Server Error
    *
    * @param {object} query a compatible mongoose query
    * @returns {Promise.<Boolean, Error>}
    */
-  checkForExistingUser(query) {
+  checkForExistingProfile(query) {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await this.DB.findOne(query).exec()
-        if (user) resolve(true)
-        throw new Error()
+        resolve(Boolean(user))
       } catch (err) {
         console.error(err)
-        reject(ErrorMessages.DuplicateAccount())
+        reject(ErrorMessages.UnknownServerError())
       }
     })
   }
@@ -96,7 +119,7 @@ class Profile {
       try {
         const user = await this.DB.findOne(query).exec()
         if (user !== null) resolve(user)
-        throw new Error() // A User was not found
+        reject(ErrorMessages.NotFoundErr())
       } catch (err) {
         console.error(err)
         reject(ErrorMessages.NotFoundErr())

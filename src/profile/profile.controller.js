@@ -19,7 +19,7 @@ class ProfileController {
   updateProfile(query, update) {
     return new Promise(async (resolve, reject) => {
       try {
-        const userExists = await this.DB.checkForExistingUser(query)
+        const userExists = await this.DB.checkForExistingProfile(query)
         if (!userExists) throw ErrorMessages.NotFoundErr()
 
         const updatedProfile = await this.DB.updateExistingProfile(query, update)
@@ -44,8 +44,8 @@ class ProfileController {
   createProfile(profile) {
     return new Promise(async (resolve, reject) => {
       try {
-        const userExists = await this.DB.checkForExistingUser({ email: profile.email })
-        if (userExists) throw ErrorMessages.DuplicateAccount()
+        const userExists = await this.DB.checkForExistingProfile({ email: profile.email })
+        if (userExists) reject(ErrorMessages.DuplicateAccount())
 
         const newProfile = await this.DB.createNewProfile(profile)
 
