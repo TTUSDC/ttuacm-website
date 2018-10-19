@@ -1,5 +1,5 @@
 const ProfileModel = require('./profile.model')
-const { generateJWTToken } = require('../utils/generate-jwt')
+const ErrorMessages = require('./profile.errors')
 
 class ProfileController {
   constructor() {
@@ -7,24 +7,27 @@ class ProfileController {
   }
 
   /**
-   * Updates the complete user object
+   * Updates the user
    *
-   * TODO: Have this depend on the Auth service
-   * TODO: Abstract the mongoosejs calls with better higher level methods
+   * - OnSuccess: Resolves with the updated profile
+   * - OnFailure: Rejects with a Create User Error
    *
-   * @param {object} newUser new user object
-   * @returns {Promise.<object, Error>} Resolves: a new user object and token  Rejects: Error
+   * @param {object} query mongoose query
+   * @param {object} update fields to update
+   * @returns {Promise.<string, Error>} Resolves: a new user object and token  Rejects: Error
    */
-  updateUser(newUser) {
+  updateProfile(query, update) {
     return new Promise(async (resolve, reject) => {
       try {
-        const user = await this.DB.findByIdAndUpdate(newUser._id, newUser, { new: true }).exec()
-        if (!user) reject(new Error('Profile Not Found'))
-        const token = await generateJWTToken(user)
-        const response = { user, token }
-        resolve(response)
+        const userExists = await this.DB.checkForExistingUser(query)
+        if (!userExists) throw ErrorMessages.NotFoundErr()
+
+        const updatedProfile = await this.DB.updateExistingProfile(query, update)
+
+        resolve(updatedProfile)
       } catch (err) {
-        reject(err)
+        console.error(err)
+        reject(ErrorMessages.UpdateProfileError())
       }
     })
   }
@@ -32,19 +35,21 @@ class ProfileController {
   /**
    * Fetches the user's profile
    *
+   * - OnSuccess: Resolves with the profile
+   * - OnFailure: Rejects with a Not Found Error
+   *
    * @param {string} email - user's unique email
    * @returns {Promise.<object, Error>} Resolves: a user object  Rejects: Error
    */
-  getProfile(email) {
-    return new Promise((resolve, reject) => {
-      this.DB.findOne({ email })
-        .then((user) => {
-          if (!user) reject(new Error('Email Not Found'))
-          resolve(user)
-        })
-        .catch((err) => {
-          reject(err)
-        })
+  getProfileByEmail(email) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const profile = this.DB.getProfile({ email })
+        resolve(profile)
+      } catch (err) {
+        console.error(err)
+        reject(ErrorMessages.NotFoundErr())
+      }
     })
   }
 }
