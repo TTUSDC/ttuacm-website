@@ -60,5 +60,8 @@
   "jest": {
     "verbose": true,
     "testEnvironment": "node"
+  },
+  "engines": {
+    "node": "8"
   }
 }
