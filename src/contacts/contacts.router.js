@@ -14,7 +14,7 @@ const router = express.Router();
  *
  * @typedef {function} ContactsRouter
  */
-router.get('/', (req, res) => {
+router.get('/test', (req, res) => {
   res.send('Contacts App Works!');
 });
 

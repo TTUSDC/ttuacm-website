@@ -14,7 +14,7 @@ const { membersOnlyRoute } = require('../utils/protected-route')
  *
  * @typedef {function} EventsRouter
  */
-router.get('/', (req, res) => {
+router.get('/test', (req, res) => {
   res.send('Email App Works!')
 })
 

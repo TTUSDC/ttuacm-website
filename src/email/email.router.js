@@ -13,7 +13,7 @@ const Controller = require('./email.controller')
  *
  * @typedef {function} EmailRouter
  */
-router.get('/', (req, res) => {
+router.get('/test', (req, res) => {
   res.send('Email App Works!')
 })
 

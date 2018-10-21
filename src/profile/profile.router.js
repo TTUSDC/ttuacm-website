@@ -14,7 +14,7 @@ const Controller = require('./profile.controller')
  *
  * @typedef {function} ProfileRouter
  */
-router.get('/', (req, res) => {
+router.get('/test', (req, res) => {
   res.send(`Profile App Works`)
 })
 
