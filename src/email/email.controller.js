@@ -20,15 +20,15 @@ class EmailController {
 
     this.protocol = protocol
     this.host = host
-    this.mailbox = functions.config().email.email_username || 'v2z435ain366pxsa@ethereal.email'
+    this.mailbox = functions.config().email.email_username
 
     if (process.env.NODE_ENV !== 'prod') {
       this.smtpTransporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
         auth: {
-          user: 'v2z435ain366pxsa@ethereal.email',
-          pass: 'g7U7pZp5YAmZ2sMXDb',
+          user: functions.config().email.email_username,
+          pass: functions.config().email.email_password,
         },
         tls: {
           // do not fail on invalid certs

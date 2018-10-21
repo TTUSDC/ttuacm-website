@@ -1,8 +1,17 @@
-require('firebase-functions-test')()
+const test = require('firebase-functions-test')()
+
+test.mockConfig({
+  email: {
+    email_username: "v2z435ain366pxsa@ethereal.email",
+    email_password: "g7U7pZp5YAmZ2sMXDb"
+  }
+})
+
 const chai = require('chai')
 const Controller = require('./email.controller')
 
 const { expect } = chai
+
 
 describe('Email Unit Tests', () => {
   let ctrl

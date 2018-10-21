@@ -1,4 +1,11 @@
-require('firebase-functions-test')()
+const test = require('firebase-functions-test')()
+
+test.mockConfig({
+  auth: {
+    session_secret: 'SessionSecretForTests!'
+  }
+})
+
 const chai = require('chai')
 const mongoose = require('mongoose')
 const Controller = require('./auth.controller')
