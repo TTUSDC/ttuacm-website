@@ -7,7 +7,7 @@ const { membersOnlyRoute } = require('../utils/protected-route');
 const router = express.Router();
 
 /**
- * Testing route for the Email Service
+ * Testing route for the Teams Service
  *
  * - Endpoint: `/teams/api/v2/test`
  * - Verb: GET
@@ -15,8 +15,8 @@ const router = express.Router();
  * @typedef {function} TeamsRouter
  */
 router.get('/test', (req, res) => {
-  res.send('Contacts App Works!');
-});
+  res.send('Teams App Works!')
+})
 
 /**
  * Gets all of the members in a team
@@ -25,7 +25,7 @@ router.get('/test', (req, res) => {
  * - Endpoint: `/teams/api/v2/teams`
  * - Verb: GET
  *
- * @typedef {function} TeamsRouter-GetMembersFromGroup
+ * @typedef {function} TeamsRouter-GetMembersFromTeam
  */
 router.get('/teams', async (req, res) => {
   try {
@@ -43,7 +43,7 @@ router.get('/teams', async (req, res) => {
  * - Verb: POST
  *
  * @requires Authentication - JWT
- * @typedef {function} TeamsRouter-CreateNewGroup
+ * @typedef {function} TeamsRouter-CreateNewTeam
  */
 router.post('/teams', membersOnlyRoute, async (req, res) => {
   try {
@@ -61,6 +61,7 @@ router.post('/teams', membersOnlyRoute, async (req, res) => {
  * - Verb: PUT
  *
  * @requires Authentication - JWT
+ * @typedef {function} TeamsRouter-UpdateTeamMembers
  */
 router.put('/teams', membersOnlyRoute, async (req, res) => {
   try {
@@ -78,7 +79,7 @@ router.put('/teams', membersOnlyRoute, async (req, res) => {
  * - Verb: DELETE
  *
  * @requires Authentication - JWT
- * @typedef {function} TeamsRouter-DeleteUserFromGroup
+ * @typedef {function} TeamsRouter-DeleteUserFromTeam
  */
 router.delete('/teams', membersOnlyRoute, async (req, res) => {
   try {
