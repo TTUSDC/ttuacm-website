@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer')
 const functions = require('firebase-functions')
 
+process.env = functions.config().email
+
 /**
  * Handles sending emails to students
  */
@@ -20,15 +22,15 @@ class EmailController {
 
     this.protocol = protocol
     this.host = host
-    this.mailbox = functions.config().email.email_username
+    this.mailbox = process.env.email_username
 
     if (process.env.NODE_ENV !== 'prod') {
       this.smtpTransporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
         auth: {
-          user: functions.config().email.email_username,
-          pass: functions.config().email.email_password,
+          user: process.env.email_username,
+          pass: process.env.email_password,
         },
         tls: {
           // do not fail on invalid certs
@@ -75,7 +77,6 @@ class EmailController {
           console.error(err)
           reject(err)
         }
-        console.log(`Email send to ${email}`)
         resolve()
       })
     })
@@ -102,7 +103,6 @@ class EmailController {
           console.error(err)
           reject(err)
         }
-        console.log(`Email send to ${email}`)
         resolve()
       })
     })
@@ -133,7 +133,6 @@ class EmailController {
           console.error(err)
           reject(err)
         }
-        console.log(`Email send to ${this.mailbox}`)
         resolve()
       })
     })
@@ -164,7 +163,6 @@ class EmailController {
           console.error(err)
           reject(err)
         }
-        console.log(`Email send to ${email}`)
         resolve()
       })
     })
