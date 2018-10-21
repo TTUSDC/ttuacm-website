@@ -8,12 +8,12 @@ const Controller = require('./email.controller')
 /**
  * Testing route for the Email Service
  *
- * - Endpoint: `/email/api/v2`
+ * - Endpoint: `/email/api/v2/test`
  * - Verb: GET
  *
  * @typedef {function} EmailRouter
  */
-router.get('/', (req, res) => {
+router.get('/test', (req, res) => {
   res.send('Email App Works!')
 })
 
@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
  * - Endpoint: `/email/api/v2/contact-us`
  * - Verb: POST
  *
- * @typedef {function} EmailRouter-contactUs
+ * @typedef {function} EmailRouter-ContactUs
  */
 router.post('/contact-us', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
@@ -46,7 +46,7 @@ router.post('/contact-us', (req, res) => {
  * - Endpoint: `/email/api/v2/confirm-email`
  * - Verb: POST
  *
- * @typedef {function} EmailRouter-sendConfirmationEmail
+ * @typedef {function} EmailRouter-SendConfirmationEmail
  */
 router.post('/confirm-email', (res, req) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
@@ -69,7 +69,7 @@ router.post('/confirm-email', (res, req) => {
  * - Endpoint: `/email/api/v2/reset-password`
  * - Verb: POST
  *
- * @typedef {function} EmailRouter-sendResetEmail
+ * @typedef {function} EmailRouter-SendResetEmail
  */
 router.post('/reset-password', (res, req) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
@@ -89,7 +89,7 @@ router.post('/reset-password', (res, req) => {
  * - Endpoint: `/email/api/v2/change-password-notif`
  * - Verb: POST
  *
- * @typedef {function} EmailRouter-sendChangedPasswordNotification
+ * @typedef {function} EmailRouter-SendChangedPasswordNotification
  */
 router.post('/change-password-notif', (res, req) => {
   const ctrl = new Controller(req.protocol, req.headers.host)

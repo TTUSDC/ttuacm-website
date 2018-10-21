@@ -7,7 +7,7 @@ const ErrorMessages = require('./auth.errors')
 const generateHexToken = require('../utils/generate-hex')
 const generateJWTToken = require('../utils/generate-jwt')
 
-process.env = functions.config().config
+process.env = functions.config().auth
 
 // Bcrypt options
 const saltRounds = 10

@@ -13,12 +13,12 @@ const Controller = require('./auth.controller')
  * provides a way for the other services to create their OAuth2
  * instances
  *
- * - Endpoint: `/auth/api/v2`
+ * - Endpoint: `/auth/api/v2/test`
  * - Verb: GET
  *
  * @typedef {function} AuthRouter
  */
-router.get('/', (req, res) => {
+router.get('/test', (req, res) => {
   res.send('Auth App Works!')
 })
 

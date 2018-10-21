@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const functions = require('firebase-functions')
 
 /**
  * Handles sending emails to students
@@ -6,6 +7,7 @@ const nodemailer = require('nodemailer')
 class EmailController {
   /**
    * Sets the protocol and host for all links in the emails
+   *
    * @param {string} protocol protocol of host [http, https]
    * @param {string} host host of host [localhost, acmttu.org]
    */
@@ -18,15 +20,15 @@ class EmailController {
 
     this.protocol = protocol
     this.host = host
-    this.mailbox = process.env.email_username
+    this.mailbox = functions.config().email.email_username
 
     if (process.env.NODE_ENV !== 'prod') {
       this.smtpTransporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
         auth: {
-          user: 'fr3yjbymylwvbkc6@ethereal.email',
-          pass: 'sCvgzSPfhssNBEH3TQ',
+          user: functions.config().email.email_username,
+          pass: functions.config().email.email_password,
         },
         tls: {
           // do not fail on invalid certs
@@ -37,8 +39,8 @@ class EmailController {
       this.smtpTransporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-          user: process.env.email_username,
-          pass: process.env.email_password,
+          user: functions.config().email.email_username,
+          pass: functions.config().email.email_password,
         },
         tls: {
           // do not fail on invalid certs
@@ -73,7 +75,6 @@ class EmailController {
           console.error(err)
           reject(err)
         }
-        console.log(`Email send to ${email}`)
         resolve()
       })
     })
@@ -100,7 +101,6 @@ class EmailController {
           console.error(err)
           reject(err)
         }
-        console.log(`Email send to ${email}`)
         resolve()
       })
     })
@@ -131,7 +131,6 @@ class EmailController {
           console.error(err)
           reject(err)
         }
-        console.log(`Email send to ${this.mailbox}`)
         resolve()
       })
     })
@@ -162,11 +161,10 @@ class EmailController {
           console.error(err)
           reject(err)
         }
-        console.log(`Email send to ${email}`)
         resolve()
       })
     })
   }
 }
 
-exports = EmailController
+module.exports = EmailController

@@ -18,6 +18,7 @@ connectDB(database) // Open connection to the database
 
 const app = express()
 app.use('/api/v2', router)
+app.use(cors())
 
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: false }))

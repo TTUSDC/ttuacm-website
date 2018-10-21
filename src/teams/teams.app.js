@@ -1,7 +1,9 @@
 const express = require('express');
-const router = require('./contacts.router');
+const cors = require('cors')
+const router = require('./teams.router');
 
 const app = express();
 app.use('/api/v2', router);
+app.use(cors())
 
 module.exports = app;
