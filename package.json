@@ -18,7 +18,7 @@
     "serve:profile": "nodemon --exec firebase serve --only functions:profile",
     "test": "cross-env NODE_ENV=test jest",
     "lint": "eslint src",
-    "env-config": "node env-config.js",
+    "env-config": "node src/utils/env-config.js",
     "logs": "firebase functions:log",
     "docs": "esdoc -c .esdoc.js"
   },
