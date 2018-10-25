@@ -19,6 +19,7 @@
     "test": "cross-env NODE_ENV=test jest",
     "lint": "eslint src",
     "env-config": "node src/utils/env-config.js",
+    "env-save": "firebase functions:config:get > .runtimeconfig.json",
     "logs": "firebase functions:log",
     "docs": "esdoc -c .esdoc.js"
   },
