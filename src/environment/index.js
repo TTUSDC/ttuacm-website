@@ -16,6 +16,11 @@ app.use(cors)
  * When the route is called in a production/staging environment,
  * we have to check whether or not the host is either the
  * production or staging host. Otherwise, send over the environment
+ *
+ * - Endpoint: `/environment/get-environment`
+ * - Verb: GET
+ *
+ * @typedef {function} EnvironmentProvider
  */
 app.get('/get-environment', (req, res) => {
   const { environment } = functions.config()
