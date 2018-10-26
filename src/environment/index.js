@@ -17,7 +17,7 @@ app.use(cors)
  * we have to check whether or not the host is either the
  * production or staging host. Otherwise, send over the environment
  */
-app.get('/', (req, res) => {
+app.get('/get-environment', (req, res) => {
   const { environment } = functions.config()
   if (['prod', 'staging'].includes(environment.env)) {
     if (PROTECTED_ENDPOINTS.includes(req.headers.origin)) {
