@@ -24,6 +24,7 @@
     "docs": "esdoc -c .esdoc.js"
   },
   "dependencies": {
+    "@firebase/app-types": "0.3.2",
     "axios": "~0.18.0",
     "bcryptjs": "~2.0",
     "body-parser": "~1.18.3",
@@ -57,7 +58,8 @@
     "jest": "23.6.0",
     "mockgoose": "7.3.5",
     "nodemon": "^1.18.3",
-    "sinon": "~6.0.0"
+    "sinon": "~6.0.0",
+    "supertest": "3.3.0"
   },
   "jest": {
     "verbose": true,

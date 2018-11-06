@@ -7,12 +7,7 @@ const passportConfig = require('./config/passport')
 const router = require('./auth.router')
 const connectDB = require('../utils/db-connect')
 
-// Env Variables from the Configs
-const { environment, auth } = functions.config()
-process.env = auth
-process.env.NODE_ENV = environment.env
-
-const database = process.env.db
+const database = functions.config().auth.db
 
 connectDB(database) // Open connection to the database
 

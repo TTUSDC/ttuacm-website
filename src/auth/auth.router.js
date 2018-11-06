@@ -1,7 +1,9 @@
+const util = require('util')
 const express = require('express')
 const passport = require('passport')
 const querystring = require('querystring')
 const OAuthHandler = require('./config/oauth2')
+const Request = require('../utils/request')
 
 const router = express.Router()
 
@@ -23,22 +25,22 @@ router.get('/test', (req, res) => {
 })
 
 /**
- * Creates and sends back the Google API of choice
+ * Creates a OAuthClient to extract in the other services
  *
- * - Endpoint: `/auth/api/v2/google-api/:api`
+ * - Endpoint: `/auth/api/v2/google-api`
  * - Verb: GET
  *
  * @typedef {function} AuthRouter-GoogleAPIs
+ * @todo secure this route
  */
-router.get('/google-api/:api', async (req, res) => {
+router.get('/google-api', async (req, res) => {
   try {
-    const { api } = req.params
     const OAuth = new OAuthHandler()
-    const instance = await OAuth.createAPI(api)
-    res.status(200).json({ api: instance })
+    const client = await OAuth.getClient()
+    res.status(200).json({ client })
   } catch (err) {
     console.error(err)
-    res.status(404).json({ err })
+    res.status(404).json({ err: err.message })
   }
 })
 
@@ -153,10 +155,12 @@ router.post('/register', async (req, res) => {
     password: req.body.password,
     confirmEmailToken: null,
   }
+
   try {
     const ctrl = new Controller()
+    const request = new Request('v2', 'email')
     const createdUser = await ctrl.register(user)
-    // TODO: Send Confirmation email
+    await request.get().path('/confirm-email').end()
     res.status(201).json({ createdUser })
   } catch (err) {
     res.status(err.code).json({ err })
@@ -232,9 +236,10 @@ router.get('/confirm/:token', (req, res) => {
 router.post('/forgot', async (req, res) => {
   try {
     const ctrl = new Controller()
+    const request = new Request('v2', 'email')
     const { email } = req.body
     const payload = await ctrl.forgotLogin(email)
-    // TODO: Send a reset email
+    await request.get().path('/reset-password').end()
     res.status(200).json({ recipient: payload.user })
   } catch (err) {
     res.status(err.code).json({ msg: err.message })
@@ -283,11 +288,12 @@ router.get('/reset/:token', (req, res) => {
 router.post('/reset/:token', async (req, res) => {
   try {
     const ctrl = new Controller()
+    const request = new Request('v2', 'email')
     const { token } = req.params
     const { password } = req.body
 
     const user = await ctrl.verifyUser(token, password)
-    // TODO: send a changed password email
+    await request.get().path('/change-password-notif').end()
     res.status(200).json({ user })
   } catch (err) {
     res.status(404).json({ user: null })
