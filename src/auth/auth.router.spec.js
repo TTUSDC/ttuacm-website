@@ -20,7 +20,6 @@ test.mockConfig({
 
 const request = require('supertest')
 const chai = require('chai')
-const sinon = require('sinon')
 const app = require('./auth.app')
 
 const { expect } = chai

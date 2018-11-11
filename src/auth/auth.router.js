@@ -1,4 +1,3 @@
-const util = require('util')
 const express = require('express')
 const passport = require('passport')
 const querystring = require('querystring')
@@ -160,7 +159,7 @@ router.post('/register', async (req, res) => {
     const ctrl = new Controller()
     const request = new Request('v2', 'email')
     const createdUser = await ctrl.register(user)
-    await request.get().path('/confirm-email').end()
+    await request.get('/confirm-email').end()
     res.status(201).json({ createdUser })
   } catch (err) {
     res.status(err.code).json({ err })
@@ -239,7 +238,7 @@ router.post('/forgot', async (req, res) => {
     const request = new Request('v2', 'email')
     const { email } = req.body
     const payload = await ctrl.forgotLogin(email)
-    await request.get().path('/reset-password').end()
+    await request.get('/reset-password').end()
     res.status(200).json({ recipient: payload.user })
   } catch (err) {
     res.status(err.code).json({ msg: err.message })
@@ -259,19 +258,18 @@ router.post('/forgot', async (req, res) => {
  * @typedef {function} AuthRouter-ResetToken
  * @param {string} token - A string that contains the HEX code/Reset token of a lost account
  */
-router.get('/reset/:token', (req, res) => {
+router.get('/reset/:token', async (req, res) => {
   const ctrl = new Controller()
   const { token } = req.params
-  const { redirectURL } = req.body
-  ctrl.resetToken(token)
-    .then((passToken) => {
-      const qs = querystring.stringify({ token: passToken })
-      res.redirect(`${redirectURL}/auth/forgot/redirect/?${qs}`)
-    })
-    .catch((err) => {
-      const qs = querystring.stringify({ err })
-      res.redirect(`${redirectURL}/auth/?${qs}`)
-    })
+  const { redirectURLSuccess, fallback } = req.body
+  try {
+    const passToken = ctrl.resetToken(token)
+    const qs = querystring.stringify({ token: passToken })
+    res.redirect(`${redirectURLSuccess}/?${qs}`)
+  } catch (err) {
+    const qs = querystring.stringify({ err })
+    res.redirect(`${fallback}/?${qs}`)
+  }
 })
 
 /**
@@ -293,7 +291,7 @@ router.post('/reset/:token', async (req, res) => {
     const { password } = req.body
 
     const user = await ctrl.verifyUser(token, password)
-    await request.get().path('/change-password-notif').end()
+    await request.get('/change-password-notif').end()
     res.status(200).json({ user })
   } catch (err) {
     res.status(404).json({ user: null })
