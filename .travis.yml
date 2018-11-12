@@ -10,6 +10,8 @@ jobs:
       yarn: true
       directories:
       - node_modules
+    install:
+    - npm install -g firebase-tools@latest
     script:
     - yarn serve
     - yarn lint
