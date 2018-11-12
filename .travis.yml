@@ -10,12 +10,9 @@ jobs:
       yarn: true
       directories:
       - node_modules
-    install:
-    - npm install -g firebase-tools@latest
     script:
-    - yarn serve
     - yarn lint
-    - yarn test --ci --forceExit --detectOpenHandles --maxWorkers=10
+    - yarn test:ci --ci --forceExit --detectOpenHandles --maxWorkers=10
   - stage: deploy
     install:
     - npm install -g firebase-tools@latest
