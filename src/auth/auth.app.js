@@ -12,9 +12,6 @@ const database = functions.config().auth.db
 connectDB(database) // Open connection to the database
 
 const app = express()
-app.use('/api/v2', router)
-app.use(cors())
-
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: false }))
 app.use(cors({ origin: true }))
@@ -22,5 +19,8 @@ app.use(cors({ origin: true }))
 app.use(passport.initialize())
 app.use(passport.session())
 passportConfig(passport)
+app.use(cors())
+
+app.use('/api/v2', router)
 
 module.exports = app

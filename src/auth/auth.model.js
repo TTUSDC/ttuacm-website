@@ -1,19 +1,68 @@
 const mongoose = require('mongoose')
 const ErrorMessages = require('./auth.errors')
 
-// TODO: Clean up database again to split up the shemas
 const studentSchema = mongoose.Schema({
-  googleId: { type: String, default: '' },
-  facebookId: { type: String, default: '' },
-  githubId: { type: String, default: '' },
-  email: { type: String, required: true },
-  password: { type: String, required: false, default: null },
-  confirmEmailToken: { type: String, default: '' },
-  resetPasswordToken: { type: String, default: '' },
-  resetPasswordExpires: { type: Date, default: null },
-  verified: { type: Boolean },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: false
+  },
+  classification: {
+    type: String,
+    required: true,
+    enum: ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate', 'PhD', 'Other'],
+    default: 'Other'
+  },
+  hasPaidDues: {
+    type: Boolean,
+    default: false
+  },
+  blocked: {
+    type: Boolean,
+    default: false
+  },
+  googleId: {
+    type: String,
+    default: ''
+  },
+  facebookId: {
+    type: String,
+    default: ''
+  },
+  githubId: {
+    type: String,
+    default: ''
+  },
+  password: {
+    type: String,
+    required: false,
+  },
+  confirmEmailToken: {
+    type: String,
+    default: ''
+  },
+  resetPasswordToken: {
+    type: String,
+    default: ''
+  },
+  resetPasswordExpires: {
+    type: Date,
+    default: null
+  },
+  verified: {
+    type: Boolean
+  },
 }, { autoCreate: true })
 
+// Filter Private Data from api calls
 function filterUser(user) {
   const filteredUser = user
   // Delete unwanted data here using delete

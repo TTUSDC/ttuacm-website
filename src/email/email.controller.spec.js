@@ -22,7 +22,7 @@ describe('Email Unit Tests', () => {
 
   it('[sendResetEmail] should send reset email without error', async () => {
     try {
-      await ctrl.sendResetEmail('Token', 'email@gmail.com')
+      await ctrl.sendResetEmail('email@gmail.com', 'Token')
     } catch (err) {
       expect(err).not.to.exist
     }

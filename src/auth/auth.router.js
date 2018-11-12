@@ -2,7 +2,7 @@ const express = require('express')
 const passport = require('passport')
 const querystring = require('querystring')
 const OAuthHandler = require('./config/oauth2')
-const Request = require('../utils/request')
+const { Request } = require('../utils/request')
 
 const router = express.Router()
 
@@ -150,8 +150,11 @@ router.get(
  */
 router.post('/register', async (req, res) => {
   const user = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
+    classification: req.body.classification,
     confirmEmailToken: null,
   }
 
@@ -159,10 +162,18 @@ router.post('/register', async (req, res) => {
     const ctrl = new Controller()
     const request = new Request('v2', 'email')
     const createdUser = await ctrl.register(user)
-    await request.get('/confirm-email').end()
+
+    // Sending the email token
+    await request.post('/confirm-email')
+      .body({
+        email: createdUser.email,
+        token: createdUser.confirmEmailToken
+      })
+      .end()
     res.status(201).json({ createdUser })
   } catch (err) {
-    res.status(err.code).json({ err })
+    console.error(err)
+    res.status(404).json({ err: err.message })
   }
 })
 
@@ -178,19 +189,18 @@ router.post('/register', async (req, res) => {
  *
  * @typedef {function} AuthRouter-Login
  */
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   const ctrl = new Controller()
   const { email } = req.body
   const inputPassword = req.body.password
-  ctrl.login(email, inputPassword)
-    .then((response) => {
-      const { token } = response
-      const user = response.foundUser
-      res.status(200).json({ token: `JWT ${token}`, user })
-    })
-    .catch((err) => {
-      res.status(err.code).json({ err })
-    })
+
+  try {
+    const { foundUser, token } = await ctrl.login(email, inputPassword)
+    res.status(200).json({ token: `JWT ${token}`, user: foundUser })
+  } catch (err) {
+    console.error(err)
+    res.status(err.code).json({ err })
+  }
 })
 
 /**
