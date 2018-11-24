@@ -11,16 +11,15 @@ jobs:
       directories:
       - node_modules
     before_install:
-		- openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv -in secrets.tar.enc -out secrets.tar -d
-		- tar xvf secrets.tar
+			- openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv -in secrets.tar.enc -out secrets.tar -d
+			- tar xvf secrets.tar
     script:
     - yarn lint
     - yarn test:unit --ci --forceExit --detectOpenHandles
   - stage: deploy
     before_install:
-		- openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv -in secrets.tar.enc -out secrets.tar -d
-		- tar xvf secrets.tar
-		- ls src/auth/config
+			- openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv -in secrets.tar.enc -out secrets.tar -d
+			- tar xvf secrets.tar
     install:
     - npm install -g firebase-tools@latest
     - yarn add -DE esdoc@0.5.2 esdoc-node@1.0.2
