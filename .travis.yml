@@ -9,20 +9,20 @@ jobs:
     cache:
       yarn: true
       directories:
-      - node_modules
-    before_install:
-			- openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv -in secrets.tar.enc -out secrets.tar -d
-			- tar xvf secrets.tar
+        - node_modules
+		before_install:
+		- openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
+			-in secrets.tar.enc -out secrets.tar -d
     script:
     - yarn lint
     - yarn test:unit --ci --forceExit --detectOpenHandles
   - stage: deploy
-    before_install:
-			- openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv -in secrets.tar.enc -out secrets.tar -d
-			- tar xvf secrets.tar
     install:
     - npm install -g firebase-tools@latest
     - yarn add -DE esdoc@0.5.2 esdoc-node@1.0.2
+		before_install:
+		- openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
+			-in secrets.tar.enc -out secrets.tar -d
     script:
     - yarn docs
     deploy:
@@ -35,16 +35,16 @@ jobs:
     - provider: firebase
       skip_cleanup: true
       token:
-        secure: "5A676DT+NTlR8iey3Cp8HA0DSI8jz7LZg986cH4uvytmwYx/jxAmIvnXhdyVqZf/NsQvlcLikvFY11duoGeMu4TjMSXU7PmPRXePiJi7PAF1r1qF4R95L538bNcbE4n5fJiAztCoW3n0lsihCgi+R9M34bTeRfGuVRxT6jzwkGLlgMNNF/kX2JIPhPJdLPbzyl2qUev891CLFRKBFfTx/D2x331rtSiQ1+lSLmKwBC5JVoo3P59je8cHvOdYNkt8OmTKV6TrzHi7lmRKAH07WdTpk5LR1mv0k5iCl9GGWNUQvHeKT5gSHhF+b01KmHibAbEESnac0HRcEvVvWv0bUSSPemOBb6LpJISJOe1UX561XDtmJI5ajcDZ+j5hA49NHMOAzQef0rMuW/c7X9EtsYYDrGsgkHr8rakkhz4WKSMwzluB9CnLzxczKnlH1yLBLn/jllHniW7uPV1AK15t2OUH/3GGHJL+y25BVZZxwRexXhxPFAKh0aY0O3qwzShzc8CVEymibdG9NcOR6MIXu47jc6uCph30PpgUt8oHXQrC48zAyzJqWbDTv8/u1kKGBpMl8C52gHCXiR88IRUEU5ed1SfKf7VGUFjJd3q5+bDDESfKCZc+3grCQSHZTqdEfCOEe8jINuXNm9II+RHYBOF6xkkLGoJPf7gg0i/WoaI="
-      project: "acm-texas-tech-web-app-2"
+        secure: 5A676DT+NTlR8iey3Cp8HA0DSI8jz7LZg986cH4uvytmwYx/jxAmIvnXhdyVqZf/NsQvlcLikvFY11duoGeMu4TjMSXU7PmPRXePiJi7PAF1r1qF4R95L538bNcbE4n5fJiAztCoW3n0lsihCgi+R9M34bTeRfGuVRxT6jzwkGLlgMNNF/kX2JIPhPJdLPbzyl2qUev891CLFRKBFfTx/D2x331rtSiQ1+lSLmKwBC5JVoo3P59je8cHvOdYNkt8OmTKV6TrzHi7lmRKAH07WdTpk5LR1mv0k5iCl9GGWNUQvHeKT5gSHhF+b01KmHibAbEESnac0HRcEvVvWv0bUSSPemOBb6LpJISJOe1UX561XDtmJI5ajcDZ+j5hA49NHMOAzQef0rMuW/c7X9EtsYYDrGsgkHr8rakkhz4WKSMwzluB9CnLzxczKnlH1yLBLn/jllHniW7uPV1AK15t2OUH/3GGHJL+y25BVZZxwRexXhxPFAKh0aY0O3qwzShzc8CVEymibdG9NcOR6MIXu47jc6uCph30PpgUt8oHXQrC48zAyzJqWbDTv8/u1kKGBpMl8C52gHCXiR88IRUEU5ed1SfKf7VGUFjJd3q5+bDDESfKCZc+3grCQSHZTqdEfCOEe8jINuXNm9II+RHYBOF6xkkLGoJPf7gg0i/WoaI=
+      project: acm-texas-tech-web-app-2
       message: Deployed to production
       on:
         branch: master
     - provider: firebase
       skip_cleanup: true
       token:
-        secure: "5A676DT+NTlR8iey3Cp8HA0DSI8jz7LZg986cH4uvytmwYx/jxAmIvnXhdyVqZf/NsQvlcLikvFY11duoGeMu4TjMSXU7PmPRXePiJi7PAF1r1qF4R95L538bNcbE4n5fJiAztCoW3n0lsihCgi+R9M34bTeRfGuVRxT6jzwkGLlgMNNF/kX2JIPhPJdLPbzyl2qUev891CLFRKBFfTx/D2x331rtSiQ1+lSLmKwBC5JVoo3P59je8cHvOdYNkt8OmTKV6TrzHi7lmRKAH07WdTpk5LR1mv0k5iCl9GGWNUQvHeKT5gSHhF+b01KmHibAbEESnac0HRcEvVvWv0bUSSPemOBb6LpJISJOe1UX561XDtmJI5ajcDZ+j5hA49NHMOAzQef0rMuW/c7X9EtsYYDrGsgkHr8rakkhz4WKSMwzluB9CnLzxczKnlH1yLBLn/jllHniW7uPV1AK15t2OUH/3GGHJL+y25BVZZxwRexXhxPFAKh0aY0O3qwzShzc8CVEymibdG9NcOR6MIXu47jc6uCph30PpgUt8oHXQrC48zAyzJqWbDTv8/u1kKGBpMl8C52gHCXiR88IRUEU5ed1SfKf7VGUFjJd3q5+bDDESfKCZc+3grCQSHZTqdEfCOEe8jINuXNm9II+RHYBOF6xkkLGoJPf7gg0i/WoaI="
-      project: "acm-texas-tech-web-app-2-beta"
+        secure: 5A676DT+NTlR8iey3Cp8HA0DSI8jz7LZg986cH4uvytmwYx/jxAmIvnXhdyVqZf/NsQvlcLikvFY11duoGeMu4TjMSXU7PmPRXePiJi7PAF1r1qF4R95L538bNcbE4n5fJiAztCoW3n0lsihCgi+R9M34bTeRfGuVRxT6jzwkGLlgMNNF/kX2JIPhPJdLPbzyl2qUev891CLFRKBFfTx/D2x331rtSiQ1+lSLmKwBC5JVoo3P59je8cHvOdYNkt8OmTKV6TrzHi7lmRKAH07WdTpk5LR1mv0k5iCl9GGWNUQvHeKT5gSHhF+b01KmHibAbEESnac0HRcEvVvWv0bUSSPemOBb6LpJISJOe1UX561XDtmJI5ajcDZ+j5hA49NHMOAzQef0rMuW/c7X9EtsYYDrGsgkHr8rakkhz4WKSMwzluB9CnLzxczKnlH1yLBLn/jllHniW7uPV1AK15t2OUH/3GGHJL+y25BVZZxwRexXhxPFAKh0aY0O3qwzShzc8CVEymibdG9NcOR6MIXu47jc6uCph30PpgUt8oHXQrC48zAyzJqWbDTv8/u1kKGBpMl8C52gHCXiR88IRUEU5ed1SfKf7VGUFjJd3q5+bDDESfKCZc+3grCQSHZTqdEfCOEe8jINuXNm9II+RHYBOF6xkkLGoJPf7gg0i/WoaI=
+      project: acm-texas-tech-web-app-2-beta
       message: Deployed to staging
       on:
         branch: next
