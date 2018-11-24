@@ -7,10 +7,10 @@ class EventsController {
    * Grabs the OAuth2 Provider from Auth Service and creates a calendar object
    */
   constructor() {
-		this.calendar
+    this.calendar
     this.currentAttendees
     this.calendarId
-     new Request('v2', 'auth')
+    new Request('v2', 'auth')
       .params({ api: 'calendar' })
       .path('google-api')
       .end().then((res) => {
