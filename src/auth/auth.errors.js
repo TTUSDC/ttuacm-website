@@ -11,7 +11,7 @@ function OAuthError() {
 }
 
 function NotFoundErr() {
-  const err = new Error('Cannot find user in datbase')
+  const err = new Error('Cannot find user in database')
   err.code = 404
   return err
 }

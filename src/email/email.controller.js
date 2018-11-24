@@ -58,7 +58,7 @@ class EmailController {
    * @returns {Promise.<null, Error>} Rejects with an error if there is something wrong with the email
    * @todo Make this look cleaner
    */
-  sendResetEmail(token, email) {
+  sendResetEmail(email, token) {
     return new Promise((resolve, reject) => {
       const mailOptions = {
         to: email,

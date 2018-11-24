@@ -48,9 +48,9 @@ router.post('/contact-us', (req, res) => {
  *
  * @typedef {function} EmailRouter-SendConfirmationEmail
  */
-router.post('/confirm-email', (res, req) => {
+router.post('/confirm-email', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
-  const { token, email } = req.body
+  const { email, token } = req.body
 
   ctrl.sendConfirmationEmail(email, token)
     .then(() => res.status(200).json())
@@ -71,7 +71,7 @@ router.post('/confirm-email', (res, req) => {
  *
  * @typedef {function} EmailRouter-SendResetEmail
  */
-router.post('/reset-password', (res, req) => {
+router.post('/reset-password', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
   const { email, token } = req.body
 
@@ -91,11 +91,11 @@ router.post('/reset-password', (res, req) => {
  *
  * @typedef {function} EmailRouter-SendChangedPasswordNotification
  */
-router.post('/change-password-notif', (res, req) => {
+router.post('/change-password-notif', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
   const { email, token } = req.body
 
-  ctrl.sendConfirmationEmail(email, token)
+  ctrl.sendChangedPasswordEmail(email, token)
     .then(() => res.status(200).json())
     .catch(err => {
       console.error(err)

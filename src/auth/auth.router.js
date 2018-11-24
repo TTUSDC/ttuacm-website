@@ -2,6 +2,7 @@ const express = require('express')
 const passport = require('passport')
 const querystring = require('querystring')
 const OAuthHandler = require('./config/oauth2')
+const { Request } = require('../utils/request')
 
 const router = express.Router()
 
@@ -23,22 +24,22 @@ router.get('/test', (req, res) => {
 })
 
 /**
- * Creates and sends back the Google API of choice
+ * Creates a OAuthClient to extract in the other services
  *
- * - Endpoint: `/auth/api/v2/google-api/:api`
+ * - Endpoint: `/auth/api/v2/google-api`
  * - Verb: GET
  *
  * @typedef {function} AuthRouter-GoogleAPIs
+ * @todo secure this route
  */
-router.get('/google-api/:api', async (req, res) => {
+router.get('/google-api', async (req, res) => {
   try {
-    const { api } = req.params
     const OAuth = new OAuthHandler()
-    const instance = await OAuth.createAPI(api)
-    res.status(200).json({ api: instance })
+    const client = await OAuth.getClient()
+    res.status(200).json({ client })
   } catch (err) {
     console.error(err)
-    res.status(404).json({ err })
+    res.status(404).json({ err: err.message })
   }
 })
 
@@ -149,17 +150,30 @@ router.get(
  */
 router.post('/register', async (req, res) => {
   const user = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
+    classification: req.body.classification,
     confirmEmailToken: null,
   }
+
   try {
     const ctrl = new Controller()
+    const request = new Request('v2', 'email')
     const createdUser = await ctrl.register(user)
-    // TODO: Send Confirmation email
+
+    // Sending the email token
+    await request.post('/confirm-email')
+      .body({
+        email: createdUser.email,
+        token: createdUser.confirmEmailToken
+      })
+      .end()
     res.status(201).json({ createdUser })
   } catch (err) {
-    res.status(err.code).json({ err })
+    console.error(err)
+    res.status(404).json({ err: err.message })
   }
 })
 
@@ -175,19 +189,18 @@ router.post('/register', async (req, res) => {
  *
  * @typedef {function} AuthRouter-Login
  */
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   const ctrl = new Controller()
   const { email } = req.body
   const inputPassword = req.body.password
-  ctrl.login(email, inputPassword)
-    .then((response) => {
-      const { token } = response
-      const user = response.foundUser
-      res.status(200).json({ token: `JWT ${token}`, user })
-    })
-    .catch((err) => {
-      res.status(err.code).json({ err })
-    })
+
+  try {
+    const { foundUser, token } = await ctrl.login(email, inputPassword)
+    res.status(200).json({ token: `JWT ${token}`, user: foundUser })
+  } catch (err) {
+    console.error(err)
+    res.status(err.code).json({ err })
+  }
 })
 
 /**
@@ -209,11 +222,11 @@ router.get('/confirm/:token', (req, res) => {
   ctrl.confirmToken(token)
     .then(() => {
       const qs = querystring.stringify({ verify: 'success' })
-      res.redirect(`${redirectURL}/auth/?${qs}`)
+      res.redirect(302, `${redirectURL}/auth/?${qs}`)
     })
     .catch(() => {
       const qs = querystring.stringify({ err: 'Error Validating Email' })
-      res.redirect(`${redirectURL}/?${qs}`)
+      res.redirect(302, `${redirectURL}/?${qs}`)
     })
 })
 
@@ -232,9 +245,10 @@ router.get('/confirm/:token', (req, res) => {
 router.post('/forgot', async (req, res) => {
   try {
     const ctrl = new Controller()
+    const request = new Request('v2', 'email')
     const { email } = req.body
     const payload = await ctrl.forgotLogin(email)
-    // TODO: Send a reset email
+    await request.get('/reset-password').end()
     res.status(200).json({ recipient: payload.user })
   } catch (err) {
     res.status(err.code).json({ msg: err.message })
@@ -254,19 +268,18 @@ router.post('/forgot', async (req, res) => {
  * @typedef {function} AuthRouter-ResetToken
  * @param {string} token - A string that contains the HEX code/Reset token of a lost account
  */
-router.get('/reset/:token', (req, res) => {
+router.get('/reset/:token', async (req, res) => {
   const ctrl = new Controller()
   const { token } = req.params
-  const { redirectURL } = req.body
-  ctrl.resetToken(token)
-    .then((passToken) => {
-      const qs = querystring.stringify({ token: passToken })
-      res.redirect(`${redirectURL}/auth/forgot/redirect/?${qs}`)
-    })
-    .catch((err) => {
-      const qs = querystring.stringify({ err })
-      res.redirect(`${redirectURL}/auth/?${qs}`)
-    })
+  const { redirectURLSuccess, fallback } = req.body
+  try {
+    const passToken = ctrl.resetToken(token)
+    const qs = querystring.stringify({ token: passToken })
+    res.redirect(`${redirectURLSuccess}/?${qs}`)
+  } catch (err) {
+    const qs = querystring.stringify({ err })
+    res.redirect(`${fallback}/?${qs}`)
+  }
 })
 
 /**
@@ -283,11 +296,12 @@ router.get('/reset/:token', (req, res) => {
 router.post('/reset/:token', async (req, res) => {
   try {
     const ctrl = new Controller()
+    const request = new Request('v2', 'email')
     const { token } = req.params
     const { password } = req.body
 
     const user = await ctrl.verifyUser(token, password)
-    // TODO: send a changed password email
+    await request.get('/change-password-notif').end()
     res.status(200).json({ user })
   } catch (err) {
     res.status(404).json({ user: null })

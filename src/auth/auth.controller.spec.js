@@ -31,29 +31,33 @@ describe('Auth Unit Tests', () => {
     model = new Model()
   })
 
-  afterEach(() => {
+  afterEach((done) => {
     // Make sure to at least create one user for each test
     // or this will error out
-    mongoose.connection.dropCollection('students')
+    mongoose.connection.dropCollection('students', done)
   })
 
-  it('[register] should save a new user to the database', () => {
+  it('[register] should save a new user to the database', async () => {
     const testUser = {
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
     }
 
-    return ctrl.register(testUser)
-      .then((createdUser) => {
-        expect(createdUser.email).to.equal('email@gmail.com')
-        expect(createdUser.password).not.to.equal('password')
-      })
+    const createdUser = await ctrl.register(testUser)
+    expect(createdUser.email).to.equal('email@gmail.com')
+    expect(createdUser.password).not.to.equal('password')
   })
 
   it('[register] should reject a new user to the database if they share an email', async () => {
     const testUser = {
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
     }
 
     try {
@@ -69,14 +73,17 @@ describe('Auth Unit Tests', () => {
 
   it('[login] should block a user login if they are not verified', async () => {
     const testUser = {
-      email: 'email@gmail',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
     }
 
-    await ctrl.register(testUser)
+    const newUser = await ctrl.register(testUser)
 
     try {
-      await ctrl.login(testUser.email, testUser.password)
+      await ctrl.login(newUser.email, newUser.password)
     } catch (err) {
       const targetError = ErrorMessages.UserNotVerified()
       expect(err.message).to.equal(targetError.message)
@@ -86,8 +93,11 @@ describe('Auth Unit Tests', () => {
 
   it('[login] should block a user to login if they are give the wrong password', async () => {
     const testUser = {
-      email: 'email@gmail',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
     }
 
     const newUser = await ctrl.register(testUser)
@@ -104,9 +114,12 @@ describe('Auth Unit Tests', () => {
 
   it('[login] should allow a user to login if they are give the right password', async () => {
     const testUser = {
-      email: 'email@gmail',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'email@gmail.com',
       password: 'password',
-      verified: true
+      classification: 'Freshman',
+      verified: true,
     }
 
     const newUser = await ctrl.register(testUser)
@@ -124,10 +137,13 @@ describe('Auth Unit Tests', () => {
 
   it('[forgotLogin] should update the user\'s resetPass attributes', async () => {
     const testUser = {
-      email: 'email@gmail',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
       confirmEmailToken: '',
-      verified: true
+      verified: true,
     }
 
     try {
@@ -142,9 +158,12 @@ describe('Auth Unit Tests', () => {
 
   it('[forgotLogin] should throw error if an email was not found', async () => {
     const testUser = {
-      email: 'email@gmail',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'email@gmail.com',
       password: 'password',
-      verified: true
+      classification: 'Freshman',
+      verified: true,
     }
 
     try {
@@ -159,8 +178,16 @@ describe('Auth Unit Tests', () => {
   })
 
   it('[resetToken] should throw an error if a reset token was not passed', async () => {
+    const testUser = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'email@gmail.com',
+      password: 'password',
+      classification: 'Freshman',
+    }
+
     try {
-      await model.createNewUser({ email: 'email' })
+      await model.createNewUser(testUser)
       await ctrl.resetToken()
       throw ErrorMessages.ErrorTestUtil()
     } catch (err) {
@@ -171,8 +198,16 @@ describe('Auth Unit Tests', () => {
   })
 
   it('[resetToken] should throw an error if an invalid token was passed', async () => {
+    const testUser = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'email@gmail.com',
+      password: 'password',
+      classification: 'Freshman',
+    }
+
     try {
-      await model.createNewUser({ email: 'email' })
+      await model.createNewUser(testUser)
       await ctrl.resetToken('Bad Token')
       throw ErrorMessages.ErrorTestUtil()
     } catch (err) {
@@ -184,8 +219,11 @@ describe('Auth Unit Tests', () => {
 
   it('[resetToken] should resolve with the user\'s token', async () => {
     const testUser = {
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
       resetPasswordToken: 'Token',
       resetPasswordExpires: Date.now() + 1000000
     }
@@ -201,15 +239,18 @@ describe('Auth Unit Tests', () => {
 
   it('[verifyUser] should throw an error when the user passes a bad JWT', async () => {
     const testUser = {
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
       resetPasswordToken: 'Token',
       resetPasswordExpires: Date.now() + 1000000
     }
 
     try {
-      await model.createNewUser(testUser)
-      await ctrl.verifyUser('Bad Token', 'password')
+      const newUser = await model.createNewUser(testUser)
+      await ctrl.verifyUser('Bad Token', newUser.password)
       throw ErrorMessages.ErrorTestUtil()
     } catch (err) {
       const targetError = ErrorMessages.NotFoundErr()
@@ -218,10 +259,13 @@ describe('Auth Unit Tests', () => {
     }
   })
 
-  it('[verifyUser] should update the found user they pass a JWT', async () => {
+  it('[verifyUser] should update the found user when they pass a valid JWT', async () => {
     const testUser = {
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
       resetPasswordToken: 'Token',
       resetPasswordExpires: Date.now() + 1000000
     }
@@ -237,8 +281,11 @@ describe('Auth Unit Tests', () => {
 
   it('[confirmToken] should correctly compare two matching tokens', async () => {
     const testUser = {
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
       confirmEmailToken: 'Token'
     }
 
@@ -254,8 +301,11 @@ describe('Auth Unit Tests', () => {
 
   it('[confirmToken] should throw error for two mismatching tokens', async () => {
     const testUser = {
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'email@gmail.com',
       password: 'password',
+      classification: 'Freshman',
       confirmEmailToken: 'Token'
     }
 
