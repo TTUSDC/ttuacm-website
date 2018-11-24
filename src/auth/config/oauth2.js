@@ -11,13 +11,13 @@ const SCOPES = [
   'https://www.google.com/m8/feeds/',
 ]
 
-const TOKEN_PATH = path.resolve(__dirname, 'credentials.json')
+const TOKEN_PATH = path.resolve(__dirname, 'token.json')
 
 class OAuthHandler {
   constructor() {
     console.log('Grabbing Google API credentials...')
     try {
-      this.content = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'client_secret.json')))
+      this.credentials = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'credentials.json')))
     } catch (err) {
       console.error('Cannot read Client Secret')
       process.exit(1)
@@ -47,18 +47,18 @@ class OAuthHandler {
     // Gets the information out of the token
     let token = {}
     // eslint-disable-next-line
-    const { client_secret, client_id, redirect_uris } = this.content.installed
+    const { client_secret, client_id, redirect_uris } = this.credentials.installed
     this.oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0])
 
     // Check if we have previously stored a token.
     try {
       token = fs.readFileSync(TOKEN_PATH)
+      if (this.oAuth2Client === null) throw ErrorMessages.OAuthError()
+      this.oAuth2Client.setCredentials(JSON.parse(token))
     } catch (err) {
       this.oAuth2Client = await this._getAccessToken()
     }
 
-    if (this.oAuth2Client === null) throw ErrorMessages.OAuthError()
-    this.oAuth2Client.setCredentials(JSON.parse(token))
     return null
   }
 

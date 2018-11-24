@@ -3,7 +3,7 @@
 .runtimeconfig.json
 
 # API Credentials and Keys
-client_secret.json
+token.json
 credentials.json
 secrets.tar
 

@@ -37,7 +37,7 @@
     "firebase": "5.5.4",
     "firebase-admin": "6.2.0",
     "firebase-functions": "2.1.0",
-    "googleapis": "33.0.0",
+    "googleapis": "27",
     "jsonwebtoken": "8.3.0",
     "mongoose": "5.2.8",
     "nodemailer": "4.6.8",
