@@ -50,6 +50,3 @@ jobs:
         branch: next
 notifications:
   email: false
-before_install:
-- openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
-  -in secrets.tar.enc -out secrets.tar -d
