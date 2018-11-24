@@ -1,2 +1,2 @@
 # Email Functions
-- Anything having to do with Emails or Notifications
+- Anything having to do with sending Emails or Notifications
