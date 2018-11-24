@@ -222,11 +222,11 @@ router.get('/confirm/:token', (req, res) => {
   ctrl.confirmToken(token)
     .then(() => {
       const qs = querystring.stringify({ verify: 'success' })
-      res.redirect(`${redirectURL}/auth/?${qs}`)
+      res.redirect(302, `${redirectURL}/auth/?${qs}`)
     })
     .catch(() => {
       const qs = querystring.stringify({ err: 'Error Validating Email' })
-      res.redirect(`${redirectURL}/?${qs}`)
+      res.redirect(302, `${redirectURL}/?${qs}`)
     })
 })
 

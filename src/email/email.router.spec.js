@@ -1,15 +1,6 @@
-const test = require('firebase-functions-test')()
-
-test.mockConfig({
-  email: {
-    // Fake email provider. No need to hide it
-    email_username: "v2z435ain366pxsa@ethereal.email",
-    email_password: "g7U7pZp5YAmZ2sMXDb"
-  }
-})
-
 const request = require('supertest')
-const app = require('./email.app')
+
+const app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/email'
 
 describe('Email Integration Tests', () => {
   it('should be able to connect to email service', () => request(app)

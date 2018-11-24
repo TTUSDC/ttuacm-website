@@ -1,28 +1,8 @@
-const test = require('firebase-functions-test')()
-const mongoose = require('mongoose')
-
-test.mockConfig({
-  auth: {
-    session_secret: 'SessionSecretForTests',
-    db: 'mongodb://localhost:27017/development',
-    facebook_clientid: "200556733895479",
-    github_client_secret: "oUPA7cV--cIpJjr7UHGuXEEM",
-    google_clientid: "200743691961-upugqobu93oa2rjajsvadpldll7r03ia.apps.googleusercontent.com",
-    google_client_secret: "238c5be7e90da744d8551334e70b62d4168d4635",
-    github_clientid: "aea94a0a1b79749f4c88",
-    gcalapikey: "AIzaSyCUY5hRNgM2yGrVWwRC2vvdBk3MtwapJEI",
-    facebook_client_secret: "ae687f6cd71f6aa75b004e414e74dc0b",
-  },
-  connections: {
-    host: 'localhost:5000/sandbox-206807/us-central1',
-    protocol: 'http',
-  }
-})
-
 const request = require('supertest')
 const chai = require('chai')
-const Controller = require('./auth.controller')
-const app = require('./auth.app')
+const mongoose = require('mongoose')
+
+const app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/auth'
 
 const { expect } = chai
 
@@ -52,9 +32,9 @@ describe('Auth Integration Tests', () => {
   })
 
   describe('Local Registration', () => {
-    // eslint-disable-next-line
+  // eslint-disable-next-line
     beforeAll((done) => {
-      mongoose.connect('mongodb://localhost:27017/testing', {
+      mongoose.connect(process.env.DB_CONNECTION_STRING, {
         useNewUrlParser: true,
       }, (err) => {
         done(err)
@@ -67,43 +47,39 @@ describe('Auth Integration Tests', () => {
       mongoose.connection.dropCollection('students', done)
     })
 
-    it('should be able to get register a user', () => request(app)
-        .post('/api/v2/register')
-        .send({
-          email: 'Some-email@gmail.com',
-          firstName: 'John',
-          lastName: 'Doe',
-          classification: 'Freshman',
-          password: 'Some-password123',
-        })
-        .expect(201)
-        .then(({ body }) => {
-          expect(body.createdUser.email === 'Some-email@gmail.com').to.equal(true)
-        })
-        )
+    it('should be able to register a user, verify the email, and login', async () => {
+      try {
+        const registerBody = await request(app)
+          .post('/api/v2/register')
+          .send({
+            email: 'johndoe@gmail.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            classification: 'Freshman',
+            password: 'Some-password123',
+          })
+          .expect(201)
 
-    it('should be able to log a user in', async () => {
-      const ctrl = new Controller()
-      const newUser = await ctrl.register({
-        email: 'email@gmail.com',
-        password: 'password',
-        firstName: 'John',
-        lastName: 'Doe',
-        classification: 'Freshman',
-      })
+        expect(registerBody.body.createdUser.email === 'johndoe@gmail').to.equal(true)
+        expect(registerBody.body.createdUser.confirmEmailToken).not.to.equal('')
 
-      await ctrl.confirmToken(newUser.confirmEmailToken)
+        await request(app)
+          .get(`/api/v2/confirm/${registerBody.body.createdUser.confirmEmailToken}`)
+          .expect(302)
 
-      return request(app)
-        .post('/api/v2/login')
-        .send({
-          email: 'email@gmail.com',
-          password: 'password'
-        })
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.token).not.to.equal("")
-        })
+        const loginBody = await request(app)
+          .post('/api/v2/login')
+          .send({
+            email: 'johndoe@gmail.com',
+            password: 'Some-password123',
+          })
+          .expect(200)
+
+        expect(loginBody.body.token).not.to.equal('')
+        expect(loginBody.body.user.email).to.equal('johndoe@gmail.com')
+      } catch (err) {
+        throw err
+      }
     })
   })
 })
