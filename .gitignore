@@ -5,6 +5,7 @@
 # API Credentials and Keys
 client_secret.json
 credentials.json
+secrets.tar
 
 # Mongo Login
 connect-db.sh
