@@ -29,7 +29,7 @@ jobs:
     - provider: firebase
       skip_cleanup: true
       token:
-        secure: "KYW9YprJXXfV75L2q3qwzhDtYO1h5uiYjZgxylwzcNn5QWwcLRiWhlobv/U42PBDP5S4ngi4SRDfwzYlmY/ix2NCLiCC4RHQbcchWXfGa3ukusU1bjqyVOWBwDp1APlVS5DGv209JiVVu02UeRNlcSRmlAK076HfSKYVVHFilkfv0o5JEu0fLmozQKTZ/4ahU1LV9Re9/edOFdzURlYN4LxN3HQxv6rka2RlYhn2NtvQOQPY99+A77i2mC3BGTMGLxxB31oYjqbisgoKUVAeAWW/L5gsTaUuaoW7Ynrfumyq0WzxX/hH4/IXFG/tXLLJqMPyIRyXsNRJmVmox9sLG+MindVTQQfWyimq1953Blvu869Sn/aE1MAjsDBAPO9I08aErc9asBBuzpIrSO2jnD1pyxJ7o1gjE5ZU/lGhk4xeHjHxLf5H6GyZ965EjT8q2kx5qwHXa96HntuXnX2UafLqpe9f8ao4HD/8ibXsF6zBRaQ8IV9a2TAlpCYrskCU2C8SeY9/4rpdanFbr3DVkqIx6OPtX0+jhbs6mTifzG6VBG7TGy7z0tKokpavZYVjLjb7EgZplNnGwbNSTdBRq/RcZrmUqcHeT4t7x4YQarvhUIqoJT/T0+300ggYElqb6De+N/nXDLJJ0wTjsWcKE9n1cxdPtnMu3EPosMGo3xk="
+        secure: c/czSw3s+WuyUz9wwNzW7x/6ECszSrfCyGR3AGtWdIZ65l/zH/S5cxjvsC3w1UHKJtdGrVmJqJcd55UbiQooLFv9911BxmiovVyb7gwSicys97p1kv0vOa5/1WPXUvYFDULvVFrIT4DCNhq4N4+OWDKFdV39Y9QKx1hEepzXBGZ7gIb1woSkHtBdZ92H2D9KhUOF9cqYdx7wShT3dd6GdBdTw93+yAMVgB6j2KKZ/jKdR9T7uJGCJNHTjly9q0IJpuGTXBassZPZzjuop7eEUvgWL/2RzKgCciraQesUwWEOPqIO3KsOQOHeDlnBv5PI48hvWumgbwxNzuG4oPhAAoDRg1zdnzAtEFu+06zIbAHFZyd2+Qo9qn4Nt+fzQ2cRgCtN3cWsdLqA60r3x7aq2o8YbIUiEGgCPe1yjXVVzh9uv9adcpi0V4BuaHlAJ97eC/LawdZ45O1zxQg35em2HgTLsPeWBlavotNKjzHo/ZA49xW3tPvDf7cNKSOOvxfvuL/Z80Sv5mPI5DYYhYmKkQy2VuPya9EoV/MU2euN6ou0qOCNOX2OxbpR7iMA+RvKVHNEJNSda2YUy20PPqPnyhNnYWa9/NoG46HVVUrdjwa/lPZbQ8H2BwR/1XLv/ybTf/uF5t/BOYTxD0CjvkzsOHFZx/iUATiMcMtNF/Wix8Q=
       project: acm-texas-tech-web-app-2
       message: Deployed to production
       on:
@@ -37,20 +37,10 @@ jobs:
     - provider: firebase
       skip_cleanup: true
       token:
-        secure: "KYW9YprJXXfV75L2q3qwzhDtYO1h5uiYjZgxylwzcNn5QWwcLRiWhlobv/U42PBDP5S4ngi4SRDfwzYlmY/ix2NCLiCC4RHQbcchWXfGa3ukusU1bjqyVOWBwDp1APlVS5DGv209JiVVu02UeRNlcSRmlAK076HfSKYVVHFilkfv0o5JEu0fLmozQKTZ/4ahU1LV9Re9/edOFdzURlYN4LxN3HQxv6rka2RlYhn2NtvQOQPY99+A77i2mC3BGTMGLxxB31oYjqbisgoKUVAeAWW/L5gsTaUuaoW7Ynrfumyq0WzxX/hH4/IXFG/tXLLJqMPyIRyXsNRJmVmox9sLG+MindVTQQfWyimq1953Blvu869Sn/aE1MAjsDBAPO9I08aErc9asBBuzpIrSO2jnD1pyxJ7o1gjE5ZU/lGhk4xeHjHxLf5H6GyZ965EjT8q2kx5qwHXa96HntuXnX2UafLqpe9f8ao4HD/8ibXsF6zBRaQ8IV9a2TAlpCYrskCU2C8SeY9/4rpdanFbr3DVkqIx6OPtX0+jhbs6mTifzG6VBG7TGy7z0tKokpavZYVjLjb7EgZplNnGwbNSTdBRq/RcZrmUqcHeT4t7x4YQarvhUIqoJT/T0+300ggYElqb6De+N/nXDLJJ0wTjsWcKE9n1cxdPtnMu3EPosMGo3xk="
+        secure: c/czSw3s+WuyUz9wwNzW7x/6ECszSrfCyGR3AGtWdIZ65l/zH/S5cxjvsC3w1UHKJtdGrVmJqJcd55UbiQooLFv9911BxmiovVyb7gwSicys97p1kv0vOa5/1WPXUvYFDULvVFrIT4DCNhq4N4+OWDKFdV39Y9QKx1hEepzXBGZ7gIb1woSkHtBdZ92H2D9KhUOF9cqYdx7wShT3dd6GdBdTw93+yAMVgB6j2KKZ/jKdR9T7uJGCJNHTjly9q0IJpuGTXBassZPZzjuop7eEUvgWL/2RzKgCciraQesUwWEOPqIO3KsOQOHeDlnBv5PI48hvWumgbwxNzuG4oPhAAoDRg1zdnzAtEFu+06zIbAHFZyd2+Qo9qn4Nt+fzQ2cRgCtN3cWsdLqA60r3x7aq2o8YbIUiEGgCPe1yjXVVzh9uv9adcpi0V4BuaHlAJ97eC/LawdZ45O1zxQg35em2HgTLsPeWBlavotNKjzHo/ZA49xW3tPvDf7cNKSOOvxfvuL/Z80Sv5mPI5DYYhYmKkQy2VuPya9EoV/MU2euN6ou0qOCNOX2OxbpR7iMA+RvKVHNEJNSda2YUy20PPqPnyhNnYWa9/NoG46HVVUrdjwa/lPZbQ8H2BwR/1XLv/ybTf/uF5t/BOYTxD0CjvkzsOHFZx/iUATiMcMtNF/Wix8Q=
       project: acm-texas-tech-web-app-2-beta
       message: Deployed to staging
       on:
         branch: next
-    # Not Yet
-    # - stage: integrate
-    #   if: branch = next
-    #   cache:
-    #     yarn: true
-    #     directories:
-    #     - node_modules
-    #   script:
-    #   - yarn test:integration --ci --forceExit --detectOpenHandles
-
 notifications:
   email: false
