@@ -13,6 +13,7 @@ jobs:
     before_install:
     - openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
       -in secrets.tar.enc -out secrets.tar -d
+    - tar xvf secrets.tar
     script:
     - ls src/auth/config
     - ls src/events
@@ -25,6 +26,7 @@ jobs:
     before_install:
     - openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
       -in secrets.tar.enc -out secrets.tar -d
+    - tar xvf secrets.tar
     script:
     - yarn docs
     deploy:
