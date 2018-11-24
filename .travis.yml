@@ -15,8 +15,6 @@ jobs:
       -in secrets.tar.enc -out secrets.tar -d
     - tar xvf secrets.tar
     script:
-    - ls src/auth/config
-    - ls src/events
     - yarn lint
     - yarn test:unit --ci --forceExit --detectOpenHandles
   - stage: deploy
