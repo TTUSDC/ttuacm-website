@@ -1,227 +1,125 @@
-const Request = require('../utils/request')
-/**
- * Handles Google Calendar Events Controller
- */
-class EventsController {
-  /**
-   * Grabs the OAuth2 Provider from Auth Service and creates a calendar object
-   */
-  constructor() {
-		this.calendar
-    this.currentAttendees
-    this.calendarId
-     new Request('v2', 'auth')
-      .params({ api: 'calendar' })
-      .path('google-api')
-      .end().then((res) => {
-         /**
-         * Calendar Object
-         * @type {object}
-         */
-        this.calendar = res.data.api
-         /**
-         * Current Attendees for any particular event
-         * @type {Array<object>}
-         */
-        this.currentAttendees = []
-        /**
-         * Calendar of choice from ACM
-         * @type {string}
-         */
-        this.calendarId = 'primary'
-      }).catch((err) => {
-        console.error(err)
-        throw err
-      })
-  }
+/* eslint-disable */
+const fs = require('fs');
+const readline = require('readline');
+const path = require('path')
+const {google} = require('googleapis');
 
+// If modifying these scopes, delete token.json.
+const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
+// The file token.json stores the user's access and refresh tokens, and is
+// created automatically when the authorization flow completes for the first
+// time.
+const TOKEN_PATH = path.resolve(__dirname, 'token.json')
 
-  /**
-   * Gets the raw events object
-   *
-   * - OnSuccess: Resolves with a list of (raw) events (an empty array if nore are found[])
-   * - OnFailure: Rejects with an Error
-   *
-   * @returns { Promise.<Array, Error> }
-   */
-  getRawEvents() {
-    return new Promise((resolve, reject) => {
-      this.calendar.events.list(
-        {
-          calendarId: this.calendarId,
-          timeMin: new Date().toISOString(),
-          singleEvents: true,
-          orderBy: 'startTime',
-        },
-        (err, { data }) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(data.items || [])
-          }
-        },
-      )
-    })
-  }
-
-  /**
-   * Lists the events on the user's primary calendar.
-   *
-   * - OnSuccess: Resolves with a list(10) events
-   * - OnFailure: Rejects with an Error
-   *
-   * @requires oAuth2Client
-   */
-  listEvents() {
-    return new Promise(async (resolve, reject) => {
-      this.getRawEvents()
-        .then((events) => {
-          // Will store all of the events and return
-          const eventsList = []
-          // Maps all of the numbers to days
-          const weekday = [
-            'Sunday',
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-          ]
-          events.map((event, i) => {
-            const start = event.start.dateTime || event.start.date
-            const end = event.end.dateTime || event.end.date
-            // Event Object
-            eventsList.push({
-              id: i + 1,
-              day: `${weekday[new Date(start).getDay()]}`,
-              startTime: start,
-              endTime: end,
-              title: event.summary || '',
-              location: event.location || 'TBA',
-              creator: event.creator.displayName || 'TTU ACM',
-              description: event.description || '',
-              attendees: event.attendees || [],
-              eventId: event.id, // Event ID according to Google
-              allDayEvent: event.start.date !== undefined,
-            })
-            return resolve(eventsList)
-          })
-        })
-        .catch((err) => {
-          reject(err)
-        })
-    })
-  }
-
-  /**
-   * Lists all attendees for an event
-   *
-   * - OnSuccess: Resolves
-   * - OnFailure: Rejects with an Error
-   *
-   * @param {string} eventId Event ID
-   * @returns {Promise.<Array<Object>>} A Promise
-   */
-  getAttendees(eventId) {
-    return new Promise((resolve, reject) => {
-      this.calendar.events.get(
-        {
-          calendarId: this.calendarId,
-          eventId,
-        },
-        (err, { data }) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(data.attendees || [])
-          }
-        },
-      )
-    })
-  }
-
-  /**
-   * Adds an attendee to an event
-   *
-   * - OnSuccess: Resolves
-   * - OnFailure: Rejects with an Error
-   *
-   * @param {string} eventId the event ID
-   * @param {Array} currentAttendees the current attendees for the event
-   * @param {string} email the user's email
-   * @returns {Promise.<null>} A Promise
-   */
-  addAttendee(eventId, email) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        this.currentAttendees.push({ email, responseStatus: 'accepted' })
-        resolve()
-      } catch (err) {
-        reject(err)
-      }
-    })
-  }
-
-  /**
-   * Removes the attendee by their email
-   *
-   * - OnSuccess: Resolves with the current attendees
-   * - OnFailure: Rejects with an Error
-   *
-   * @param {string} email the user's email
-   * @returns {Array<Object>} updated attendee list
-   */
-  removeAttendee(email) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        if (this.currentAttendees.length === 0) throw new Error('No attendees found')
-        const originalAttendees = this.currentAttendees
-        this.currentAttendees = this.currentAttendees.filter(each => each.email !== email.toLowerCase())
-        if (originalAttendees.length === this.currentAttendees.length) {
-          throw new Error('No user found')
-        }
-        resolve(this.currentAttendees)
-      } catch (err) {
-        reject(err)
-      }
-    })
-  }
-
-  /**
-   * Replaces the event's attendees with the attendees list
-   *
-   * - OnSuccess: Resolves with the new event object
-   * - OnFailure: Rejects with an Error
-   *
-   * Fun Fact: Google's API deletes duplicates by default
-   *
-   * @requires oAuth2Client
-   * @param {string} eventId user's event ID
-   * @param {Array<Object>} attendees array of attendees
-   * @returns {Promise<Array<Object>>}
-   */
-  updateAttendee(eventId, attendees) {
-    return new Promise(async (resolve, reject) => {
-      this.calendar.events.patch(
-        {
-          calendarId: this.calendarId,
-          eventId,
-          resource: {
-            attendees,
-          },
-        },
-        (err, { data }) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(data)
-          }
-        },
-      )
-    })
-  }
+function getAllEvents(done) {
+  // Load client secrets from a local file.
+  fs.readFile(path.resolve(__dirname, 'credentials.json'), (err, content) => {
+    if (err) done(err)
+    // Authorize a client with credentials, then call the Google Calendar API.
+    authorize(JSON.parse(content), listEvents, done);
+  });
 }
 
+/**
+ * Create an OAuth2 client with the given credentials, and then execute the
+ * given callback function.
+ * @param {Object} credentials The authorization client credentials.
+ * @param {function} callback The callback to call with the authorized client.
+ */
+function authorize(credentials, callback, done) {
+  const {client_secret, client_id, redirect_uris} = credentials.installed;
+  const oAuth2Client = new google.auth.OAuth2(
+      client_id, client_secret, redirect_uris[0]);
 
-module.exports = EventsController
+  // Check if we have previously stored a token.
+  fs.readFile(TOKEN_PATH, (err, token) => {
+    if (err) return getAccessToken(oAuth2Client, callback);
+    oAuth2Client.setCredentials(JSON.parse(token));
+    listEvents(oAuth2Client, done);
+  });
+}
+
+/**
+ * Get and store new token after prompting for user authorization, and then
+ * execute the given callback with the authorized OAuth2 client.
+ * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
+ * @param {getEventsCallback} callback The callback for the authorized client.
+ */
+function getAccessToken(oAuth2Client, callback, done) {
+  const authUrl = oAuth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: SCOPES,
+  });
+  console.log('Authorize this app by visiting this url:', authUrl);
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  rl.question('Enter the code from that page here: ', (code) => {
+    rl.close();
+    oAuth2Client.getToken(code, (err, token) => {
+      if (err) done(err)
+      oAuth2Client.setCredentials(token);
+      // Store the token to disk for later program executions
+      fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+        if (err) done(err)
+        console.log('Token stored to', TOKEN_PATH);
+      });
+      callback(oAuth2Client, done);
+    });
+  });
+}
+
+/**
+ * Lists the next 10 events on the user's primary calendar.
+ * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+ */
+function listEvents(auth, done) {
+  const weekday = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ]
+  const calendar = google.calendar({version: 'v3', auth});
+  let allEvents
+  calendar.events.list({
+    calendarId: 'primary',
+    timeMin: (new Date()).toISOString(),
+    singleEvents: true,
+    orderBy: 'startTime',
+  }, (err, res) => {
+    if (err) done(err)
+    events = res.data.items;
+    if (events.length) {
+      allEvents = events.map((event, i) => {
+        // Will store all of the events and return
+        // Maps all of the numbers to days
+        const start = event.start.dateTime || event.start.date
+        const end = event.end.dateTime || event.end.date
+        const singleEvent =  {
+          id: i + 1,
+          day: `${weekday[new Date(start).getDay()]}`,
+          startTime: start,
+          endTime: end,
+          title: event.summary || '',
+          location: event.location || 'TBA',
+          creator: event.creator.displayName || 'TTU ACM',
+          description: event.description || '',
+          attendees: event.attendees || [],
+          eventId: event.id, // Event ID according to Google
+          allDayEvent: event.start.date !== undefined,
+        }
+        return singleEvent
+      })
+    } else {
+      console.log('No upcoming events found.');
+    }
+    done(null, allEvents)
+  });
+}
+
+module.exports.getAllEvents = getAllEvents
