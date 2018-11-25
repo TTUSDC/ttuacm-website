@@ -1,3 +1,4 @@
+// TODO: Add error messages for ease in testing
 const mongoose = require('mongoose');
 
 const teamsSchema = mongoose.Schema({
@@ -7,7 +8,7 @@ const teamsSchema = mongoose.Schema({
   members: { type: [Array], default: [] },
 })
 
-class ContactsModel {
+class TeamsModel {
   /**
    * Creates  DB instance of the teams collection
    */
@@ -23,26 +24,22 @@ class ContactsModel {
    *
    * @param {string} groupName - the name for the group
    * @param {boolean} exact - whether or not to save the exact name of the group name
-   * @return {string} the formatted string
+   * @return {string} - the formatted string
    */
-  static formatGroupName(groupName, exact = false) {
+  static formatGroupName(groupName) {
     let formattedName = groupName;
 
-    if (exact) {
-      console.log('saving the exact name ', groupName);
-    } else {
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth();
-      const currentYear = currentDate.getYear();
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getYear();
 
-      // May - December is considered Fall, everything else is Spring
-      const season = currentMonth > 4 && currentMonth <= 11 ? 'Fall' : 'Spring';
+    // May - December is considered Fall, everything else is Spring
+    const season = currentMonth > 4 && currentMonth <= 11 ? 'Fall' : 'Spring';
 
-      // Gets the last two digits of the year
-      const year = currentYear.toString().slice(1, 3);
+    // Gets the last two digits of the year
+    const year = currentYear.toString().slice(1, 3);
 
-      formattedName = `SDC - ${groupName} - ${season} ${year}`;
-    }
+    formattedName = `SDC - ${groupName} - ${season} ${year}`;
 
     return formattedName;
   }
@@ -50,12 +47,18 @@ class ContactsModel {
   /**
    * Should create a new Team
    *
-   * @param {string} name formmated name of group
+   * @param {string} name - formmated name of group
+   * @return {object} createdTeam - the team we just created with no members
    */
-  createNewTeam(name) {
-    // TODO: Fill in this method
-    console.log(this.DB)
-    console.log(name)
+  async createNewTeam(name) {
+    try {
+      const newTeam = new this.DB({ name })
+      const createdTeam = await newTeam.save()
+      return createdTeam
+    } catch (err) {
+      console.error(err)
+      throw err // TODO: Replace this error with a pre defined error
+    }
   }
 
   /**
@@ -67,6 +70,14 @@ class ContactsModel {
     // TODO: Fill in this method
     console.log(this.DB)
     console.log(targetGroup)
+  }
+
+  /**
+   * Get all of the data from the database
+   */
+  getAllTeams() {
+    // TODO: Fill in this method
+    console.log(this.DB)
   }
 
   /**
@@ -94,4 +105,4 @@ class ContactsModel {
   }
 }
 
-exports = ContactsModel
+exports = TeamsModel
