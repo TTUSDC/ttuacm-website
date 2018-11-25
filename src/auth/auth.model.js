@@ -15,16 +15,22 @@ const studentSchema = mongoose.Schema({
     type: String,
     required: false
   },
+  // Deprecated
   classification: {
     type: String,
     required: true,
     enum: ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate', 'PhD', 'Other'],
     default: 'Other'
   },
+  graduationDate: {
+    type: Date,
+    default: new Date('January 1, 1970 00:00:00')
+  },
   hasPaidDues: {
     type: Boolean,
     default: false
   },
+  // Deprecated
   blocked: {
     type: Boolean,
     default: false
@@ -86,71 +92,64 @@ class AuthModel {
    * @param {string} targetAttr - attribute to change
    * @param {string} finalAttr - value of target attribute after changes
    */
-  updateUserByEmail(email, targetAttr, finalAttr) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const foundUser = await this.DB.findOne({ email }).exec()
-        foundUser[targetAttr] = finalAttr
-        const updatedUser = await foundUser.save().exec()
-        resolve(updatedUser)
-      } catch (err) {
-        console.error(err)
-        reject(ErrorMessages.CreateUserError)
-      }
-    })
+  async updateUserByEmail(email, targetAttr, finalAttr) {
+    try {
+      const foundUser = await this.DB.findOne({ email }).exec()
+      foundUser[targetAttr] = finalAttr
+      const updatedUser = await foundUser.save().exec()
+      return updatedUser
+    } catch (err) {
+      console.error(err)
+      throw ErrorMessages.CreateUserError
+    }
   }
 
   /**
    * Creates a new user
    * @param {object} user - user object
    */
-  createNewUser(user) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const newUser = new this.DB(user)
-        const createdUser = await newUser.save()
-        resolve(createdUser)
-      } catch (err) {
-        console.error(err)
-        reject(ErrorMessages.CreateUserError())
-      }
-    })
+  async createNewUser(user) {
+    try {
+      const newUser = new this.DB(user)
+      const createdUser = await newUser.save()
+      return createdUser
+    } catch (err) {
+      console.error(err)
+      throw ErrorMessages.CreateUserError()
+    }
   }
 
   /**
    * This will find the user by the ID
    * @param {string} id The Mongo Id we are going to find
    */
-  getUserById(id) {
-    this.DB.findById(id)
-      .then((user) => {
-        if (user !== null) return filterUser(user)
-        throw new Error() // A User was not found
-      })
-      .catch((err) => {
-        console.error(err)
-        return ErrorMessages.NotFoundErr()
-      })
+  async getUserById(id) {
+    try {
+      const user = await this.DB.findById(id).exec()
+      if (user !== null) return filterUser(user)
+      throw new Error() // A User was not found
+    } catch (err) {
+      console.error(err)
+      throw ErrorMessages.NotFoundErr()
+    }
   }
 
   /**
    * This will find the user by the email
    * @param {object} query - A query to the database
    */
-  getUserByAttribute(query) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const user = await this.DB.findOne(query).exec()
-        if (user !== null) {
-          const filteredUser = filterUser(user)
-          resolve(filteredUser)
-        }
-        resolve()
-      } catch (err) {
-        console.error(err)
-        reject(ErrorMessages.NotFoundErr())
+  async getUserByAttribute(query) {
+    try {
+      const user = await this.DB.findOne(query).exec()
+      let filteredUser
+      if (user !== null) {
+        filteredUser = filterUser(user)
       }
-    })
+      return filteredUser
+    } catch (err) {
+      console.error(err)
+      throw ErrorMessages.NotFoundErr()
+    }
   }
 
   /**
@@ -159,39 +158,39 @@ class AuthModel {
    * @param {string} value - the attribute value to match
    * @param {object} update - the attribute(s) to update
    */
-  updateUserByAttribute(query, update) {
-    return new Promise((resolve, reject) => {
-      try {
-        const user = this.DB.findOneAndUpdate(query, update, { new: true }).exec()
-        if (user !== null) resolve(filterUser(user))
-        resolve()
-      } catch (err) {
-        console.error(err)
-        reject(ErrorMessages.UnknownServerError())
+  async updateUserByAttribute(query, update) {
+    try {
+      const user = this.DB.findOneAndUpdate(query, update, { new: true }).exec()
+      let filteredUser
+      if (user !== null) {
+        filteredUser = filterUser(user)
       }
-    })
+      return filteredUser
+    } catch (err) {
+      console.error(err)
+      throw ErrorMessages.UnknownServerError()
+    }
   }
 
   /**
    * Gives a list of all the users in the database as an object
    */
-  findAllUsers() {
-    this.DB.find()
-      .then((users) => {
-        if (users !== null) {
-          const data = users.map(user => ({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            classification: user.classification,
-          }))
-          return data
-        }
-        throw new Error()
-      })
-      .catch((err) => {
-        console.error(err)
-        return ErrorMessages.NotFoundErr()
-      })
+  async findAllUsers() {
+    try {
+      const users = await this.DB.find()
+      if (users !== null) {
+        const data = users.map(user => ({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          classification: user.classification,
+        }))
+        return data
+      }
+      throw new Error('Did not find user in database')
+    } catch (err) {
+      console.error(err)
+      return ErrorMessages.NotFoundErr()
+    }
   }
 
   /**
@@ -207,32 +206,32 @@ class AuthModel {
    * @param {Object} data Data object that will be passed
    * @param {string} authProvider OAuth2Provider [Google, GitHub, Facebook]
    */
-  mergeAccounts(profile, data, authProvider) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const existingUser = this.DB.findOne({ email: profile.email }).exec()
-        let newUser
-        if (existingUser !== null) {
-          existingUser[authProvider] = profile.id
-          newUser = existingUser
-        } else {
-          newUser = new this.DB(data)
-        }
-        newUser = await existingUser.save().exec()
-        resolve(newUser)
-      } catch (err) {
-        console.error(err)
-        reject(ErrorMessages.MergeAccError())
+  async mergeAccounts(profile, data, authProvider) {
+    try {
+      const existingUser = this.DB.findOne({ email: profile.email }).exec()
+      let newUser
+      if (existingUser !== null) {
+        existingUser[authProvider] = profile.id
+        newUser = existingUser
+      } else {
+        newUser = new this.DB(data)
       }
-    })
+      newUser = await existingUser.save().exec()
+      return newUser
+    } catch (err) {
+      console.error(err)
+      throw ErrorMessages.MergeAccError()
+    }
   }
 
-  deleteUserByEmail(userEmail) {
-    this.DB.deleteOne({ email: userEmail })
-      .catch((err) => {
-        console.error(err)
-        return ErrorMessages.NotFoundErr()
-      })
+  async deleteUserByEmail(userEmail) {
+    try {
+      await this.DB.deleteOne({ email: userEmail }).exec()
+      return null
+    } catch (err) {
+      console.error(err)
+      return ErrorMessages.NotFoundErr()
+    }
   }
 }
 
