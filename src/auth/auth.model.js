@@ -15,7 +15,7 @@ const studentSchema = mongoose.Schema({
     type: String,
     required: false
   },
-  // Deprecated
+  // TODO: REMOVE. Deprecated
   classification: {
     type: String,
     required: true,
@@ -30,7 +30,7 @@ const studentSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
-  // Deprecated
+  // TODO: REMOVE. Deprecated
   blocked: {
     type: Boolean,
     default: false
@@ -173,6 +173,20 @@ class AuthModel {
   }
 
   /**
+   * Deletes a user from the database
+   * @param {string} userEmail - the account's email to delete
+   */
+  async deleteUserByEmail(userEmail) {
+    try {
+      await this.DB.deleteOne({ email: userEmail }).exec()
+      return null
+    } catch (err) {
+      console.error(err)
+      return ErrorMessages.NotFoundErr()
+    }
+  }
+
+  /**
    * Gives a list of all the users in the database as an object
    */
   async findAllUsers() {
@@ -224,15 +238,6 @@ class AuthModel {
     }
   }
 
-  async deleteUserByEmail(userEmail) {
-    try {
-      await this.DB.deleteOne({ email: userEmail }).exec()
-      return null
-    } catch (err) {
-      console.error(err)
-      return ErrorMessages.NotFoundErr()
-    }
-  }
 }
 
 module.exports = AuthModel
