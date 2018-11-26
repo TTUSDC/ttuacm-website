@@ -28,7 +28,7 @@ describe('Teams Unit Tests' , () => {
     mongoose.connection.dropCollection('teams', done)
   })
 
-  it('Should be able to add an email to all the teams without duplicates', async () => {
+  it('[addMemberOfGroups] should be able to add an email to all the teams without duplicates', async () => {
     const email1 = 'email1'
     const email2 = 'email2'
     const teams = [
@@ -55,7 +55,7 @@ describe('Teams Unit Tests' , () => {
     }
   })
 
-  it('Should be able to remove an email from all the teams', async () => {
+  it('[deleteMemberOfGroups] should be able to remove an email from all the teams', async () => {
     const email1 = 'email1'
     const email2 = 'email2'
     const teams = [
