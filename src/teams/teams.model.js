@@ -54,11 +54,11 @@ class TeamsModel {
   /**
    * Get a team's members
    *
-   * @param {string} name formmated name of group
+   * @param {string} name - name of group
    */
-  async getTeamMembers(targetGroup) {
+  async getTeamMembers(name) {
     try {
-      const foundTeam = await this.DB.findOne({ name: targetGroup }).exec()
+      const foundTeam = await this.DB.findOne({ name }).exec()
       if (foundTeam == null) throw ErrorMessages.TeamNotFound()
       return foundTeam.members
     } catch (err) {
@@ -81,7 +81,7 @@ class TeamsModel {
   }
 
   /**
-   * Add to a group's members
+   * Add to a group's members and makes sure there are no duplicates
    *
    * @param {Array<string>} groups - name of the group in the database
    * @param {string} emailToAdd - email of the user to add to the group
@@ -91,7 +91,7 @@ class TeamsModel {
     try {
       const updatedTeam = await this.DB.updateMany(
         { name: { $in: groups }},
-        { $push: { members: emailToAdd }}
+        { $addToSet: { members: emailToAdd }}
       ).exec()
 
       return updatedTeam
@@ -123,4 +123,4 @@ class TeamsModel {
   }
 }
 
-exports = TeamsModel
+module.exports = TeamsModel

@@ -1,4 +1,11 @@
+const TeamModel = require('./teams.model')
+const { asyncForEach } = require('../utils/async-for-each')
+
 class TeamController {
+  constructor() {
+    this.model = new TeamModel()
+  }
+
   /**
    * Formats the group name given to match the semester and year
    *
@@ -26,6 +33,57 @@ class TeamController {
 
     return formattedName;
   }
+
+  /**
+   * Will grab all of the user's groups of interest
+   *
+   * @param {string} email - the email to check
+   * @return {Array<string>} - the name of the groups that this user is a part of
+   */
+  async getActiveGroups(email) {
+    // TODO
+    console.log({ email })
+    console.log(this.model)
+  }
+
+  /**
+   * Adds the member to groups if the are not already a part of them
+   * If there is no group with that name, a new one is created
+   *
+   * @param {Array<string>} groupNames - groups to join
+   * @param {string} email - email to add
+   * @return {Error} - An error if something happened with adding members to the group
+   */
+  async addMemberOfGroups(groupNames, email) {
+    const fmtGroupNames = groupNames.map((name) => TeamController.formatGroupName(name))
+    // Check if they all exist, otherwise, make them
+    try {
+      await asyncForEach(fmtGroupNames, async (name) => {
+        const exists = await this.model.checkIfTeamExists(name)
+        if (!exists) await this.model.createNewTeam(name)
+      })
+
+      await this.model.addToTeams(fmtGroupNames, email)
+    } catch (err) {
+      console.error(err)
+      throw err // TODO
+    }
+
+  }
+
+  /**
+   * Adds the member to groups if the are not already a part of them
+   * If there is no group with that name, nothing is done
+   *
+   * @param {Array<string>} - groups to remove from
+   * @param {string} - email to add
+   * @return {Error} - An error if something happened with adding members to the group
+   */
+  async deleteMemberOfGroups(groupsNames, email) {
+    // TODO
+    console.log({ groupsNames, email })
+    console.log(this.model)
+  }
 }
 
-exports = TeamController
+module.exports = TeamController
