@@ -68,21 +68,30 @@ class TeamController {
       console.error(err)
       throw err // TODO
     }
-
   }
 
   /**
    * Adds the member to groups if the are not already a part of them
    * If there is no group with that name, nothing is done
    *
-   * @param {Array<string>} - groups to remove from
-   * @param {string} - email to add
+   * @param {Array<string>} groupNames - groups to remove from
+   * @param {string} email - email to remove
    * @return {Error} - An error if something happened with adding members to the group
    */
-  async deleteMemberOfGroups(groupsNames, email) {
-    // TODO
-    console.log({ groupsNames, email })
-    console.log(this.model)
+  async deleteMemberOfGroups(groupNames, email) {
+    const fmtGroupNames = groupNames.map((name) => TeamController.formatGroupName(name))
+    // Check if they all exist, otherwise, make them
+    try {
+      await asyncForEach(fmtGroupNames, async (name) => {
+        const exists = await this.model.checkIfTeamExists(name)
+        if (!exists) await this.model.createNewTeam(name)
+      })
+
+      await this.model.removeFromTeams(fmtGroupNames, email)
+    } catch (err) {
+      console.error(err)
+      throw err // TODO
+    }
   }
 }
 

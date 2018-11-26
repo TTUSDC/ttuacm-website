@@ -51,7 +51,32 @@ describe('Teams Unit Tests' , () => {
       expect(allTeams[0].members[1][0]).to.equal('email2')
       expect(allTeams[0].members.length).to.equal(2)
     } catch (err) {
-      expect(err.message).not.to.exist
+      expect(err).not.to.exist
+    }
+  })
+
+  it('Should be able to remove an email from all the teams', async () => {
+    const email1 = 'email1'
+    const email2 = 'email2'
+    const teams = [
+      'team1',
+      'team2',
+      'team3',
+    ]
+
+    try {
+      await ctrl.addMemberOfGroups(teams, email1)
+      await ctrl.addMemberOfGroups(teams, email2)
+
+      await ctrl.deleteMemberOfGroups(teams, email1)
+      await ctrl.deleteMemberOfGroups(teams, email2)
+      await ctrl.deleteMemberOfGroups(['team4', 'team'], email2)
+
+      const allTeams = await model.getAllTeams()
+      expect(allTeams[1].members.length).to.equal(0)
+      expect(allTeams[0].members.length).to.equal(0)
+    } catch (err) {
+      expect(err).not.to.exist
     }
   })
 })
