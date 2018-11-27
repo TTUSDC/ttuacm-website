@@ -25,7 +25,7 @@
     "env-config": "node src/utils/env-config.js",
     "env-save": "firebase functions:config:get > .runtimeconfig.json",
     "logs": "firebase functions:log",
-    "docs": "esdoc -c .esdoc.js"
+    "docs": "esdoc"
   },
   "dependencies": {
     "@firebase/app-types": "0.3.2",
@@ -52,8 +52,8 @@
   "devDependencies": {
     "chai": "4.2.0",
     "cross-env": "5.2.0",
-    "esdoc": "0.5.2",
-    "esdoc-node": "1.0.2",
+    "esdoc": "1.1.0",
+    "esdoc-standard-plugin": "1.0.0",
     "eslint": "5.6.1",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-config-prettier": "^3.1.0",

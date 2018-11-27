@@ -10,7 +10,7 @@ class TeamController {
    * Formats the group name given to match the semester and year
    *
    * @example
-   * `SDC - Algorithms - Fall 2018
+   * `SDC - Algorithms - Fall 2018`
    *
    * @param {string} groupName - the name for the group
    * @param {boolean} exact - whether or not to save the exact name of the group name
