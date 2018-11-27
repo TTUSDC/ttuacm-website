@@ -17,6 +17,29 @@ class TeamsModel {
   }
 
   /**
+   * Finds all the teams that are associated with the user
+   *
+   * @param {string} email - the email to find
+   */
+  async getUserTeams(email) {
+    try {
+      const query = await this.DB.find({}).exec()
+      const results = query.filter((doc) => {
+        const curr = doc.toObject()
+        let exists = false
+        for (const member of curr.members) {
+          if (member[0] === email) exists = true
+        }
+        return exists
+      })
+      return results
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  }
+
+  /**
    * Checks whether or not a team exists or not.
    * @param {string} name - name of group
    * @return {boolean} - True if it exists and false if it does not
@@ -73,7 +96,7 @@ class TeamsModel {
   async getAllTeams() {
     try {
       const teams = await this.DB.find({}).exec()
-      return teams
+      return teams.map((team) => team.toObject())
     } catch (err) {
       console.error(err)
       throw ErrorMessages.UnknownServerError()
@@ -85,7 +108,7 @@ class TeamsModel {
    *
    * @param {Array<string>} groups - name of the group in the database
    * @param {string} emailToAdd - email of the user to add to the group
-   * @return {Array<object>} updatedTeam - the updated Team
+   * @return {Array<object>} updatedTeam - the updated Teams
    */
   async addToTeams(groups, emailToAdd) {
     try {

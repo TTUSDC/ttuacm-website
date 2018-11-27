@@ -41,9 +41,13 @@ class TeamController {
    * @return {Array<string>} - the name of the groups that this user is a part of
    */
   async getActiveGroups(email) {
-    // TODO
-    console.log({ email })
-    console.log(this.model)
+    try {
+      const teams = await this.model.getUserTeams(email)
+      return teams
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 
   /**

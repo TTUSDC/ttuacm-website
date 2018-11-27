@@ -1,3 +1,10 @@
+function MissingRequestBody(body) {
+  const err = new Error('Missing Part of request body')
+  console.warn(body)
+  err.code = 404
+  return err
+}
+
 function CreateTeamError(name) {
   const err = new Error(`Cannot create team: ${name}`)
   err.code = 500
@@ -18,6 +25,7 @@ function UnknownServerError() {
 
 exports = {
   CreateTeamError,
+  MissingRequestBody,
   TeamNotFound,
   UnknownServerError,
 }
