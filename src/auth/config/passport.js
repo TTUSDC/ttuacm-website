@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+const functions = require('firebase-functions')
 const passportJwt = require('passport-jwt')
 const { ExtractJwt } = require('passport-jwt')
 const passportGoogle = require('passport-google-oauth2')
@@ -10,6 +12,16 @@ const GitHubStrategy = passportGitHub.Strategy
 const FacebookStrategy = passportFacebook.Strategy
 
 const User = require('../auth.model')
+
+const {
+    session_secret,
+    github_client_secret,
+    google_clientid,
+    google_client_secret,
+    github_clientid,
+    facebook_clientid,
+    facebook_client_secret
+} = functions.config().auth
 
 /**
  * Uses a JWT stategy to verify the token
@@ -30,7 +42,7 @@ module.exports = (passport) => {
   // JWT Strategy
   const jwtOpts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
-    secretOrKey: process.env.session_secret,
+    secretOrKey: session_secret,
   }
   passport.use(
     new JwtStrategy(jwtOpts, (jwtPayload, done) => {
@@ -47,8 +59,8 @@ module.exports = (passport) => {
   )
 
   // Google Strategy
-  const googleClientID = process.env.google_clientid
-  const googleClientSecret = process.env.google_client_secret
+  const googleClientID = google_clientid
+  const googleClientSecret = google_client_secret
   const googleOpts = {
     // Change this callback URL in production
     callbackURL: '/api/auth/google/redirect',
@@ -83,8 +95,8 @@ module.exports = (passport) => {
   )
 
   // GitHub Strategy
-  const githubClientID = process.env.github_clientid
-  const githubClientSecret = process.env.github_client_secret
+  const githubClientID = github_clientid
+  const githubClientSecret = github_client_secret
   const githubOpts = {
     callbackURL: '/api/auth/github/redirect',
     clientID: githubClientID,
@@ -119,8 +131,8 @@ module.exports = (passport) => {
     }),
   )
   // Facebook Strategy
-  const facebookClientID = process.env.facebook_clientid
-  const facebookClientSecret = process.env.facebook_client_secret
+  const facebookClientID = facebook_clientid
+  const facebookClientSecret = facebook_client_secret
   const facebookOpts = {
     callbackURL: '/api/auth/facebook/redirect',
     clientID: facebookClientID,

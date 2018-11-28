@@ -82,4 +82,4 @@ router.delete('/teams', membersOnlyRoute, async (req, res) => {
   }
 })
 
-exports = router;
+module.exports = router;
