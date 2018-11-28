@@ -20,7 +20,7 @@ jobs:
   - stage: deploy
     install:
     - npm install -g firebase-tools@latest
-    - yarn add esdoc esdoc-standard-plugin
+    - npm install -g esdoc esdoc-standard-plugin
     before_install:
     - openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
       -in secrets.tar.enc -out secrets.tar -d
