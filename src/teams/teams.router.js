@@ -1,10 +1,11 @@
-const express = require('express');
-const { membersOnlyRoute } = require('../utils/protected-route');
+const express = require('express')
+const ErrorMessages = require('./teams.errors')
+const { membersOnlyRoute } = require('../utils/protected-route')
 
 // Controller
-// const Controller = require('./teams.controller');
+const Controller = require('./teams.controller')
 
-const router = express.Router();
+const router = express.Router()
 
 /**
  * Testing route for the Teams Service
@@ -19,35 +20,19 @@ router.get('/test', (req, res) => {
 })
 
 /**
- * Gets all of the members in a team
+ * Gets all of the teams that the user is a part of
  *
  * - Restricted
  * - Endpoint: `/teams/api/v2/teams`
  * - Verb: GET
  *
- * @typedef {function} TeamsRouter-GetMembersFromTeam
+ * @typedef {function} TeamsRouter-GetTeams
  */
-router.get('/teams', async (req, res) => {
+router.get('/teams', membersOnlyRoute, async (req, res) => {
   try {
-    res.status(200).end();
-  } catch (err) {
-    res.status(err.code).json({ err });
-  }
-})
-
-/**
- * Creates a new team
- *
- * - Restricted
- * - Endpoint: `/teams/api/v2/teams`
- * - Verb: POST
- *
- * @requires Authentication - JWT
- * @typedef {function} TeamsRouter-CreateNewTeam
- */
-router.post('/teams', membersOnlyRoute, async (req, res) => {
-  try {
-    res.status(200).end();
+    if (!req.body.email) throw ErrorMessages.MissingRequestBody()
+    const teams = await (new Controller()).getActiveGroups(req.body.email)
+    res.status(200).end({ teams });
   } catch (err) {
     res.status(err.code).json({ err });
   }
@@ -61,10 +46,14 @@ router.post('/teams', membersOnlyRoute, async (req, res) => {
  * - Verb: PUT
  *
  * @requires Authentication - JWT
- * @typedef {function} TeamsRouter-UpdateTeamMembers
+ * @typedef {function} TeamsRouter-AddMembers
  */
 router.put('/teams', membersOnlyRoute, async (req, res) => {
   try {
+    if (!req.body.email || !req.body.teams) throw ErrorMessages.MissingRequestBody()
+    const { email, teams } = req.body
+
+    await (new Controller()).addMemberOfGroups(teams, email)
     res.status(200).end();
   } catch (err) {
     res.status(err.code).json({ err });
@@ -79,14 +68,18 @@ router.put('/teams', membersOnlyRoute, async (req, res) => {
  * - Verb: DELETE
  *
  * @requires Authentication - JWT
- * @typedef {function} TeamsRouter-DeleteUserFromTeam
+ * @typedef {function} TeamsRouter-DeleteUserFromTeams
  */
 router.delete('/teams', membersOnlyRoute, async (req, res) => {
   try {
+    if (!req.body.email || !req.body.teams) throw ErrorMessages.MissingRequestBody()
+    const { email, teams } = req.body
+
+    await (new Controller).deleteMemberOfGroups(teams, email)
     res.status(200).end();
   } catch (err) {
     res.status(err.code).json({ err });
   }
 })
 
-module.exports = router;
+exports = router;

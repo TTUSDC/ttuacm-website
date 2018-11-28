@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ErrorMessages = require('./teams.errors')
 
 const teamsSchema = mongoose.Schema({
   // Group's name
@@ -7,7 +8,7 @@ const teamsSchema = mongoose.Schema({
   members: { type: [Array], default: [] },
 })
 
-class ContactsModel {
+class TeamsModel {
   /**
    * Creates  DB instance of the teams collection
    */
@@ -16,82 +17,133 @@ class ContactsModel {
   }
 
   /**
-   * Formats the group name given to match the semester and year
+   * Finds all the teams that are associated with the user
    *
-   * @example
-   * `SDC - Algorithms - Fall 2018
-   *
-   * @param {string} groupName - the name for the group
-   * @param {boolean} exact - whether or not to save the exact name of the group name
-   * @return {string} the formatted string
+   * @param {string} email - the email to find
    */
-  static formatGroupName(groupName, exact = false) {
-    let formattedName = groupName;
-
-    if (exact) {
-      console.log('saving the exact name ', groupName);
-    } else {
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth();
-      const currentYear = currentDate.getYear();
-
-      // May - December is considered Fall, everything else is Spring
-      const season = currentMonth > 4 && currentMonth <= 11 ? 'Fall' : 'Spring';
-
-      // Gets the last two digits of the year
-      const year = currentYear.toString().slice(1, 3);
-
-      formattedName = `SDC - ${groupName} - ${season} ${year}`;
+  async getUserTeams(email) {
+    try {
+      const query = await this.DB.find({}).exec()
+      const results = query.filter((doc) => {
+        const curr = doc.toObject()
+        let exists = false
+        for (const member of curr.members) {
+          if (member[0] === email) exists = true
+        }
+        return exists
+      })
+      return results
+    } catch (err) {
+      console.error(err)
+      throw err
     }
+  }
 
-    return formattedName;
+  /**
+   * Checks whether or not a team exists or not.
+   * @param {string} name - name of group
+   * @return {boolean} - True if it exists and false if it does not
+   */
+  async checkIfTeamExists(name) {
+    try {
+      const found = await this.DB.findOne({ name }).exec()
+      if (found !== null) {
+        return true
+      }
+      return false
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 
   /**
    * Should create a new Team
    *
-   * @param {string} name formmated name of group
+   * @param {string} name - formmated name of group
+   * @return {object} createdTeam - the team we just created with no members
    */
-  createNewTeam(name) {
-    // TODO: Fill in this method
-    console.log(this.DB)
-    console.log(name)
+  async createNewTeam(name) {
+    try {
+      const newTeam = new this.DB({ name })
+      const createdTeam = await newTeam.save()
+      return createdTeam
+    } catch (err) {
+      console.error(err)
+      throw ErrorMessages.CreateTeamError()
+    }
   }
 
   /**
    * Get a team's members
    *
-   * @param {string} name formmated name of group
+   * @param {string} name - name of group
    */
-  getTeamMembers(targetGroup) {
-    // TODO: Fill in this method
-    console.log(this.DB)
-    console.log(targetGroup)
+  async getTeamMembers(name) {
+    try {
+      const foundTeam = await this.DB.findOne({ name }).exec()
+      if (foundTeam == null) throw ErrorMessages.TeamNotFound()
+      return foundTeam.members
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 
   /**
-   * Update a group's members
-   *
-   * @param {string} targetGroup name of the group in the database
-   * @param {string} emailToAdd email of the user to add to the group
+   * Get all of the data from the database
    */
-  updateTeam(targetGroup, emailToAdd) {
-    // TODO: Fill in this method
-    console.log(this.DB)
-    console.log({ targetGroup, emailToAdd })
+  async getAllTeams() {
+    try {
+      const teams = await this.DB.find({}).exec()
+      return teams.map((team) => team.toObject())
+    } catch (err) {
+      console.error(err)
+      throw ErrorMessages.UnknownServerError()
+    }
   }
 
   /**
-   * Delete a group's members
+   * Add to a group's members and makes sure there are no duplicates
    *
-   * @param {string} targetGroup name of the group in the database
-   * @param {string} emailToAdd email of the user to delete from the group
+   * @param {Array<string>} groups - name of the group in the database
+   * @param {string} emailToAdd - email of the user to add to the group
+   * @return {Array<object>} updatedTeam - the updated Teams
    */
-  deleteEmailFromTeam(targetGroup, emailToDelete) {
-    // TODO: Fill in this method
-    console.log(this.DB)
-    console.log({ targetGroup, emailToDelete })
+  async addToTeams(groups, emailToAdd) {
+    try {
+      const updatedTeam = await this.DB.updateMany(
+        { name: { $in: groups }},
+        { $addToSet: { members: emailToAdd }}
+      ).exec()
+
+      return updatedTeam
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  }
+
+  /**
+   * Add to a group's members
+   *
+   * @param {Array<string>} groups - name of the group in the database
+   * @param {string} emailToDelete - email of the user to remove from the group
+   * @return {Array<object>} updatedTeam - the updated Team
+   */
+  async removeFromTeams(groups, emailToDelete) {
+    try {
+      const updatedTeam = await this.DB.updateMany(
+        { name: { $in: groups }},
+        { $pull: { members: emailToDelete }}
+      ).exec()
+
+      return updatedTeam
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 }
 
-exports = ContactsModel
+module.exports = TeamsModel

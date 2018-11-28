@@ -7,8 +7,6 @@ const ErrorMessages = require('./auth.errors')
 const generateHexToken = require('../utils/generate-hex')
 const generateJWTToken = require('../utils/generate-jwt')
 
-process.env = functions.config().auth
-
 // Bcrypt options
 const saltRounds = 10
 
@@ -35,7 +33,7 @@ class AuthController {
    * @returns {Promise.<Object, Error>} Resolves with a user objectand rejects with an error
    */
   register(user) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise( async (resolve, reject) => {
       // If the email is available, continue with the proccess
       try {
         const query = { email: user.email }
@@ -234,7 +232,7 @@ class AuthController {
    * @returns {string} a query string to add to a redirect
    */
   static oauth2(user) {
-    const token = jwt.sign({ data: user }, process.env.session_secret, {
+    const token = jwt.sign({ data: user }, functions.config.auth().session_secret, {
       expiresIn: 604800, // 1 week
     })
 
