@@ -64,3 +64,43 @@ launch.json
 *.swp
 *.swo
 data/
+
+# Client
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+firebaseconfig.json
+.runtimeconfig.json
+.firebaserc
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+
+# Docs
+/docs
+/out
+/reference
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor
+*.swp
+*.swo
+*.swn
+.tern-project
+.tern-config
+.tern-port
