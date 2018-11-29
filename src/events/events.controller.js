@@ -101,17 +101,13 @@ function listEvents(auth, done) {
         const start = event.start.dateTime || event.start.date
         const end = event.end.dateTime || event.end.date
         const singleEvent =  {
-          id: i + 1,
           day: `${weekday[new Date(start).getDay()]}`,
           startTime: start,
           endTime: end,
           title: event.summary || '',
           location: event.location || 'TBA',
-          creator: event.creator.displayName || 'TTU ACM',
           description: event.description || '',
-          attendees: event.attendees || [],
-          eventId: event.id, // Event ID according to Google
-          allDayEvent: event.start.date !== undefined,
+          recurringEvent: Boolean(event.recurringEventId),
         }
         return singleEvent
       })
