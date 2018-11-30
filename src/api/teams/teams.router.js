@@ -75,7 +75,7 @@ router.delete('/teams', membersOnlyRoute, async (req, res) => {
     if (!req.body.email || !req.body.teams) throw ErrorMessages.MissingRequestBody()
     const { email, teams } = req.body
 
-    await (new Controller).deleteMemberOfGroups(teams, email)
+    await (new Controller()).deleteMemberOfGroups(teams, email)
     res.status(200).end();
   } catch (err) {
     res.status(err.code).json({ err });

@@ -156,8 +156,8 @@ class Request {
    * @returns {Promise.<Response, Error>}
    */
   async end() {
-      this.config.method = this.method
-      this.config.url = this.url
+    this.config.method = this.method
+    this.config.url = this.url
 
     try {
       let res

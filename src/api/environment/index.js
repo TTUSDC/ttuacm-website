@@ -4,7 +4,7 @@ const cors = require('cors')
 
 const PROTECTED_ENDPOINTS = [
   'https://acm-texas-tech-web-app-2-beta.firebaseapp.com/',
-  'https://acm-texas-tech-web-app-2.firebaseapp.com'
+  'https://acm-texas-tech-web-app-2.firebaseapp.com',
 ]
 
 const app = express()

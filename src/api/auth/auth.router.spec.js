@@ -9,26 +9,23 @@ const { expect } = chai
 describe('Auth Integration Tests', () => {
   describe('OAuth Tests', () => {
     it('should be able to send back a oAuthClient to extract', () => request(app)
-        .get('/api/v2/google-api')
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.client.credentials).to.exist
-        }))
+      .get('/api/v2/google-api')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.client.credentials).to.exist
+      }))
 
     it('should be able to get Facebook OAuth', () => request(app)
-        .get('/api/v2/facebook')
-        .expect(302)
-        )
+      .get('/api/v2/facebook')
+      .expect(302))
 
     it('should be able to get Google OAuth', () => request(app)
-        .get('/api/v2/google')
-        .expect(302)
-        )
+      .get('/api/v2/google')
+      .expect(302))
 
     it('should be able to get GitHub OAuth', () => request(app)
-        .get('/api/v2/github')
-        .expect(302)
-        )
+      .get('/api/v2/github')
+      .expect(302))
   })
 
   describe('Local Registration', () => {

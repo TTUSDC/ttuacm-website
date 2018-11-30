@@ -59,7 +59,7 @@ class TeamController {
    * @return {Error} - An error if something happened with adding members to the group
    */
   async addMemberOfGroups(groupNames, email) {
-    const fmtGroupNames = groupNames.map((name) => TeamController.formatGroupName(name))
+    const fmtGroupNames = groupNames.map(name => TeamController.formatGroupName(name))
     // Check if they all exist, otherwise, make them
     try {
       await asyncForEach(fmtGroupNames, async (name) => {
@@ -83,7 +83,7 @@ class TeamController {
    * @return {Error} - An error if something happened with adding members to the group
    */
   async deleteMemberOfGroups(groupNames, email) {
-    const fmtGroupNames = groupNames.map((name) => TeamController.formatGroupName(name))
+    const fmtGroupNames = groupNames.map(name => TeamController.formatGroupName(name))
     // Check if they all exist, otherwise, make them
     try {
       await asyncForEach(fmtGroupNames, async (name) => {

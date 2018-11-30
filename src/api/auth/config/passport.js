@@ -14,13 +14,13 @@ const FacebookStrategy = passportFacebook.Strategy
 const User = require('../auth.model')
 
 const {
-    session_secret,
-    github_client_secret,
-    google_clientid,
-    google_client_secret,
-    github_clientid,
-    facebook_clientid,
-    facebook_client_secret
+  session_secret,
+  github_client_secret,
+  google_clientid,
+  google_client_secret,
+  github_clientid,
+  facebook_clientid,
+  facebook_client_secret,
 } = functions.config().auth
 
 /**

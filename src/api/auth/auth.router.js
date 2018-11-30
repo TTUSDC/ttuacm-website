@@ -167,7 +167,7 @@ router.post('/register', async (req, res) => {
     await request.post('/confirm-email')
       .body({
         email: createdUser.email,
-        token: createdUser.confirmEmailToken
+        token: createdUser.confirmEmailToken,
       })
       .end()
     res.status(201).json({ createdUser })

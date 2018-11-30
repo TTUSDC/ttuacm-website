@@ -55,7 +55,7 @@ class EmailController {
    *
    * @param {string} email user's email
    * @param {string} token HEX token/reset token
-   * @returns {Promise.<null, Error>} Rejects with an error if there is something wrong with the email
+   * @returns {Promise.<null, Error>}
    * @todo Make this look cleaner
    */
   sendResetEmail(email, token) {
@@ -84,7 +84,7 @@ class EmailController {
    * Send the notification to the user that informtion in their account has changed
    *
    * @param {string} email user's email
-   * @returns {Promise.<null, Error>} Rejects with an error if there is something wrong with the email
+   * @returns {Promise.<null, Error>}
    */
   sendChangedPasswordEmail(email) {
     return new Promise((resolve, reject) => {

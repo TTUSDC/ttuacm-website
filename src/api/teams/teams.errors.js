@@ -18,7 +18,7 @@ function TeamNotFound(name) {
 }
 
 function UnknownServerError() {
-  const err = new Error(`An Unknown Server Error has occured`)
+  const err = new Error('An Unknown Server Error has occured')
   err.code = 500
   return err
 }

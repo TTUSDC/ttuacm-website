@@ -28,13 +28,13 @@ class OAuthHandler {
    * Creates an OAuthClient to be used for Google APIs
    */
   async getClient() {
-      try {
-        await this._authorize()
-        return this.oAuth2Client
-      } catch (err) {
-        console.error(err)
-        throw ErrorMessages.OAuthError()
-      }
+    try {
+      await this._authorize()
+      return this.oAuth2Client
+    } catch (err) {
+      console.error(err)
+      throw ErrorMessages.OAuthError()
+    }
   }
 
   /**

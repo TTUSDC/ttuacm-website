@@ -27,12 +27,16 @@ router.get('/test', (req, res) => {
  */
 router.post('/contact-us', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
-  const { name, email, topic, message } = req.body
-  const emailInfo = { name, email, topic, message }
+  const {
+    name, email, topic, message,
+  } = req.body
+  const emailInfo = {
+    name, email, topic, message,
+  }
 
   ctrl.contactUs(emailInfo)
     .then(() => res.status(200).json())
-    .catch(err => {
+    .catch((err) => {
       console.error(err)
       res.status(404).json()
     })
@@ -54,7 +58,7 @@ router.post('/confirm-email', (req, res) => {
 
   ctrl.sendConfirmationEmail(email, token)
     .then(() => res.status(200).json())
-    .catch(err => {
+    .catch((err) => {
       console.error(err)
       res.status(404).json()
     })
@@ -77,7 +81,7 @@ router.post('/reset-password', (req, res) => {
 
   ctrl.sendResetEmail(email, token)
     .then(() => res.status(200).json())
-    .catch(err => {
+    .catch((err) => {
       console.error(err)
       res.status(404).json()
     })
@@ -97,7 +101,7 @@ router.post('/change-password-notif', (req, res) => {
 
   ctrl.sendChangedPasswordEmail(email, token)
     .then(() => res.status(200).json())
-    .catch(err => {
+    .catch((err) => {
       console.error(err)
       res.status(404).json()
     })

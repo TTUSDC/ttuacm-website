@@ -2,8 +2,8 @@ const test = require('firebase-functions-test')()
 
 test.mockConfig({
   auth: {
-    session_secret: 'SessionSecretForTests!'
-  }
+    session_secret: 'SessionSecretForTests!',
+  },
 })
 
 const chai = require('chai')
@@ -225,7 +225,7 @@ describe('Auth Unit Tests', () => {
       password: 'password',
       classification: 'Freshman',
       resetPasswordToken: 'Token',
-      resetPasswordExpires: Date.now() + 1000000
+      resetPasswordExpires: Date.now() + 1000000,
     }
 
     try {
@@ -245,7 +245,7 @@ describe('Auth Unit Tests', () => {
       password: 'password',
       classification: 'Freshman',
       resetPasswordToken: 'Token',
-      resetPasswordExpires: Date.now() + 1000000
+      resetPasswordExpires: Date.now() + 1000000,
     }
 
     try {
@@ -267,7 +267,7 @@ describe('Auth Unit Tests', () => {
       password: 'password',
       classification: 'Freshman',
       resetPasswordToken: 'Token',
-      resetPasswordExpires: Date.now() + 1000000
+      resetPasswordExpires: Date.now() + 1000000,
     }
 
     try {
@@ -286,7 +286,7 @@ describe('Auth Unit Tests', () => {
       email: 'email@gmail.com',
       password: 'password',
       classification: 'Freshman',
-      confirmEmailToken: 'Token'
+      confirmEmailToken: 'Token',
     }
 
     try {
@@ -306,7 +306,7 @@ describe('Auth Unit Tests', () => {
       email: 'email@gmail.com',
       password: 'password',
       classification: 'Freshman',
-      confirmEmailToken: 'Token'
+      confirmEmailToken: 'Token',
     }
 
     try {

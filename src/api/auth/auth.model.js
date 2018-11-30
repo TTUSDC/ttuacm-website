@@ -5,47 +5,47 @@ const studentSchema = mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   firstName: {
     type: String,
-    required: true
+    required: true,
   },
   lastName: {
     type: String,
-    required: false
+    required: false,
   },
   // TODO: REMOVE. Deprecated
   classification: {
     type: String,
     required: true,
     enum: ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate', 'PhD', 'Other'],
-    default: 'Other'
+    default: 'Other',
   },
   graduationDate: {
     type: Date,
-    default: new Date('January 1, 1970 00:00:00')
+    default: new Date('January 1, 1970 00:00:00'),
   },
   hasPaidDues: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // TODO: REMOVE. Deprecated
   blocked: {
     type: Boolean,
-    default: false
+    default: false,
   },
   googleId: {
     type: String,
-    default: ''
+    default: '',
   },
   facebookId: {
     type: String,
-    default: ''
+    default: '',
   },
   githubId: {
     type: String,
-    default: ''
+    default: '',
   },
   password: {
     type: String,
@@ -53,18 +53,18 @@ const studentSchema = mongoose.Schema({
   },
   confirmEmailToken: {
     type: String,
-    default: ''
+    default: '',
   },
   resetPasswordToken: {
     type: String,
-    default: ''
+    default: '',
   },
   resetPasswordExpires: {
     type: Date,
-    default: null
+    default: null,
   },
   verified: {
-    type: Boolean
+    type: Boolean,
   },
 }, { autoCreate: true })
 
@@ -237,7 +237,6 @@ class AuthModel {
       throw ErrorMessages.MergeAccError()
     }
   }
-
 }
 
 module.exports = AuthModel

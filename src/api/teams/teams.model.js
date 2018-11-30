@@ -96,7 +96,7 @@ class TeamsModel {
   async getAllTeams() {
     try {
       const teams = await this.DB.find({}).exec()
-      return teams.map((team) => team.toObject())
+      return teams.map(team => team.toObject())
     } catch (err) {
       console.error(err)
       throw ErrorMessages.UnknownServerError()
@@ -113,8 +113,8 @@ class TeamsModel {
   async addToTeams(groups, emailToAdd) {
     try {
       const updatedTeam = await this.DB.updateMany(
-        { name: { $in: groups }},
-        { $addToSet: { members: emailToAdd }}
+        { name: { $in: groups } },
+        { $addToSet: { members: emailToAdd } },
       ).exec()
 
       return updatedTeam
@@ -134,8 +134,8 @@ class TeamsModel {
   async removeFromTeams(groups, emailToDelete) {
     try {
       const updatedTeam = await this.DB.updateMany(
-        { name: { $in: groups }},
-        { $pull: { members: emailToDelete }}
+        { name: { $in: groups } },
+        { $pull: { members: emailToDelete } },
       ).exec()
 
       return updatedTeam

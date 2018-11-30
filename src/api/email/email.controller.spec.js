@@ -2,9 +2,9 @@ const test = require('firebase-functions-test')()
 
 test.mockConfig({
   email: {
-    email_username: "v2z435ain366pxsa@ethereal.email",
-    email_password: "g7U7pZp5YAmZ2sMXDb"
-  }
+    email_username: 'v2z435ain366pxsa@ethereal.email',
+    email_password: 'g7U7pZp5YAmZ2sMXDb',
+  },
 })
 
 const chai = require('chai')
@@ -42,7 +42,7 @@ describe('Email Unit Tests', () => {
         email: 'email@gmail.com',
         name: 'testUser',
         topic: 'topic',
-        message: 'hello world!'
+        message: 'hello world!',
       }
       await ctrl.contactUs(options)
     } catch (err) {

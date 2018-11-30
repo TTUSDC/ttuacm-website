@@ -33,7 +33,7 @@ class AuthController {
    * @returns {Promise.<Object, Error>} Resolves with a user objectand rejects with an error
    */
   register(user) {
-    return new Promise( async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       // If the email is available, continue with the proccess
       try {
         const query = { email: user.email }

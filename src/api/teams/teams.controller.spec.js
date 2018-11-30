@@ -6,7 +6,7 @@ const { asyncForEach } = require('../../utils/async-for-each')
 
 const { expect } = chai
 
-describe('Teams Unit Tests' , () => {
+describe('Teams Unit Tests', () => {
   let ctrl
   let model
   // eslint-disable-next-line
