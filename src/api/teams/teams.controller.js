@@ -1,5 +1,5 @@
 const TeamModel = require('./teams.model')
-const { asyncForEach } = require('../utils/async-for-each')
+const { asyncForEach } = require('../../utils/async-for-each')
 
 class TeamController {
   constructor() {

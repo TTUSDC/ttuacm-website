@@ -4,8 +4,8 @@ const querystring = require('querystring')
 const bcrypt = require('bcryptjs')
 const AuthModel = require('./auth.model')
 const ErrorMessages = require('./auth.errors')
-const generateHexToken = require('../utils/generate-hex')
-const generateJWTToken = require('../utils/generate-jwt')
+const generateHexToken = require('../../utils/generate-hex')
+const generateJWTToken = require('../../utils/generate-jwt')
 
 // Bcrypt options
 const saltRounds = 10

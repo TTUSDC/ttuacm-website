@@ -1,6 +1,6 @@
 const express = require('express')
 const ErrorMessages = require('./teams.errors')
-const { membersOnlyRoute } = require('../utils/protected-route')
+const { membersOnlyRoute } = require('../../utils/protected-route')
 
 // Controller
 const Controller = require('./teams.controller')

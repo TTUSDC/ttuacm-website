@@ -1,6 +1,6 @@
 const express = require('express')
 const functions = require('firebase-functions')
-const cors = require('cors')({ origin: true })
+const cors = require('cors')
 
 const PROTECTED_ENDPOINTS = [
   'https://acm-texas-tech-web-app-2-beta.firebaseapp.com/',
@@ -8,7 +8,7 @@ const PROTECTED_ENDPOINTS = [
 ]
 
 const app = express()
-app.use(cors)
+app.use(cors({ origin: true }))
 
 /**
  * A Protected route to serve environment variables
