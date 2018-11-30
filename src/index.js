@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react' // eslint-disable-line
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 
-import logger from './utils/logger'
 
 import App from 'App.jsx'
 import MaintenanceScreen from 'MaintenanceScreen.jsx'
+import logger from './utils/logger'
 
 const {
   NODE_ENV,
@@ -14,7 +14,7 @@ const {
 
 if (NODE_ENV === 'development') logger.info('In development mode')
 
-function ConditionalRender(Component) {
+function ConditionalRender(Component) { // eslint-disable-line
   ReactDOM.render(<Component />, document.getElementById('root'))
 }
 
