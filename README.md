@@ -1,5 +1,5 @@
 # Disclaimer: Still in the process of migration
-# TTUACM Backend
+# TTUACM Website
 ```
 $ yarn
 $ yarn test:client && yarn serve:client
