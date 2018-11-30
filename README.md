@@ -2,7 +2,8 @@
 # TTUACM Backend
 ```
 $ yarn
-$ yarn test && yarn serve
+$ yarn test:client && yarn serve:client
+$ yarn test:api && yarn serve:api
 ```
 
 ### Contributing:
