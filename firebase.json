@@ -17,11 +17,14 @@
     ]
   },
   "functions": {
-    "source": "./src/api",
+    "source": ".",
     "ignore": [
       ".git",
       ".github",
       "node_modules",
+      "build",
+      "public",
+      "src/client",
       "docs"
     ]
   },

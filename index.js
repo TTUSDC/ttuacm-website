@@ -3,11 +3,11 @@ const admin = require('firebase-admin')
 
 admin.initializeApp()
 
-const authApp = require('./auth')
-const teamsApp = require('./teams')
-const emailApp = require('./email')
-const eventsApp = require('./events')
-const environmentService = require('./environment')
+const authApp = require('./src/api/auth')
+const teamsApp = require('./src/api/teams')
+const emailApp = require('./src/api/email')
+const eventsApp = require('./src/api/events')
+const environmentService = require('./src/api/environment')
 
 exports.auth = functions.https.onRequest(authApp)
 exports.email = functions.https.onRequest(emailApp)
