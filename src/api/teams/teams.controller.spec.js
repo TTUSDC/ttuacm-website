@@ -2,7 +2,7 @@ const chai = require('chai')
 const mongoose = require('mongoose')
 const Controller = require('./teams.controller')
 const Model = require('./teams.model')
-const { asyncForEach } = require('../utils/async-for-each')
+const { asyncForEach } = require('../../utils/async-for-each')
 
 const { expect } = chai
 

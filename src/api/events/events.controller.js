@@ -93,7 +93,7 @@ function listEvents(auth, done) {
     orderBy: 'startTime',
   }, (err, res) => {
     if (err) done(err)
-    events = res.data.items;
+    let events = res.data.items;
     if (events.length) {
       allEvents = events.map((event, i) => {
         // Will store all of the events and return
