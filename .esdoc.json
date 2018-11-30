@@ -1,0 +1,16 @@
+{
+  "source": "./src",
+  "destination": "./docs",
+  "excludes": [
+    "client_secret.json",
+    "credentials.json",
+    "README.md",
+    "index.js",
+    "/*/*.app.js",
+    "logger.js"
+  ],
+  "plugins": [
+    {"name": "esdoc-standard-plugin"},
+    {"name": "./esdoc-module-plugin.js"}
+  ]
+}

@@ -10,14 +10,24 @@ jobs:
       yarn: true
       directories:
       - node_modules
+    before_install:
+    - openssl aes-256-cbc -K $encrypted_2f6d61fcabf9_key -iv $encrypted_2f6d61fcabf9_iv
+      -in secrets.tar.enc -out secrets.tar -d
+    - tar xvf secrets.tar
     script:
     - yarn lint
-    - yarn test --ci --forceExit --detectOpenHandles --maxWorkers=10
+    - yarn test:unit --ci --forceExit
+    - yarn test:client
   - stage: deploy
     install:
-    - yarn add -DE esdoc@0.5.2 esdoc-node@1.0.2
+    - yarn
+    before_install:
+    - openssl aes-256-cbc -K $encrypted_2f6d61fcabf9_key -iv $encrypted_2f6d61fcabf9_iv
+      -in secrets.tar.enc -out secrets.tar -d
+    - tar xvf secrets.tar
     script:
     - yarn docs
+    - yarn build:client
     deploy:
     - provider: pages
       skip_cleanup: true
@@ -28,7 +38,7 @@ jobs:
     - provider: firebase
       skip_cleanup: true
       token:
-        secure: "KYW9YprJXXfV75L2q3qwzhDtYO1h5uiYjZgxylwzcNn5QWwcLRiWhlobv/U42PBDP5S4ngi4SRDfwzYlmY/ix2NCLiCC4RHQbcchWXfGa3ukusU1bjqyVOWBwDp1APlVS5DGv209JiVVu02UeRNlcSRmlAK076HfSKYVVHFilkfv0o5JEu0fLmozQKTZ/4ahU1LV9Re9/edOFdzURlYN4LxN3HQxv6rka2RlYhn2NtvQOQPY99+A77i2mC3BGTMGLxxB31oYjqbisgoKUVAeAWW/L5gsTaUuaoW7Ynrfumyq0WzxX/hH4/IXFG/tXLLJqMPyIRyXsNRJmVmox9sLG+MindVTQQfWyimq1953Blvu869Sn/aE1MAjsDBAPO9I08aErc9asBBuzpIrSO2jnD1pyxJ7o1gjE5ZU/lGhk4xeHjHxLf5H6GyZ965EjT8q2kx5qwHXa96HntuXnX2UafLqpe9f8ao4HD/8ibXsF6zBRaQ8IV9a2TAlpCYrskCU2C8SeY9/4rpdanFbr3DVkqIx6OPtX0+jhbs6mTifzG6VBG7TGy7z0tKokpavZYVjLjb7EgZplNnGwbNSTdBRq/RcZrmUqcHeT4t7x4YQarvhUIqoJT/T0+300ggYElqb6De+N/nXDLJJ0wTjsWcKE9n1cxdPtnMu3EPosMGo3xk="
+        secure: ecDRfSeLDIhqwPP2MAkBNyrkMjHtJqMOK3/b03rNk9kVoyROLSSIci6xzBN2xi6rNv1X3JcPje9gRrfv/NPLOFeH+gX3aBO7KoNl5sjT6ZdiI2n+xnXjlbP8R8a1FIPt/JF0/+a19Ybzuaz6EPnCw+nnn8IXejYnjOG9BB2mD28Ms98yQs9c0YTXCCLCJ06Kzr284pP6WpK7ZA2UvWi2HJHwXUgtuxjDTCNcQ1nuX8SD1DlyCmtP4Tboxj3hLZ8mhgNvpYJ+WMPmuiB8d8p6HbLVMaDRDJvvDVhnA2hWrUr4Ggoi7GhiIwiM8jVM7AlxUA40MlObrMZUu0SAy/7a5dJs8V/AjJNuciYHnH1C78m+P0Dz4l8MNrD7GLIF6aodEkVSEyte/n9I9VVpzBvEz+XIxUHTpC4xUbet/Pir+2WmxdCjdeQE9/mpmi/fs/I8AwbcRwqFdcph03v0pp3wBBGE2AZ6ylxRtjzwUykz3MzeWeNe/pMcMPvAM1p+85q59MNBQ6k3fBvIY0qOpp6mBswVw52tr40o2+/Fovew1x0Ctnh/nhJEMC+/6vWOPVG73y4BBPA1X+zTI6S6PrubkaQOf4u4k6IcJ8SRq3RTifX9Dibzvffzk7sRVfSf3ryo+nc5cc0nfB3YXWx89yX4EwkwE8jEoD8Ag6RpYunKmRU=
       project: acm-texas-tech-web-app-2
       message: Deployed to production
       on:
@@ -36,11 +46,10 @@ jobs:
     - provider: firebase
       skip_cleanup: true
       token:
-        secure: "KYW9YprJXXfV75L2q3qwzhDtYO1h5uiYjZgxylwzcNn5QWwcLRiWhlobv/U42PBDP5S4ngi4SRDfwzYlmY/ix2NCLiCC4RHQbcchWXfGa3ukusU1bjqyVOWBwDp1APlVS5DGv209JiVVu02UeRNlcSRmlAK076HfSKYVVHFilkfv0o5JEu0fLmozQKTZ/4ahU1LV9Re9/edOFdzURlYN4LxN3HQxv6rka2RlYhn2NtvQOQPY99+A77i2mC3BGTMGLxxB31oYjqbisgoKUVAeAWW/L5gsTaUuaoW7Ynrfumyq0WzxX/hH4/IXFG/tXLLJqMPyIRyXsNRJmVmox9sLG+MindVTQQfWyimq1953Blvu869Sn/aE1MAjsDBAPO9I08aErc9asBBuzpIrSO2jnD1pyxJ7o1gjE5ZU/lGhk4xeHjHxLf5H6GyZ965EjT8q2kx5qwHXa96HntuXnX2UafLqpe9f8ao4HD/8ibXsF6zBRaQ8IV9a2TAlpCYrskCU2C8SeY9/4rpdanFbr3DVkqIx6OPtX0+jhbs6mTifzG6VBG7TGy7z0tKokpavZYVjLjb7EgZplNnGwbNSTdBRq/RcZrmUqcHeT4t7x4YQarvhUIqoJT/T0+300ggYElqb6De+N/nXDLJJ0wTjsWcKE9n1cxdPtnMu3EPosMGo3xk="
+        secure: ecDRfSeLDIhqwPP2MAkBNyrkMjHtJqMOK3/b03rNk9kVoyROLSSIci6xzBN2xi6rNv1X3JcPje9gRrfv/NPLOFeH+gX3aBO7KoNl5sjT6ZdiI2n+xnXjlbP8R8a1FIPt/JF0/+a19Ybzuaz6EPnCw+nnn8IXejYnjOG9BB2mD28Ms98yQs9c0YTXCCLCJ06Kzr284pP6WpK7ZA2UvWi2HJHwXUgtuxjDTCNcQ1nuX8SD1DlyCmtP4Tboxj3hLZ8mhgNvpYJ+WMPmuiB8d8p6HbLVMaDRDJvvDVhnA2hWrUr4Ggoi7GhiIwiM8jVM7AlxUA40MlObrMZUu0SAy/7a5dJs8V/AjJNuciYHnH1C78m+P0Dz4l8MNrD7GLIF6aodEkVSEyte/n9I9VVpzBvEz+XIxUHTpC4xUbet/Pir+2WmxdCjdeQE9/mpmi/fs/I8AwbcRwqFdcph03v0pp3wBBGE2AZ6ylxRtjzwUykz3MzeWeNe/pMcMPvAM1p+85q59MNBQ6k3fBvIY0qOpp6mBswVw52tr40o2+/Fovew1x0Ctnh/nhJEMC+/6vWOPVG73y4BBPA1X+zTI6S6PrubkaQOf4u4k6IcJ8SRq3RTifX9Dibzvffzk7sRVfSf3ryo+nc5cc0nfB3YXWx89yX4EwkwE8jEoD8Ag6RpYunKmRU=
       project: acm-texas-tech-web-app-2-beta
       message: Deployed to staging
       on:
         branch: next
-
 notifications:
   email: false
