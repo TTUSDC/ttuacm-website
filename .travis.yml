@@ -11,21 +11,23 @@ jobs:
       directories:
       - node_modules
     before_install:
-    - openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
+    - openssl aes-256-cbc -K $encrypted_2f6d61fcabf9_key -iv $encrypted_2f6d61fcabf9_iv
       -in secrets.tar.enc -out secrets.tar -d
     - tar xvf secrets.tar
     script:
     - yarn lint
-    - yarn test:unit --ci --forceExit --detectOpenHandles
+    - yarn test:unit --ci --forceExit
+    - yarn test:client
   - stage: deploy
     install:
     - yarn
     before_install:
-    - openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
+    - openssl aes-256-cbc -K $encrypted_2f6d61fcabf9_key -iv $encrypted_2f6d61fcabf9_iv
       -in secrets.tar.enc -out secrets.tar -d
     - tar xvf secrets.tar
     script:
     - yarn docs
+    - yarn build:client
     deploy:
     - provider: pages
       skip_cleanup: true

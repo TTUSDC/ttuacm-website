@@ -1,6 +1,23 @@
 {
+  "hosting": {
+    "public": "build",
+    "ignore": [
+      "firebase.json",
+      "docs",
+      "src",
+      "reference",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
   "functions": {
-    "source": ".",
+    "source": "./src/api",
     "ignore": [
       ".git",
       ".github",
