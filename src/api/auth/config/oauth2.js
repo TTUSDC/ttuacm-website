@@ -15,7 +15,6 @@ const TOKEN_PATH = path.resolve(__dirname, 'token.json')
 
 class OAuthHandler {
   constructor() {
-    console.log('Grabbing Google API credentials...')
     try {
       this.credentials = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'credentials.json')))
     } catch (err) {
@@ -38,10 +37,10 @@ class OAuthHandler {
   }
 
   /**
-   * Create an OAuth2 client with the given credentials, and then execute the
-   * given callback function.
-   * @param {Object} credentials The authorization client credentials.
-   * @return {function} if error in reading credentials.json asks for a new one.
+   * Create an OAuth2 client with the given credentials
+   *
+   * @throws {Error}
+   * @return {null}
    */
   async _authorize() {
     // Gets the information out of the token
