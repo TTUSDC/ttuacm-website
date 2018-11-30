@@ -16,7 +16,7 @@ jobs:
     - tar xvf secrets.tar
     script:
     - yarn lint
-    - yarn test:unit --ci --forceExit --detectOpenHandles
+    - yarn test:unit --ci --forceExit
     - yarn test:client
   - stage: deploy
     install:
