@@ -11,7 +11,7 @@ jobs:
       directories:
       - node_modules
     before_install:
-    - openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
+    - openssl aes-256-cbc -K $encrypted_2f6d61fcabf9_key -iv $encrypted_2f6d61fcabf9_iv
       -in secrets.tar.enc -out secrets.tar -d
     - tar xvf secrets.tar
     script:
@@ -22,7 +22,7 @@ jobs:
     install:
     - yarn
     before_install:
-    - openssl aes-256-cbc -K $encrypted_8eab31fea6da_key -iv $encrypted_8eab31fea6da_iv
+    - openssl aes-256-cbc -K $encrypted_2f6d61fcabf9_key -iv $encrypted_2f6d61fcabf9_iv
       -in secrets.tar.enc -out secrets.tar -d
     - tar xvf secrets.tar
     script:
