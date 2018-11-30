@@ -17,6 +17,7 @@ jobs:
     script:
     - yarn lint
     - yarn test:unit --ci --forceExit --detectOpenHandles
+    - yarn test:client
   - stage: deploy
     install:
     - yarn
@@ -26,6 +27,7 @@ jobs:
     - tar xvf secrets.tar
     script:
     - yarn docs
+    - yarn build:client
     deploy:
     - provider: pages
       skip_cleanup: true
