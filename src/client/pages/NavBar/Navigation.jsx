@@ -1,64 +1,43 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
+import { withStyles } from '@material-ui/core/styles'
 
-const Navigation = ({ handleNavigation, classes = {} }) => (
-  <div className={classes.root}>
-    <AppBar position='static'>
-      <Toolbar>
-        {/* TODO: Handle Resoinsiveness */}
-        {/* <IconButton className={classes.menuButton} color='inherit' aria-label='Menu'> */}
-        {/*   <MenuIcon /> */}
-        {/* </IconButton> */}
-        <Typography
-          variant='h6'
-          color='inherit'
-          className={classes.grow}
-        >
-          <span
-            role='button'
-            tabIndex={0}
-            className={classes.homeBtn}
-            onClick={handleNavigation('/')}
-            onKeyPress={() => {}}
-          >
-            LOGO
-          </span>
-        </Typography>
-        <Button onClick={handleNavigation('/')} color='inherit'>Home</Button>
-        <Button onClick={handleNavigation('/about')} color='inherit'>About</Button>
-        <Button onClick={handleNavigation('/events')} color='inherit'>Events</Button>
-        <Button onClick={handleNavigation('/teams')} color='inherit'>Club</Button>
-        <Button onClick={handleNavigation('/auth')} color='inherit'>Login</Button>
-      </Toolbar>
-    </AppBar>
-  </div>
-)
-
-const styles = {
-  root: {
-    flexGrow: 1,
-  },
-  homeBtn: {
-    cursor: 'pointer',
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
+const withBox = {
+  border: 'solid white 2px',
 }
 
+const Navigation = ({
+  classes, handleNavigation, currentPage, routes,
+}) => (
+  <React.Fragment>
+    {
+      routes.map((route, key) => (
+        <Typography
+          key={`${route[0]}-${key + 1}`}
+          variant='h6'
+          style={route[0] === currentPage ? withBox : {}}
+          onClick={handleNavigation(`${route[0]}`)}
+          className={classes.nav}
+        >
+          {route[1]}
+        </Typography>
+      ))
+    }
+  </React.Fragment>
+)
+
+const style = () => ({
+  nav: {
+    padding: '5px',
+    margin: '0px 5px',
+    width: '85px',
+    textAlign: 'center',
+  },
+})
 
 Navigation.propTypes = {
-  classes: PropTypes.shape({}).isRequired,
   handleNavigation: PropTypes.func.isRequired,
 }
 
-export default withStyles(styles)(Navigation)
+export default withStyles(style)(Navigation)
