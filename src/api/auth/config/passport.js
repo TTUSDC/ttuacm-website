@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 const functions = require('firebase-functions')
-const { JwtStrategy } = require('passport-jwt').Strategy
-const { ExtractJwt } = require('passport-jwt')
+const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt')
 
 const User = require('../auth.model')
 
