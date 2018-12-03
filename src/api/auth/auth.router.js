@@ -1,7 +1,5 @@
 const express = require('express')
-const passport = require('passport')
 const querystring = require('querystring')
-const OAuthHandler = require('./config/oauth2')
 const { Request } = require('../../utils/request')
 
 const router = express.Router()
@@ -22,119 +20,6 @@ const Controller = require('./auth.controller')
 router.get('/test', (req, res) => {
   res.send('Auth App Works!')
 })
-
-/**
- * Creates a OAuthClient to extract in the other services
- *
- * - Endpoint: `/auth/api/v2/google-api`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GoogleAPIs
- * @todo secure this route
- */
-router.get('/google-api', async (req, res) => {
-  try {
-    const OAuth = new OAuthHandler()
-    const client = await OAuth.getClient()
-    res.status(200).json({ client })
-  } catch (err) {
-    console.error(err)
-    res.status(404).json({ err: err.message })
-  }
-})
-
-/**
- * Gets the Google Login Screen
- *
- * - Endpoint: `/auth/api/v2/google`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GoogleAuth
- */
-router.get(
-  '/google',
-  passport.authenticate('google', {
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email',
-    ],
-  }),
-)
-
-/**
- * Callback for Google OAuth2
- *
- * - Endpoint: `/auth/api/v2/google/redirect`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GoogleAuthRedirect
- */
-router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-  const qs = Controller.oauth2(req.user)
-  res.redirect(`${req.body.redirectURL}/?${qs}`)
-})
-
-/**
- * Gets the GitHub Login Screen
- *
- * - Endpoint: `/auth/api/v2/github`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GitHubAuth
- */
-router.get(
-  '/github',
-  passport.authenticate('github', {
-    scope: ['read:user'],
-  }),
-)
-
-/**
- * Callback for GitHub OAuth2
- *
- * - Endpoint: `/auth/api/v2/github/redirect`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GitHubuthRedirect
- */
-router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
-  const qs = Controller.oauth2(req.user)
-  res.redirect(`${req.body.redirectURL}/?${qs}`)
-})
-
-/**
- * Gets the Facebook Login Screen
- *
- * - Endpoint: `/auth/api/v2/facebook`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-FacebookAuth
- */
-router.get(
-  '/facebook',
-  passport.authenticate('facebook', {
-    scope: ['public_profile', 'email'],
-  }),
-)
-
-/**
- * Callback for Facebook OAuth2
- *
- * - Endpoint: `/auth/api/v2/facebook/redirect`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GitHubuthRedirect
- */
-router.get(
-  '/facebook/redirect',
-  passport.authenticate('facebook', {
-    failureRedirect: '/login',
-  }),
-  (req, res) => {
-    const qs = Controller.oauth2(req.user)
-    res.redirect(`${req.body.redirectURL}/?${qs}`)
-  },
-)
 
 /**
  * Registers the user and saves them as a unverified user
