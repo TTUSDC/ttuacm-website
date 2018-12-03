@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import Auth from './Auth.jsx'
+import Auth from 'componenets/Auth.jsx'
 
 /**
  * Handles requests to the server during production and fetching mocks in development
