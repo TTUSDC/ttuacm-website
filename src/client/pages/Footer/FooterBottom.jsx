@@ -11,6 +11,9 @@ const style = {
     display: 'flex',
     height: '60px',
   },
+  container: {
+    margin: '0px 15px',
+  },
   copyright: {
     display: 'flex',
     alignItems: 'center',
@@ -22,21 +25,18 @@ const style = {
   },
 }
 
-const FooterBottom = ({ classes = {} }) => {
-  console.log()
-  return (
-    <div className={classes.root}>
-      <Grid container spacing={12}>
-        <Grid className={classes.copyright} item xs={10}>
-          <Copyright />
-        </Grid>
-        <Grid className={classes.links} item xs={2}>
-          <Links />
-        </Grid>
+const FooterBottom = ({ classes = {} }) => (
+  <div className={classes.root}>
+    <Grid container spacing={12}>
+      <Grid className={classes.copyright} item xs={10}>
+        <Copyright />
       </Grid>
-    </div>
-  )
-}
+      <Grid className={classes.links} item xs={2}>
+        <Links />
+      </Grid>
+    </Grid>
+  </div>
+)
 
 FooterBottom.propTypes = {
   classes: PropTypes.shape({}),
