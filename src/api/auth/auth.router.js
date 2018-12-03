@@ -1,7 +1,5 @@
 const express = require('express')
-const passport = require('passport')
 const querystring = require('querystring')
-const OAuthHandler = require('./config/oauth2')
 const { Request } = require('../../utils/request')
 
 const router = express.Router()
