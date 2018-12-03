@@ -1,38 +1,37 @@
 import React from 'react'
-import { hot } from 'react-hot-loader'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import { red, black } from '@material-ui/core/colors'
-import { Provider } from 'react-redux'
-import store from 'redux/store'
+import { ConnectedRouter } from 'connected-react-router/immutable'
+import { PropTypes } from 'prop-types'
+import { Route, Switch } from 'react-router'
+import Authentication from 'pages/Authentication/AuthenticationPage.jsx'
+import Events from 'pages/Events/EventsPage.jsx'
+import Landing from 'pages/Landing/LandingPage.jsx'
+import AboutUs from 'pages/AboutUs/AboutUsPage.jsx'
+import ContactUs from 'pages/ContactUs/ContactUsPage.jsx'
+import Teams from 'pages/Teams/TeamsPage.jsx'
+import NotFound from 'pages/NotFound/NotFoundPage.jsx'
+import NavBar from 'pages/NavBar/NavBar.jsx'
+import Footer from 'pages/Footer/Footer.jsx'
 
-const style = {
-  margin: 0,
-  padding: 0,
-  fontFamily: 'sans-serif',
-}
-
-const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true,
-  },
-  palette: {
-    type: 'dark',
-    primary: black,
-    secondary: red,
-  },
-})
-
-/**
- * Root of Component Tree
- * Router - connected-react-router
- * Theme = Material UI
- */
-const App = () => (
-  <Provider store={store}>
-    <MuiThemeProvider theme={theme}>
-      <div style={{ style }}>ACM Texas Tech</div>
-    </MuiThemeProvider>
-  </Provider>
+const App = ({ history }) => (
+  <React.Fragment>
+    <NavBar />
+    <ConnectedRouter history={history}>
+      <Switch>
+        <Route exact path='/' component={Landing} />
+        <Route path='/auth' component={Authentication} />
+        <Route path='/about' component={AboutUs} />
+        <Route path='/contact' component={ContactUs} />
+        <Route path='/teams' component={Teams} />
+        <Route path='/events' component={Events} />
+        <Route component={NotFound} />
+      </Switch>
+    </ConnectedRouter>
+    <Footer />
+  </React.Fragment>
 )
 
-export default hot(module)(App)
+App.propTypes = {
+  history: PropTypes.shape({}),
+}
+
+export default App
