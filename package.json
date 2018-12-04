@@ -28,6 +28,7 @@
     "connected-react-router": "4.3",
     "cors": "2.8.4",
     "debug": "3",
+    "dotenv": "6.1.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",

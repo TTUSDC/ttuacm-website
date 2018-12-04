@@ -52,5 +52,11 @@ jobs:
       message: Deployed to staging
       on:
         branch: next
+  - stage: acceptance
+    if: branch = next
+    install:
+    - yarn
+    script:
+      - yarn test:integration --ci --forceExit
 notifications:
   email: false

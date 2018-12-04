@@ -3,6 +3,7 @@ const test = require('firebase-functions-test')()
 test.mockConfig({
   auth: {
     session_secret: 'SessionSecretForTests!',
+    db: 'mongodb://localhost:27017/testing',
   },
 })
 
@@ -18,17 +19,14 @@ describe('Auth Unit Tests', () => {
   let ctrl
   let model
   // eslint-disable-next-line
-  beforeAll((done) => {
-    mongoose.connect('mongodb://localhost:27017/testing', {
-      useNewUrlParser: true,
-    }, (err) => {
-      done(err)
-    })
-  })
-
-  beforeEach(() => {
+  beforeEach((done) => {
     ctrl = new Controller()
     model = new Model()
+    model.connect().then(() => {
+      done()
+    }).catch((err) => {
+      done(err)
+    })
   })
 
   afterEach((done) => {
