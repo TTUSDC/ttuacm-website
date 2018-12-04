@@ -19,10 +19,7 @@ jobs:
     - yarn test:unit --ci --forceExit
     - yarn test:client
   - stage: deploy
-    branches:
-      only:
-        - master
-        - next
+    if: branch = next | master
     install:
     - yarn
     before_install:
