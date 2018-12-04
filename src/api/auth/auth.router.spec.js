@@ -1,22 +1,31 @@
+require('dotenv').config()
 const request = require('supertest')
 const chai = require('chai')
 const mongoose = require('mongoose')
+const test = require('firebase-functions-test')()
 
-const app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/auth'
+test.mockConfig({
+  auth: {
+    session_secret: 'SessionSecretForTests!',
+    db: 'mongodb://localhost:27017/testing',
+  },
+})
+
+const app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
 
 const { expect } = chai
 
 describe('Auth Integration Tests', () => {
   // eslint-disable-next-line
   beforeAll((done) => {
-    mongoose.connect(process.env.DB_CONNECTION_STRING, {
+    mongoose.connect(process.env.DB_CONNECTION, {
       useNewUrlParser: true,
     }, (err) => {
       done(err)
     })
   })
 
-  afterEach((done) => {
+  beforeEach((done) => {
     // Make sure to at least create one user for each test
     // or this will error out
     mongoose.connection.dropCollection('students', done)
@@ -25,7 +34,7 @@ describe('Auth Integration Tests', () => {
   it('should be able to register a user, verify the email, and login', async () => {
     try {
       const registerBody = await request(app)
-        .post('/api/v2/register')
+        .post('/register')
         .send({
           email: 'johndoe@gmail.com',
           firstName: 'John',
@@ -39,11 +48,11 @@ describe('Auth Integration Tests', () => {
       expect(registerBody.body.createdUser.confirmEmailToken).not.to.equal('')
 
       await request(app)
-        .get(`/api/v2/confirm/${registerBody.body.createdUser.confirmEmailToken}`)
+        .get(`/confirm/${registerBody.body.createdUser.confirmEmailToken}`)
         .expect(302)
 
       const loginBody = await request(app)
-        .post('/api/v2/login')
+        .post('/login')
         .send({
           email: 'johndoe@gmail.com',
           password: 'Some-password123',
