@@ -94,7 +94,6 @@ class AuthModel {
    */
   connect() {
     return new Promise((resolve, reject) => {
-      console.log(CONNECTION_STRING)
       mongoose.connect(CONNECTION_STRING, {
         useNewUrlParser: true,
       }, (err) => {
