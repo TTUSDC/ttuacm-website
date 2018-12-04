@@ -58,6 +58,12 @@ function MissingToken() {
   return err
 }
 
+function NotConnectedToMongo() {
+  const err = new Error('You called a method before connecting to the database. Use `.connect` before calling a method')
+  err.code = 500
+  return err
+}
+
 function InvalidToken() {
   const err = new Error('Not Token passed to endpoint')
   err.code = 404
@@ -82,5 +88,6 @@ module.exports = {
   UnknownServerError,
   DuplicateAccount,
   MergeAccError,
+  NotConnectedToMongo,
   NotFoundErr,
 }

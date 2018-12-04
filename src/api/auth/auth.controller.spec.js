@@ -3,6 +3,7 @@ const test = require('firebase-functions-test')()
 test.mockConfig({
   auth: {
     session_secret: 'SessionSecretForTests!',
+    db: 'mongodb://localhost:27017/testing',
   },
 })
 
@@ -18,23 +19,21 @@ describe('Auth Unit Tests', () => {
   let ctrl
   let model
   // eslint-disable-next-line
-  beforeAll((done) => {
-    mongoose.connect('mongodb://localhost:27017/testing', {
-      useNewUrlParser: true,
-    }, (err) => {
-      done(err)
-    })
-  })
-
-  beforeEach(() => {
+  beforeEach((done) => {
     ctrl = new Controller()
     model = new Model()
+    model.connect().then(() => {
+      done()
+    }).catch((err) => {
+      done(err)
+    })
   })
 
   afterEach((done) => {
     // Make sure to at least create one user for each test
     // or this will error out
     mongoose.connection.dropCollection('students', done)
+    mongoose.connection.close()
   })
 
   it('[register] should save a new user to the database', async () => {
