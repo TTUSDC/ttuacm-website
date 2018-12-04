@@ -4,12 +4,6 @@ function InvalidAPIOption(option) {
   return err
 }
 
-function OAuthError() {
-  const err = new Error('There was an error with the the credentials, please refresh manually')
-  err.code = 404
-  return err
-}
-
 function NotFoundErr() {
   const err = new Error('Cannot find user in database')
   err.code = 404
@@ -88,6 +82,5 @@ module.exports = {
   UnknownServerError,
   DuplicateAccount,
   MergeAccError,
-  OAuthError,
   NotFoundErr,
 }
