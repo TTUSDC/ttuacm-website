@@ -1,6 +1,3 @@
-const functions = require('firebase-functions')
-const jwt = require('jsonwebtoken')
-const querystring = require('querystring')
 const bcrypt = require('bcryptjs')
 const AuthModel = require('./auth.model')
 const ErrorMessages = require('./auth.errors')
