@@ -33,7 +33,6 @@ describe('Auth Unit Tests', () => {
     // Make sure to at least create one user for each test
     // or this will error out
     mongoose.connection.dropCollection('students', done)
-    mongoose.connection.close()
   })
 
   it('[register] should save a new user to the database', async () => {
