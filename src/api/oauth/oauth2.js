@@ -3,7 +3,7 @@ const readline = require('readline')
 const path = require('path')
 const { google } = require('googleapis')
 
-const ErrorMessages = require('../auth.errors')
+const ErrorMessages = require('./oauth.errors')
 
 // If modifying these scopes, delete credentials.json.
 const SCOPES = [
