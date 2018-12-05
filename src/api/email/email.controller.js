@@ -25,7 +25,7 @@ class EmailController {
 
   _createTransport() {
     return new Promise((resolve, reject) => {
-      if (process.env.NODE_ENV !== 'prod') {
+      if (!['prod', 'staging'].includes(functions.config().environment.env)) {
         nodemailer.createTestAccount((err, account) => {
           if (err) reject(err)
           this.smtpTransporter = nodemailer.createTransport({
@@ -55,6 +55,7 @@ class EmailController {
             rejectUnauthorized: false,
           },
         })
+        resolve()
       }
     })
   }
@@ -81,6 +82,7 @@ class EmailController {
     try {
       await this._createTransport()
       await this.smtpTransporter.sendMail(mailOptions)
+      return null
     } catch (err) {
       console.error(err)
       throw err
@@ -105,6 +107,7 @@ class EmailController {
     try {
       await this._createTransport()
       await this.smtpTransporter.sendMail(mailOptions)
+      return null
     } catch (err) {
       console.error(err)
       throw err
@@ -133,6 +136,7 @@ class EmailController {
     try {
       await this._createTransport()
       await this.smtpTransporter.sendMail(mailOptions)
+      return null
     } catch (err) {
       console.error(err)
       throw err
@@ -162,6 +166,7 @@ class EmailController {
     try {
       await this._createTransport()
       await this.smtpTransporter.sendMail(mailOptions)
+      return null
     } catch (err) {
       console.error(err)
       throw err
