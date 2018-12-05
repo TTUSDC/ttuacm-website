@@ -1,14 +1,16 @@
 const express = require('express')
 const functions = require('firebase-functions')
-const cors = require('cors')
 
 const PROTECTED_ENDPOINTS = [
   'https://acm-texas-tech-web-app-2-beta.firebaseapp.com/',
   'https://acm-texas-tech-web-app-2.firebaseapp.com',
 ]
 
-const app = express()
-app.use(cors({ origin: true }))
+const router = express.Router()
+
+router.get('/test', (req, res) => {
+  res.send('Environment Provider Works!')
+})
 
 /**
  * A Protected route to serve environment variables
@@ -22,13 +24,13 @@ app.use(cors({ origin: true }))
  *
  * @typedef {function} EnvironmentProvider
  */
-app.get('/get-environment', (req, res) => {
+router.get('/', (req, res) => {
   const { environment } = functions.config()
   if (['prod', 'staging'].includes(environment.env)) {
     if (PROTECTED_ENDPOINTS.includes(req.headers.origin)) {
       res.json(environment)
     } else {
-      console.error(`${req.headers.origin} does not match https://acm-texas-tech-web-app-2.firebaseapp.com`)
+      console.error(`${req.headers.origin} does not match https://acm-texas-tech-web-router-2.firebaseapp.com`)
       res.status(401).end()
     }
   } else {
@@ -36,4 +38,4 @@ app.get('/get-environment', (req, res) => {
   }
 })
 
-module.exports = app
+module.exports = router
