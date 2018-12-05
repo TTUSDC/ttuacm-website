@@ -23,6 +23,7 @@ class EmailController {
     this.mailbox = functions.config().email.email_username
 
     if (process.env.NODE_ENV !== 'prod') {
+      console.log('sending to ethereal')
       this.smtpTransporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
