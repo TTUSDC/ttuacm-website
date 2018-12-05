@@ -29,10 +29,15 @@ describe('Auth Unit Tests', () => {
     })
   })
 
-  afterEach((done) => {
+  beforeEach((done) => {
     // Make sure to at least create one user for each test
     // or this will error out
-    mongoose.connection.dropCollection('students', done)
+    try {
+      mongoose.connection.dropCollection('students', done)
+    } catch (err) {
+      console.error(err)
+      done()
+    }
   })
 
   it('[register] should save a new user to the database', async () => {

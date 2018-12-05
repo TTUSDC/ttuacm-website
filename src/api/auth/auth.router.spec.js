@@ -25,7 +25,12 @@ describe('Auth Integration Tests', () => {
   beforeEach((done) => {
     // Make sure to at least create one user for each test
     // or this will error out
-    mongoose.connection.dropCollection('students', done)
+    try {
+      mongoose.connection.dropCollection('students', done)
+    } catch (err) {
+      console.error(err)
+      done()
+    }
   })
 
   it('should be able to connect to the auth service', async () => request(app)
