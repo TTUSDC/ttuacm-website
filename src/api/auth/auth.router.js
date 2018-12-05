@@ -58,7 +58,7 @@ router.post('/register', async (req, res) => {
     res.status(201).json({ createdUser })
   } catch (err) {
     console.error(err)
-    res.status(404).json({ err: err.message })
+    res.status(500).json({ err: err.message })
   }
 })
 
@@ -189,7 +189,7 @@ router.post('/reset/:token', async (req, res) => {
     await request.get('/change-password-notif').end()
     res.status(200).json({ user })
   } catch (err) {
-    res.status(404).json({ user: null })
+    res.status(500).json({ user: null })
   }
 })
 

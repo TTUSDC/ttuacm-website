@@ -38,7 +38,7 @@ router.post('/contact-us', (req, res) => {
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)
-      res.status(404).json()
+      res.status(500).json()
     })
 })
 
@@ -60,7 +60,7 @@ router.post('/confirm-email', (req, res) => {
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)
-      res.status(404).json()
+      res.status(500).json()
     })
 })
 
@@ -83,7 +83,7 @@ router.post('/reset-password', (req, res) => {
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)
-      res.status(404).json()
+      res.status(500).json()
     })
 })
 
@@ -103,7 +103,7 @@ router.post('/change-password-notif', (req, res) => {
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)
-      res.status(404).json()
+      res.status(500).json()
     })
 })
 

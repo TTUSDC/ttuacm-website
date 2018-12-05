@@ -1,6 +1,12 @@
+require('dotenv').config()
 const request = require('supertest')
 
-const app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/email'
+let app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/email'
+
+if (!process.env.CI) {
+  app = `${process.env.API_ENDPOINT}/api/v2/email`
+}
+
 
 describe('Email Integration Tests', () => {
   it('should be able to connect to email service', () => request(app)

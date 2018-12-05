@@ -69,7 +69,7 @@ class Request {
     }
 
     this.instance = axios.create({
-      baseURL: `${protocol}://${host}/${service}/api/${version}`,
+      baseURL: `${protocol}://${host}/api/${version}/${service}`,
       timeout: 5000,
     })
   }

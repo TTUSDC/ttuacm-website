@@ -27,8 +27,8 @@ class EmailController {
         host: 'smtp.ethereal.email',
         port: 587,
         auth: {
-          user: functions.config().email.email_username,
-          pass: functions.config().email.email_password,
+          user: 'v2z435ain366pxsa@ethereal.email',
+          pass: 'g7U7pZp5YAmZ2sMXDb',
         },
         tls: {
           // do not fail on invalid certs

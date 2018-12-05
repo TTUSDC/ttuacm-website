@@ -2,16 +2,12 @@ require('dotenv').config()
 const request = require('supertest')
 const chai = require('chai')
 const mongoose = require('mongoose')
-const test = require('firebase-functions-test')()
 
-test.mockConfig({
-  auth: {
-    session_secret: 'SessionSecretForTests!',
-    db: 'mongodb://localhost:27017/testing',
-  },
-})
+let app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
 
-const app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
+if (!process.env.CI) {
+  app = `${process.env.API_ENDPOINT}/api/v2/auth`
+}
 
 const { expect } = chai
 
@@ -31,6 +27,10 @@ describe('Auth Integration Tests', () => {
     mongoose.connection.dropCollection('students', done)
   })
 
+  it('should be able to connect to the auth service', async () => request(app)
+    .get('/test')
+    .expect(200))
+
   it('should be able to register a user, verify the email, and login', async () => {
     try {
       const registerBody = await request(app)
@@ -44,7 +44,7 @@ describe('Auth Integration Tests', () => {
         })
         .expect(201)
 
-      expect(registerBody.body.createdUser.email === 'johndoe@gmail').to.equal(true)
+      expect(registerBody.body.createdUser.email === 'johndoe@gmail.com').to.equal(true)
       expect(registerBody.body.createdUser.confirmEmailToken).not.to.equal('')
 
       await request(app)
