@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 let app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
 
 if (!process.env.CI) {
+  console.log('Testing integration outside of CI. Using API_ENDPOINT')
   app = `${process.env.API_ENDPOINT}/api/v2/auth`
 }
 
