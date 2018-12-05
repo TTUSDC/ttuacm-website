@@ -5,6 +5,9 @@ test.mockConfig({
     email_username: 'v2z435ain366pxsa@ethereal.email',
     email_password: 'g7U7pZp5YAmZ2sMXDb',
   },
+  environment: {
+    env: 'testing',
+  },
 })
 
 const chai = require('chai')
