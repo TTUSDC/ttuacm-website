@@ -3,6 +3,8 @@ const test = require('firebase-functions-test')()
 test.mockConfig({
   auth: {
     session_secret: 'SessionSecretForTests!',
+  },
+  connections: {
     db: 'mongodb://localhost:27017/testing',
   },
 })
