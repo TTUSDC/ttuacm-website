@@ -56,15 +56,15 @@ jobs:
       message: Deployed to staging
       on:
         branch: next
-  # - stage: acceptance
-  #   if: branch = next
-  #   cache:
-  #     yarn: true
-  #     directories:
-  #     - node_modules
-  #   install:
-  #   - yarn
-  #   script:
-  #     - yarn test:integration --ci --forceExit
+  - stage: acceptance
+    if: branch = next
+    cache:
+      yarn: true
+      directories:
+      - node_modules
+    install:
+    - yarn
+    script:
+      - yarn test:integration --ci --forceExit
 notifications:
   email: false

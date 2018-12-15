@@ -65,6 +65,7 @@ const SERVICES = new Map([
       'init',
       'protocol',
       'host',
+      'db',
     ],
   ],
   [
