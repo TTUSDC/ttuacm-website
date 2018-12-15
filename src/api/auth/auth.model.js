@@ -76,7 +76,7 @@ function filterUser(user) {
   return filteredUser
 }
 
-const CONNECTION_STRING = functions.config().auth.db
+const CONNECTION_STRING = functions.config().connections.db
 /**
  * Model that manages the students collection
  */
