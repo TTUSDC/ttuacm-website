@@ -18,6 +18,7 @@ describe('Auth Integration Tests', () => {
     mongoose.connect(process.env.DB_CONNECTION, {
       useNewUrlParser: true,
     }, (err) => {
+      console.error(err)
       done(err)
     })
   })
