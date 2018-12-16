@@ -125,7 +125,7 @@ function setup() {
 
 // Asks the user to pick what service they want to configure
 function chooseService() {
-  rl.question('What service you you like to configure?  ', (ans) => {
+  rl.question('What service would you like to configure?  ', (ans) => {
     if(ans === '') {
       process.exit(0)
     } else if(!SERVICES.has(ans)) {
