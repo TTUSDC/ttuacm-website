@@ -65,6 +65,9 @@ jobs:
     install:
     - yarn
     script:
-      - yarn test:integration --ci --forceExit
+    - yarn test:integration --ci --forceExit
 notifications:
   email: false
+env:
+  global:
+    secure: D/8iOjk3xS+mROThmcdNJIVD2QIK6iuzUHJGHPFVtjHa3P6x+p8s7e0/IReRUsRByQRlS8KB1kxLm6/tphVVpDFkEcfLdDIBbjlUHx8WAKxM2sRzKCeQEZNxpFeNXuBykDWtqokng8brm/yVCtm5xTbX8Da5cRYj2zOQ50ydR9Z1rBedYWZTPgqkb8shzLH+XbIlPrWQZsW1BUQxeqxXdnwLCnyDO/1NOnafuxGdXKr0aUn00bQSPmUHQfIH5dQBb6ISkJiSYPjlMOBwvYdWxhRgFFViXjAv67V8qu+ExcgwZpyKSQO+Oaxv76E50EWwQNacuwPn2DiKolaOE8u83ENiuzsaauri3Er4mW1cpDPJMqwdI96UvtxNv8k8Xx2GtbsVHRypaofpXc1y5IBq1OleOjWEeO01iXpnqq4R5Rz2RV4Mr8uIWpcsoAUTu2hImYcJ0RwrYMHGjcbadeV63Lfovj0k1sHGWev1dkXTNk2Chtw6DruJbS2+/80oo7QjgnmDHeP1P0oD2e10rW/6zoA91H6jakjN6FU2p+aBM18/SDDUI+KEK7WORASLb3d//rZts4E5K9A0ORofPtjBfmXvS25y1osLHnew+mTHMQa6x9Xo4aH6p6v4CvcT0+964aetkkKqZZoz6/RvRoEmvl04mtO2p5N5/pnVZy/XamE=

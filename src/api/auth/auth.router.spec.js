@@ -11,7 +11,7 @@ if (!process.env.CI) {
 }
 
 const connection_string = process.env.DB_CONNECTION
-console.log(process.env)
+console.log(connection_string)
 
 const { expect } = chai
 
