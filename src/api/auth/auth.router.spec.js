@@ -11,7 +11,6 @@ if (!process.env.CI) {
 }
 
 const connection_string = process.env.DB_CONNECTION
-console.log(connection_string)
 
 const { expect } = chai
 
@@ -21,7 +20,7 @@ describe('Auth Integration Tests', () => {
     mongoose.connect(connection_string, {
       useNewUrlParser: true,
     }, (err) => {
-      console.error(err)
+      if (err) console.error(err)
       done(err)
     })
   })
