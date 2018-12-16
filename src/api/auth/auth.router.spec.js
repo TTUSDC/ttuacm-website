@@ -10,12 +10,14 @@ if (!process.env.CI) {
   app = `${process.env.API_ENDPOINT}/api/v2/auth`
 }
 
+const connection_string = process.env.DB_CONNECTION
+
 const { expect } = chai
 
 describe('Auth Integration Tests', () => {
   // eslint-disable-next-line
   beforeAll((done) => {
-    mongoose.connect(process.env.DB_CONNECTION, {
+    mongoose.connect(connection_string, {
       useNewUrlParser: true,
     }, (err) => {
       console.error(err)
