@@ -78,7 +78,6 @@
     "eslint-plugin-chai-friendly": "0.4.1",
     "eslint-plugin-react": "7.11.1",
     "firebase-functions-test": "0.1.5",
-    "mockgoose": "7.3.5",
     "nodemon": "^1.18.3",
     "sinon": "~6.0.0",
     "sinon-chai": "3.2.0",
