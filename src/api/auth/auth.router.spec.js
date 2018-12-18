@@ -2,6 +2,7 @@ require('dotenv').config()
 const request = require('supertest')
 const chai = require('chai')
 const mongoose = require('mongoose')
+const AuthModel = require('./auth.model')
 
 let app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
 
@@ -18,28 +19,26 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 
 describe('Auth Integration Tests', () => {
   // eslint-disable-next-line
-  beforeAll((done) => {
-    mongoose.connect(connection_string, {
-      useNewUrlParser: true,
-    }, (err) => {
-      if (err) console.error(err)
-      mongoose.connection.db.dropDatabase(() => {
-        done()
+  beforeAll(async () => {
+    try {
+      await mongoose.connect(connection_string, {
+        useNewUrlParser: true,
       })
-    })
+      await mongoose.connection.dropDatabase()
+    } catch(err) {
+      console.error(err)
+      throw err
+    }
   })
 
-  beforeEach((done) => {
+  beforeEach(async () => {
     // Make sure to at least create one user for each test
     // or this will error out
-    try {
-      mongoose.connection.db.dropDatabase(() => {
-        done()
-      })
-    } catch (err) {
-      console.error(err)
-      done()
-    }
+    await mongoose.connection.dropDatabase()
+  })
+
+  afterEach(async () => {
+    await mongoose.connection.dropDatabase()
   })
 
   it('should be able to connect to the auth service', async () => request(app)
@@ -59,6 +58,7 @@ describe('Auth Integration Tests', () => {
           password: 'Some-password123',
         })
         .expect(201)
+
 
       expect(registerBody.body.createdUser.email === 'johndoe@gmail.com').to.equal(true)
       expect(registerBody.body.createdUser.confirmEmailToken).not.to.equal('')

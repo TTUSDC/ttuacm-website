@@ -4,7 +4,8 @@ const { Request } = require('../../utils/request')
 
 const router = express.Router()
 
-const Controller = require('./auth.controller')
+const AuthController = require('./auth.controller')
+const EmailController = require('../email/email.controller')
 
 /**
  * This router handles all of the authentication services
@@ -34,6 +35,9 @@ router.get('/test', (req, res) => {
  * @typedef {function} AuthRouter-Register
  */
 router.post('/register', async (req, res) => {
+  const authCtrl = new AuthController()
+  const emailCtrl = new EmailController(req.protocol, req.headers.host)
+
   const user = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -44,17 +48,12 @@ router.post('/register', async (req, res) => {
   }
 
   try {
-    const ctrl = new Controller()
-    const request = new Request('v2', 'email')
-    const createdUser = await ctrl.register(user)
+    // Register the user
+    const createdUser = await authCtrl.register(user)
 
     // Sending the email token
-    await request.post('/confirm-email')
-      .body({
-        email: createdUser.email,
-        token: createdUser.confirmEmailToken,
-      })
-      .end()
+    await emailCtrl.sendConfirmationEmail(createdUser.email, createdUser.confirmEmailToken)
+
     res.status(201).json({ createdUser })
   } catch (err) {
     console.error(err)
@@ -75,7 +74,7 @@ router.post('/register', async (req, res) => {
  * @typedef {function} AuthRouter-Login
  */
 router.post('/login', async (req, res) => {
-  const ctrl = new Controller()
+  const ctrl = new AuthController()
   const { email } = req.body
   const inputPassword = req.body.password
 
@@ -101,7 +100,7 @@ router.post('/login', async (req, res) => {
  * @param {querystring} token - HEX token saved in confirmEmailToken
  */
 router.get('/confirm/:token', (req, res) => {
-  const ctrl = new Controller()
+  const ctrl = new AuthController()
   const { token } = req.params
   const { redirectURL } = req.body
   ctrl.confirmToken(token)
@@ -129,7 +128,7 @@ router.get('/confirm/:token', (req, res) => {
  */
 router.post('/forgot', async (req, res) => {
   try {
-    const ctrl = new Controller()
+    const ctrl = new AuthController()
     const request = new Request('v2', 'email')
     const { email } = req.body
     const payload = await ctrl.forgotLogin(email)
@@ -154,7 +153,7 @@ router.post('/forgot', async (req, res) => {
  * @param {string} token - A string that contains the HEX code/Reset token of a lost account
  */
 router.get('/reset/:token', async (req, res) => {
-  const ctrl = new Controller()
+  const ctrl = new AuthController()
   const { token } = req.params
   const { redirectURLSuccess, fallback } = req.body
   try {
@@ -180,7 +179,7 @@ router.get('/reset/:token', async (req, res) => {
  */
 router.post('/reset/:token', async (req, res) => {
   try {
-    const ctrl = new Controller()
+    const ctrl = new AuthController()
     const request = new Request('v2', 'email')
     const { token } = req.params
     const { password } = req.body
