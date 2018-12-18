@@ -2,7 +2,6 @@ require('dotenv').config()
 const request = require('supertest')
 const chai = require('chai')
 const mongoose = require('mongoose')
-const AuthModel = require('./auth.model')
 
 let app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
 
@@ -15,6 +14,7 @@ const connection_string = process.env.DB_CONNECTION
 
 const { expect } = chai
 
+/* eslint-disable-next-line */
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 
 describe('Auth Integration Tests', () => {
