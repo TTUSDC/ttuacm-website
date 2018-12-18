@@ -1,6 +1,5 @@
 const express = require('express')
 const querystring = require('querystring')
-const { Request } = require('../../utils/request')
 
 const router = express.Router()
 
@@ -128,12 +127,13 @@ router.get('/confirm/:token', (req, res) => {
  */
 router.post('/forgot', async (req, res) => {
   try {
-    const ctrl = new AuthController()
-    const request = new Request('v2', 'email')
-    const { email } = req.body
-    const payload = await ctrl.forgotLogin(email)
-    await request.get('/reset-password').end()
-    res.status(200).json({ recipient: payload.user })
+    const authCtrl = new AuthController()
+    const emailCtrl = new EmailController(req.protocol, req.headers.host)
+
+    const { user } = await authCtrl.forgotLogin(req.body.email)
+    await emailCtrl.sendResetEmail(user.email, user.resetPasswordToken)
+
+    res.status(200).json({ recipient: user })
   } catch (err) {
     res.status(err.code).json({ msg: err.message })
   }
@@ -179,13 +179,15 @@ router.get('/reset/:token', async (req, res) => {
  */
 router.post('/reset/:token', async (req, res) => {
   try {
-    const ctrl = new AuthController()
-    const request = new Request('v2', 'email')
+    const authCtrl = new AuthController()
+    const emailCtrl = new EmailController(req.headers.host, req.protocol)
     const { token } = req.params
     const { password } = req.body
 
-    const user = await ctrl.verifyUser(token, password)
-    await request.get('/change-password-notif').end()
+    const user = await authCtrl.verifyUser(token, password)
+
+    await emailCtrl.sendChangedPasswordEmail(user.email)
+
     res.status(200).json({ user })
   } catch (err) {
     res.status(500).json({ user: null })
