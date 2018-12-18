@@ -195,6 +195,8 @@ router.get('/reset/:token', async (req, res) => {
  * - OnSuccess: Sends a error status code
  *
  * @typedef {function} AuthRouter-VerifyUser
+ * @param {string} req.header.host - URL
+ * @param {string} req.protocol - HTTP(S)
  * @param {object} req.body - Body Parser Body Object
  * @param {object} req.params - Express Params Object
  * @param {string} req.body.password - new password
@@ -203,7 +205,7 @@ router.get('/reset/:token', async (req, res) => {
 router.post('/reset/:token', async (req, res) => {
   try {
     const authCtrl = new AuthController()
-    const emailCtrl = new EmailController(req.headers.host, req.protocol)
+    const emailCtrl = new EmailController(req.protocol, req.header.host)
     const { token } = req.params
     const { password } = req.body
 

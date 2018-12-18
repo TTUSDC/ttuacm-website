@@ -8,7 +8,7 @@ const Controller = require('./email.controller')
 /**
  * Testing route for the Email Service
  *
- * - Endpoint: `/email/api/v2/test`
+ * - Endpoint: `/api/v2/email/test`
  * - Verb: GET
  *
  * @typedef {function} EmailRouter
@@ -18,23 +18,22 @@ router.get('/test', (req, res) => {
 })
 
 /**
- * Sends and question to ACM Email
+ * Sends a question to ACM Email
  *
- * - Endpoint: `/email/api/v2/contact-us`
+ * - Endpoint: `/api/v2/email/contact-us`
  * - Verb: POST
  *
  * @typedef {function} EmailRouter-ContactUs
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.name - user name
+ * @param {string} req.body.email - user email
+ * @param {string} req.body.topic - topic to attach
+ * @param {string} req.body.message - message to send
  */
 router.post('/contact-us', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
-  const {
-    name, email, topic, message,
-  } = req.body
-  const emailInfo = {
-    name, email, topic, message,
-  }
 
-  ctrl.contactUs(emailInfo)
+  ctrl.contactUs(req.body)
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)
@@ -49,10 +48,13 @@ router.post('/contact-us', (req, res) => {
  *
  * This will mainly be used for resending emails
  *
- * - Endpoint: `/email/api/v2/confirm-email`
+ * - Endpoint: `/api/v2/email/confirm-email`
  * - Verb: POST
  *
  * @typedef {function} EmailRouter-SendConfirmationEmail
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.email - user email
+ * @param {string} req.body.token - user reset password token
  */
 router.post('/confirm-email', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
@@ -74,10 +76,14 @@ router.post('/confirm-email', (req, res) => {
  *
  * This will mainly be used for resending emails
  *
- * - Endpoint: `/email/api/v2/reset-password`
+ * - Endpoint: `/api/v2/email/reset-password`
  * - Verb: POST
  *
  * @typedef {function} EmailRouter-SendResetEmail
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.email - user email
+ * @param {string} req.body.token - user reset password token
+ *
  */
 router.post('/reset-password', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
