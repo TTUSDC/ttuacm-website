@@ -32,6 +32,14 @@ router.get('/test', (req, res) => {
  * - OnSuccess: Sends the user back as JSON
  *
  * @typedef {function} AuthRouter-Register
+ * @param {object} req.body - Body Parser Body Object
+ * @param {object} req.body.protocol - HTTP(S)
+ * @param {object} req.body.host - URL
+ * @param {object} req.body.firstName - user first name
+ * @param {object} req.body.lastName - user last name
+ * @param {object} req.body.email - user email
+ * @param {object} req.body.password - user password
+ * @param {object} req.body.classification - user classification
  */
 router.post('/register', async (req, res) => {
   const authCtrl = new AuthController()
@@ -71,14 +79,16 @@ router.post('/register', async (req, res) => {
  * - OnSuccess: Sends the JWT Token of the user
  *
  * @typedef {function} AuthRouter-Login
+ * @param {object} req.body - Body Parser Body Object
+ * @param {object} req.body.email - user email
+ * @param {object} req.body.password - user password
  */
 router.post('/login', async (req, res) => {
   const ctrl = new AuthController()
-  const { email } = req.body
-  const inputPassword = req.body.password
+  const { email, password } = req.body
 
   try {
-    const { foundUser, token } = await ctrl.login(email, inputPassword)
+    const { foundUser, token } = await ctrl.login(email, password)
     res.status(200).json({ token: `JWT ${token}`, user: foundUser })
   } catch (err) {
     console.error(err)
@@ -96,20 +106,24 @@ router.post('/login', async (req, res) => {
  * - OnSuccess: Redirects to the login page with querystring to signal a notification
  *
  * @typedef {function} AuthRouter-ConfirmToken
- * @param {querystring} token - HEX token saved in confirmEmailToken
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.redirectURLSuccess - Success URL
+ * @param {string} req.body.fallback - Fallback URL
+ * @param {object} req.params - Express Params Object
+ * @param {string} req.parmas.token - HEX token saved in confirmEmailToken
  */
 router.get('/confirm/:token', (req, res) => {
   const ctrl = new AuthController()
   const { token } = req.params
-  const { redirectURL } = req.body
+  const { redirectURLSuccess, fallback } = req.body
   ctrl.confirmToken(token)
     .then(() => {
       const qs = querystring.stringify({ verify: 'success' })
-      res.redirect(302, `${redirectURL}/auth/?${qs}`)
+      res.redirect(302, `${redirectURLSuccess}/?${qs}`)
     })
     .catch(() => {
       const qs = querystring.stringify({ err: 'Error Validating Email' })
-      res.redirect(302, `${redirectURL}/?${qs}`)
+      res.redirect(302, `${fallback}/?${qs}`)
     })
 })
 
@@ -123,6 +137,7 @@ router.get('/confirm/:token', (req, res) => {
  * - OnSuccess: Sends the user that the email was sent to
  *
  * @typedef {function} AuthRouter-ForgotLogin
+ * @param {object} req.body - Body Parser Body Object
  * @param {string} req.body.email - Email for the account that needs to change passwords
  */
 router.post('/forgot', async (req, res) => {
@@ -150,14 +165,18 @@ router.post('/forgot', async (req, res) => {
  * - OnSuccess: Redirects to the forgot-redirect page to change password
  *
  * @typedef {function} AuthRouter-ResetToken
- * @param {string} token - A string that contains the HEX code/Reset token of a lost account
+ * @param {object} req.body = Body Parser Body Object
+ * @param {string} req.body.redirectURLSuccess - Success URL
+ * @param {string} req.body.fallback - Fallback URL
+ * @param {object} req.params - Express Params Object
+ * @param {string} req.parmas.token - HEX token saved in confirmEmailToken
  */
 router.get('/reset/:token', async (req, res) => {
   const ctrl = new AuthController()
   const { token } = req.params
   const { redirectURLSuccess, fallback } = req.body
   try {
-    const passToken = ctrl.resetToken(token)
+    const passToken = await ctrl.resetToken(token)
     const qs = querystring.stringify({ token: passToken })
     res.redirect(`${redirectURLSuccess}/?${qs}`)
   } catch (err) {
@@ -176,6 +195,10 @@ router.get('/reset/:token', async (req, res) => {
  * - OnSuccess: Sends a error status code
  *
  * @typedef {function} AuthRouter-VerifyUser
+ * @param {object} req.body - Body Parser Body Object
+ * @param {object} req.params - Express Params Object
+ * @param {string} req.body.password - new password
+ * @param {string} req.params.token - token of the user that we need to change
  */
 router.post('/reset/:token', async (req, res) => {
   try {
