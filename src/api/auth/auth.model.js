@@ -105,14 +105,6 @@ class AuthModel {
   }
 
   /**
-   * Deletes all of the students in a database
-   */
-  async deleteAllUsers() {
-    await this.DB.remove({})
-    return null
-  }
-
-  /**
    * Updates the user by their email address
    * @param {string} email - user email
    * @param {string} targetAttr - attribute to change
