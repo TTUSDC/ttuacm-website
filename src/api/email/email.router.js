@@ -45,7 +45,9 @@ router.post('/contact-us', (req, res) => {
 /**
  * Sends a confirmation email to the user with a link/endpoint
  * to verify their email. Users will click the link to verify
- * thier emails and should be redirected to the login page
+ * their emails and should be redirected to the login page
+ *
+ * This will mainly be used for resending emails
  *
  * - Endpoint: `/email/api/v2/confirm-email`
  * - Verb: POST
@@ -70,6 +72,8 @@ router.post('/confirm-email', (req, res) => {
  * link sent and redirected to the reset
  * password page
  *
+ * This will mainly be used for resending emails
+ *
  * - Endpoint: `/email/api/v2/reset-password`
  * - Verb: POST
  *
@@ -80,26 +84,6 @@ router.post('/reset-password', (req, res) => {
   const { email, token } = req.body
 
   ctrl.sendResetEmail(email, token)
-    .then(() => res.status(200).json())
-    .catch((err) => {
-      console.error(err)
-      res.status(500).json()
-    })
-})
-
-/**
- * Notifies the user that their password has been changed
- *
- * - Endpoint: `/email/api/v2/change-password-notif`
- * - Verb: POST
- *
- * @typedef {function} EmailRouter-SendChangedPasswordNotification
- */
-router.post('/change-password-notif', (req, res) => {
-  const ctrl = new Controller(req.protocol, req.headers.host)
-  const { email, token } = req.body
-
-  ctrl.sendChangedPasswordEmail(email, token)
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)

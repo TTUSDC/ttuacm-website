@@ -266,3 +266,4 @@ class AuthModel {
 }
 
 module.exports = AuthModel
+module.exports.studentSchema = studentSchema

@@ -21,25 +21,11 @@ describe('Auth Unit Tests', () => {
   let ctrl
   let model
   // eslint-disable-next-line
-  beforeEach((done) => {
+  beforeEach(async () => {
     ctrl = new Controller()
     model = new Model()
-    model.connect().then(() => {
-      done()
-    }).catch((err) => {
-      done(err)
-    })
-  })
-
-  beforeEach((done) => {
-    // Make sure to at least create one user for each test
-    // or this will error out
-    try {
-      mongoose.connection.dropCollection('students', done)
-    } catch (err) {
-      console.error(err)
-      done()
-    }
+    await model.connect()
+    await mongoose.connection.dropDatabase()
   })
 
   it('[register] should save a new user to the database', async () => {
