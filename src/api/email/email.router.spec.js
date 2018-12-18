@@ -40,12 +40,4 @@ describe('Email Integration Tests', () => {
       token: 'test',
     })
     .expect(200))
-
-  it('should be able to send changed password emails', () => request(app)
-    .post('/change-password-notif')
-    .send({
-      email: 'some-email@gmail.com',
-      token: 'test',
-    })
-    .expect(200))
 })
