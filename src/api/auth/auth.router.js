@@ -12,7 +12,7 @@ const EmailController = require('../email/email.controller')
  * provides a way for the other services to create their OAuth2
  * instances
  *
- * - Endpoint: `/auth/api/v2/test`
+ * - Endpoint: `/api/v2/test`
  * - Verb: GET
  *
  * @typedef {function} AuthRouter
@@ -25,7 +25,7 @@ router.get('/test', (req, res) => {
  * Registers the user and saves them as a unverified user
  * It then sends an email to that user to verify
  *
- * - Endpoint: `/auth/api/v2/register`
+ * - Endpoint: `/api/v2/auth/register`
  * - Verb: POST
  *
  * - OnFailure: Sends an error message
@@ -64,7 +64,7 @@ router.post('/register', async (req, res) => {
  * JWT Login/Authentication
  * User must not have signed up using OAuth2
  *
- * - Endpoint: `/auth/api/v2/login`
+ * - Endpoint: `/api/v2/auth/login`
  * - Verb: POST
  *
  * - OnFailure: Sends an error message
@@ -89,7 +89,7 @@ router.post('/login', async (req, res) => {
 /**
  * Confirms the user has a valid email account
  *
- * - Endpoint: `/auth/api/v2/confirm/:token`
+ * - Endpoint: `/api/v2/auth/confirm/:token`
  * - Verb: GET
  *
  * - OnFailure: Redirects to error page
@@ -116,7 +116,7 @@ router.get('/confirm/:token', (req, res) => {
 /**
  * Verifies that the user is resetting the password of an account they own
  *
- * - Endpoint: `/auth/api/v2/forgot`
+ * - Endpoint: `/api/v2/auth/forgot`
  * - Verb: POST
  *
  * - OnFailure: Sends an internal server error message
@@ -143,7 +143,7 @@ router.post('/forgot', async (req, res) => {
  * This endpoint is hit by an email to reset a user password
  * This endpoint is hit first in the sequence
  *
- * - Endpoint: `/auth/api/v2/reset/:token`
+ * - Endpoint: `/api/v2/auth/reset/:token`
  * - Verb: GET
  *
  * - OnFailure: Redirects to the login screen with an error in query string
@@ -169,7 +169,7 @@ router.get('/reset/:token', async (req, res) => {
 /**
  * Client hits this endpoint with a token and a new password to update the account with
  *
- * - Endpoint: `/auth/api/v2/reset/:token`
+ * - Endpoint: `/api/v2/auth/reset/:token`
  * - Verb: POST
  *
  * - OnFailure: Sends a success status code
