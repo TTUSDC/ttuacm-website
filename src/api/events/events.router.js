@@ -8,7 +8,7 @@ const router = express.Router()
  * Testing route for the Events Service
  *
  * - Endpoint: `/api/v2/events/test`
- * - GET
+ * - Verb: GET
  *
  * @typedef {function} EventsRouter
  */

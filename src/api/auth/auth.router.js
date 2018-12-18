@@ -12,7 +12,7 @@ const EmailController = require('../email/email.controller')
  * provides a way for the other services to create their OAuth2
  * instances
  *
- * - Endpoint: `/auth/api/v2/test`
+ * - Endpoint: `/api/v2/test`
  * - Verb: GET
  *
  * @typedef {function} AuthRouter
@@ -25,13 +25,21 @@ router.get('/test', (req, res) => {
  * Registers the user and saves them as a unverified user
  * It then sends an email to that user to verify
  *
- * - Endpoint: `/auth/api/v2/register`
+ * - Endpoint: `/api/v2/auth/register`
  * - Verb: POST
  *
  * - OnFailure: Sends an error message
  * - OnSuccess: Sends the user back as JSON
  *
  * @typedef {function} AuthRouter-Register
+ * @param {object} req.body - Body Parser Body Object
+ * @param {object} req.body.protocol - HTTP(S)
+ * @param {object} req.body.host - URL
+ * @param {object} req.body.firstName - user first name
+ * @param {object} req.body.lastName - user last name
+ * @param {object} req.body.email - user email
+ * @param {object} req.body.password - user password
+ * @param {object} req.body.classification - user classification
  */
 router.post('/register', async (req, res) => {
   const authCtrl = new AuthController()
@@ -64,21 +72,23 @@ router.post('/register', async (req, res) => {
  * JWT Login/Authentication
  * User must not have signed up using OAuth2
  *
- * - Endpoint: `/auth/api/v2/login`
+ * - Endpoint: `/api/v2/auth/login`
  * - Verb: POST
  *
  * - OnFailure: Sends an error message
  * - OnSuccess: Sends the JWT Token of the user
  *
  * @typedef {function} AuthRouter-Login
+ * @param {object} req.body - Body Parser Body Object
+ * @param {object} req.body.email - user email
+ * @param {object} req.body.password - user password
  */
 router.post('/login', async (req, res) => {
   const ctrl = new AuthController()
-  const { email } = req.body
-  const inputPassword = req.body.password
+  const { email, password } = req.body
 
   try {
-    const { foundUser, token } = await ctrl.login(email, inputPassword)
+    const { foundUser, token } = await ctrl.login(email, password)
     res.status(200).json({ token: `JWT ${token}`, user: foundUser })
   } catch (err) {
     console.error(err)
@@ -89,40 +99,45 @@ router.post('/login', async (req, res) => {
 /**
  * Confirms the user has a valid email account
  *
- * - Endpoint: `/auth/api/v2/confirm/:token`
+ * - Endpoint: `/api/v2/auth/confirm/:token`
  * - Verb: GET
  *
  * - OnFailure: Redirects to error page
  * - OnSuccess: Redirects to the login page with querystring to signal a notification
  *
  * @typedef {function} AuthRouter-ConfirmToken
- * @param {querystring} token - HEX token saved in confirmEmailToken
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.redirectURLSuccess - Success URL
+ * @param {string} req.body.fallback - Fallback URL
+ * @param {object} req.params - Express Params Object
+ * @param {string} req.parmas.token - HEX token saved in confirmEmailToken
  */
 router.get('/confirm/:token', (req, res) => {
   const ctrl = new AuthController()
   const { token } = req.params
-  const { redirectURL } = req.body
+  const { redirectURLSuccess, fallback } = req.body
   ctrl.confirmToken(token)
     .then(() => {
       const qs = querystring.stringify({ verify: 'success' })
-      res.redirect(302, `${redirectURL}/auth/?${qs}`)
+      res.redirect(302, `${redirectURLSuccess}/?${qs}`)
     })
     .catch(() => {
       const qs = querystring.stringify({ err: 'Error Validating Email' })
-      res.redirect(302, `${redirectURL}/?${qs}`)
+      res.redirect(302, `${fallback}/?${qs}`)
     })
 })
 
 /**
  * Verifies that the user is resetting the password of an account they own
  *
- * - Endpoint: `/auth/api/v2/forgot`
+ * - Endpoint: `/api/v2/auth/forgot`
  * - Verb: POST
  *
  * - OnFailure: Sends an internal server error message
  * - OnSuccess: Sends the user that the email was sent to
  *
  * @typedef {function} AuthRouter-ForgotLogin
+ * @param {object} req.body - Body Parser Body Object
  * @param {string} req.body.email - Email for the account that needs to change passwords
  */
 router.post('/forgot', async (req, res) => {
@@ -143,21 +158,25 @@ router.post('/forgot', async (req, res) => {
  * This endpoint is hit by an email to reset a user password
  * This endpoint is hit first in the sequence
  *
- * - Endpoint: `/auth/api/v2/reset/:token`
+ * - Endpoint: `/api/v2/auth/reset/:token`
  * - Verb: GET
  *
  * - OnFailure: Redirects to the login screen with an error in query string
  * - OnSuccess: Redirects to the forgot-redirect page to change password
  *
  * @typedef {function} AuthRouter-ResetToken
- * @param {string} token - A string that contains the HEX code/Reset token of a lost account
+ * @param {object} req.body = Body Parser Body Object
+ * @param {string} req.body.redirectURLSuccess - Success URL
+ * @param {string} req.body.fallback - Fallback URL
+ * @param {object} req.params - Express Params Object
+ * @param {string} req.parmas.token - HEX token saved in confirmEmailToken
  */
 router.get('/reset/:token', async (req, res) => {
   const ctrl = new AuthController()
   const { token } = req.params
   const { redirectURLSuccess, fallback } = req.body
   try {
-    const passToken = ctrl.resetToken(token)
+    const passToken = await ctrl.resetToken(token)
     const qs = querystring.stringify({ token: passToken })
     res.redirect(`${redirectURLSuccess}/?${qs}`)
   } catch (err) {
@@ -169,18 +188,24 @@ router.get('/reset/:token', async (req, res) => {
 /**
  * Client hits this endpoint with a token and a new password to update the account with
  *
- * - Endpoint: `/auth/api/v2/reset/:token`
+ * - Endpoint: `/api/v2/auth/reset/:token`
  * - Verb: POST
  *
  * - OnFailure: Sends a success status code
  * - OnSuccess: Sends a error status code
  *
  * @typedef {function} AuthRouter-VerifyUser
+ * @param {string} req.header.host - URL
+ * @param {string} req.protocol - HTTP(S)
+ * @param {object} req.body - Body Parser Body Object
+ * @param {object} req.params - Express Params Object
+ * @param {string} req.body.password - new password
+ * @param {string} req.params.token - token of the user that we need to change
  */
 router.post('/reset/:token', async (req, res) => {
   try {
     const authCtrl = new AuthController()
-    const emailCtrl = new EmailController(req.headers.host, req.protocol)
+    const emailCtrl = new EmailController(req.protocol, req.header.host)
     const { token } = req.params
     const { password } = req.body
 
