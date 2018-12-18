@@ -14,6 +14,8 @@ const connection_string = process.env.DB_CONNECTION
 
 const { expect } = chai
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+
 describe('Auth Integration Tests', () => {
   // eslint-disable-next-line
   beforeAll((done) => {
@@ -21,7 +23,9 @@ describe('Auth Integration Tests', () => {
       useNewUrlParser: true,
     }, (err) => {
       if (err) console.error(err)
-      done(err)
+      mongoose.connection.db.dropDatabase(() => {
+        done()
+      })
     })
   })
 
@@ -29,7 +33,9 @@ describe('Auth Integration Tests', () => {
     // Make sure to at least create one user for each test
     // or this will error out
     try {
-      mongoose.connection.dropCollection('students', done)
+      mongoose.connection.db.dropDatabase(() => {
+        done()
+      })
     } catch (err) {
       console.error(err)
       done()
@@ -42,6 +48,7 @@ describe('Auth Integration Tests', () => {
 
   it('should be able to register a user, verify the email, and login', async () => {
     try {
+      // Register the user
       const registerBody = await request(app)
         .post('/register')
         .send({
@@ -56,10 +63,12 @@ describe('Auth Integration Tests', () => {
       expect(registerBody.body.createdUser.email === 'johndoe@gmail.com').to.equal(true)
       expect(registerBody.body.createdUser.confirmEmailToken).not.to.equal('')
 
+      // Confirm the email
       await request(app)
         .get(`/confirm/${registerBody.body.createdUser.confirmEmailToken}`)
         .expect(302)
 
+      // Login
       const loginBody = await request(app)
         .post('/login')
         .send({
