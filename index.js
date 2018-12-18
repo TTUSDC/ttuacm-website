@@ -22,7 +22,7 @@ api.use(cors({ origin: true }))
 api.use(passport.initialize())
 api.use(passport.session())
 passportConfig(passport)
-api.use(cors())
+api.use(cors({ origin: true }))
 
 api.use('/v2/auth', authApp)
 api.use('/v2/teams', teamsApp)
