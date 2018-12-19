@@ -74,7 +74,7 @@ function ConditionalRender(Component) { // eslint-disable-line
 // we will build without environment variables
 const connectionString = (
   REACT_APP_environment_connection
-  || 'https://acm-texas-tech-web-app-2.firebaseapp.com/environment/get-environment'
+  || 'https://acm-texas-tech-web-app-2.firebaseapp.com/api/v2/environment'
 )
 
 const render = () => {

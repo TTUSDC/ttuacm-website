@@ -1,5 +1,6 @@
 const express = require('express')
 const functions = require('firebase-functions')
+const cors = require('cors')
 
 const PROTECTED_ENDPOINTS = [
   'https://acm-texas-tech-web-app-2-beta.firebaseapp.com/',
@@ -7,6 +8,7 @@ const PROTECTED_ENDPOINTS = [
 ]
 
 const router = express.Router()
+router.use(cors({ origin: true }))
 
 router.get('/test', (req, res) => {
   res.send('Environment Provider Works!')
@@ -19,7 +21,7 @@ router.get('/test', (req, res) => {
  * we have to check whether or not the host is either the
  * production or staging host. Otherwise, send over the environment
  *
- * - Endpoint: `/environment/get-environment`
+ * - Endpoint: `/api/v2/environment`
  * - Verb: GET
  *
  * @typedef {function} EnvironmentProvider

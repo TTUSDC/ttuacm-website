@@ -29,4 +29,9 @@ api.use('/v2/email', emailApp)
 api.use('/v2/events', eventsApp)
 api.use('/v2/environment', environmentService)
 
+// Not Found
+api.use((req, res) => {
+  res.status(404).json({ err: 'Not Found' })
+})
+
 exports.api = functions.https.onRequest(api)
