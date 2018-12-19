@@ -4,6 +4,7 @@ node_js:
 jobs:
   include:
   - stage: test
+    if: NOT branch = master
     services:
     - mongodb
     cache:
