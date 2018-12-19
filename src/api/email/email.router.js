@@ -8,7 +8,7 @@ const Controller = require('./email.controller')
 /**
  * Testing route for the Email Service
  *
- * - Endpoint: `/email/api/v2/test`
+ * - Endpoint: `/api/v2/email/test`
  * - Verb: GET
  *
  * @typedef {function} EmailRouter
@@ -18,39 +18,43 @@ router.get('/test', (req, res) => {
 })
 
 /**
- * Sends and question to ACM Email
+ * Sends a question to ACM Email
  *
- * - Endpoint: `/email/api/v2/contact-us`
+ * - Endpoint: `/api/v2/email/contact-us`
  * - Verb: POST
  *
  * @typedef {function} EmailRouter-ContactUs
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.name - user name
+ * @param {string} req.body.email - user email
+ * @param {string} req.body.topic - topic to attach
+ * @param {string} req.body.message - message to send
  */
 router.post('/contact-us', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
-  const {
-    name, email, topic, message,
-  } = req.body
-  const emailInfo = {
-    name, email, topic, message,
-  }
 
-  ctrl.contactUs(emailInfo)
+  ctrl.contactUs(req.body)
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)
-      res.status(404).json()
+      res.status(500).json()
     })
 })
 
 /**
  * Sends a confirmation email to the user with a link/endpoint
  * to verify their email. Users will click the link to verify
- * thier emails and should be redirected to the login page
+ * their emails and should be redirected to the login page
  *
- * - Endpoint: `/email/api/v2/confirm-email`
+ * This will mainly be used for resending emails
+ *
+ * - Endpoint: `/api/v2/email/confirm-email`
  * - Verb: POST
  *
  * @typedef {function} EmailRouter-SendConfirmationEmail
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.email - user email
+ * @param {string} req.body.token - user reset password token
  */
 router.post('/confirm-email', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
@@ -60,7 +64,7 @@ router.post('/confirm-email', (req, res) => {
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)
-      res.status(404).json()
+      res.status(500).json()
     })
 })
 
@@ -70,10 +74,16 @@ router.post('/confirm-email', (req, res) => {
  * link sent and redirected to the reset
  * password page
  *
- * - Endpoint: `/email/api/v2/reset-password`
+ * This will mainly be used for resending emails
+ *
+ * - Endpoint: `/api/v2/email/reset-password`
  * - Verb: POST
  *
  * @typedef {function} EmailRouter-SendResetEmail
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.email - user email
+ * @param {string} req.body.token - user reset password token
+ *
  */
 router.post('/reset-password', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
@@ -83,27 +93,7 @@ router.post('/reset-password', (req, res) => {
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)
-      res.status(404).json()
-    })
-})
-
-/**
- * Notifies the user that their password has been changed
- *
- * - Endpoint: `/email/api/v2/change-password-notif`
- * - Verb: POST
- *
- * @typedef {function} EmailRouter-SendChangedPasswordNotification
- */
-router.post('/change-password-notif', (req, res) => {
-  const ctrl = new Controller(req.protocol, req.headers.host)
-  const { email, token } = req.body
-
-  ctrl.sendChangedPasswordEmail(email, token)
-    .then(() => res.status(200).json())
-    .catch((err) => {
-      console.error(err)
-      res.status(404).json()
+      res.status(500).json()
     })
 })
 

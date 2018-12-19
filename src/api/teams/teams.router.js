@@ -10,7 +10,7 @@ const router = express.Router()
 /**
  * Testing route for the Teams Service
  *
- * - Endpoint: `/teams/api/v2/test`
+ * - Endpoint: `/api/v2/teams/test`
  * - Verb: GET
  *
  * @typedef {function} TeamsRouter
@@ -23,12 +23,14 @@ router.get('/test', (req, res) => {
  * Gets all of the teams that the user is a part of
  *
  * - Restricted
- * - Endpoint: `/teams/api/v2/teams`
+ * - Endpoint: `/api/v2/teams`
  * - Verb: GET
  *
  * @typedef {function} TeamsRouter-GetTeams
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.email - user email
  */
-router.get('/teams', membersOnlyRoute, async (req, res) => {
+router.get('/', membersOnlyRoute, async (req, res) => {
   try {
     if (!req.body.email) throw ErrorMessages.MissingRequestBody()
     const teams = await (new Controller()).getActiveGroups(req.body.email)
@@ -42,13 +44,16 @@ router.get('/teams', membersOnlyRoute, async (req, res) => {
  * Adds the given email to the SDC Group with their interests
  *
  * - Restricted
- * - Endpoint: `/teams/api/v2/teams`
+ * - Endpoint: `/api/v2/teams`
  * - Verb: PUT
  *
  * @requires Authentication - JWT
  * @typedef {function} TeamsRouter-AddMembers
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.email - user email
+ * @param {Array<string>} req.body.teams - user teams
  */
-router.put('/teams', membersOnlyRoute, async (req, res) => {
+router.put('/', membersOnlyRoute, async (req, res) => {
   try {
     if (!req.body.email || !req.body.teams) throw ErrorMessages.MissingRequestBody()
     const { email, teams } = req.body
@@ -64,13 +69,16 @@ router.put('/teams', membersOnlyRoute, async (req, res) => {
  * Deletes a member from a group
  *
  * - Restricted
- * - Endpoint: `/teams/api/v2/teams`
+ * - Endpoint: `/api/v2/teams`
  * - Verb: DELETE
  *
  * @requires Authentication - JWT
  * @typedef {function} TeamsRouter-DeleteUserFromTeams
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.email - user email
+ * @param {Array<string>} req.body.teams - user teams
  */
-router.delete('/teams', membersOnlyRoute, async (req, res) => {
+router.delete('/', membersOnlyRoute, async (req, res) => {
   try {
     if (!req.body.email || !req.body.teams) throw ErrorMessages.MissingRequestBody()
     const { email, teams } = req.body

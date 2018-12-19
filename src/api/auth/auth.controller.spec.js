@@ -4,6 +4,9 @@ test.mockConfig({
   auth: {
     session_secret: 'SessionSecretForTests!',
   },
+  connections: {
+    db: 'mongodb://localhost:27017/testing',
+  },
 })
 
 const chai = require('chai')
@@ -18,23 +21,11 @@ describe('Auth Unit Tests', () => {
   let ctrl
   let model
   // eslint-disable-next-line
-  beforeAll((done) => {
-    mongoose.connect('mongodb://localhost:27017/testing', {
-      useNewUrlParser: true,
-    }, (err) => {
-      done(err)
-    })
-  })
-
-  beforeEach(() => {
+  beforeEach(async () => {
     ctrl = new Controller()
     model = new Model()
-  })
-
-  afterEach((done) => {
-    // Make sure to at least create one user for each test
-    // or this will error out
-    mongoose.connection.dropCollection('students', done)
+    await model.connect()
+    await mongoose.connection.dropDatabase()
   })
 
   it('[register] should save a new user to the database', async () => {

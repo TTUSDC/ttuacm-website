@@ -1,12 +1,10 @@
 const express = require('express')
-const passport = require('passport')
 const querystring = require('querystring')
-const OAuthHandler = require('./config/oauth2')
-const { Request } = require('../../utils/request')
 
 const router = express.Router()
 
-const Controller = require('./auth.controller')
+const AuthController = require('./auth.controller')
+const EmailController = require('../email/email.controller')
 
 /**
  * This router handles all of the authentication services
@@ -14,7 +12,7 @@ const Controller = require('./auth.controller')
  * provides a way for the other services to create their OAuth2
  * instances
  *
- * - Endpoint: `/auth/api/v2/test`
+ * - Endpoint: `/api/v2/test`
  * - Verb: GET
  *
  * @typedef {function} AuthRouter
@@ -24,131 +22,29 @@ router.get('/test', (req, res) => {
 })
 
 /**
- * Creates a OAuthClient to extract in the other services
- *
- * - Endpoint: `/auth/api/v2/google-api`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GoogleAPIs
- * @todo secure this route
- */
-router.get('/google-api', async (req, res) => {
-  try {
-    const OAuth = new OAuthHandler()
-    const client = await OAuth.getClient()
-    res.status(200).json({ client })
-  } catch (err) {
-    console.error(err)
-    res.status(404).json({ err: err.message })
-  }
-})
-
-/**
- * Gets the Google Login Screen
- *
- * - Endpoint: `/auth/api/v2/google`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GoogleAuth
- */
-router.get(
-  '/google',
-  passport.authenticate('google', {
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email',
-    ],
-  }),
-)
-
-/**
- * Callback for Google OAuth2
- *
- * - Endpoint: `/auth/api/v2/google/redirect`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GoogleAuthRedirect
- */
-router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-  const qs = Controller.oauth2(req.user)
-  res.redirect(`${req.body.redirectURL}/?${qs}`)
-})
-
-/**
- * Gets the GitHub Login Screen
- *
- * - Endpoint: `/auth/api/v2/github`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GitHubAuth
- */
-router.get(
-  '/github',
-  passport.authenticate('github', {
-    scope: ['read:user'],
-  }),
-)
-
-/**
- * Callback for GitHub OAuth2
- *
- * - Endpoint: `/auth/api/v2/github/redirect`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GitHubuthRedirect
- */
-router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
-  const qs = Controller.oauth2(req.user)
-  res.redirect(`${req.body.redirectURL}/?${qs}`)
-})
-
-/**
- * Gets the Facebook Login Screen
- *
- * - Endpoint: `/auth/api/v2/facebook`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-FacebookAuth
- */
-router.get(
-  '/facebook',
-  passport.authenticate('facebook', {
-    scope: ['public_profile', 'email'],
-  }),
-)
-
-/**
- * Callback for Facebook OAuth2
- *
- * - Endpoint: `/auth/api/v2/facebook/redirect`
- * - Verb: GET
- *
- * @typedef {function} AuthRouter-GitHubuthRedirect
- */
-router.get(
-  '/facebook/redirect',
-  passport.authenticate('facebook', {
-    failureRedirect: '/login',
-  }),
-  (req, res) => {
-    const qs = Controller.oauth2(req.user)
-    res.redirect(`${req.body.redirectURL}/?${qs}`)
-  },
-)
-
-/**
  * Registers the user and saves them as a unverified user
  * It then sends an email to that user to verify
  *
- * - Endpoint: `/auth/api/v2/register`
+ * - Endpoint: `/api/v2/auth/register`
  * - Verb: POST
  *
  * - OnFailure: Sends an error message
  * - OnSuccess: Sends the user back as JSON
  *
  * @typedef {function} AuthRouter-Register
+ * @param {object} req.body - Body Parser Body Object
+ * @param {object} req.body.protocol - HTTP(S)
+ * @param {object} req.body.host - URL
+ * @param {object} req.body.firstName - user first name
+ * @param {object} req.body.lastName - user last name
+ * @param {object} req.body.email - user email
+ * @param {object} req.body.password - user password
+ * @param {object} req.body.classification - user classification
  */
 router.post('/register', async (req, res) => {
+  const authCtrl = new AuthController()
+  const emailCtrl = new EmailController(req.protocol, req.headers.host)
+
   const user = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -159,21 +55,16 @@ router.post('/register', async (req, res) => {
   }
 
   try {
-    const ctrl = new Controller()
-    const request = new Request('v2', 'email')
-    const createdUser = await ctrl.register(user)
+    // Register the user
+    const createdUser = await authCtrl.register(user)
 
     // Sending the email token
-    await request.post('/confirm-email')
-      .body({
-        email: createdUser.email,
-        token: createdUser.confirmEmailToken,
-      })
-      .end()
+    await emailCtrl.sendConfirmationEmail(createdUser.email, createdUser.confirmEmailToken)
+
     res.status(201).json({ createdUser })
   } catch (err) {
     console.error(err)
-    res.status(404).json({ err: err.message })
+    res.status(500).json({ err: err.message })
   }
 })
 
@@ -181,21 +72,23 @@ router.post('/register', async (req, res) => {
  * JWT Login/Authentication
  * User must not have signed up using OAuth2
  *
- * - Endpoint: `/auth/api/v2/login`
+ * - Endpoint: `/api/v2/auth/login`
  * - Verb: POST
  *
  * - OnFailure: Sends an error message
  * - OnSuccess: Sends the JWT Token of the user
  *
  * @typedef {function} AuthRouter-Login
+ * @param {object} req.body - Body Parser Body Object
+ * @param {object} req.body.email - user email
+ * @param {object} req.body.password - user password
  */
 router.post('/login', async (req, res) => {
-  const ctrl = new Controller()
-  const { email } = req.body
-  const inputPassword = req.body.password
+  const ctrl = new AuthController()
+  const { email, password } = req.body
 
   try {
-    const { foundUser, token } = await ctrl.login(email, inputPassword)
+    const { foundUser, token } = await ctrl.login(email, password)
     res.status(200).json({ token: `JWT ${token}`, user: foundUser })
   } catch (err) {
     console.error(err)
@@ -206,50 +99,56 @@ router.post('/login', async (req, res) => {
 /**
  * Confirms the user has a valid email account
  *
- * - Endpoint: `/auth/api/v2/confirm/:token`
+ * - Endpoint: `/api/v2/auth/confirm/:token`
  * - Verb: GET
  *
  * - OnFailure: Redirects to error page
  * - OnSuccess: Redirects to the login page with querystring to signal a notification
  *
  * @typedef {function} AuthRouter-ConfirmToken
- * @param {querystring} token - HEX token saved in confirmEmailToken
+ * @param {object} req.body - Body Parser Body Object
+ * @param {string} req.body.redirectURLSuccess - Success URL
+ * @param {string} req.body.fallback - Fallback URL
+ * @param {object} req.params - Express Params Object
+ * @param {string} req.parmas.token - HEX token saved in confirmEmailToken
  */
 router.get('/confirm/:token', (req, res) => {
-  const ctrl = new Controller()
+  const ctrl = new AuthController()
   const { token } = req.params
-  const { redirectURL } = req.body
+  const { redirectURLSuccess, fallback } = req.body
   ctrl.confirmToken(token)
     .then(() => {
       const qs = querystring.stringify({ verify: 'success' })
-      res.redirect(302, `${redirectURL}/auth/?${qs}`)
+      res.redirect(302, `${redirectURLSuccess}/?${qs}`)
     })
     .catch(() => {
       const qs = querystring.stringify({ err: 'Error Validating Email' })
-      res.redirect(302, `${redirectURL}/?${qs}`)
+      res.redirect(302, `${fallback}/?${qs}`)
     })
 })
 
 /**
  * Verifies that the user is resetting the password of an account they own
  *
- * - Endpoint: `/auth/api/v2/forgot`
+ * - Endpoint: `/api/v2/auth/forgot`
  * - Verb: POST
  *
  * - OnFailure: Sends an internal server error message
  * - OnSuccess: Sends the user that the email was sent to
  *
  * @typedef {function} AuthRouter-ForgotLogin
+ * @param {object} req.body - Body Parser Body Object
  * @param {string} req.body.email - Email for the account that needs to change passwords
  */
 router.post('/forgot', async (req, res) => {
   try {
-    const ctrl = new Controller()
-    const request = new Request('v2', 'email')
-    const { email } = req.body
-    const payload = await ctrl.forgotLogin(email)
-    await request.get('/reset-password').end()
-    res.status(200).json({ recipient: payload.user })
+    const authCtrl = new AuthController()
+    const emailCtrl = new EmailController(req.protocol, req.headers.host)
+
+    const { user } = await authCtrl.forgotLogin(req.body.email)
+    await emailCtrl.sendResetEmail(user.email, user.resetPasswordToken)
+
+    res.status(200).json({ recipient: user })
   } catch (err) {
     res.status(err.code).json({ msg: err.message })
   }
@@ -259,21 +158,25 @@ router.post('/forgot', async (req, res) => {
  * This endpoint is hit by an email to reset a user password
  * This endpoint is hit first in the sequence
  *
- * - Endpoint: `/auth/api/v2/reset/:token`
+ * - Endpoint: `/api/v2/auth/reset/:token`
  * - Verb: GET
  *
  * - OnFailure: Redirects to the login screen with an error in query string
  * - OnSuccess: Redirects to the forgot-redirect page to change password
  *
  * @typedef {function} AuthRouter-ResetToken
- * @param {string} token - A string that contains the HEX code/Reset token of a lost account
+ * @param {object} req.body = Body Parser Body Object
+ * @param {string} req.body.redirectURLSuccess - Success URL
+ * @param {string} req.body.fallback - Fallback URL
+ * @param {object} req.params - Express Params Object
+ * @param {string} req.parmas.token - HEX token saved in confirmEmailToken
  */
 router.get('/reset/:token', async (req, res) => {
-  const ctrl = new Controller()
+  const ctrl = new AuthController()
   const { token } = req.params
   const { redirectURLSuccess, fallback } = req.body
   try {
-    const passToken = ctrl.resetToken(token)
+    const passToken = await ctrl.resetToken(token)
     const qs = querystring.stringify({ token: passToken })
     res.redirect(`${redirectURLSuccess}/?${qs}`)
   } catch (err) {
@@ -285,26 +188,34 @@ router.get('/reset/:token', async (req, res) => {
 /**
  * Client hits this endpoint with a token and a new password to update the account with
  *
- * - Endpoint: `/auth/api/v2/reset/:token`
+ * - Endpoint: `/api/v2/auth/reset/:token`
  * - Verb: POST
  *
  * - OnFailure: Sends a success status code
  * - OnSuccess: Sends a error status code
  *
  * @typedef {function} AuthRouter-VerifyUser
+ * @param {string} req.header.host - URL
+ * @param {string} req.protocol - HTTP(S)
+ * @param {object} req.body - Body Parser Body Object
+ * @param {object} req.params - Express Params Object
+ * @param {string} req.body.password - new password
+ * @param {string} req.params.token - token of the user that we need to change
  */
 router.post('/reset/:token', async (req, res) => {
   try {
-    const ctrl = new Controller()
-    const request = new Request('v2', 'email')
+    const authCtrl = new AuthController()
+    const emailCtrl = new EmailController(req.protocol, req.header.host)
     const { token } = req.params
     const { password } = req.body
 
-    const user = await ctrl.verifyUser(token, password)
-    await request.get('/change-password-notif').end()
+    const user = await authCtrl.verifyUser(token, password)
+
+    await emailCtrl.sendChangedPasswordEmail(user.email)
+
     res.status(200).json({ user })
   } catch (err) {
-    res.status(404).json({ user: null })
+    res.status(500).json({ user: null })
   }
 })
 

@@ -21,33 +21,43 @@ class EmailController {
     this.protocol = protocol
     this.host = host
     this.mailbox = functions.config().email.email_username
+  }
 
-    if (process.env.NODE_ENV !== 'prod') {
-      this.smtpTransporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
-        auth: {
-          user: functions.config().email.email_username,
-          pass: functions.config().email.email_password,
-        },
-        tls: {
+  _createTransport() {
+    return new Promise((resolve, reject) => {
+      if (!['prod', 'staging'].includes(functions.config().environment.env)) {
+        nodemailer.createTestAccount((err, account) => {
+          if (err) reject(err)
+          this.smtpTransporter = nodemailer.createTransport({
+            host: account.smtp.host,
+            port: account.smtp.port,
+            secure: account.smtp.secure,
+            auth: {
+              user: account.user,
+              pass: account.pass,
+            },
+            tls: {
+            // do not fail on invalid certs
+              rejectUnauthorized: false,
+            },
+          })
+          resolve()
+        })
+      } else {
+        this.smtpTransporter = nodemailer.createTransport({
+          service: 'Gmail',
+          auth: {
+            user: functions.config().email.email_username,
+            pass: functions.config().email.email_password,
+          },
+          tls: {
           // do not fail on invalid certs
-          rejectUnauthorized: false,
-        },
-      })
-    } else {
-      this.smtpTransporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-          user: functions.config().email.email_username,
-          pass: functions.config().email.email_password,
-        },
-        tls: {
-          // do not fail on invalid certs
-          rejectUnauthorized: false,
-        },
-      })
-    }
+            rejectUnauthorized: false,
+          },
+        })
+        resolve()
+      }
+    })
   }
 
   /**
@@ -55,29 +65,28 @@ class EmailController {
    *
    * @param {string} email user's email
    * @param {string} token HEX token/reset token
-   * @returns {Promise.<null, Error>}
    * @todo Make this look cleaner
    */
-  sendResetEmail(email, token) {
-    return new Promise((resolve, reject) => {
-      const mailOptions = {
-        to: email,
-        from: 'Texas Tech ACM',
-        subject: 'TTU ACM Password Reset',
-        html: `<p>You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n</p>\n\n<a>${
-          this.protocol
-        }://${
-          this.host
-        }/api/users/reset/${token}</a>\n\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\n`,
-      }
-      this.smtpTransporter.sendMail(mailOptions, (err) => {
-        if (err) {
-          console.error(err)
-          reject(err)
-        }
-        resolve()
-      })
-    })
+  async sendResetEmail(email, token) {
+    const mailOptions = {
+      to: email,
+      from: 'Texas Tech ACM',
+      subject: 'TTU ACM Password Reset',
+      html: `<p>You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n</p>\n\n<a>${
+        this.protocol
+      }://${
+        this.host
+      }/api/users/reset/${token}</a>\n\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\n`,
+    }
+
+    try {
+      await this._createTransport()
+      await this.smtpTransporter.sendMail(mailOptions)
+      return null
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 
   /**
@@ -86,24 +95,23 @@ class EmailController {
    * @param {string} email user's email
    * @returns {Promise.<null, Error>}
    */
-  sendChangedPasswordEmail(email) {
-    return new Promise((resolve, reject) => {
-      const mailOptions = {
-        to: email,
-        from: this.mailbox,
-        subject: 'Your password has been changed',
-        text:
-          'Hello,\n\n'
-          + 'This is a confirmation that the password for your account has been changed.\n',
-      }
-      this.smtpTransporter.sendMail(mailOptions, (err) => {
-        if (err) {
-          console.error(err)
-          reject(err)
-        }
-        resolve()
-      })
-    })
+  async sendChangedPasswordEmail(email) {
+    const mailOptions = {
+      to: email,
+      from: this.mailbox,
+      subject: 'Your password has been changed',
+      text:
+        'Hello,\n\n'
+        + 'This is a confirmation that the password for your account has been changed.\n',
+    }
+    try {
+      await this._createTransport()
+      await this.smtpTransporter.sendMail(mailOptions)
+      return null
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 
   /**
@@ -114,26 +122,25 @@ class EmailController {
    * @param {string} options.email student email
    * @param {string} options.topic student topic
    * @param {string} options.message student message
-   * @returns {Promise.<null, Error>}
    */
-  contactUs(options) {
-    return new Promise((resolve, reject) => {
-      const mailOptions = {
-        from: options.email,
-        to: this.mailbox,
-        subject: 'ACM Question',
-        text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
-          options.topic
-        }\n\nMessage: ${options.message}\n`,
-      }
-      this.smtpTransporter.sendMail(mailOptions, (err) => {
-        if (err) {
-          console.error(err)
-          reject(err)
-        }
-        resolve()
-      })
-    })
+  async contactUs(options) {
+    const mailOptions = {
+      from: options.email,
+      to: this.mailbox,
+      subject: 'ACM Question',
+      text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
+        options.topic
+      }\n\nMessage: ${options.message}\n`,
+    }
+
+    try {
+      await this._createTransport()
+      await this.smtpTransporter.sendMail(mailOptions)
+      return null
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 
   /**
@@ -144,26 +151,26 @@ class EmailController {
    * @param {string} token user's HEX token saved in the auth database
    * @returns {Promise.<null, Error>}
    */
-  sendConfirmationEmail(email, token) {
-    return new Promise((resolve, reject) => {
-      const mailOptions = {
-        to: email,
-        from: 'Texas Tech ACM',
-        subject: 'Welcome to ACM: TTU',
-        html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
-          this.protocol
-        }://${
-          this.host
-        }/api/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`,
-      }
-      this.smtpTransporter.sendMail(mailOptions, (err) => {
-        if (err) {
-          console.error(err)
-          reject(err)
-        }
-        resolve()
-      })
-    })
+  async sendConfirmationEmail(email, token) {
+    const mailOptions = {
+      to: email,
+      from: 'Texas Tech ACM',
+      subject: 'Welcome to ACM: TTU',
+      html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
+        this.protocol
+      }://${
+        this.host
+      }/api/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`,
+    }
+
+    try {
+      await this._createTransport()
+      await this.smtpTransporter.sendMail(mailOptions)
+      return null
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 }
 

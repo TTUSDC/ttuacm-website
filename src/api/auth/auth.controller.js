@@ -1,6 +1,3 @@
-const functions = require('firebase-functions')
-const jwt = require('jsonwebtoken')
-const querystring = require('querystring')
 const bcrypt = require('bcryptjs')
 const AuthModel = require('./auth.model')
 const ErrorMessages = require('./auth.errors')
@@ -37,6 +34,7 @@ class AuthController {
       // If the email is available, continue with the proccess
       try {
         const query = { email: user.email }
+        await this.DB.connect()
         const foundUser = await this.DB.getUserByAttribute(query)
         if (foundUser !== undefined) reject(ErrorMessages.DuplicateAccount())
         // Generates the salt used for hashing
@@ -72,6 +70,7 @@ class AuthController {
     return new Promise(async (resolve, reject) => {
       try {
         const query = { email }
+        await this.DB.connect()
         const foundUser = await this.DB.getUserByAttribute(query)
 
         if (!foundUser) {
@@ -114,6 +113,7 @@ class AuthController {
           resetPasswordExpires: Date.now() + 3 * 60 * 60 * 1000, // 3 Hours
         }
 
+        await this.DB.connect()
         const updatedUser = await this.DB.updateUserByAttribute(query, update)
         if (updatedUser === null) {
           reject(ErrorMessages.NotFoundErr())
@@ -143,6 +143,7 @@ class AuthController {
           resetPasswordExpires: { $gt: Date.now() },
         }
 
+        await this.DB.connect()
         const user = await this.DB.getUserByAttribute(query)
 
         // User was not found or the token was expired, either way...
@@ -187,6 +188,7 @@ class AuthController {
             resetPasswordToken: undefined,
             resetPasswordExpires: undefined,
           }
+          await this.DB.connect()
           const updatedUser = await this.DB.updateUserByAttribute(query, update)
           if (!updatedUser) reject(ErrorMessages.NotFoundErr())
           resolve(updatedUser)
@@ -215,6 +217,7 @@ class AuthController {
       }
 
       try {
+        await this.DB.connect()
         const user = await this.DB.updateUserByAttribute(query, update)
         if (!user) reject(ErrorMessages.NotFoundErr())
         resolve(user)
@@ -223,24 +226,6 @@ class AuthController {
         reject(ErrorMessages.NotFoundErr())
       }
     })
-  }
-
-  /**
-   * Redirects user to homepage after logging in with OAuth2
-   *
-   * @param {object} user - user object
-   * @returns {string} a query string to add to a redirect
-   */
-  static oauth2(user) {
-    const token = jwt.sign({ data: user }, functions.config.auth().session_secret, {
-      expiresIn: 604800, // 1 week
-    })
-
-    const qs = querystring.stringify({
-      token: `JWT ${token}`,
-    })
-
-    return qs
   }
 }
 

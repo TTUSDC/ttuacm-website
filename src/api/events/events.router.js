@@ -7,8 +7,8 @@ const router = express.Router()
 /**
  * Testing route for the Events Service
  *
- * - Endpoint: `/events/api/v2/test`
- * - GET
+ * - Endpoint: `/api/v2/events/test`
+ * - Verb: GET
  *
  * @typedef {function} EventsRouter
  */
@@ -19,19 +19,19 @@ router.get('/test', (req, res) => {
 /**
  * Gets all the events (formatted) in ACM Google Calendar using an OAuth2 Object
  *
- * - Endpoint: `/events/api/v2/`
+ * - Endpoint: `/api/v2/events`
  * - Verb: GET
  *
  * @typedef {function} EventsRouter-listEvents
  */
 router.get('/', async (req, res) => {
-  Controller.getAllEvents((err, events) => {
-    if (err) {
-      res.status(500).json({ err })
-    } else {
-      res.status(200).json({ events })
-    }
-  })
+  try {
+    const ctrl = new Controller()
+    const allEvents = await ctrl.getAllEvents()
+    res.status(200).json({ allEvents })
+  } catch (err) {
+    res.status(500).json({ err })
+  }
 })
 
 module.exports = router

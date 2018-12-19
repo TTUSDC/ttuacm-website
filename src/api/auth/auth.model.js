@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const functions = require('firebase-functions')
 const ErrorMessages = require('./auth.errors')
 
 const studentSchema = mongoose.Schema({
@@ -75,6 +76,7 @@ function filterUser(user) {
   return filteredUser
 }
 
+const CONNECTION_STRING = functions.config().connections.db
 /**
  * Model that manages the students collection
  */
@@ -84,6 +86,22 @@ class AuthModel {
    */
   constructor() {
     this.DB = mongoose.model('Students', studentSchema)
+    this.connected = false
+  }
+
+  /**
+   * Connects to the Database
+   */
+  connect() {
+    return new Promise((resolve, reject) => {
+      mongoose.connect(CONNECTION_STRING, {
+        useNewUrlParser: true,
+      }, (err) => {
+        if (err) reject(err)
+        this.connected = true
+        resolve()
+      })
+    })
   }
 
   /**
@@ -93,6 +111,7 @@ class AuthModel {
    * @param {string} finalAttr - value of target attribute after changes
    */
   async updateUserByEmail(email, targetAttr, finalAttr) {
+    if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       const foundUser = await this.DB.findOne({ email }).exec()
       foundUser[targetAttr] = finalAttr
@@ -109,6 +128,7 @@ class AuthModel {
    * @param {object} user - user object
    */
   async createNewUser(user) {
+    if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       const newUser = new this.DB(user)
       const createdUser = await newUser.save()
@@ -124,6 +144,7 @@ class AuthModel {
    * @param {string} id The Mongo Id we are going to find
    */
   async getUserById(id) {
+    if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       const user = await this.DB.findById(id).exec()
       if (user !== null) return filterUser(user)
@@ -139,6 +160,7 @@ class AuthModel {
    * @param {object} query - A query to the database
    */
   async getUserByAttribute(query) {
+    if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       const user = await this.DB.findOne(query).exec()
       let filteredUser
@@ -159,6 +181,7 @@ class AuthModel {
    * @param {object} update - the attribute(s) to update
    */
   async updateUserByAttribute(query, update) {
+    if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       const user = this.DB.findOneAndUpdate(query, update, { new: true }).exec()
       let filteredUser
@@ -177,6 +200,7 @@ class AuthModel {
    * @param {string} userEmail - the account's email to delete
    */
   async deleteUserByEmail(userEmail) {
+    if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       await this.DB.deleteOne({ email: userEmail }).exec()
       return null
@@ -190,6 +214,7 @@ class AuthModel {
    * Gives a list of all the users in the database as an object
    */
   async findAllUsers() {
+    if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       const users = await this.DB.find()
       if (users !== null) {
@@ -221,6 +246,7 @@ class AuthModel {
    * @param {string} authProvider OAuth2Provider [Google, GitHub, Facebook]
    */
   async mergeAccounts(profile, data, authProvider) {
+    if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       const existingUser = this.DB.findOne({ email: profile.email }).exec()
       let newUser
@@ -240,3 +266,4 @@ class AuthModel {
 }
 
 module.exports = AuthModel
+module.exports.studentSchema = studentSchema

@@ -19,8 +19,13 @@ jobs:
     - yarn test:unit --ci --forceExit
     - yarn test:client
   - stage: deploy
+    if: branch =~ /(master|next)/
     install:
     - yarn
+    cache:
+      yarn: true
+      directories:
+      - node_modules
     before_install:
     - openssl aes-256-cbc -K $encrypted_2f6d61fcabf9_key -iv $encrypted_2f6d61fcabf9_iv
       -in secrets.tar.enc -out secrets.tar -d
@@ -51,5 +56,15 @@ jobs:
       message: Deployed to staging
       on:
         branch: next
+  - stage: acceptance
+    if: branch = next
+    cache:
+      yarn: true
+      directories:
+      - node_modules
+    install:
+    - yarn
+    script:
+    - yarn test:integration --ci --forceExit
 notifications:
   email: false

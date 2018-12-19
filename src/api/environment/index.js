@@ -7,8 +7,12 @@ const PROTECTED_ENDPOINTS = [
   'https://acm-texas-tech-web-app-2.firebaseapp.com',
 ]
 
-const app = express()
-app.use(cors({ origin: true }))
+const router = express.Router()
+router.use(cors({ origin: true }))
+
+router.get('/test', (req, res) => {
+  res.send('Environment Provider Works!')
+})
 
 /**
  * A Protected route to serve environment variables
@@ -17,12 +21,12 @@ app.use(cors({ origin: true }))
  * we have to check whether or not the host is either the
  * production or staging host. Otherwise, send over the environment
  *
- * - Endpoint: `/environment/get-environment`
+ * - Endpoint: `/api/v2/environment`
  * - Verb: GET
  *
  * @typedef {function} EnvironmentProvider
  */
-app.get('/get-environment', (req, res) => {
+router.get('/', (req, res) => {
   const { environment } = functions.config()
   if (['prod', 'staging'].includes(environment.env)) {
     if (PROTECTED_ENDPOINTS.includes(req.headers.origin)) {
@@ -36,4 +40,4 @@ app.get('/get-environment', (req, res) => {
   }
 })
 
-module.exports = app
+module.exports = router
