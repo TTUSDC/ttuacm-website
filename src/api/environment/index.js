@@ -32,7 +32,7 @@ router.get('/', (req, res) => {
     if (PROTECTED_ENDPOINTS.includes(req.headers.origin)) {
       res.json(environment)
     } else {
-      console.error(`${req.headers.origin} does not match https://acm-texas-tech-web-router-2.firebaseapp.com`)
+      console.error(`${req.headers.origin} does not match https://acm-texas-tech-web-app-2.firebaseapp.com`)
       res.status(401).end()
     }
   } else {
