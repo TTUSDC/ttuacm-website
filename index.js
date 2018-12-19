@@ -2,7 +2,7 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const express = require('express')
 const bp = require('body-parser')
-const cors = require('cors')
+const cors = require('cors')({ origin: true })
 const passport = require('passport')
 const passportConfig = require('./src/api/auth/config/passport')
 
@@ -15,7 +15,7 @@ const eventsApp = require('./src/api/events/events.router')
 const environmentService = require('./src/api/environment/index')
 
 const api = express()
-api.use(cors({ origin: true }))
+api.use(cors)
 api.use(bp.json())
 api.use(bp.urlencoded({ extended: false }))
 
