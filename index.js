@@ -15,14 +15,13 @@ const eventsApp = require('./src/api/events/events.router')
 const environmentService = require('./src/api/environment/index')
 
 const api = express()
+api.use(cors({ origin: true }))
 api.use(bp.json())
 api.use(bp.urlencoded({ extended: false }))
-api.use(cors({ origin: true }))
 
 api.use(passport.initialize())
 api.use(passport.session())
 passportConfig(passport)
-api.use(cors({ origin: true }))
 
 api.use('/v2/auth', authApp)
 api.use('/v2/teams', teamsApp)
