@@ -1,0 +1,60 @@
+import React, { useState, useContext } from 'react'
+import LoginForm from 'components/LoginForm.jsx'
+import { ConnectionString } from 'context/ConnectionStringContext'
+import * as axios from 'axios'
+
+import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
+
+function LoginContainer({ navigateTo, switchForm }) {
+  const initState = {
+    email: '',
+    password: '',
+    loginError: null,
+  }
+
+  const [loginFormValues, setLoginFormValues] = useState(initState)
+  const connectionString = useContext(ConnectionString)
+
+  const handleChangeValues = (newValue, valueToChange) => {
+    const currentValues = { ...loginFormValues }
+    currentValues[valueToChange] = newValue
+    currentValues.loginError = null
+    setLoginFormValues(currentValues)
+  }
+
+  const handleSubmit = () => {
+    axios.post(`${connectionString}/auth/login`, { data: loginFormValues })
+      .then(({ data }) => {
+        localStorage.setItem('token', data.token)
+        navigateTo('/events')
+      })
+      .catch((loginError) => {
+        console.error(loginError)
+        setLoginFormValues({
+          ...loginFormValues,
+          password: '',
+          loginError,
+        })
+      })
+  }
+
+  return (
+    <LoginForm
+      handleChangeValues={handleChangeValues}
+      handleSubmit={handleSubmit}
+      switchForm={switchForm}
+      {...loginFormValues}
+    />
+  )
+}
+
+const mapStateToProps = () => ({})
+
+const mapDispatchToProps = dispatch => ({
+  navigateTo: (location) => {
+    dispatch(push(location))
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)
