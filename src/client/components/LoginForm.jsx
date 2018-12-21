@@ -1,58 +1,80 @@
 import React from 'react'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import PropTypes from 'prop-types'
 
-export default function LoginForm({
+const LoginForm = ({
   handleChangeValues,
   handleSubmit,
   switchForm,
-  email,
-  password,
-  loginError,
-}) {
-  const handleSubmitButtonClick = (e) => {
-    e.preventDefault()
-    handleSubmit()
-  }
-
-  const handleNewFormValue = target => e => handleChangeValues(e.target.value, target)
-
-  return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmitButtonClick}>
-        <TextField
-          cypress='email'
-          label='Email'
-          value={email}
-          onChange={handleNewFormValue('email')}
-          error={Boolean(loginError)}
-        />
-        <TextField
-          cypress='password'
-          label='Password'
-          value={password}
-          onChange={handleNewFormValue('password')}
-          error={Boolean(loginError)}
-          helperText={loginError ? 'Incorrect username/password combination' : ''}
-        />
-        <Button cypress='login-submit-button' type='submit' variant='contained' color='primary'>
-          Login
-        </Button>
-        <Button onClick={() => switchForm('registration')} cypress='switch-to-registration' color='primary'>
+  email = '',
+  password = '',
+  passwordError = null,
+  loginError = null,
+  loading = false,
+}) => (
+  <div>
+    <h1>Login</h1>
+    <form
+      data-testid='login-form'
+      onSubmit={(e) => {
+        e.preventDefault()
+        handleSubmit()
+      }}
+    >
+      <TextField
+        label='Email'
+        inputProps={{
+          'data-testid': 'Email',
+        }}
+        value={email}
+        onChange={e => handleChangeValues(e.target.value, 'email')}
+        error={Boolean(loginError)}
+      />
+      <TextField
+        type='password'
+        inputProps={{
+          'data-testid': 'Password',
+        }}
+        label='Password'
+        value={password}
+        onChange={e => handleChangeValues(e.target.value, 'password')}
+        error={Boolean(passwordError)}
+        helperText={passwordError ? 'Incorrect username/password combination' : ''}
+      />
+      <Button
+        data-testid='login-submit-button'
+        type='submit'
+        variant='contained'
+        color='primary'
+      >
+        {
+          loading
+            ? <CircularProgress color='secondary' data-testid='login-loading-spinner' />
+            : 'Login'
+        }
+      </Button>
+      <Button
+        onClick={() => switchForm('registration')}
+        data-testid='switch-to-registration'
+        color='primary'
+      >
           Create a new account
-        </Button>
-      </form>
-    </div>
-  )
-}
+      </Button>
+    </form>
+  </div>
+)
 
 LoginForm.propTypes = {
   handleChangeValues: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   switchForm: PropTypes.func.isRequired,
-  email: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
+  email: PropTypes.string,
+  password: PropTypes.string,
+  passwordError: PropTypes.shape({}),
   loginError: PropTypes.shape({}),
+  loading: PropTypes.bool,
 }
+
+export default LoginForm

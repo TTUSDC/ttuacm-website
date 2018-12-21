@@ -9,12 +9,14 @@ import { push } from 'react-router-redux'
 function RegistrationContainer({ navigateTo, switchForm }) {
   const initState = {
     email: '',
+    emailError: null,
     password: '',
     passwordError: null,
     confirmPassword: '',
     confirmPasswordError: null,
     graduationDate: '',
     registrationError: null,
+    loading: false,
   }
 
   const [registrationFormValues, setRegistrationFormValues] = useState(initState)
@@ -28,6 +30,10 @@ function RegistrationContainer({ navigateTo, switchForm }) {
   }
 
   const handleSubmit = () => {
+    setRegistrationFormValues({
+      ...registrationFormValues,
+      loading: true,
+    })
     axios.post(`${connectionString}/auth/register`, { data: registrationFormValues })
       .then(({ data }) => {
         localStorage.setItem('token', data.token)
@@ -42,14 +48,86 @@ function RegistrationContainer({ navigateTo, switchForm }) {
           passwordError: null,
           confirmPasswordError: null,
           registrationError,
+          loading: false,
         })
       })
+  }
+
+  const checkForErrors = () => {
+    const currentErrors = {
+      emailError: registrationFormValues.emailError,
+      passwordError: registrationFormValues.passwordError,
+      confirmPasswordError: registrationFormValues.confirmPasswordError,
+    }
+
+    const { email, password, confirmPassword } = registrationFormValues
+
+
+    // Email Error handling
+    let emailErrorMsg = ''
+    if(email === '') {
+      emailErrorMsg = '';
+    } else if(/@ttu.edu$/.test(email) !== true) {
+      emailErrorMsg = 'Please use a TTU email address.';
+    }
+
+    currentErrors.emailError = emailErrorMsg !== ''
+      ? new Error(emailErrorMsg)
+      : null
+
+    // Password Error handling
+    let passwordErrorMsg = ''
+    if (password === '') {
+      passwordErrorMsg = ''
+    } else if (/^[\x00-\x7F]+$/.test(password) !== true) {
+      // ASCII only
+      passwordErrorMsg = 'Please use only ASCII characters.';
+    } else if(password.length < 8) {
+      // 8 characters long
+      passwordErrorMsg = 'Please use at least 8 characters.';
+    } else if(/[A-Z]/.test(password) !== true) {
+      // 1 uppercase
+      passwordErrorMsg = 'Please use at least one uppercase letter.';
+    } else if(/[a-z]/.test(password) !== true) {
+      // 1 lowercase
+      passwordErrorMsg = 'Please use at least one lowercase letter.';
+    } else if(/[0-9]/.test(password) !== true) {
+      // 1 number
+      passwordErrorMsg = 'Please use at least one number.';
+    } else if(/[^A-Za-z0-9]/.test(password) !== true) {
+      // 1 special character
+      passwordErrorMsg = 'Please use at least one special character.';
+    }
+
+    currentErrors.passwordError = passwordErrorMsg !== ''
+      ? new Error(passwordErrorMsg)
+      : null
+
+    let confirmPasswordErrorMsg = '';
+
+    if (confirmPassword === '') {
+      confirmPasswordErrorMsg = ''
+    } else if (password === '' || confirmPassword === '') {
+      confirmPasswordErrorMsg = '';
+    } else if(password !== confirmPassword) {
+      confirmPasswordErrorMsg = 'Please enter a matching password.';
+    }
+
+    currentErrors.confirmPasswordError = confirmPasswordErrorMsg !== ''
+      ? new Error(confirmPasswordErrorMsg)
+      : null
+
+    setRegistrationFormValues({
+      ...registrationFormValues,
+      ...currentErrors,
+    })
   }
 
   return (
     <RegistrationForm
       handleChangeValues={handleChangeValues}
       handleSubmit={handleSubmit}
+      checkForErrors={checkForErrors}
       switchForm={switchForm}
       {...registrationFormValues}
     />

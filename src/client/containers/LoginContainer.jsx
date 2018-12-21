@@ -6,11 +6,13 @@ import * as axios from 'axios'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-function LoginContainer({ navigateTo, switchForm }) {
+export function LoginContainer({ navigateTo, switchForm }) {
   const initState = {
     email: '',
     password: '',
+    passwordError: null,
     loginError: null,
+    loading: false,
   }
 
   const [loginFormValues, setLoginFormValues] = useState(initState)
@@ -24,9 +26,18 @@ function LoginContainer({ navigateTo, switchForm }) {
   }
 
   const handleSubmit = () => {
+    setLoginFormValues({
+      ...loginFormValues,
+      loading: true,
+    })
+
     axios.post(`${connectionString}/auth/login`, { data: loginFormValues })
       .then(({ data }) => {
         localStorage.setItem('token', data.token)
+        setLoginFormValues({
+          ...loginFormValues,
+          loading: false,
+        })
         navigateTo('/events')
       })
       .catch((loginError) => {
@@ -35,6 +46,7 @@ function LoginContainer({ navigateTo, switchForm }) {
           ...loginFormValues,
           password: '',
           loginError,
+          loading: false,
         })
       })
   }
