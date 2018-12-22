@@ -27,9 +27,12 @@ router.get('/test', (req, res) => {
  * @typedef {function} EnvironmentProvider
  */
 router.get('/', (req, res) => {
-  const { environment } = functions.config()
+  const { environment, auth, connections } = functions.config()
   if (['prod', 'staging'].includes(environment.env)) {
     if (PROTECTED_ENDPOINTS.includes(req.headers.origin)) {
+      environment.session_secret = auth.session_secret
+      environment.protocol = connections.protocol
+      environment.host = connections.host
       res.json(environment)
     } else {
       console.error(`${req.headers.origin} does not match https://acm-texas-tech-web-app-2.firebaseapp.com`)
