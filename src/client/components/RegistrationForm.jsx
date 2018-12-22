@@ -4,6 +4,20 @@ import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import PropTypes from 'prop-types'
 
+export function hasErrors({
+  email, emailError, password, passwordError, confirmPassword, confirmPasswordError, graduationDate,
+}) {
+  return (
+    email === ''
+    || password === ''
+    || confirmPassword === ''
+    || graduationDate === ''
+    || emailError !== null
+    || passwordError !== null
+    || confirmPasswordError !== null
+  )
+}
+
 /**
  * Presentation Component for the Registration Form
  *
@@ -83,6 +97,11 @@ const RegistrationForm = ({
       <Button
         data-testid='registration-submit-button'
         type='submit'
+        disabled={
+          hasErrors({
+            email, password, confirmPassword, graduationDate, emailError, passwordError, confirmPasswordError,
+          } || loading)
+        }
         variant='contained'
         color='primary'
       >
