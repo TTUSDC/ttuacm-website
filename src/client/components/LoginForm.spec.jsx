@@ -38,7 +38,7 @@ describe('LoginForm', () => {
     expect(handleChangeValuesSpy.getCall(1).args[1]).to.equal('password')
   })
 
-  test('should be able to submit on button press', () => {
+  test('should be not able to submit on button press when form is empty', () => {
     const defaultProps = {
       handleChangeValues: handleChangeValuesSpy,
       handleSubmit: handleSubmitSpy,
@@ -51,7 +51,7 @@ describe('LoginForm', () => {
 
     fireEvent.click(button)
 
-    expect(handleSubmitSpy.calledOnce).to.equal(true)
+    expect(handleSubmitSpy.calledOnce).to.equal(false)
   })
 
   test('should be able to call switch function on button press', () => {

@@ -4,6 +4,12 @@ import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import PropTypes from 'prop-types'
 
+export function hasError({
+  email = '', password = '', loginError = null, passwordError = null,
+}) {
+  return (email === '' || password === '' || loginError !== null || passwordError !== null)
+}
+
 const LoginForm = ({
   handleChangeValues,
   handleSubmit,
@@ -45,6 +51,9 @@ const LoginForm = ({
       />
       <Button
         data-testid='login-submit-button'
+        disabled={hasError({
+          email, password, loginError, passwordError,
+        }) || loading}
         type='submit'
         variant='contained'
         color='primary'
