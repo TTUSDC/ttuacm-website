@@ -35,61 +35,61 @@ export const EventField = [
 
 
 export const EventsResponse = {
-  "TODAY": [
+  TODAY: [
     {
-      "month": 'July',
-      "day": '28',
-      "weekday": 'Saturday',
-      "name": 'GitHub Workshop',
-      "timeloc": '5:00pm - 6:00pm @ IMSE 117',
-      "content": `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut`,
+      month: 'July',
+      day: '28',
+      weekday: 'Saturday',
+      name: 'GitHub Workshop',
+      timeloc: '5:00pm - 6:00pm @ IMSE 117',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
     },
     {
-      "month": 'July',
-      "day": '28',
-      "weekday": 'Saturday',
-      "name": 'GitHub Workshop',
-      "timeloc": '5:00pm - 6:00pm @ IMSE 117',
-      "content": `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut`,
-    }
-  ],
-  "TOMORROW": [
-    {
-      "month": 'July',
-      "day": '28',
-      "weekday": 'Saturday',
-      "name": 'GitHub Workshop',
-      "timeloc": '5:00pm - 6:00pm @ IMSE 117',
-      "content": `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut`,
-    },
-    {
-      "month": 'July',
-      "day": '28',
-      "weekday": 'Saturday',
-      "name": 'GitHub Workshop',
-      "timeloc": '5:00pm - 6:00pm @ IMSE 117',
-      "content": `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut`,
-    }
-  ],
-  "THIS WEEK": [
-    {
-      "month": 'July',
-      "day": '28',
-      "weekday": 'Saturday',
-      "name": 'GitHub Workshop',
-      "timeloc": '5:00pm - 6:00pm @ IMSE 117',
-      "content": `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut`,
-    },
-    {
-      "month": 'July',
-      "day": '28',
-      "weekday": 'Saturday',
-      "name": 'GitHub Workshop',
-      "timeloc": '5:00pm - 6:00pm @ IMSE 117',
-      "content": `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut`,
+      month: 'July',
+      day: '28',
+      weekday: 'Saturday',
+      name: 'GitHub Workshop',
+      timeloc: '5:00pm - 6:00pm @ IMSE 117',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
     },
   ],
-  "THIS MONTH": []
+  TOMORROW: [
+    {
+      month: 'July',
+      day: '28',
+      weekday: 'Saturday',
+      name: 'GitHub Workshop',
+      timeloc: '5:00pm - 6:00pm @ IMSE 117',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
+    },
+    {
+      month: 'July',
+      day: '28',
+      weekday: 'Saturday',
+      name: 'GitHub Workshop',
+      timeloc: '5:00pm - 6:00pm @ IMSE 117',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
+    },
+  ],
+  'THIS WEEK': [
+    {
+      month: 'July',
+      day: '28',
+      weekday: 'Saturday',
+      name: 'GitHub Workshop',
+      timeloc: '5:00pm - 6:00pm @ IMSE 117',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
+    },
+    {
+      month: 'July',
+      day: '28',
+      weekday: 'Saturday',
+      name: 'GitHub Workshop',
+      timeloc: '5:00pm - 6:00pm @ IMSE 117',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
+    },
+  ],
+  'THIS MONTH': [],
 }
 
 // {
@@ -98,5 +98,6 @@ export const EventsResponse = {
 //     weekday: 'Saturday',
 //     name: 'GitHub Workshop',
 //     timeloc: '5:00pm - 6:00pm @ IMSE 117',
-//     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
+//     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+//      sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
 // }
