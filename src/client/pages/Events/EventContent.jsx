@@ -41,7 +41,7 @@ const EventContent = ({
 )
 
 EventContent.propTypes = {
-  name: PropTypes.string,
+   name: PropTypes.string.isRequired,
   timeloc: PropTypes.string,
   content: PropTypes.string,
   classes: PropTypes.shape({}),
