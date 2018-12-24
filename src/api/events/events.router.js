@@ -23,6 +23,18 @@ router.get('/test', (req, res) => {
  * - Verb: GET
  *
  * @typedef {function} EventsRouter-listEvents
+ *
+ * Data that is passed back as JSON:
+ * @example
+ * {
+ *    day: `Tuesday`,
+ *    startTime: `2018-12-24T16:10:22.200Z`,
+ *    endTime: `2018-12-24T16:10:22.200Z`,
+ *    title: `Workshop`,
+ *    location: `Texas Tech`,
+ *    description: `A Really Awesome Workshop`,
+ *    recurringEvent: false,
+ * }
  */
 router.get('/', async (req, res) => {
   try {

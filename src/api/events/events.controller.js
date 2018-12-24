@@ -17,7 +17,7 @@ class EventsController {
   }
 
   /**
-   * Lists the next 10 events on the user's primary calendar.
+   * Lists all of the events form google calendar
    * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
    */
   getAllEvents() {
