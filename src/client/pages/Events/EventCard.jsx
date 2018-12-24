@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import EventDate from './EventDate.jsx';
-import EventContent from './EventContent.jsx';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import EventDate from './EventDate.jsx'
+import EventContent from './EventContent.jsx'
 
-const styles = {
+const styles = theme => ({
   EventsCard: {
     color: 'white',
     display: 'flex',
@@ -17,7 +17,7 @@ const styles = {
     backgroundColor: '#253F51',
     margin: '0 auto 2em',
   },
-};
+})
 
 const EventCard = ({
   month, day, weekday, name, timeloc, content, classes,
@@ -37,6 +37,6 @@ EventCard.propTypes = {
   timeloc: PropTypes.string,
   content: PropTypes.string,
   classes: PropTypes.shape({}),
-};
+}
 
 export default withStyles(styles)(EventCard);

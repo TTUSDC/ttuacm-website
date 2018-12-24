@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
 const styles = {
   date: {
@@ -23,7 +23,7 @@ const styles = {
     fontSize: '8rem',
     fontWeight: 'bold',
   },
-};
+}
 
 const EventDate = ({
   month, day, weekday, classes,
@@ -42,4 +42,4 @@ EventDate.propTypes = {
   classes: PropTypes.shape({}),
 };
 
-export default withStyles(styles, { withTheme: true })(EventDate);
+export default withStyles(styles, { withTheme: true })(EventDate)

@@ -1,11 +1,8 @@
-import React from 'react';
-
+import React from 'react'
 import PropTypes from 'prop-types'
-
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-
- import EventsView from 'pages/Events/EventsView'
+import EventsView from 'pages/Events/EventsView'
 
 /*
 *
@@ -15,12 +12,12 @@ import { withStyles } from '@material-ui/core/styles'
 import { EventsResponse, EventField, ProvidedTimes } from './EventsFakeAPI'
 
 function getEventsAsArray(givenTime) {
-  const eventsAsArray = [];
-  const eventsForGivenTime = EventsResponse[givenTime];
+  const eventsAsArray = []
+  const eventsForGivenTime = EventsResponse[givenTime]
 
   if (EventsResponse[givenTime]) {
     for (let eventIdx = 0; eventIdx < eventsForGivenTime.length; eventIdx += 1) {
-      const event = eventsForGivenTime[eventIdx];
+      const event = eventsForGivenTime[eventIdx]
       const eventArr = []
 
       for (const field of EventField) {
@@ -30,21 +27,17 @@ function getEventsAsArray(givenTime) {
       eventsAsArray.push(eventArr)
     }
   }
-  return eventsAsArray;
+  return eventsAsArray
 }
 
 function renderEventsViews(givenTime) {
-  // const allEvents = ProvidedTimes.map((time) => {
-
-  // });
-  // console.log(allEvents);
-  const anEvent = getEventsAsArray(givenTime);
+  const anEvent = getEventsAsArray(givenTime)
   return (
     <EventsView
       time={givenTime}
       events={anEvent}
     />
-  );
+  )
 }
 
 /*
@@ -61,7 +54,7 @@ const styles = {
     flexDirection: 'column',
     color: 'white',
   },
-};
+}
 
 
 const EventsContainer = ({ classes = {} }) => (
@@ -72,7 +65,6 @@ const EventsContainer = ({ classes = {} }) => (
     alignItems='center'
     className={classes.EventsContainer}
   >
-    {/* <p>Inside the EventsContainer</p> */}
     {renderEventsViews(ProvidedTimes[0])}
     {renderEventsViews(ProvidedTimes[1])}
     {renderEventsViews(ProvidedTimes[2])}
@@ -82,6 +74,6 @@ const EventsContainer = ({ classes = {} }) => (
 
 EventsContainer.propTypes = {
   classes: PropTypes.shape({}),
-};
+}
 
-export default withStyles(styles)(EventsContainer);
+export default withStyles(styles)(EventsContainer)

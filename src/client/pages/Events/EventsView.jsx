@@ -1,14 +1,13 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { Typography } from '@material-ui/core';
+import React from 'react'
+import Grid from '@material-ui/core/Grid'
+import { withStyles } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { Typography } from '@material-ui/core'
 
 import EventCard from './EventCard.jsx'
 
 function renderEvents(events) {
   if (events.length === 0 || !events) {
-    console.log('EMPTY BOOOHOOO');
     return (
       <EventCard
         month=''
@@ -18,10 +17,10 @@ function renderEvents(events) {
         timeloc=''
         content='Please check back later'
       />
-    );
+    )
   }
 
-  const eventsCards = events.map((event, idx) => {
+  const eventsCards = events.map((event) => {
     const month = event[0]
     const day = event[1]
     const weekday = event[2]
@@ -30,8 +29,7 @@ function renderEvents(events) {
     const content = event[5]
     return (
       <EventCard
-        key={idx} // Add to do it because no stable index's available.
-        month={month} 
+        month={month}
         day={day}
         weekday={weekday}
         name={name}
@@ -39,9 +37,8 @@ function renderEvents(events) {
         content={content}
       />
     )
-  });
-  console.log(eventsCards);
-  return eventsCards;
+  })
+  return eventsCards
 }
 
 
@@ -80,4 +77,4 @@ EventsView.propTypes = {
   events: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
 }
 
-export default withStyles(styles)(EventsView);
+export default withStyles(styles)(EventsView)

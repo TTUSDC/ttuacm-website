@@ -24,14 +24,14 @@ export const ProvidedTimes = [
   'THIS MONTH',
 ]
 
-export const EventField = [
-  'month',
-  'day',
-  'weekday',
-  'name',
-  'timeloc',
-  'content',
-]
+export const EventField = {
+  MONTH: 'month',
+  DAY: 'day',
+  WEEKDAY: 'weekday',
+  NAME: 'name',
+  TIMELOC: 'timeloc',
+  CONTENT: 'content',
+}
 
 
 export const EventsResponse = {
@@ -91,13 +91,3 @@ export const EventsResponse = {
   ],
   'THIS MONTH': [],
 }
-
-// {
-//     month: 'July',
-//     day: '28',
-//     weekday: 'Saturday',
-//     name: 'GitHub Workshop',
-//     timeloc: '5:00pm - 6:00pm @ IMSE 117',
-//     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-//      sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
-// }
