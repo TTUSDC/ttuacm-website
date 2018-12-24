@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-import PageInfo from '../../components/PageInfo'
+ import PageInfo from 'components/PageInfo'
 import EventsContainer from '../../containers/EventsContainer'
 
 import { EventsPageInfo } from '../../containers/EventsFakeAPI'
