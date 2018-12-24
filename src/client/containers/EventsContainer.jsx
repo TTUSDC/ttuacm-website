@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 
-import EventsView from '../pages/Events/EventsView'
+ import EventsView from 'pages/Events/EventsView'
 
 /*
 *
