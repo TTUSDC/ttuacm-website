@@ -1,8 +1,8 @@
 {
-  "name": "ttuacm-backend",
+  "name": "ttuacm-website",
   "version": "2.0.0",
   "license": "MIT",
-  "description": "ACM TTU Backend",
+  "description": "ACM TTU Website",
   "scripts": {
     "serve:api": "nodemon --exec firebase serve --only functions",
     "serve:client": "cross-env NODE_PATH=src/client react-app-rewired start",
