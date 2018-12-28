@@ -1,3 +1,4 @@
+import { expect } from 'chai'
 /* eslint-disable */
 const EventsResponse = {
   TODAY: [
@@ -56,3 +57,9 @@ const EventsResponse = {
   ],
   'THIS MONTH': [],
 }
+
+describe('Event Card Component', () => {
+  test('it should run', () => {
+    expect(true).to.equal(true)
+  })
+})
