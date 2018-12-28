@@ -3,12 +3,15 @@ import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import EventsList from 'pages/Events/EventsList'
 
-const EventsSection = ({ classes = {}, time, events }) => {
+const EventsSection = ({
+  classes = {}, time, events, loading,
+}) => {
   // TODO(@miggy) Apply the event filters based on the time that was given
-  console.log()
+  console.log(loading)
   return (
     <Grid
       container
@@ -25,7 +28,11 @@ const EventsSection = ({ classes = {}, time, events }) => {
       </div>
       <div className={classes.Events}>
         {/* List of Events that fall under the given time */}
-        <EventsList events={events} />
+        {
+          loading
+            ? <CircularProgress />
+            : <EventsList events={events} />
+        }
       </div>
     </Grid>
   )
@@ -52,6 +59,8 @@ EventsSection.propTypes = {
   classes: PropTypes.shape({}),
   // The different sections on the Events Page
   time: PropTypes.string,
+  // Whether or not the events are still being fetched
+  loading: PropTypes.bool,
   // The events associated with that time
   events: PropTypes.arrayOf(PropTypes.shape({})),
 }
