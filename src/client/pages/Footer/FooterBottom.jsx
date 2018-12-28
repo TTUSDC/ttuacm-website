@@ -27,11 +27,11 @@ const style = {
 
 const FooterBottom = ({ classes = {} }) => (
   <div className={classes.root}>
-    <Grid container spacing={12}>
+    <Grid container spacing={16}>
       <Grid className={classes.copyright} item xs={10}>
         <Copyright />
       </Grid>
-      <Grid className={classes.links} item xs={2}>
+      <Grid className={classes.links} item xs='auto'>
         <Links />
       </Grid>
     </Grid>

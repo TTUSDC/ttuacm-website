@@ -15,6 +15,7 @@ import thunk from 'redux-thunk'
 import rootReducer from 'redux/reducers.js'
 
 import { ConnectionStringProvider } from 'context/ConnectionStringContext'
+import { EventsPageCtxProvider } from 'context/EventsInfo'
 import App from 'App.jsx'
 import logger from './utils/logger'
 
@@ -62,7 +63,9 @@ function render() {
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>
           <ConnectionStringProvider>
-            <App history={history} />
+            <EventsPageCtxProvider>
+              <App history={history} />
+            </EventsPageCtxProvider>
           </ConnectionStringProvider>
         </MuiThemeProvider>
       </Provider>
