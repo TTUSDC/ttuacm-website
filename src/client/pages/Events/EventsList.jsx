@@ -1,6 +1,7 @@
 import React from 'react'
 import EventCard from 'components/EventCard'
 
+// Returns a list of event cards
 export default function EventsList({ events }) {
   if (events.length === 0 || !events) {
     return (
