@@ -6,6 +6,7 @@ import EventsSection from 'pages/Events/EventsSection'
 import { ConnectionString } from 'context/ConnectionStringContext'
 import { EventsPageCtx } from 'context/EventsInfo'
 import * as axios from 'axios'
+import MOCK_CALENDAR from '__mocks__/calendar'
 
 const styles = {
   EventsContainer: {
@@ -20,29 +21,31 @@ const styles = {
 const EventsContainer = ({ classes = {} }) => {
   // Get constants from context
   const { providedTimes } = useContext(EventsPageCtx)
+  const [events, setEvents] = useState(MOCK_CALENDAR)
+  const [loading, setLoading] = useState(false)
   const connectionString = useContext(ConnectionString)
 
-  const [events, setEvents] = useState([])
-  const [loading, setLoading] = useState(false)
-  // Fetch the events from the API
-  useEffect(() => {
-    setLoading(true)
-    // Grabs all the events from the API and maps their times from strings to dates
-    axios.get(`${connectionString}/events`).then(({ data }) => {
-      const allEvents = data.allEvents.map(event => ({
-        ...event,
-        startTime: new Date(event.startTime),
-        endTime: new Date(event.endTime),
-      }))
-      setEvents(allEvents)
-    }).catch((err) => {
-      // TODO set up error handling
-      console.error(err)
-      setEvents([])
-    }).finally(() => {
-      setLoading(false)
-    })
-  }, [])
+  if (process.env.NODE_ENV === 'production') {
+    // Fetch the events from the API
+    useEffect(() => {
+      setLoading(true)
+      // Grabs all the events from the API and maps their times from strings to dates
+      axios.get(`${connectionString}/events`).then(({ data }) => {
+        const allEvents = data.allEvents.map(event => ({
+          ...event,
+          startTime: new Date(event.startTime),
+          endTime: new Date(event.endTime),
+        }))
+        setEvents(allEvents)
+      }).catch((err) => {
+        // TODO set up error handling
+        console.error(err)
+        setEvents([])
+      }).finally(() => {
+        setLoading(false)
+      })
+    }, [])
+  }
 
   return (
     <Grid
