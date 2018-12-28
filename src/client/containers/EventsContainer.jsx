@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 import EventsSection from 'pages/Events/EventsSection'
 import { ConnectionString } from 'context/ConnectionStringContext'
 import { EventsPageCtx } from 'context/EventsInfo'
+import * as axios from 'axios'
 
 const styles = {
   EventsContainer: {
@@ -17,15 +18,30 @@ const styles = {
 }
 
 const EventsContainer = ({ classes = {} }) => {
-  // Fetch the events from the API
-  const connectionString = useContext(ConnectionString)
+  // Get constants from context
   const { providedTimes } = useContext(EventsPageCtx)
+  const connectionString = useContext(ConnectionString)
 
   const [events, setEvents] = useState([])
-
+  const [loading, setLoading] = useState(false)
+  // Fetch the events from the API
   useEffect(() => {
-    console.log(`Calling API: ${connectionString}/events`)
-    setEvents([])
+    setLoading(true)
+    // Grabs all the events from the API and maps their times from strings to dates
+    axios.get(`${connectionString}/events`).then(({ data }) => {
+      const allEvents = data.allEvents.map(event => ({
+        ...event,
+        startTime: new Date(event.startTime),
+        endTime: new Date(event.endTime),
+      }))
+      setEvents(allEvents)
+    }).catch((err) => {
+      // TODO set up error handling
+      console.error(err)
+      setEvents([])
+    }).finally(() => {
+      setLoading(false)
+    })
   }, [])
 
   return (
@@ -36,10 +52,18 @@ const EventsContainer = ({ classes = {} }) => {
       alignItems='center'
       className={classes.EventsContainer}
     >
-      <EventsSection time={providedTimes.TODAY} events={events} />
-      <EventsSection time={providedTimes.TOMORROW} events={events} />
-      <EventsSection time={providedTimes.THIS_WEEK} events={events} />
-      <EventsSection time={providedTimes.THIS_MONTH} events={events} />
+      {
+        !events.length
+          ? <EventsSection loading={loading} time={providedTimes.TODAY} events={events} />
+          : (
+            <React.Fragment>
+              <EventsSection loading={loading} time={providedTimes.TODAY} events={events} />
+              <EventsSection loading={loading} time={providedTimes.TOMORROW} events={events} />
+              <EventsSection loading={loading} time={providedTimes.THIS_WEEK} events={events} />
+              <EventsSection loading={loading} time={providedTimes.THIS_MONTH} events={events} />
+            </React.Fragment>
+          )
+        }
     </Grid>
   )
 }
