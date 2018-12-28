@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-import EventsView from 'pages/Events/EventsView'
+import EventsSection from 'pages/Events/EventsSection'
 import { ConnectionString } from 'context/ConnectionStringContext'
 import { EventsPageCtx } from 'context/EventsInfo'
 
@@ -36,10 +36,10 @@ const EventsContainer = ({ classes = {} }) => {
       alignItems='center'
       className={classes.EventsContainer}
     >
-      <EventsView time={providedTimes.TODAY} events={events} />
-      <EventsView time={providedTimes.TOMORROW} events={events} />
-      <EventsView time={providedTimes.THIS_WEEK} events={events} />
-      <EventsView time={providedTimes.THIS_MONTH} events={events} />
+      <EventsSection time={providedTimes.TODAY} events={events} />
+      <EventsSection time={providedTimes.TOMORROW} events={events} />
+      <EventsSection time={providedTimes.THIS_WEEK} events={events} />
+      <EventsSection time={providedTimes.THIS_MONTH} events={events} />
     </Grid>
   )
 }

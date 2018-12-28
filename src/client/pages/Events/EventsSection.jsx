@@ -4,44 +4,9 @@ import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 
-import EventCard from 'components/EventCard'
+import EventsList from 'pages/Events/EventsList'
 
-function Events({ events }) {
-  if (events.length === 0 || !events) {
-    return (
-      <EventCard
-        month=''
-        day=''
-        weekday=''
-        name={'NOTHING\'S HAPPENING'}
-        timeloc=''
-        content='Please check back later'
-      />
-    )
-  }
-
-  const eventsCards = events.map(({
-    day, startTime, title, location, description,
-  }) => {
-    const start = new Date(startTime)
-    const month = start.getMonth()
-    const weekday = start.getDate()
-
-    return (
-      <EventCard
-        month={month}
-        day={day}
-        weekday={weekday}
-        name={title}
-        timeloc={location}
-        content={description}
-      />
-    )
-  })
-  return eventsCards
-}
-
-const EventsView = ({ classes = {}, time, events }) => {
+const EventsSection = ({ classes = {}, time, events }) => {
   // TODO(@miggy) Apply the event filters based on the time that was given
   console.log()
   return (
@@ -53,12 +18,14 @@ const EventsView = ({ classes = {}, time, events }) => {
       className={classes.EventsView}
     >
       <div>
+        {/* Section Header */}
         <Typography variant='h3' className={classes.EventTime}>
           {time}
         </Typography>
       </div>
       <div className={classes.Events}>
-        <Events events={events} />
+        {/* List of Events that fall under the given time */}
+        <EventsList events={events} />
       </div>
     </Grid>
   )
@@ -80,7 +47,7 @@ const styles = {
   },
 }
 
-EventsView.propTypes = {
+EventsSection.propTypes = {
   // Styles
   classes: PropTypes.shape({}),
   // The different sections on the Events Page
@@ -89,4 +56,4 @@ EventsView.propTypes = {
   events: PropTypes.arrayOf(PropTypes.shape({})),
 }
 
-export default withStyles(styles)(EventsView)
+export default withStyles(styles)(EventsSection)
