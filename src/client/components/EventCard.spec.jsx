@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 /* eslint-disable */
-const EventsResponse = {
+const MOCK_CALENDAR = {
   TODAY: [
     {
       month: 'July',
