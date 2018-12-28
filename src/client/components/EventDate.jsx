@@ -9,9 +9,8 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: ' center',
-    size: '80%',
-    flexGrow: 2,
+    textAlign: 'center',
+    margin: '0px 20px',
   },
   month: {
     fontSize: '2rem',
@@ -36,9 +35,13 @@ const EventDate = ({
 )
 
 EventDate.propTypes = {
+  // January-Decemeber
   month: PropTypes.string,
+  // 0-31
   day: PropTypes.string,
+  // Monday-Sunday
   weekday: PropTypes.string,
+  // Style
   classes: PropTypes.shape({}),
 };
 

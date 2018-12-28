@@ -10,7 +10,7 @@ const styles = () => ({
     color: 'white',
     display: 'flex',
     flexDirection: 'row',
-    flexFlow: 'row wrap',
+    flexFlow: 'row',
     alignItems: 'stretch',
     width: '86vw',
     height: '37vh',
@@ -30,11 +30,17 @@ const EventCard = ({
 
 
 EventCard.propTypes = {
+  // January-December
   month: PropTypes.string,
+  // 0-31
   day: PropTypes.string,
+  // Monday-Friday
   weekday: PropTypes.string,
+  // Title for the event
   name: PropTypes.string,
+  // Time and location
   timeloc: PropTypes.string,
+  // Description
   content: PropTypes.string,
   classes: PropTypes.shape({}),
 }
