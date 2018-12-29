@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 
 const styles = {
-  PageInfo: {
+  PageHeader: {
     display: 'flex',
     color: 'white',
     width: '100%',
@@ -30,20 +30,20 @@ const styles = {
   },
 };
 
-const PageInfo = ({
+const PageHeader = ({
   classes = {}, title, info, // color,
 }) => (
-  <div className={classes.PageInfo}>
+  <div className={classes.PageHeader}>
     <div><Typography variant='h2' className={classes.title}>{title}</Typography></div>
     <div><Typography variant='h4' className={classes.info}>{info}</Typography></div>
   </div>
 )
 
-PageInfo.propTypes = {
+PageHeader.propTypes = {
 //   color: PropTypes.string,
   classes: PropTypes.shape({}),
   title: PropTypes.string,
   info: PropTypes.string,
 };
 
-export default withStyles(styles)(PageInfo);
+export default withStyles(styles)(PageHeader);

@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 import EventsSection from 'pages/Events/EventsSection'
 import { ConnectionString } from 'context/ConnectionStringContext'
-import { EventsPageCtx } from 'context/EventsInfo'
 import * as axios from 'axios'
 import MOCK_CALENDAR from '__mocks__/calendar'
 
@@ -21,7 +20,7 @@ const styles = {
   },
 }
 
-const placeHolder = {
+const placeHolder = [{
   day: 'Monday',
   startTime: new Date(),
   endTime: new Date(),
@@ -29,12 +28,17 @@ const placeHolder = {
   location: '',
   description: '',
   recurringEvent: false,
-}
+}]
 
 const EventsContainer = ({ classes = {} }) => {
-  // Get constants from context
-  const { providedTimes } = useContext(EventsPageCtx)
-  const [events, setEvents] = useState(SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : [placeHolder])
+  const providedTimes = {
+    TODAY: 'TODAY',
+    TOMORROW: 'TOMORROW',
+    THIS_WEEK: 'THIS WEEK',
+    THIS_MONTH: 'THIS MONTH',
+  }
+
+  const [events, setEvents] = useState(SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder)
   const [loading, setLoading] = useState(false)
   const connectionString = useContext(ConnectionString)
 

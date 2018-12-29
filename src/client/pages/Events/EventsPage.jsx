@@ -1,9 +1,7 @@
-import React, { Fragment, useContext } from 'react'
+import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import PageInfo from 'components/PageInfo'
+import PageLayout from 'components/PageLayout'
 import EventsContainer from 'containers/EventsContainer'
-import { EventsPageCtx } from 'context/EventsInfo'
 
 const styles = {
   container: {
@@ -12,18 +10,18 @@ const styles = {
 }
 
 function EventsPage() {
-  const EventsPageInfo = useContext(EventsPageCtx)
+  const EventsPageInfo = {
+    title: 'EVENTS',
+    info: `Many events are organized throughout the semester.
+      From companies' info sessions to simple workshops,
+      we offer you many opportunities to become successful in your studies`,
+  }
+
   return (
-    <Fragment>
-      <Grid container spacing={24}>
-        <Grid item xs={12}>
-          <PageInfo {...EventsPageInfo} />
-        </Grid>
-        <Grid item xs={12}>
-          <EventsContainer />
-        </Grid>
-      </Grid>
-    </Fragment>
+    <PageLayout
+      headerInfo={EventsPageInfo}
+      content={<EventsContainer />}
+    />
   )
 }
 
