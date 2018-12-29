@@ -1,9 +1,28 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import PageLayout from 'components/PageLayout'
+import EventsContainer from 'containers/EventsContainer'
 
-class EventsPage extends React.Component {
-  render() {
-    return <h1>Events Page</h1>
-  }
+const styles = {
+  container: {
+    backgroundColor: '#333333',
+  },
 }
 
-export default EventsPage
+function EventsPage() {
+  const EventsPageInfo = {
+    title: 'EVENTS',
+    info: `Many events are organized throughout the semester.
+      From companies' info sessions to simple workshops,
+      we offer you many opportunities to become successful in your studies`,
+  }
+
+  return (
+    <PageLayout
+      headerInfo={EventsPageInfo}
+      content={<EventsContainer />}
+    />
+  )
+}
+
+export default withStyles(styles)(EventsPage);
