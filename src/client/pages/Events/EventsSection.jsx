@@ -26,7 +26,7 @@ export function filterEvents(time, events) {
       })
       break
     case('THIS WEEK'):
-      // Check if date is less than 7 away and start day is greater than today
+      // Check if date is less than 7 away and start day is greater or equal to today
       // Week starts on Sunday
       filteredEvents = events.filter((event) => {
         const now = new Date()
@@ -34,7 +34,7 @@ export function filterEvents(time, events) {
         const start = event.startTime.getDate()
         const today = now.getDay()
         const startDay = event.startTime.getDay()
-        return ((start - currentDate < 7 && start - currentDate > 0) && (startDay > today))
+        return ((start - currentDate < 7 && start - currentDate >= 0) && (startDay >= today))
       })
       break
     case('THIS MONTH'):
@@ -56,7 +56,7 @@ export function filterEvents(time, events) {
 }
 
 const EventsSection = ({
-  classes = {}, time, events, loading,
+  classes = {}, time, events = [], loading = false,
 }) => (
   <Grid
     container
@@ -102,7 +102,7 @@ EventsSection.propTypes = {
   // Styles
   classes: PropTypes.shape({}),
   // The different sections on the Events Page
-  time: PropTypes.string,
+  time: PropTypes.string.isRequired,
   // Whether or not the events are still being fetched
   loading: PropTypes.bool,
   // The events associated with that time
