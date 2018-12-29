@@ -5,41 +5,61 @@ const router = express.Router()
 
 const AuthController = require('./auth.controller')
 const EmailController = require('../email/email.controller')
+/**
+ * @apiDefine UserErrorResponse
+ *
+ * @apiErrorExample {json} Error-Response:
+ *   HTTP/1.1 500 Internal Server Error
+ *   {
+ *     "err": Error
+ *   }
+ */
 
 /**
- * This router handles all of the authentication services
- * whether it be through OAuth or local sign up. This service
- * provides a way for the other services to create their OAuth2
- * instances
+ * @api {get} /api/v2/auth/test Test Route
+ * @apiDescription
+ * Test route to check if the API is properly connected
  *
- * - Endpoint: `/api/v2/test`
- * - Verb: GET
+ * @apiGroup Auth
+ * @apiVersion 0.2.0
  *
- * @typedef {function} AuthRouter
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
  */
 router.get('/test', (req, res) => {
   res.send('Auth App Works!')
 })
 
 /**
- * Registers the user and saves them as a unverified user
- * It then sends an email to that user to verify
+ * @api {post} /api/v2/auth/register Register
+ * @apiDescription
+ * Registers the user and saves them as a unverified
+ * user it then sends an email to that user to verify
  *
- * - Endpoint: `/api/v2/auth/register`
- * - Verb: POST
+ * @apiVersion 0.2.0
  *
- * - OnFailure: Sends an error message
- * - OnSuccess: Sends the user back as JSON
+ * @apiGroup Auth
+ * @apiUse UserErrorResponse
  *
- * @typedef {function} AuthRouter-Register
- * @param {object} req.body - Body Parser Body Object
- * @param {object} req.body.protocol - HTTP(S)
- * @param {object} req.body.host - URL
- * @param {object} req.body.firstName - user first name
- * @param {object} req.body.lastName - user last name
- * @param {object} req.body.email - user email
- * @param {object} req.body.password - user password
- * @param {object} req.body.classification - user classification
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 201 OK
+ *     {
+ *         "email": String,
+ *         "firstName": String,
+ *         "lastName": String
+ *         "graduationDate": Date
+ *         "hasPaidDues": Boolean
+ *         "verified": Boolean
+ *     }
+ *
+ * @apiParam (Request body) {String} email email
+ * @apiParam (Request body) {String} firstName first name
+ * @apiParam (Request body) {String} lastName last name
+ * @apiParam (Request body) {String} password password
+ * @apiParam (Request body) {String} graduationDate graduation date
  */
 router.post('/register', async (req, res) => {
   const authCtrl = new AuthController()
@@ -61,7 +81,7 @@ router.post('/register', async (req, res) => {
     // Sending the email token
     await emailCtrl.sendConfirmationEmail(createdUser.email, createdUser.confirmEmailToken)
 
-    res.status(201).json({ createdUser })
+    res.status(201).json(createdUser)
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: err.message })
@@ -69,19 +89,33 @@ router.post('/register', async (req, res) => {
 })
 
 /**
- * JWT Login/Authentication
- * User must not have signed up using OAuth2
+ * @api {post} /api/v2/auth/login Login
+ * @apiDescription
+ * Logs in the user without OAuth2
+ * Uses JWT Login/Authentication
  *
- * - Endpoint: `/api/v2/auth/login`
- * - Verb: POST
+ * @apiVersion 0.2.0
  *
- * - OnFailure: Sends an error message
- * - OnSuccess: Sends the JWT Token of the user
+ * @apiGroup Auth
+ * @apiUse UserErrorResponse
  *
- * @typedef {function} AuthRouter-Login
- * @param {object} req.body - Body Parser Body Object
- * @param {object} req.body.email - user email
- * @param {object} req.body.password - user password
+ * @apiParam (Request body) {String} email email
+ * @apiParam (Request body) {String} password password
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "token": String
+ *       "user": {
+ *         "email": String,
+ *         "firstName": String,
+ *         "lastName": String
+ *         "graduationDate": Date
+ *         "hasPaidDues": Boolean
+ *         "verified": Boolean
+ *       }
+ *     }
+ *
  */
 router.post('/login', async (req, res) => {
   const ctrl = new AuthController()
@@ -97,20 +131,30 @@ router.post('/login', async (req, res) => {
 })
 
 /**
- * Confirms the user has a valid email account
+ * @api {get} /api/v2/auth/confirm/:token Confirm User By Email
+ * @apiDescription
+ * Confirms the user has a valid email account.
+ * Responses are in querystring
  *
- * - Endpoint: `/api/v2/auth/confirm/:token`
- * - Verb: GET
+ * @apiVersion 0.2.0
  *
- * - OnFailure: Redirects to error page
- * - OnSuccess: Redirects to the login page with querystring to signal a notification
+ * @apiGroup Auth
  *
- * @typedef {function} AuthRouter-ConfirmToken
- * @param {object} req.body - Body Parser Body Object
- * @param {string} req.body.redirectURLSuccess - Success URL
- * @param {string} req.body.fallback - Fallback URL
- * @param {object} req.params - Express Params Object
- * @param {string} req.parmas.token - HEX token saved in confirmEmailToken
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 302 OK
+ *     {
+ *       verify: "success"
+ *     }
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 302 OK
+ *     {
+ *       err: "Error Validating Email"
+ *     }
+ *
+ * @apiParam (Request body) {String} fallback URL to redirect when failure
+ * @apiParam (Request body) {String} redirectURLSuccess URL to redirect when success
+ * @apiParam (Request Params) {String} token Token in `confirmEmailToken`
  */
 router.get('/confirm/:token', (req, res) => {
   const ctrl = new AuthController()
@@ -128,17 +172,27 @@ router.get('/confirm/:token', (req, res) => {
 })
 
 /**
+ * @api {post} /api/v2/auth/forgot Forgot Password
+ * @apiDescription
  * Verifies that the user is resetting the password of an account they own
  *
- * - Endpoint: `/api/v2/auth/forgot`
- * - Verb: POST
+ * @apiVersion 0.2.0
  *
- * - OnFailure: Sends an internal server error message
- * - OnSuccess: Sends the user that the email was sent to
+ * @apiGroup Auth
  *
- * @typedef {function} AuthRouter-ForgotLogin
- * @param {object} req.body - Body Parser Body Object
- * @param {string} req.body.email - Email for the account that needs to change passwords
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "email": String,
+ *       "firstName": String,
+ *       "lastName": String
+ *       "graduationDate": Date
+ *       "hasPaidDues": Boolean
+ *       "verified": Boolean
+ *     }
+ *
+ * @apiUse UserErrorResponse
+ * @apiParam (Request body) {String} email email
  */
 router.post('/forgot', async (req, res) => {
   try {
@@ -148,28 +202,37 @@ router.post('/forgot', async (req, res) => {
     const { user } = await authCtrl.forgotLogin(req.body.email)
     await emailCtrl.sendResetEmail(user.email, user.resetPasswordToken)
 
-    res.status(200).json({ recipient: user })
+    res.status(200).json(user)
   } catch (err) {
     res.status(err.code).json({ msg: err.message })
   }
 })
 
 /**
+ * @api {get} /api/v2/auth/reset/:token Reset Password - Email
+ * @apiDescription
  * This endpoint is hit by an email to reset a user password
  * This endpoint is hit first in the sequence
  *
- * - Endpoint: `/api/v2/auth/reset/:token`
- * - Verb: GET
+ * @apiVersion 0.2.0
  *
- * - OnFailure: Redirects to the login screen with an error in query string
- * - OnSuccess: Redirects to the forgot-redirect page to change password
+ * @apiGroup Auth
  *
- * @typedef {function} AuthRouter-ResetToken
- * @param {object} req.body = Body Parser Body Object
- * @param {string} req.body.redirectURLSuccess - Success URL
- * @param {string} req.body.fallback - Fallback URL
- * @param {object} req.params - Express Params Object
- * @param {string} req.parmas.token - HEX token saved in confirmEmailToken
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 302 OK
+ *     {
+ *       "token": String
+ *     }
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 302 OK
+ *     {
+ *       "err": Error
+ *     }
+ *
+ * @apiParam (Request body) {String} fallback URL to redirect when failure
+ * @apiParam (Request body) {String} redirectURLSuccess URL to redirect when success
+ * @apiParam (Request Params) {String} token Token in `confirmEmailToken`
  */
 router.get('/reset/:token', async (req, res) => {
   const ctrl = new AuthController()
@@ -186,21 +249,29 @@ router.get('/reset/:token', async (req, res) => {
 })
 
 /**
+ * @api {post} /api/v2/auth/reset/:token Reset Password - Client
+ * @apiDescription
  * Client hits this endpoint with a token and a new password to update the account with
  *
- * - Endpoint: `/api/v2/auth/reset/:token`
- * - Verb: POST
+ * @apiVersion 0.2.0
  *
- * - OnFailure: Sends a success status code
- * - OnSuccess: Sends a error status code
+ * @apiGroup Auth
  *
- * @typedef {function} AuthRouter-VerifyUser
- * @param {string} req.header.host - URL
- * @param {string} req.protocol - HTTP(S)
- * @param {object} req.body - Body Parser Body Object
- * @param {object} req.params - Express Params Object
- * @param {string} req.body.password - new password
- * @param {string} req.params.token - token of the user that we need to change
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        "email": String,
+ *        "firstName": String,
+ *        "lastName": String
+ *        "graduationDate": Date
+ *        "hasPaidDues": Boolean
+ *        "verified": Boolean
+ *     }
+ *
+ * @apiUse UserErrorResponse
+ *
+ * @apiParam (Request body) {String} password New Password
+ * @apiParam (Request Params) {String} token Token in `resetPasswordToken`
  */
 router.post('/reset/:token', async (req, res) => {
   try {
@@ -213,9 +284,9 @@ router.post('/reset/:token', async (req, res) => {
 
     await emailCtrl.sendChangedPasswordEmail(user.email)
 
-    res.status(200).json({ user })
+    res.status(200).json(user)
   } catch (err) {
-    res.status(500).json({ user: null })
+    res.status(500).json({ err })
   }
 })
 
