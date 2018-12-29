@@ -8,6 +8,9 @@ import { EventsPageCtx } from 'context/EventsInfo'
 import * as axios from 'axios'
 import MOCK_CALENDAR from '__mocks__/calendar'
 
+let SHOW_MOCK_CALENDAR = true
+if (process.env.NODE_ENV === 'production') SHOW_MOCK_CALENDAR = false
+
 const styles = {
   EventsContainer: {
     margin: '0 0',
@@ -18,10 +21,20 @@ const styles = {
   },
 }
 
+const placeHolder = {
+  day: 'Monday',
+  startTime: new Date(),
+  endTime: new Date(),
+  title: 'No Events Yet! Stay Tuned!',
+  location: '',
+  description: '',
+  recurringEvent: false,
+}
+
 const EventsContainer = ({ classes = {} }) => {
   // Get constants from context
   const { providedTimes } = useContext(EventsPageCtx)
-  const [events, setEvents] = useState(MOCK_CALENDAR)
+  const [events, setEvents] = useState(SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : [placeHolder])
   const [loading, setLoading] = useState(false)
   const connectionString = useContext(ConnectionString)
 
@@ -55,18 +68,18 @@ const EventsContainer = ({ classes = {} }) => {
       alignItems='center'
       className={classes.EventsContainer}
     >
+      <EventsSection loading={loading} time={providedTimes.TODAY} events={events} />
       {
-        !events.length
-          ? <EventsSection loading={loading} time={providedTimes.TODAY} events={events} />
-          : (
+        events.length > 1
+          ? (
             <React.Fragment>
-              <EventsSection loading={loading} time={providedTimes.TODAY} events={events} />
               <EventsSection loading={loading} time={providedTimes.TOMORROW} events={events} />
               <EventsSection loading={loading} time={providedTimes.THIS_WEEK} events={events} />
               <EventsSection loading={loading} time={providedTimes.THIS_MONTH} events={events} />
             </React.Fragment>
           )
-        }
+          : null
+      }
     </Grid>
   )
 }
