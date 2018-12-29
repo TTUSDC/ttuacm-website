@@ -12,7 +12,7 @@ const styles = {
     flexGrow: 3,
   },
   name: {
-    fontSize: '4rem',
+    fontSize: '3rem',
     fontWeight: 'bold', // Before I override the CardHeader's values in theme
     marginBottom: '0px',
   },
