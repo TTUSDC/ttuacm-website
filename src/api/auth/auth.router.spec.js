@@ -60,12 +60,12 @@ describe('Auth Integration Tests', () => {
         .expect(201)
 
 
-      expect(registerBody.body.createdUser.email === 'johndoe@gmail.com').to.equal(true)
-      expect(registerBody.body.createdUser.confirmEmailToken).not.to.equal('')
+      expect(registerBody.body.email === 'johndoe@gmail.com').to.equal(true)
+      expect(registerBody.body.confirmEmailToken).not.to.equal('')
 
       // Confirm the email
       await request(app)
-        .get(`/confirm/${registerBody.body.createdUser.confirmEmailToken}`)
+        .get(`/confirm/${registerBody.body.confirmEmailToken}`)
         .expect(302)
 
       // Login
