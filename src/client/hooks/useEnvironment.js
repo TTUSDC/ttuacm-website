@@ -38,7 +38,7 @@ export default function useEnvironment(connectionString) {
         setErr(error)
       })
     }
-  })
+  }, [])
 
   return [env, err]
 }
