@@ -16,23 +16,11 @@ const studentSchema = mongoose.Schema({
     type: String,
     required: false,
   },
-  // TODO: REMOVE. Deprecated
-  classification: {
-    type: String,
-    required: true,
-    enum: ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate', 'PhD', 'Other'],
-    default: 'Other',
-  },
   graduationDate: {
     type: Date,
     default: new Date('January 1, 1970 00:00:00'),
   },
   hasPaidDues: {
-    type: Boolean,
-    default: false,
-  },
-  // TODO: REMOVE. Deprecated
-  blocked: {
     type: Boolean,
     default: false,
   },
@@ -72,7 +60,7 @@ const studentSchema = mongoose.Schema({
 // Filter Private Data from api calls
 function filterUser(user) {
   const filteredUser = user
-  // Delete unwanted data here using delete
+  // TODO Delete unwanted data here using delete
   return filteredUser
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "ttuacm-website",
-  "version": "2.0.0",
+  "version": "0.2.0",
   "license": "MIT",
   "description": "ACM TTU Website",
   "scripts": {
@@ -16,7 +16,7 @@
     "env-config:client": "cp .env.config .env",
     "env-config:api": "node src/utils/env-config.js",
     "env-save:api": "firebase functions:config:get > .runtimeconfig.json",
-    "docs": "esdoc"
+    "docs": "apidoc -i src/api/ -o docs/"
   },
   "dependencies": {
     "@firebase/app-types": "0.3.2",
@@ -68,6 +68,7 @@
   "private": true,
   "devDependencies": {
     "@firebase/app-types": "0.3.2",
+    "apidoc": "0.17.7",
     "babel-preset-env": "1.7.0",
     "babel-preset-stage-2": "6.24.1",
     "chai": "4.2.0",
@@ -101,5 +102,8 @@
   },
   "engines": {
     "node": "8"
+  },
+  "apidoc": {
+    "title": "TTUACM API Documentation"
   }
 }

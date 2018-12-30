@@ -5,36 +5,51 @@ const Controller = require('./events.controller')
 const router = express.Router()
 
 /**
- * Testing route for the Events Service
+ * @api {get} /api/v2/events/test Test Route
+ * @apiDescription
+ * Test route to check if the API is properly connected
  *
- * - Endpoint: `/api/v2/events/test`
- * - Verb: GET
+ * @apiGroup Events
+ * @apiVersion 0.2.0
  *
- * @typedef {function} EventsRouter
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
  */
 router.get('/test', (req, res) => {
   res.send('Email App Works!')
 })
 
 /**
+ * @api {get} /api/v2/events Get Events
+ * @apiDescription
  * Gets all the events (formatted) in ACM Google Calendar using an OAuth2 Object
  *
- * - Endpoint: `/api/v2/events`
- * - Verb: GET
+ * @apiVersion 0.2.0
  *
- * @typedef {function} EventsRouter-listEvents
+ * @apiGroup Events
  *
- * Data that is passed back as JSON:
- * @example
- * {
- *    day: `Tuesday`,
- *    startTime: `2018-12-24T16:10:22.200Z`,
- *    endTime: `2018-12-24T16:10:22.200Z`,
- *    title: `Workshop`,
- *    location: `Texas Tech`,
- *    description: `A Really Awesome Workshop`,
- *    recurringEvent: false,
- * }
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 201 OK
+ *     {
+ *        "allEvents": {
+ *           "day": `Tuesday`,
+ *           "startTime": `2018-12-24T16:10:22.200Z`,
+ *           "endTime": `2018-12-24T16:10:22.200Z`,
+ *           "title": `Workshop`,
+ *           "location": `Texas Tech`,
+ *           "description": `A Really Awesome Workshop`,
+ *           "recurringEvent": false,
+ *        }
+ *     }
+ *
+ * @apiErrorExample {json} Error-Response:
+ *   HTTP/1.1 500 Internal Server Error
+ *   {
+ *     "err": Error
+ *   }
  */
 router.get('/', async (req, res) => {
   try {

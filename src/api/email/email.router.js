@@ -6,29 +6,42 @@ const router = express.Router()
 const Controller = require('./email.controller')
 
 /**
- * Testing route for the Email Service
+ * @api {get} /api/v2/email/test Test Route
+ * @apiDescription
+ * Test route to check if the API is properly connected
  *
- * - Endpoint: `/api/v2/email/test`
- * - Verb: GET
+ * @apiGroup Email
+ * @apiVersion 0.2.0
  *
- * @typedef {function} EmailRouter
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
  */
 router.get('/test', (req, res) => {
   res.send('Email App Works!')
 })
 
 /**
+ * @api {post} /api/v2/email/contact-us Contact Us
+ * @apiDescription
  * Sends a question to ACM Email
  *
- * - Endpoint: `/api/v2/email/contact-us`
- * - Verb: POST
+ * @apiVersion 0.2.0
  *
- * @typedef {function} EmailRouter-ContactUs
- * @param {object} req.body - Body Parser Body Object
- * @param {string} req.body.name - user name
- * @param {string} req.body.email - user email
- * @param {string} req.body.topic - topic to attach
- * @param {string} req.body.message - message to send
+ * @apiGroup Email
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 500 OK
+ *
+ * @apiParam (Request body) {String} name name
+ * @apiParam (Request body) {String} email email
+ * @apiParam (Request body) {String} topic topic
+ * @apiParam (Request body) {String} message message
  */
 router.post('/contact-us', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
@@ -42,19 +55,25 @@ router.post('/contact-us', (req, res) => {
 })
 
 /**
+ * @api {post} /api/v2/email/confirm-email Send Confirmation Email
+ * @apiDescription
  * Sends a confirmation email to the user with a link/endpoint
  * to verify their email. Users will click the link to verify
- * their emails and should be redirected to the login page
- *
+ * their emails and should be redirected to the login page.
  * This will mainly be used for resending emails
  *
- * - Endpoint: `/api/v2/email/confirm-email`
- * - Verb: POST
+ * @apiVersion 0.2.0
  *
- * @typedef {function} EmailRouter-SendConfirmationEmail
- * @param {object} req.body - Body Parser Body Object
- * @param {string} req.body.email - user email
- * @param {string} req.body.token - user reset password token
+ * @apiGroup Email
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 500 OK
+ *
+ * @apiParam (Request body) {String} email email
+ * @apiParam (Request body) {String} token the user's reset password token
  */
 router.post('/confirm-email', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
@@ -69,21 +88,27 @@ router.post('/confirm-email', (req, res) => {
 })
 
 /**
- * Sends a reset password email to the user
+ * @api {post} /api/v2/email/reset-password Send Reset Email
+ * @apiDescription
+ * Sends a reset password email to the user.
  * The user should be able to click on the
  * link sent and redirected to the reset
  * password page
  *
  * This will mainly be used for resending emails
  *
- * - Endpoint: `/api/v2/email/reset-password`
- * - Verb: POST
+ * @apiVersion 0.2.0
  *
- * @typedef {function} EmailRouter-SendResetEmail
- * @param {object} req.body - Body Parser Body Object
- * @param {string} req.body.email - user email
- * @param {string} req.body.token - user reset password token
+ * @apiGroup Email
  *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 500 OK
+ *
+ * @apiParam (Request body) {String} email email
+ * @apiParam (Request body) {String} token the user's reset password token
  */
 router.post('/reset-password', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)

@@ -10,19 +10,56 @@ const PROTECTED_ENDPOINTS = [
 const router = express.Router()
 router.use(cors({ origin: true }))
 
+/**
+ * @api {get} /api/v2/environment/test Test Route
+ * @apiDescription
+ * Test route to check if the API is properly connected
+ *
+ * @apiGroup Environment
+ * @apiVersion 0.2.0
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ */
 router.get('/test', (req, res) => {
   res.send('Environment Provider Works!')
 })
 
 /**
+ * @api {get} /api/v2/environment Get Environment Variables
+ * @apiDescription
  * A Protected route to serve environment variables
  *
  * When the route is called in a production/staging environment,
  * we have to check whether or not the host is either the
  * production or staging host. Otherwise, send over the environment
  *
- * - Endpoint: `/api/v2/environment`
- * - Verb: GET
+ * @apiVersion 0.2.0
+ *
+ * @apiGroup Environment
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        "auth_provider_x509_cert_url": String,
+ *        "auth_uri": String,
+ *        "client_x509_cert_url": String,
+ *        "private_key": String,
+ *        "maintainance": String,
+ *        "private_key_id": String,
+ *        "project_id": String,
+ *        "client_id": String,
+ *        "env": String,
+ *        "token_uri": String,
+ *        "client_email": String,
+ *        "type": String
+ *        "session_secret": String,
+ *        "protocol": String,
+ *        "host": String,
+ *     }
  *
  * @typedef {function} EnvironmentProvider
  */
