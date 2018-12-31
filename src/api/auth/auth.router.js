@@ -5,6 +5,8 @@ const router = express.Router()
 
 const AuthController = require('./auth.controller')
 const EmailController = require('../email/email.controller')
+const AuthModel = require('./auth.model')
+
 /**
  * @apiDefine UserErrorResponse
  *
@@ -285,6 +287,33 @@ router.post('/reset/:token', async (req, res) => {
     await emailCtrl.sendChangedPasswordEmail(user.email)
 
     res.status(200).json(user)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+})
+
+// Create a new user with anything
+router.post('/seed', async (req, res) => {
+  try {
+    const authModel = new AuthModel()
+    await authModel.connect()
+    await authModel.createNewUser(req.body)
+
+    res.status(200).end()
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+})
+//
+// Delete a existing user based on email
+router.delete('/seed', async (req, res) => {
+  try {
+    const { email } = req.body
+    const authModel = new AuthModel()
+    await authModel.connect()
+    await authModel.deleteUserByEmail(email)
+
+    res.status(200).end()
   } catch (err) {
     res.status(500).json({ err })
   }
