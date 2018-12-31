@@ -68,6 +68,8 @@ export function checkForErrors({ email = '', password = '', confirmPassword = ''
 
 function RegistrationContainer({ navigateTo, switchForm }) {
   const initState = {
+    firstName: '',
+    lastName: '',
     email: '',
     emailError: null,
     password: '',
@@ -94,7 +96,7 @@ function RegistrationContainer({ navigateTo, switchForm }) {
       ...registrationFormValues,
       loading: true,
     })
-    axios.post(`${connectionString}/auth/register`, { data: registrationFormValues })
+    axios.post(`${connectionString}/auth/register`, registrationFormValues)
       .then(({ data }) => {
         localStorage.setItem('token', data.token)
         // Redirect to Events Page

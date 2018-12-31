@@ -80,16 +80,13 @@ class AuthModel {
   /**
    * Connects to the Database
    */
-  connect() {
-    return new Promise((resolve, reject) => {
-      mongoose.connect(CONNECTION_STRING, {
-        useNewUrlParser: true,
-      }, (err) => {
-        if (err) reject(err)
-        this.connected = true
-        resolve()
-      })
-    })
+  async connect() {
+    try {
+      await mongoose.connect(CONNECTION_STRING, { useNewUrlParser: true })
+      this.connected = true
+    } catch (err) {
+      throw err
+    }
   }
 
   /**
