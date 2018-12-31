@@ -2,6 +2,6 @@
   "baseUrl": "https://acm-texas-tech-web-app-2-beta.firebaseapp.com",
 	"ignoreTestFiles": "**/examples/*",
 	"env": {
-		"DB_CONNECTION": "mongodb://localhost:27017/dev"
+    "API_CONNECTION": "https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api"
 	}
 }

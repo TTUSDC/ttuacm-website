@@ -2,6 +2,7 @@
   "baseUrl": "http://localhost:3000",
 	"ignoreTestFiles": "**/examples/*",
 	"env": {
-		"DB_CONNECTION": "mongodb://localhost:27017/dev"
+    "_comment": "Replace API_CONNECTION with local firebase functions",
+    "API_CONNECTION": "http://localhost:5000/sandbox-206807/us-central1/api"
 	}
 }
