@@ -2,6 +2,6 @@
   "baseUrl": "https://acm-texas-tech-web-app-2-beta.firebaseapp.com",
 	"ignoreTestFiles": "**/examples/*",
 	"env": {
-    "API_CONNECTION": "https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api"
+    "API_CONNECTION": "https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net"
 	}
 }
