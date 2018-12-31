@@ -1,6 +1,7 @@
 import React from 'react' // eslint-disable-line
 import ReactDOM from 'react-dom'
 import './client/index.css'
+import * as axios from 'axios'
 
 import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
@@ -17,6 +18,8 @@ import rootReducer from 'redux/reducers.js'
 import { ConnectionStringProvider } from 'context/ConnectionStringContext'
 import App from 'App.jsx'
 import logger from './utils/logger'
+
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 
 setConfig({
   pureSFC: true,
