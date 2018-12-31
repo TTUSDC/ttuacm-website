@@ -76,6 +76,7 @@ firebaseconfig.json
 
 # testing
 /coverage
+cypress/videos
 
 # production
 /build

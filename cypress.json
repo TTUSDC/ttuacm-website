@@ -1,4 +1,1 @@
-{
-  "baseUrl": "https://acm-texas-tech-web-app-2-beta.firebaseapp.com",
-	"ignoreTestFiles": "**/examples/*"
-}
+{}
