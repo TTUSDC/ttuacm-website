@@ -1,1 +1,8 @@
-{}
+{
+  "baseUrl": "http://localhost:3000",
+	"ignoreTestFiles": "**/examples/*",
+	"env": {
+    "_comment": "Replace API_CONNECTION with local firebase functions",
+    "API_CONNECTION": "http://localhost:5000/sandbox-206807/us-central1"
+	}
+}

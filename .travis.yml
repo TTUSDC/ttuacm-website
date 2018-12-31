@@ -67,5 +67,6 @@ jobs:
     - yarn
     script:
     - yarn test:integration --ci --forceExit
+    - yarn e2e:ci
 notifications:
   email: false
