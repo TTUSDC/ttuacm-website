@@ -70,6 +70,8 @@ data/
 firebaseconfig.json
 .runtimeconfig.json
 .firebaserc
+cypress/staging/cypress
+cypress/development/cypress
 
 # dependencies
 /node_modules
