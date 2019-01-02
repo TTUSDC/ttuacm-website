@@ -76,7 +76,7 @@ router.post('/contact-us', (req, res) => {
  * @apiParam (Request body) {String} token the user's reset password token
  */
 router.post('/confirm-email', (req, res) => {
-  const ctrl = new Controller(req.protocol, req.headers.host)
+  const ctrl = new Controller()
   const { email, token } = req.body
 
   ctrl.sendConfirmationEmail(email, token)
@@ -111,7 +111,7 @@ router.post('/confirm-email', (req, res) => {
  * @apiParam (Request body) {String} token the user's reset password token
  */
 router.post('/reset-password', (req, res) => {
-  const ctrl = new Controller(req.protocol, req.headers.host)
+  const ctrl = new Controller()
   const { email, token } = req.body
 
   ctrl.sendResetEmail(email, token)
