@@ -36,7 +36,13 @@ context('User Authentication', () => {
 
     cy.get('[data-testid=registration-submit-button]').click()
 
-    cy.url({ timeout: 10000 }).should('include', 'events')
+    cy.url({ timeout: 10000 }).should('include', 'verify')
+    cy.url({ timeout: 10000 }).should('include', 'token')
+    cy.url({ timeout: 10000 }).should('include', 'email')
+    cy.url({ timeout: 10000 }).should('include', 'miggy.reyes%40ttu.edu')
+
+    cy.get('[data-testid=confirm-email-button]').click()
+    cy.get('[data-testid=confirm-waiting-symbol]', { timeout: 5000 })
   })
 
   it('should not be able to register a user with bad input', () => {

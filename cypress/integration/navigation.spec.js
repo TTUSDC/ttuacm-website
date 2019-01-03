@@ -11,9 +11,19 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 context('Navigation', () => {
   it('should be able to navigate to all pages', () => {
     cy.visit('')
+      .url().should('include', 'home')
       .visit('about')
+      .url().should('include', 'about')
       .visit('events')
+      .url().should('include', 'events')
       .visit('teams')
+      .url().should('include', 'teams')
       .visit('auth')
+      .url().should('include', 'auth')
+  })
+
+  it('should bounce all of the protected routes', () => {
+    cy.visit('verify')
+      .url().should('include', '/home')
   })
 })
