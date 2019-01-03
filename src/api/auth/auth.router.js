@@ -147,7 +147,6 @@ router.post('/register', async (req, res) => {
  */
 router.post('/login', async (req, res) => {
   const ctrl = new AuthController()
-  console.log(req.body)
   const { email, password } = req.body
 
   try {
