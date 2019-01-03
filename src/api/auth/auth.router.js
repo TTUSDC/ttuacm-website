@@ -78,10 +78,13 @@ router.get('/test', (req, res) => {
  * @apiParam (Request body) {String} lastName last name
  * @apiParam (Request body) {String} password password
  * @apiParam (Request body) {String} graduationDate graduation date
+ * @apiParam (Request body) {String} fallback failure URL
+ * @apiParam (Request body) {String} redirectURLSuccess success URL
  */
 router.post('/register', async (req, res) => {
   const authCtrl = new AuthController()
   const emailCtrl = new EmailController(req.protocol, req.headers.host)
+  const { fallback, redirectURLSuccess } = req.body
 
   const user = {
     firstName: req.body.firstName,
@@ -97,7 +100,12 @@ router.post('/register', async (req, res) => {
     const createdUser = await authCtrl.register(user)
 
     // Sending the email token
-    await emailCtrl.sendConfirmationEmail(createdUser.email, createdUser.confirmEmailToken)
+    await emailCtrl.sendConfirmationEmail(
+      createdUser.email,
+      createdUser.confirmEmailToken,
+      fallback,
+      redirectURLSuccess,
+    )
 
     res.status(201).json(filterSensitiveInformation(createdUser))
   } catch (err) {
@@ -139,6 +147,7 @@ router.post('/register', async (req, res) => {
  */
 router.post('/login', async (req, res) => {
   const ctrl = new AuthController()
+  console.log(req.body)
   const { email, password } = req.body
 
   try {
@@ -154,9 +163,10 @@ router.post('/login', async (req, res) => {
 })
 
 /**
- * @api {get} /api/v2/auth/confirm/:token Confirm User By Email
+ * @api {get} /api/v2/auth/confirm Confirm User By Email
  * @apiDescription
  * Confirms the user has a valid email account.
+ * This endpoint is hit by the end user when they click the link
  * Responses are in querystring
  *
  * @apiVersion 0.2.0
@@ -175,23 +185,21 @@ router.post('/login', async (req, res) => {
  *       err: "Error Validating Email"
  *     }
  *
- * @apiParam (Request body) {String} fallback URL to redirect when failure
- * @apiParam (Request body) {String} redirectURLSuccess URL to redirect when success
- * @apiParam (Request Params) {String} token Token in `confirmEmailToken`
+ * @apiParam (Request Query) {String} fallback URL to redirect when failure
+ * @apiParam (Request Query) {String} redirectURLSuccess URL to redirect when success
+ * @apiParam (Request Query) {String} token Token in `confirmEmailToken`
  */
-router.get('/confirm/:token', (req, res) => {
+router.get('/confirm', (req, res) => {
   const ctrl = new AuthController()
-  const { token } = req.params
-  const { redirectURLSuccess, fallback } = req.body
-  ctrl.confirmToken(token)
-    .then(() => {
-      const qs = querystring.stringify({ verify: 'success' })
-      res.redirect(302, `${redirectURLSuccess}/?${qs}`)
-    })
-    .catch(() => {
-      const qs = querystring.stringify({ err: 'Error Validating Email' })
-      res.redirect(302, `${fallback}/?${qs}`)
-    })
+  const { token, redirectUrlSuccess, fallback } = req.query
+  ctrl.confirmToken(token).then(() => {
+    const qs = querystring.stringify({ verify: 'success' })
+    res.redirect(302, `${redirectUrlSuccess}/?${qs}`)
+  }).catch((err) => {
+    console.error(err)
+    const qs = querystring.stringify({ err: 'Error Validating Email' })
+    res.redirect(302, `${fallback}/?${qs}`)
+  })
 })
 
 /**

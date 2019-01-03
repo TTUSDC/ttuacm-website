@@ -97,7 +97,12 @@ function RegistrationContainer({ navigateTo, switchForm }) {
       ...registrationFormValues,
       loading: true,
     })
-    axios.post(`${connectionString}/auth/register`, registrationFormValues)
+    axios.post(`${connectionString}/auth/register`,
+      {
+        ...registrationFormValues,
+        redirectURLSuccess: `${window.location.origin}/home`,
+        fallback: `${window.location.origin}/auth`,
+      })
       .then(({ data }) => {
         const querystring = qs.stringify({
           email: data.email,

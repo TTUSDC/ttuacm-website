@@ -31,7 +31,7 @@ export function LoginContainer({ navigateTo, switchForm }) {
       loading: true,
     })
 
-    axios.post(`${connectionString}/auth/login`, { data: loginFormValues })
+    axios.post(`${connectionString}/auth/login`, loginFormValues)
       .then(({ data }) => {
         localStorage.setItem('token', data.token)
         setLoginFormValues({

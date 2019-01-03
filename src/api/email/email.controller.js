@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer')
 const functions = require('firebase-functions')
+const qs = require('querystring')
 
 const { protocol: apiProtocol, host: apiHost } = functions.config().connections
 
@@ -151,18 +152,30 @@ class EmailController {
    *
    * @param {string} email user's email
    * @param {string} token user's HEX token saved in the auth database
+   * @param {string} fallback failure URL
+   * @param {string} redirectURLSuccess success URL
    * @returns {Promise.<null, Error>}
    */
-  async sendConfirmationEmail(email, token) {
+  async sendConfirmationEmail(email, token, fallback, redirectURLSuccess) {
+    const querystring = qs.stringify({
+      token, fallback, redirectURLSuccess,
+    })
+
+    const link = `${this.protocol}://${this.host}/api/v2/auth/confirm?${querystring}`
+
     const mailOptions = {
       to: email,
       from: 'Texas Tech ACM',
       subject: 'Welcome to ACM: TTU',
-      html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
-        this.protocol
-      }://${
-        this.host
-      }/api/v2/auth/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`,
+      html: `
+        <p>
+          Please click on the following link, or paste this into your browser to verify your account:
+        </p>\n\n
+        <a>${link}</a>\n\n
+        <p>
+          If you did not sign up for an account, please ignore this email.
+        </p>\n
+      `,
     }
 
     try {

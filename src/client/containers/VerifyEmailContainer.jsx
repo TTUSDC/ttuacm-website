@@ -14,10 +14,15 @@ function VerifyEmailContainer({ query, navigateTo }) {
   let email
   let token
 
+  const currentLocation = window.location.origin
+
   function resendEmail() {
     setWaiting(true)
     axios.post(`${connectionString}/email/confirm-email`, {
-      email, token,
+      email,
+      token,
+      redirectURLSuccess: `${currentLocation}/home`,
+      fallback: `${currentLocation}/auth`,
     }).then(() => {
       // TODO show snackbar success
       console.log('Success')

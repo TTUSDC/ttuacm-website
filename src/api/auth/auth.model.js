@@ -140,6 +140,7 @@ class AuthModel {
   async getUserByAttribute(query) {
     if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
+      console.log(query)
       const user = await this.DB.findOne(query).exec()
       let filteredUser
       if (user !== null) {
