@@ -6,36 +6,40 @@ import Links from './Links.jsx'
 import Copyright from './Copyright.jsx'
 
 const style = {
-  root: {
+  footerBottom: {
     backgroundColor: 'red',
-    display: 'flex',
-    height: '60px',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
-    margin: '0px 15px',
   },
   copyright: {
     display: 'flex',
-    alignItems: 'center',
+    flexGrow: 4,
+    alignContent: 'space-around',
   },
   links: {
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    alignItems: 'center',
+    flexGrow: 1,
+    flexDirection: 'row',
   },
+  emptyDiv: {
+    width: '4%',
+    maxWidth: '9%',
+  },
+
 }
 
 const FooterBottom = ({ classes = {} }) => (
-  <div className={classes.root}>
-    <Grid container spacing={16}>
-      <Grid className={classes.copyright} item xs={10}>
-        <Copyright />
-      </Grid>
-      <Grid className={classes.links} item xs='auto'>
-        <Links />
-      </Grid>
+  <Grid container spacing={24} className={classes.footerBottom}>
+    <Grid item className={classes.copyright} xs={9}>
+      <div className={classes.emptyDiv} />
+      <Copyright />
     </Grid>
-  </div>
+    <Grid item className={classes.links}>
+      <Links />
+    </Grid>
+  </Grid>
 )
 
 FooterBottom.propTypes = {
