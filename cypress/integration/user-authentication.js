@@ -68,6 +68,12 @@ context('User Authentication', () => {
     cy.get('[data-testid=login-submit-button]').click()
 
     cy.url({ timeout: 10000 }).should('include', 'events')
+
+    cy.get('[data-testid=login-logout]').contains('Logout')
+
+    cy.get('[data-testid=login-logout]').click()
+    cy.url({ timeout: 10000 }).should('include', 'home')
+    cy.get('[data-testid=login-logout]').contains('Login')
   })
 
   it('should not be able to register a user with bad input', () => {

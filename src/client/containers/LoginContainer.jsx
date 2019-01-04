@@ -33,11 +33,8 @@ export function LoginContainer({ navigateTo, switchForm }) {
 
     axios.post(`${connectionString}/auth/login`, loginFormValues)
       .then(({ data }) => {
-        localStorage.setItem('token', data.token)
-        setLoginFormValues({
-          ...loginFormValues,
-          loading: false,
-        })
+        const token = data.token.split(' ')[1]
+        localStorage.setItem('token', token)
         navigateTo('/events')
       })
       .catch((loginError) => {

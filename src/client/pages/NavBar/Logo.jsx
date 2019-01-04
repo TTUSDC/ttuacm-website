@@ -1,8 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
-const Logo = ({ classes, handleNavigation, ...props }) => (
+const Logo = ({ classes = {}, handleNavigation }) => (
   <React.Fragment>
     <Typography
       variant='h6'
@@ -21,6 +22,11 @@ const Logo = ({ classes, handleNavigation, ...props }) => (
     </Typography>
   </React.Fragment>
 )
+
+Logo.propTypes = {
+  classes: PropTypes.shape({}),
+  handleNavigation: PropTypes.func.isRequired,
+}
 
 const styles = {
   homeBtn: {
