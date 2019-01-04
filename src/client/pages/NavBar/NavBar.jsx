@@ -13,14 +13,6 @@ const NavBar = ({ classes, currentPage, navigateTo }) => {
     navigateTo(nextPage)
   }
 
-  const routeNames = [
-    ['/', 'Home'],
-    ['/about', 'About Us'],
-    ['/events', 'Events'],
-    ['/teams', 'Club'],
-    // ['/auth', 'Login'],
-  ]
-
   return (
     <div className={classes.root}>
       <AppBar position='static'>
@@ -30,7 +22,6 @@ const NavBar = ({ classes, currentPage, navigateTo }) => {
             currentPage={currentPage}
           />
           <Navigation
-            routes={routeNames}
             handleNavigation={handleNavigation}
             currentPage={currentPage}
           />

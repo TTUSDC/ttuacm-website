@@ -8,8 +8,16 @@ const withBox = {
   border: 'solid white 2px',
 }
 
+const routes = [
+  ['/', 'Home'],
+  ['/about', 'About Us'],
+  ['/events', 'Events'],
+  ['/teams', 'Club'],
+]
+
+
 const Navigation = ({
-  classes = {}, handleNavigation, currentPage, routes,
+  classes = {}, handleNavigation, currentPage,
 }) => {
   const [error, isLoggedIn] = useLoggedIn()
   if (error) {
@@ -28,6 +36,7 @@ const Navigation = ({
       routes.map((route, key) => (
         <Typography
           key={`${route[0]}-${key + 1}`}
+          data-testid={route[1]}
           variant='h6'
           style={route[0] === currentPage ? withBox : {}}
           onClick={handleNavigation(`${route[0]}`)}
@@ -78,7 +87,6 @@ Navigation.propTypes = {
   handleNavigation: PropTypes.func.isRequired,
   classes: PropTypes.shape({}),
   currentPage: PropTypes.string.isRequired,
-  routes: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
 }
 
 export default withStyles(style)(Navigation)

@@ -12,14 +12,16 @@ context('Navigation', () => {
   it('should be able to navigate to all pages', () => {
     cy.visit('')
       .url().should('include', 'home')
-      .visit('about')
+      .get('[data-testid="About Us"]').click()
       .url().should('include', 'about')
-      .visit('events')
+      .get('[data-testid=Events]').click()
       .url().should('include', 'events')
-      .visit('teams')
+      .get('[data-testid=Club]').click()
       .url().should('include', 'teams')
-      .visit('auth')
+      .get('[data-testid=login-logout]').click()
       .url().should('include', 'auth')
+      .get('[data-testid=Logo]').click()
+      .url().should('include', 'home')
   })
 
   it('should bounce all of the protected routes', () => {

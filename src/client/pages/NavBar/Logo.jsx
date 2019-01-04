@@ -12,6 +12,7 @@ const Logo = ({ classes = {}, handleNavigation }) => (
     >
       <span
         role='button'
+        data-testid='Logo'
         tabIndex={0}
         className={classes.homeBtn}
         onClick={handleNavigation('/')}

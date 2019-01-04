@@ -31,7 +31,12 @@ export function LoginContainer({ navigateTo, switchForm }) {
       loading: true,
     })
 
-    axios.post(`${connectionString}/auth/login`, loginFormValues)
+    const body = {
+      email: loginFormValues.email,
+      password: loginFormValues.password,
+    }
+
+    axios.post(`${connectionString}/auth/login`, body)
       .then(({ data }) => {
         const token = data.token.split(' ')[1]
         localStorage.setItem('token', token)
