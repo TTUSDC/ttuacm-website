@@ -65,6 +65,7 @@ jobs:
       - node_modules
     install:
     - yarn
+    - yarn run cypress install
     script:
     - yarn test:integration --ci --forceExit
     - yarn e2e:ci

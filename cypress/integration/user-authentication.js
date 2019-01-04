@@ -30,12 +30,13 @@ context('User Authentication', () => {
       .get('[data-testid=FirstName]').type('Miggy')
       .get('[data-testid=LastName]').type('Reyes')
       .get('[data-testid=Email]').type('miggy.reyes@ttu.edu')
-      .get('[data-testid=Password]').type('BadPassword')
+      .get('[data-testid=Password]').type('P@ssw0rd')
       .get('[data-testid=ConfirmPassword]').type('P@ssw0rd')
       .get('[data-testid=GraduationDate]').type('2022-05-15')
 
-    cy.get('button[disabled]')
+    cy.get('[data-testid=registration-submit-button]').click()
 
+    cy.url({ timeout: 10000 }).should('include', 'events')
   })
 
   it('should not be able to register a user with bad input', () => {
