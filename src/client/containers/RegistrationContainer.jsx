@@ -5,6 +5,7 @@ import * as axios from 'axios'
 
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+import qs from 'querystring'
 
 export function checkForErrors({ email = '', password = '', confirmPassword = '' }) {
   const currentErrors = { }
@@ -96,11 +97,19 @@ function RegistrationContainer({ navigateTo, switchForm }) {
       ...registrationFormValues,
       loading: true,
     })
-    axios.post(`${connectionString}/auth/register`, registrationFormValues)
+    axios.post(`${connectionString}/auth/register`,
+      {
+        ...registrationFormValues,
+        redirectURLSuccess: `${window.location.origin}/home`,
+        fallback: `${window.location.origin}/auth`,
+      })
       .then(({ data }) => {
-        localStorage.setItem('token', data.token)
-        // Redirect to Events Page
-        navigateTo('/events')
+        const querystring = qs.stringify({
+          email: data.email,
+          token: data.confirmEmailToken,
+        })
+        // Redirect to Verify Email Page
+        navigateTo(`/verify?${querystring}`)
       })
       .catch((registrationError) => {
         console.error(registrationError)

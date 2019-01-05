@@ -31,13 +31,15 @@ export function LoginContainer({ navigateTo, switchForm }) {
       loading: true,
     })
 
-    axios.post(`${connectionString}/auth/login`, { data: loginFormValues })
+    const body = {
+      email: loginFormValues.email,
+      password: loginFormValues.password,
+    }
+
+    axios.post(`${connectionString}/auth/login`, body)
       .then(({ data }) => {
-        localStorage.setItem('token', data.token)
-        setLoginFormValues({
-          ...loginFormValues,
-          loading: false,
-        })
+        const token = data.token.split(' ')[1]
+        localStorage.setItem('token', token)
         navigateTo('/events')
       })
       .catch((loginError) => {

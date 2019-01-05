@@ -57,13 +57,6 @@ const studentSchema = mongoose.Schema({
   },
 }, { autoCreate: true })
 
-// Filter Private Data from api calls
-function filterUser(user) {
-  const filteredUser = user
-  // TODO Delete unwanted data here using delete
-  return filteredUser
-}
-
 const CONNECTION_STRING = functions.config().connections.db
 /**
  * Model that manages the students collection
@@ -116,8 +109,8 @@ class AuthModel {
     if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       const newUser = new this.DB(user)
-      const createdUser = await newUser.save()
-      return createdUser
+      await newUser.save()
+      return newUser
     } catch (err) {
       console.error(err)
       throw ErrorMessages.CreateUserError()
@@ -132,7 +125,7 @@ class AuthModel {
     if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
       const user = await this.DB.findById(id).exec()
-      if (user !== null) return filterUser(user)
+      if (user !== null) return user
       throw new Error() // A User was not found
     } catch (err) {
       console.error(err)
@@ -150,7 +143,7 @@ class AuthModel {
       const user = await this.DB.findOne(query).exec()
       let filteredUser
       if (user !== null) {
-        filteredUser = filterUser(user)
+        filteredUser = user
       }
       return filteredUser
     } catch (err) {
@@ -171,7 +164,7 @@ class AuthModel {
       const user = this.DB.findOneAndUpdate(query, update, { new: true }).exec()
       let filteredUser
       if (user !== null) {
-        filteredUser = filterUser(user)
+        filteredUser = user
       }
       return filteredUser
     } catch (err) {

@@ -5,6 +5,10 @@ test.mockConfig({
     email_username: 'v2z435ain366pxsa@ethereal.email',
     email_password: 'g7U7pZp5YAmZ2sMXDb',
   },
+  connections: {
+    protocol: 'protocol',
+    host: 'host',
+  },
   environment: {
     env: 'testing',
   },
@@ -20,7 +24,7 @@ describe('Email Unit Tests', () => {
   let ctrl
 
   beforeEach(() => {
-    ctrl = new Controller('protocol', 'host')
+    ctrl = new Controller()
   })
 
   it('[sendResetEmail] should send reset email without error', async () => {

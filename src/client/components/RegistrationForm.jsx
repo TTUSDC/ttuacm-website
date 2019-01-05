@@ -16,7 +16,7 @@ export function hasErrors({
   // Validators
   const fieldError = (emailError || passwordError || confirmPasswordError)
 
-  return emptyField || fieldError
+  return Boolean(emptyField || fieldError)
 }
 
 /**
