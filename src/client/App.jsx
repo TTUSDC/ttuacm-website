@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import axios from 'axios'
 import { ConnectedRouter } from 'connected-react-router/immutable'
 import { PropTypes } from 'prop-types'
 import { Route, Switch } from 'react-router'
@@ -14,6 +15,7 @@ import Footer from 'pages/Footer/Footer.jsx'
 import { ConnectionString } from 'context/ConnectionStringContext'
 import MaintenanceScreen from 'MaintenanceScreen.jsx'
 import useEnvironment from 'hooks/useEnvironment'
+import firebase from 'firebase'
 
 const Main = ({ history }) => (
   <React.Fragment>
@@ -35,12 +37,25 @@ const Main = ({ history }) => (
 
 const App = ({ history }) => {
   const connectionString = useContext(ConnectionString)
+  const [env, err] = useEnvironment(connectionString)
+  axios.get(`${connectionString}/environment`).then(({ data: env }) => {
+    const config = {
+      apiKey: env.firebase.api_key,
+      authDomain: env.firebase.auth_domain,
+      databaseURL: env.firebase.database_url,
+      projectId: env.firebase.project_id,
+      storageBucket: env.firebase.storage_bucket,
+      messagingSenderId: env.firebase.message_sender_id,
+    }
+
+    if (firebase.apps.length === 0) firebase.initializeApp(config)
+  })
+
 
   if (process.env.NODE_ENV === 'development') {
     // Changes this is you want to see the MaintenanceScreen
     return <Main history={history} />
   }
-  const [env, err] = useEnvironment(connectionString)
   if (err) {
     return <MaintenanceScreen />
   } if (env.maintainance !== 'true') {

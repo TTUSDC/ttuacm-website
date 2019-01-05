@@ -12,6 +12,7 @@ export default function useLoggedIn() {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
+    const OAuthUser = localStorage.getItem('firebaseui::rememberedAccounts')
     if (token) {
       let user = {}
       try {
@@ -23,6 +24,9 @@ export default function useLoggedIn() {
         setError(new Error('Bad Token'))
       }
     }
+
+    // TODO Should fetch the actual user fro mongo
+    if (OAuthUser) setCurrentUser(OAuthUser[0])
   })
 
   return [error, Boolean(currentUser), currentUser]

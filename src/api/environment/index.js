@@ -59,6 +59,14 @@ router.get('/test', (req, res) => {
  *        "session_secret": String,
  *        "protocol": String,
  *        "host": String,
+ *        "firebase": {
+ *          "api_key": String,
+ *          "auth_domain": String,
+ *          "database_url": String,
+ *          "project_id": String,
+ *          "storage_bucket": String,
+ *          "message_sender_id": String,
+ *        }
  *     }
  *
  * @typedef {function} EnvironmentProvider
