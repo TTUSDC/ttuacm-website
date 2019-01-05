@@ -8,18 +8,10 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Navigation from './Navigation.jsx'
 import Logo from './Logo.jsx'
 
-const NavBar = ({ classes, currentPage, ...props }) => {
+const NavBar = ({ classes, currentPage, navigateTo }) => {
   const handleNavigation = nextPage => () => {
-    props.push(nextPage)
+    navigateTo(nextPage)
   }
-
-  const routeNames = [
-    ['/', 'Home'],
-    ['/about', 'About Us'],
-    ['/events', 'Events'],
-    ['/teams', 'Club'],
-    ['/auth', 'Login'],
-  ]
 
   return (
     <div className={classes.root}>
@@ -30,7 +22,6 @@ const NavBar = ({ classes, currentPage, ...props }) => {
             currentPage={currentPage}
           />
           <Navigation
-            routes={routeNames}
             handleNavigation={handleNavigation}
             currentPage={currentPage}
           />
@@ -47,7 +38,7 @@ const styles = {
 }
 
 NavBar.propTypes = {
-  push: PropTypes.func.isRequired,
+  navigateTo: PropTypes.func.isRequired,
   classes: PropTypes.shape({}),
   currentPage: PropTypes.string.isRequired,
 }
@@ -56,4 +47,10 @@ const mapStateToProps = state => ({
   currentPage: state.router.location.pathname,
 })
 
-export default connect(mapStateToProps, { push })(withStyles(styles)(NavBar))
+const mapDispatchToProps = dispatch => ({
+  navigateTo: (location) => {
+    dispatch(push(location))
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(NavBar))

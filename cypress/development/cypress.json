@@ -4,6 +4,7 @@
   "integrationFolder": "../integration",
 	"env": {
     "_comment": "Replace API_CONNECTION with local firebase functions",
+    "baseUrl": "http://localhost:3000",
     "API_CONNECTION": "http://localhost:5000/sandbox-206807/us-central1"
 	}
 }

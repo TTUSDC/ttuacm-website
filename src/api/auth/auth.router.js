@@ -7,6 +7,20 @@ const AuthController = require('./auth.controller')
 const EmailController = require('../email/email.controller')
 const AuthModel = require('./auth.model')
 
+function filterSensitiveInformation(user) {
+  const filteredUser = {}
+  filteredUser.email = user.email
+  filteredUser.firstName = user.firstName
+  filteredUser.lastName = user.lastName
+  filteredUser.graduationDate = user.graduationDate
+  filteredUser.hasPaidDues = user.hasPaidDues
+  filteredUser.confirmEmailToken = user.confirmEmailToken
+  filteredUser.resetPasswordToken = user.resetPasswordToken
+  filteredUser.verified = user.verified
+
+  return filteredUser
+}
+
 /**
  * @apiDefine UserErrorResponse
  *
@@ -53,6 +67,8 @@ router.get('/test', (req, res) => {
  *         "firstName": String,
  *         "lastName": String
  *         "graduationDate": Date
+ *         "confirmEmailToken": String,
+ *         "resetPasswordToken": String,
  *         "hasPaidDues": Boolean
  *         "verified": Boolean
  *     }
@@ -62,10 +78,13 @@ router.get('/test', (req, res) => {
  * @apiParam (Request body) {String} lastName last name
  * @apiParam (Request body) {String} password password
  * @apiParam (Request body) {String} graduationDate graduation date
+ * @apiParam (Request body) {String} fallback failure URL
+ * @apiParam (Request body) {String} redirectURLSuccess success URL
  */
 router.post('/register', async (req, res) => {
   const authCtrl = new AuthController()
   const emailCtrl = new EmailController(req.protocol, req.headers.host)
+  const { fallback, redirectURLSuccess } = req.body
 
   const user = {
     firstName: req.body.firstName,
@@ -81,9 +100,14 @@ router.post('/register', async (req, res) => {
     const createdUser = await authCtrl.register(user)
 
     // Sending the email token
-    await emailCtrl.sendConfirmationEmail(createdUser.email, createdUser.confirmEmailToken)
+    await emailCtrl.sendConfirmationEmail(
+      createdUser.email,
+      createdUser.confirmEmailToken,
+      fallback,
+      redirectURLSuccess,
+    )
 
-    res.status(201).json(createdUser)
+    res.status(201).json(filterSensitiveInformation(createdUser))
   } catch (err) {
     console.error(err)
     res.status(500).json({ err: err.message })
@@ -113,6 +137,8 @@ router.post('/register', async (req, res) => {
  *         "firstName": String,
  *         "lastName": String
  *         "graduationDate": Date
+ *         "confirmEmailToken": String,
+ *         "resetPasswordToken": String,
  *         "hasPaidDues": Boolean
  *         "verified": Boolean
  *       }
@@ -125,7 +151,10 @@ router.post('/login', async (req, res) => {
 
   try {
     const { foundUser, token } = await ctrl.login(email, password)
-    res.status(200).json({ token: `JWT ${token}`, user: foundUser })
+    res.status(200).json({
+      token: `JWT ${token}`,
+      user: filterSensitiveInformation(foundUser),
+    })
   } catch (err) {
     console.error(err)
     res.status(err.code).json({ err })
@@ -133,9 +162,10 @@ router.post('/login', async (req, res) => {
 })
 
 /**
- * @api {get} /api/v2/auth/confirm/:token Confirm User By Email
+ * @api {get} /api/v2/auth/confirm Confirm User By Email
  * @apiDescription
  * Confirms the user has a valid email account.
+ * This endpoint is hit by the end user when they click the link
  * Responses are in querystring
  *
  * @apiVersion 0.2.0
@@ -154,23 +184,21 @@ router.post('/login', async (req, res) => {
  *       err: "Error Validating Email"
  *     }
  *
- * @apiParam (Request body) {String} fallback URL to redirect when failure
- * @apiParam (Request body) {String} redirectURLSuccess URL to redirect when success
- * @apiParam (Request Params) {String} token Token in `confirmEmailToken`
+ * @apiParam (Request Query) {String} fallback URL to redirect when failure
+ * @apiParam (Request Query) {String} redirectURLSuccess URL to redirect when success
+ * @apiParam (Request Query) {String} token Token in `confirmEmailToken`
  */
-router.get('/confirm/:token', (req, res) => {
+router.get('/confirm', (req, res) => {
   const ctrl = new AuthController()
-  const { token } = req.params
-  const { redirectURLSuccess, fallback } = req.body
-  ctrl.confirmToken(token)
-    .then(() => {
-      const qs = querystring.stringify({ verify: 'success' })
-      res.redirect(302, `${redirectURLSuccess}/?${qs}`)
-    })
-    .catch(() => {
-      const qs = querystring.stringify({ err: 'Error Validating Email' })
-      res.redirect(302, `${fallback}/?${qs}`)
-    })
+  const { token, redirectUrlSuccess, fallback } = req.query
+  ctrl.confirmToken(token).then(() => {
+    const qs = querystring.stringify({ verify: 'success' })
+    res.redirect(302, `${redirectUrlSuccess}/?${qs}`)
+  }).catch((err) => {
+    console.error(err)
+    const qs = querystring.stringify({ err: 'Error Validating Email' })
+    res.redirect(302, `${fallback}/?${qs}`)
+  })
 })
 
 /**
@@ -185,12 +213,14 @@ router.get('/confirm/:token', (req, res) => {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "email": String,
- *       "firstName": String,
- *       "lastName": String
- *       "graduationDate": Date
- *       "hasPaidDues": Boolean
- *       "verified": Boolean
+ *         "email": String,
+ *         "firstName": String,
+ *         "lastName": String
+ *         "graduationDate": Date
+ *         "confirmEmailToken": String,
+ *         "resetPasswordToken": String,
+ *         "hasPaidDues": Boolean
+ *         "verified": Boolean
  *     }
  *
  * @apiUse UserErrorResponse
@@ -204,7 +234,7 @@ router.post('/forgot', async (req, res) => {
     const { user } = await authCtrl.forgotLogin(req.body.email)
     await emailCtrl.sendResetEmail(user.email, user.resetPasswordToken)
 
-    res.status(200).json(user)
+    res.status(200).json(filterSensitiveInformation(user))
   } catch (err) {
     res.status(err.code).json({ msg: err.message })
   }
@@ -262,12 +292,14 @@ router.get('/reset/:token', async (req, res) => {
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *        "email": String,
- *        "firstName": String,
- *        "lastName": String
- *        "graduationDate": Date
- *        "hasPaidDues": Boolean
- *        "verified": Boolean
+ *         "email": String,
+ *         "firstName": String,
+ *         "lastName": String
+ *         "graduationDate": Date
+ *         "confirmEmailToken": String,
+ *         "resetPasswordToken": String,
+ *         "hasPaidDues": Boolean
+ *         "verified": Boolean
  *     }
  *
  * @apiUse UserErrorResponse
@@ -286,7 +318,7 @@ router.post('/reset/:token', async (req, res) => {
 
     await emailCtrl.sendChangedPasswordEmail(user.email)
 
-    res.status(200).json(user)
+    res.status(200).json(filterSensitiveInformation(user))
   } catch (err) {
     res.status(500).json({ err })
   }

@@ -59,8 +59,12 @@ describe('Auth Integration Tests', () => {
         })
         .expect(201)
 
-
       expect(registerBody.body.email === 'johndoe@gmail.com').to.equal(true)
+      expect(registerBody.body.githubId).not.to.exist
+      expect(registerBody.body.facebookId).not.to.exist
+      expect(registerBody.body.googleId).not.to.exist
+      expect(registerBody.body.password).not.to.exist
+      expect(registerBody.body._id).not.to.exist
       expect(registerBody.body.confirmEmailToken).not.to.equal('')
 
       // Confirm the email
