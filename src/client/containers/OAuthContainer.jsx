@@ -4,13 +4,14 @@ import firebase from 'firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+import { toggleAuthState } from 'redux/actions/auth-actions'
 
-function OAuthContainer({ navigateTo }) {
+function OAuthContainer({ navigateTo, toggleLoggedIn }) {
   function handleSignInOAuth(user) {
-    console.log(user)
     if (!user) return
 
     localStorage.setItem('oauth_user', true)
+    toggleLoggedIn()
     navigateTo('/home')
   }
 
@@ -37,11 +38,15 @@ function OAuthContainer({ navigateTo }) {
 
 OAuthContainer.propTypes = {
   navigateTo: PropTypes.func.isRequired,
+  toggleLoggedIn: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
   navigateTo: (location) => {
     dispatch(push(location))
+  },
+  toggleLoggedIn: () => {
+    dispatch(toggleAuthState())
   },
 })
 

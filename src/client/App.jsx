@@ -26,7 +26,6 @@ const App = ({ history }) => {
 
   // Initialize the Firebase App, but only do it if it has not been initialized before
   if (Object.keys(env).length) {
-    console.log('creating')
     const config = {
       apiKey: env.firebase.api_key,
       authDomain: env.firebase.auth_domain,

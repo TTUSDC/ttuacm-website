@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
-import useLoggedIn from 'hooks/useLoggedIn'
-import firebase from 'firebase'
 
 const withBox = {
   border: 'solid white 2px',
@@ -18,28 +16,10 @@ const routes = [
 
 
 const Navigation = ({
-  classes = {}, handleNavigation, currentPage,
-}) => {
-  const [error, isLoggedIn] = useLoggedIn()
-
-  if (error) {
-    // TODO handle this error with a snack bar
-    handleNavigation('/home')()
-  }
-
-  const handleLogout = () => {
-    // OAuth Sign out
-    if (localStorage.getItem('oauth_user')) firebase.auth().signOut()
-
-    // Local Sign Out
-    localStorage.removeItem('token')
-    localStorage.removeItem('oauth_user')
-    handleNavigation('/')()
-  }
-
-  return (
-    <React.Fragment>
-      {
+  classes = {}, handleNavigation, currentPage, handleLogout, isLoggedIn,
+}) => (
+  <React.Fragment>
+    {
       routes.map((route, key) => (
         <Typography
           key={`${route[0]}-${key + 1}`}
@@ -53,7 +33,7 @@ const Navigation = ({
         </Typography>
       ))
     }
-      {
+    {
       isLoggedIn
         ? (
           <Typography
@@ -77,9 +57,8 @@ const Navigation = ({
           </Typography>
         )
     }
-    </React.Fragment>
-  )
-}
+  </React.Fragment>
+)
 
 const style = () => ({
   nav: {
@@ -92,6 +71,8 @@ const style = () => ({
 
 Navigation.propTypes = {
   handleNavigation: PropTypes.func.isRequired,
+  handleLogout: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
   classes: PropTypes.shape({}),
   currentPage: PropTypes.string.isRequired,
 }
