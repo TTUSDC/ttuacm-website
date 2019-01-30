@@ -30,15 +30,13 @@ export default function useEnvironment(connectionString) {
   const [err, setErr] = useState(null)
 
   useEffect(() => {
-    if (connectionString) {
-      axios.get(`${connectionString}/environment`).then(({ data }) => {
-        const environment = data
-        setEnv(environment)
-      }).catch((error) => {
-        setErr(error)
-      })
-    }
-  }, [])
+    axios.get(`${connectionString}/environment`).then(({ data }) => {
+      const environment = data
+      setEnv(environment)
+    }).catch((error) => {
+      setErr(error)
+    })
+  }, [connectionString])
 
   return [env, err]
 }
