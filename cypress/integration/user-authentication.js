@@ -9,7 +9,7 @@ context('User Authentication', () => {
   const MOCK_USER = {
     firstName: 'Miggy',
     lastName: 'Reyes',
-    email: 'miggy.reyes@ttu.edu'
+    email: 'miggy.reyes@ttu.edu',
   }
 
   before(() => {
@@ -23,14 +23,18 @@ context('User Authentication', () => {
       .get('[data-testid=switch-to-registration]')
       .click()
 
-
-    cy
-      .get('[data-testid=FirstName]').type('Miggy')
-      .get('[data-testid=LastName]').type('Reyes')
-      .get('[data-testid=Email]').type('miggy.reyes@ttu.edu')
-      .get('[data-testid=Password]').type('P@ssw0rd')
-      .get('[data-testid=ConfirmPassword]').type('P@ssw0rd')
-      .get('[data-testid=GraduationDate]').type('2022-05-15')
+    cy.get('[data-testid=FirstName]')
+      .type('Miggy')
+      .get('[data-testid=LastName]')
+      .type('Reyes')
+      .get('[data-testid=Email]')
+      .type('miggy.reyes@ttu.edu')
+      .get('[data-testid=Password]')
+      .type('P@ssw0rd')
+      .get('[data-testid=ConfirmPassword]')
+      .type('P@ssw0rd')
+      .get('[data-testid=GraduationDate]')
+      .type('2022-05-15')
 
     cy.get('[data-testid=registration-submit-button]').click()
 
@@ -43,7 +47,7 @@ context('User Authentication', () => {
     cy.get('[data-testid=confirm-waiting-symbol]', { timeout: 10000 })
 
     // Mock the email link click
-    cy.url().then((location) =>{
+    cy.url().then((location) => {
       const currentLocation = parse(location)
       const email = qs.parse(currentLocation.query)['email']
       const token = qs.parse(currentLocation.query)['token']
@@ -81,17 +85,23 @@ context('User Authentication', () => {
       .get('[data-testid=switch-to-registration]')
       .click()
 
-    cy.get('[data-testid=FirstName]').type('Miggy')
+    cy.get('[data-testid=FirstName]')
+      .type('Miggy')
       .get('button[disabled]')
-      .get('[data-testid=LastName]').type('Reyes')
+      .get('[data-testid=LastName]')
+      .type('Reyes')
       .get('button[disabled]')
-      .get('[data-testid=Email]').type('miggy.reyes@ttu.edu')
+      .get('[data-testid=Email]')
+      .type('miggy.reyes@ttu.edu')
       .get('button[disabled]')
-      .get('[data-testid=Password]').type('BadPassword')
+      .get('[data-testid=Password]')
+      .type('BadPassword')
       .get('button[disabled]')
-      .get('[data-testid=ConfirmPassword]').type('NotMatching')
+      .get('[data-testid=ConfirmPassword]')
+      .type('NotMatching')
       .get('button[disabled]')
-      .get('[data-testid=GraduationDate]').type('2022-05-15')
+      .get('[data-testid=GraduationDate]')
+      .type('2022-05-15')
       .get('button[disabled]')
   })
 })
