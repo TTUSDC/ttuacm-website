@@ -27,3 +27,10 @@ export default function Routes() {
     </Switch>
   )
 }
+
+export const mainRoutes = {
+  '/home': ['/home', 'Home'],
+  '/about': ['/about', 'About Us'],
+  '/events': ['/events', 'Events'],
+  '/teams': ['/teams', 'Club'],
+}
