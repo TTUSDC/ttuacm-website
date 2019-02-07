@@ -7,7 +7,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import firebase from 'firebase'
 import { toggleAuthState } from 'redux/actions/auth-actions'
-import Navigation from './Navigation.jsx'
+import DesktopNavigation from './DesktopNavigation.jsx'
 import Logo from './Logo.jsx'
 
 const NavBar = ({
@@ -41,7 +41,7 @@ const NavBar = ({
             handleNavigation={handleNavigation}
             currentPage={currentPage}
           />
-          <Navigation
+          <DesktopNavigation
             isLoggedIn={isLoggedIn}
             handleLogout={handleLogout}
             handleNavigation={handleNavigation}
