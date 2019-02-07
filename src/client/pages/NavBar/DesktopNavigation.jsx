@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
 
 const withBox = {
@@ -8,68 +8,83 @@ const withBox = {
 }
 
 const routes = [
-  ['/', 'Home'],
+  ['/home', 'Home'],
   ['/about', 'About Us'],
   ['/events', 'Events'],
   ['/teams', 'Club'],
 ]
 
 
-const Navigation = ({
+const DesktopNavigation = ({
   classes = {}, handleNavigation, currentPage, handleLogout, isLoggedIn,
 }) => (
   <React.Fragment>
     {
       routes.map((route, key) => (
-        <Typography
+        <Button
           key={`${route[0]}-${key + 1}`}
           data-testid={route[1]}
-          variant='h6'
           style={route[0] === currentPage ? withBox : {}}
           onClick={handleNavigation(`${route[0]}`)}
-          className={classes.nav}
+          className={classes.DesktopNav}
         >
           {route[1]}
-        </Typography>
+        </Button>
       ))
     }
     {
       isLoggedIn
         ? (
-          <Typography
-            variant='h6'
+          <Button
             onClick={handleLogout}
-            className={classes.nav}
+            className={classes.DesktopNav}
             data-testid='login-logout'
           >
         Logout
-          </Typography>
+          </Button>
         )
         : (
-          <Typography
-            variant='h6'
+          <Button
             style={currentPage === '/auth' ? withBox : {}}
             onClick={handleNavigation('/auth')}
-            className={classes.nav}
+            className={classes.DesktopNav}
             data-testid='login-logout'
           >
         Login
-          </Typography>
+          </Button>
         )
     }
   </React.Fragment>
 )
 
-const style = () => ({
-  nav: {
-    padding: '5px',
-    margin: '0px 5px',
-    width: '85px',
-    textAlign: 'center',
+const styles = theme => ({
+  DesktopNav: {
+    textTransform: 'none',
+    fontSize: '1.25rem',
+    boxShadow: 'none',
+    fontWeight: '300',
+    '&:hover': {
+      backgroundColor: 'initial',
+      boxShadow: 'none',
+    },
+    '&:active': {
+      boxShadow: 'none',
+      backgroundColor: 'inital',
+    },
+    '&:focus': {
+      boxShadow: 'none',
+      backgroundColor: 'inital',
+    },
+    [theme.breakpoints.up('sm')]: {
+      display: 'initial',
+    },
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
 })
 
-Navigation.propTypes = {
+DesktopNavigation.propTypes = {
   handleNavigation: PropTypes.func.isRequired,
   handleLogout: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
@@ -77,4 +92,4 @@ Navigation.propTypes = {
   currentPage: PropTypes.string.isRequired,
 }
 
-export default withStyles(style)(Navigation)
+export default withStyles(styles)(DesktopNavigation)
