@@ -10,6 +10,17 @@ import { toggleAuthState } from 'redux/actions/auth-actions'
 import DesktopNavigation from './DesktopNavigation.jsx'
 import Logo from './Logo.jsx'
 
+const styles = {
+  barDefaults: {
+    maxHeight: '64px',
+    maxWidth: '100%',
+  },
+  root: {
+    display: 'flex',
+    maxWidth: '100%',
+  },
+}
+
 const NavBar = ({
   classes, currentPage, navigateTo, isLoggedIn, toggleLoggedIn,
 }) => {
@@ -35,12 +46,19 @@ const NavBar = ({
 
   return (
     <div className={classes.root}>
-      <AppBar position='static'>
-        <Toolbar>
+      <AppBar
+        position='static'
+        className={classes.barDefaults}
+      >
+        <Toolbar
+          className={classes.barDefaults}
+        >
           <Logo
             handleNavigation={handleNavigation}
             currentPage={currentPage}
           />
+
+          {/* Desktop Navigation */}
           <DesktopNavigation
             isLoggedIn={isLoggedIn}
             handleLogout={handleLogout}
@@ -51,12 +69,6 @@ const NavBar = ({
       </AppBar>
     </div>
   )
-}
-
-const styles = {
-  root: {
-    flexGrow: 1,
-  },
 }
 
 NavBar.propTypes = {
