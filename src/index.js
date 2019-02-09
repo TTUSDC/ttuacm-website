@@ -7,17 +7,13 @@ import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { red, black } from '@material-ui/core/colors'
 import { Provider } from 'react-redux'
-import { connectRouter, routerMiddleware } from 'connected-react-router'
-import { createBrowserHistory } from 'history'
-import { createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import thunk from 'redux-thunk'
-
-import rootReducer from 'redux/reducers.js'
+import { ConnectedRouter } from 'connected-react-router/immutable'
 
 import { ConnectionStringProvider } from 'context/ConnectionStringContext'
 import App from 'App.jsx'
 import logger from './utils/logger'
+
+import configureStore, { history } from './client/configureStore.js'
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 
@@ -42,32 +38,23 @@ const theme = createMuiTheme({
   },
 })
 
-const history = createBrowserHistory()
-
-const store = createStore(
-  connectRouter(history)(rootReducer),
-  composeWithDevTools(
-    applyMiddleware(
-      thunk,
-      routerMiddleware(history),
-    ),
-  ),
-)
-
+const store = configureStore()
 /**
  * Root of Component Tree
- * Router - connected-react-router
+ * Router - connected-react-router/immutable
  * Theme = Material UI
  */
 function render() {
   ReactDOM.render(
     <AppContainer>
       <Provider store={store}>
-        <MuiThemeProvider theme={theme}>
-          <ConnectionStringProvider>
-            <App history={history} />
-          </ConnectionStringProvider>
-        </MuiThemeProvider>
+        <ConnectedRouter history={history}>
+          <MuiThemeProvider theme={theme}>
+            <ConnectionStringProvider>
+              <App history={history} />
+            </ConnectionStringProvider>
+          </MuiThemeProvider>
+        </ConnectedRouter>
       </Provider>
     </AppContainer>,
     document.getElementById('root'),
@@ -80,10 +67,5 @@ if (module.hot) {
   // Reload components
   module.hot.accept('./client/App.jsx', () => {
     render()
-  })
-
-  // Reload reducers
-  module.hot.accept('./client/redux/reducers.js', () => {
-    store.replaceReducer(rootReducer(history))
   })
 }

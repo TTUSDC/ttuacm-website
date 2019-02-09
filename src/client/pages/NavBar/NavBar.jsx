@@ -29,7 +29,9 @@ const NavBar = ({
   }, [])
 
   const handleNavigation = nextPage => () => {
-    navigateTo(nextPage)
+    if (currentPage !== nextPage) {
+      navigateTo(nextPage)
+    }
   }
 
   const handleLogout = () => {
@@ -80,7 +82,7 @@ NavBar.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  currentPage: state.router.location.pathname,
+  currentPage: state.router.getIn(['location', 'pathname']),
   isLoggedIn: state.auth.get('isLoggedIn'),
 })
 

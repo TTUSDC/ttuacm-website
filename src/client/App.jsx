@@ -1,28 +1,20 @@
 import React, { useContext } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { ConnectedRouter } from 'connected-react-router/immutable'
 import { PropTypes } from 'prop-types'
-import NavBar from 'pages/NavBar/NavBar.jsx'
-import Footer from 'pages/Footer/Footer.jsx'
 import { ConnectionString } from 'context/ConnectionStringContext'
 import MaintenanceScreen from 'MaintenanceScreen.jsx'
 import useEnvironment from 'hooks/useEnvironment'
 import firebase from 'firebase'
-import Routes from 'Routes'
-
-const Main = ({ history }) => (
-  <React.Fragment>
-    <NavBar />
-    <ConnectedRouter history={history}>
-      <Routes />
-    </ConnectedRouter>
-    <Footer />
-  </React.Fragment>
-)
+import Main from 'Main'
 
 const App = ({ history }) => {
   const connectionString = useContext(ConnectionString)
   const [env, err] = useEnvironment(connectionString)
+
+  if (process.env.NODE_ENV === 'development') {
+    // Changes this is you want to see the MaintenanceScreen
+    return <Main history={history} />
+  }
 
   // Initialize the Firebase App, but only do it if it has not been initialized before
   if (Object.keys(env).length) {
@@ -37,12 +29,8 @@ const App = ({ history }) => {
 
     if (firebase.apps.length === 0) firebase.initializeApp(config)
   } else {
+    // TODO: Make the loading more beautiful
     return <CircularProgress />
-  }
-
-  if (process.env.NODE_ENV === 'development') {
-    // Changes this is you want to see the MaintenanceScreen
-    return <Main history={history} />
   }
 
   if (err) {
@@ -58,10 +46,6 @@ const App = ({ history }) => {
 }
 
 App.propTypes = {
-  history: PropTypes.shape({}),
-}
-
-Main.propTypes = {
   history: PropTypes.shape({}),
 }
 

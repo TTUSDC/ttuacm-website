@@ -16,10 +16,10 @@ const styles = ({
   },
 })
 
-const FooterTop = ({ classes = {}, currentPage, ...props }) => {
+const FooterTop = ({ classes = {}, currentPage, navigateTo }) => {
   const handleNavigation = nextPage => () => {
     if (currentPage !== nextPage) {
-      props.push(nextPage)
+      navigateTo(nextPage)
     }
   }
 
@@ -46,11 +46,17 @@ const FooterTop = ({ classes = {}, currentPage, ...props }) => {
 FooterTop.propTypes = {
   classes: PropTypes.shape({}),
   currentPage: PropTypes.string.isRequired,
-  push: PropTypes.func.isRequired,
+  navigateTo: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-  currentPage: state.router.location.pathname,
+  currentPage: state.router.getIn(['location', 'pathname']),
 })
 
-export default connect(mapStateToProps, { push })(withStyles(styles)(FooterTop))
+const mapDispatchToProps = dispatch => ({
+  navigateTo: (location) => {
+    dispatch(push(location))
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(FooterTop))
