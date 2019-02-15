@@ -34,5 +34,12 @@ export const sections = [
 ]
 
 export const withHref = (classes, href, text) => (
-  <a href={href} target='_blank' rel='noopener noreferrer' className={classes.FooterALink}>{text}</a>
+  <a
+    href={href}
+    target='_blank'
+    rel='noopener noreferrer'
+    className={classes.FooterALink}
+  >
+    {text}
+  </a>
 )
