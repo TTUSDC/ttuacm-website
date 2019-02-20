@@ -16,7 +16,7 @@ import thunk from 'redux-thunk'
 import rootReducer from 'redux/reducers.js'
 
 import { ConnectionStringProvider } from 'context/ConnectionStringContext'
-import App from 'App.jsx'
+import MaintainanceContainer from 'containers/MaintainanceContainer.jsx'
 import logger from './utils/logger'
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
@@ -65,7 +65,7 @@ function render() {
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>
           <ConnectionStringProvider>
-            <App history={history} />
+            <MaintainanceContainer history={history} />
           </ConnectionStringProvider>
         </MuiThemeProvider>
       </Provider>
@@ -78,7 +78,7 @@ render()
 
 if (module.hot) {
   // Reload components
-  module.hot.accept('./client/App.jsx', () => {
+  module.hot.accept('./client/containers/MaintainanceContainer.jsx', () => {
     render()
   })
 
