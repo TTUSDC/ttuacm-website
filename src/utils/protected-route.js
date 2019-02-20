@@ -1,5 +1,5 @@
 // TODO: Fix this so that every service has their own way to authenticate
-const passport = require('passport');
+const passport = require('passport')
 
 /**
  * Middleware for route guarding, this is pretty magical

@@ -17,21 +17,21 @@ class TeamController {
    * @return {string} - the formatted string
    */
   static formatGroupName(groupName) {
-    let formattedName = groupName;
+    let formattedName = groupName
 
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getYear();
+    const currentDate = new Date()
+    const currentMonth = currentDate.getMonth()
+    const currentYear = currentDate.getYear()
 
     // May - December is considered Fall, everything else is Spring
-    const season = currentMonth > 4 && currentMonth <= 11 ? 'Fall' : 'Spring';
+    const season = currentMonth > 4 && currentMonth <= 11 ? 'Fall' : 'Spring'
 
     // Gets the last two digits of the year
-    const year = currentYear.toString().slice(1, 3);
+    const year = currentYear.toString().slice(1, 3)
 
-    formattedName = `SDC - ${groupName} - ${season} ${year}`;
+    formattedName = `SDC - ${groupName} - ${season} ${year}`
 
-    return formattedName;
+    return formattedName
   }
 
   /**
@@ -59,7 +59,9 @@ class TeamController {
    * @return {Error} - An error if something happened with adding members to the group
    */
   async addMemberOfGroups(groupNames, email) {
-    const fmtGroupNames = groupNames.map(name => TeamController.formatGroupName(name))
+    const fmtGroupNames = groupNames.map((name) =>
+      TeamController.formatGroupName(name),
+    )
     // Check if they all exist, otherwise, make them
     try {
       await asyncForEach(fmtGroupNames, async (name) => {
@@ -83,7 +85,9 @@ class TeamController {
    * @return {Error} - An error if something happened with adding members to the group
    */
   async deleteMemberOfGroups(groupNames, email) {
-    const fmtGroupNames = groupNames.map(name => TeamController.formatGroupName(name))
+    const fmtGroupNames = groupNames.map((name) =>
+      TeamController.formatGroupName(name),
+    )
     // Check if they all exist, otherwise, make them
     try {
       await asyncForEach(fmtGroupNames, async (name) => {

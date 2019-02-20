@@ -55,7 +55,7 @@ describe('Auth Unit Tests', () => {
       await ctrl.register(testUser)
       await ctrl.register(testUser)
       throw ErrorMessages.ErrorTestUtil()
-    } catch(err) {
+    } catch (err) {
       const targetError = ErrorMessages.DuplicateAccount()
       expect(err.message).to.equal(targetError.message)
       expect(err.code).to.equal(targetError.code)
@@ -126,7 +126,7 @@ describe('Auth Unit Tests', () => {
     }
   })
 
-  it('[forgotLogin] should update the user\'s resetPass attributes', async () => {
+  it("[forgotLogin] should update the user's resetPass attributes", async () => {
     const testUser = {
       firstName: 'John',
       lastName: 'Doe',
@@ -208,7 +208,7 @@ describe('Auth Unit Tests', () => {
     }
   })
 
-  it('[resetToken] should resolve with the user\'s token', async () => {
+  it("[resetToken] should resolve with the user's token", async () => {
     const testUser = {
       firstName: 'John',
       lastName: 'Doe',

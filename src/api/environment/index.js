@@ -80,7 +80,11 @@ router.get('/', (req, res) => {
       environment.host = connections.host
       res.json(environment)
     } else {
-      console.error(`${req.headers.origin} does not match https://acm-texas-tech-web-app-2.firebaseapp.com`)
+      console.error(
+        `${
+          req.headers.origin
+        } does not match https://acm-texas-tech-web-app-2.firebaseapp.com`,
+      )
       res.status(401).end()
     }
   } else {

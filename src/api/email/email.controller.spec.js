@@ -19,7 +19,6 @@ const Controller = require('./email.controller')
 
 const { expect } = chai
 
-
 describe('Email Unit Tests', () => {
   let ctrl
 

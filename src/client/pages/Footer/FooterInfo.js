@@ -3,11 +3,13 @@ import React from 'react'
 export const sections = [
   {
     title: 'ABOUT',
-    description: [`The ACM Chapter at Texas Tech University 
+    description: [
+      `The ACM Chapter at Texas Tech University 
           creates many
           opportunities for students
           interested in computer science
-          to be involved and become better`],
+          to be involved and become better`,
+    ],
     containsAppLink: false,
     containsOutsideLink: false,
   },
@@ -34,5 +36,12 @@ export const sections = [
 ]
 
 export const withHref = (classes, href, text) => (
-  <a href={href} target='_blank' rel='noopener noreferrer' className={classes.FooterALink}>{text}</a>
+  <a
+    href={href}
+    target='_blank'
+    rel='noopener noreferrer'
+    className={classes.FooterALink}
+  >
+    {text}
+  </a>
 )

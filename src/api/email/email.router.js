@@ -46,7 +46,8 @@ router.get('/test', (req, res) => {
 router.post('/contact-us', (req, res) => {
   const ctrl = new Controller(req.protocol, req.headers.host)
 
-  ctrl.contactUs(req.body)
+  ctrl
+    .contactUs(req.body)
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)
@@ -80,9 +81,7 @@ router.post('/contact-us', (req, res) => {
 router.post('/confirm-email', async (req, res) => {
   const ctrl = new Controller()
   try {
-    const {
-      email, token, fallback, redirectURLSuccess,
-    } = req.body
+    const { email, token, fallback, redirectURLSuccess } = req.body
     await ctrl.sendConfirmationEmail(email, token, fallback, redirectURLSuccess)
     res.status(200).json()
   } catch (err) {
@@ -118,7 +117,8 @@ router.post('/reset-password', (req, res) => {
   const ctrl = new Controller()
   const { email, token } = req.body
 
-  ctrl.sendResetEmail(email, token)
+  ctrl
+    .sendResetEmail(email, token)
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)

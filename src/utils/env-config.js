@@ -11,14 +11,17 @@ shell('clear')
 console.log('Thank You for contributing to ACM!')
 console.log('We will begin by setting up the environment variables')
 console.log('')
-console.log('For email username and password, I recommend going to etherial.mail')
+console.log(
+  'For email username and password, I recommend going to etherial.mail',
+)
 console.log('')
 console.log('Skip the clientID and secrets\n')
 
 // Map of all the services and their environment variables
 const SERVICES = new Map([
   [
-    'environment', [
+    'environment',
+    [
       'init',
       'env',
       'apikey',
@@ -30,7 +33,8 @@ const SERVICES = new Map([
     ],
   ],
   [
-    'auth', [
+    'auth',
+    [
       'init',
       'session_secret',
       'db',
@@ -43,36 +47,11 @@ const SERVICES = new Map([
       'facebook_client_secret',
     ],
   ],
-  [
-    'email', [
-      'init',
-      'email_username',
-      'email_password',
-    ],
-  ],
-  [
-    'profile', [
-      'init',
-    ],
-  ],
-  [
-    'events', [
-      'init',
-    ],
-  ],
-  [
-    'connections', [
-      'init',
-      'protocol',
-      'host',
-      'db',
-    ],
-  ],
-  [
-    'teams', [
-      'init',
-    ],
-  ],
+  ['email', ['init', 'email_username', 'email_password']],
+  ['profile', ['init']],
+  ['events', ['init']],
+  ['connections', ['init', 'protocol', 'host', 'db']],
+  ['teams', ['init']],
 ])
 
 // Looks through the map to find environment variables
@@ -83,19 +62,26 @@ function getEnvVaribales(services, name) {
     if (line === '') {
       console.log('Leaving old value')
     } else if (choices <= services.length) {
-      console.log(`firebase functions:config:set ${name}.${services[choices]}=${line}`)
-      shell(`firebase functions:config:set ${name}.${services[choices]}=${line}`)
+      console.log(
+        `firebase functions:config:set ${name}.${services[choices]}=${line}`,
+      )
+      shell(
+        `firebase functions:config:set ${name}.${services[choices]}=${line}`,
+      )
     }
 
     choices += 1
     if (choices >= services.length) {
       console.log('Saving changes...')
-      rl.question('Would you like to save those settings for local development? [Y/n] ', (ans) => {
-        if (ans === 'Y' || ans === 'y') {
-          shell('firebase functions:config:get > .runtimeconfig.json')
-        }
-        process.exit(0)
-      })
+      rl.question(
+        'Would you like to save those settings for local development? [Y/n] ',
+        (ans) => {
+          if (ans === 'Y' || ans === 'y') {
+            shell('firebase functions:config:get > .runtimeconfig.json')
+          }
+          process.exit(0)
+        },
+      )
     } else {
       process.stdout.write(`${services[choices]}: `)
     }
@@ -105,30 +91,33 @@ function getEnvVaribales(services, name) {
 // Asks the user what environment [dev/prod] that they want to setup
 function setup() {
   return new Promise((resolve) => {
-    rl.question('What environment would you like to set up? [dev/staging/prod] ', (ans) => {
-      const CHOICES = new Set(['dev', 'staging', 'prod'])
+    rl.question(
+      'What environment would you like to set up? [dev/staging/prod] ',
+      (ans) => {
+        const CHOICES = new Set(['dev', 'staging', 'prod'])
 
-      if(ans === '') {
-        console.log('defaulting to dev')
-        shell('firebase functions:config:set environment.env=dev')
-      } else if (!CHOICES.has(ans)) {
-        console.log('Invalid Option. You must pick either dev or prod')
-        process.exit(0)
-      } else {
-        console.log(`Setting up ${ans} environment...`)
-        shell(`firebase functions:config:set environment.env=${ans}`)
-      }
-      resolve()
-    })
+        if (ans === '') {
+          console.log('defaulting to dev')
+          shell('firebase functions:config:set environment.env=dev')
+        } else if (!CHOICES.has(ans)) {
+          console.log('Invalid Option. You must pick either dev or prod')
+          process.exit(0)
+        } else {
+          console.log(`Setting up ${ans} environment...`)
+          shell(`firebase functions:config:set environment.env=${ans}`)
+        }
+        resolve()
+      },
+    )
   })
 }
 
 // Asks the user to pick what service they want to configure
 function chooseService() {
   rl.question('What service would you like to configure?  ', (ans) => {
-    if(ans === '') {
+    if (ans === '') {
       process.exit(0)
-    } else if(!SERVICES.has(ans)) {
+    } else if (!SERVICES.has(ans)) {
       console.log(`Sorry, we do not support ${ans} at the moment`)
       process.exit(0)
     } else {

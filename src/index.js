@@ -25,9 +25,7 @@ setConfig({
   pureSFC: true,
 })
 
-const {
-  NODE_ENV,
-} = process.env
+const { NODE_ENV } = process.env
 
 if (NODE_ENV === 'development') logger.info('In development mode')
 
@@ -46,12 +44,7 @@ const history = createBrowserHistory()
 
 const store = createStore(
   connectRouter(history)(rootReducer),
-  composeWithDevTools(
-    applyMiddleware(
-      thunk,
-      routerMiddleware(history),
-    ),
-  ),
+  composeWithDevTools(applyMiddleware(thunk, routerMiddleware(history))),
 )
 
 /**

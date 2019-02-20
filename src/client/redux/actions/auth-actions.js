@@ -27,8 +27,8 @@ export function toggleAuthState() {
     user = false
   }
 
-  return ({
+  return {
     type: AuthConsts.TOGGLE_AUTH_STATE,
     payload: { isLoggedIn: user },
-  })
+  }
 }

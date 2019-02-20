@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 const ErrorMessages = require('./teams.errors')
 
 const teamsSchema = mongoose.Schema({
@@ -96,7 +96,7 @@ class TeamsModel {
   async getAllTeams() {
     try {
       const teams = await this.DB.find({}).exec()
-      return teams.map(team => team.toObject())
+      return teams.map((team) => team.toObject())
     } catch (err) {
       console.error(err)
       throw ErrorMessages.UnknownServerError()

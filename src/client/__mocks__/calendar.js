@@ -5,7 +5,8 @@ const MOCK_CALENDAR = [
     endTime: new Date(),
     title: 'GitHub Workshop',
     location: 'IMSE 117',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
     recurringEvent: false,
   },
   {
@@ -14,7 +15,8 @@ const MOCK_CALENDAR = [
     endTime: new Date(),
     title: 'Another Workshop with a really long title',
     location: 'IMSE 118',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut',
     recurringEvent: false,
   },
   {

@@ -79,17 +79,21 @@ class AuthController {
           reject(ErrorMessages.UserNotVerified())
         } else if (foundUser !== null && foundUser.password !== null) {
           // If the user has a signed up using a local auth strategy
-          bcrypt.compare(password, foundUser.password, async (err, validPassword) => {
-            if (err) {
-              console.error(err)
-              reject(ErrorMessages.UnknownServerError())
-            } else if (validPassword) {
-              const token = generateJWTToken(foundUser)
-              resolve({ token, foundUser })
-            } else {
-              reject(ErrorMessages.InvalidLogin())
-            }
-          })
+          bcrypt.compare(
+            password,
+            foundUser.password,
+            async (err, validPassword) => {
+              if (err) {
+                console.error(err)
+                reject(ErrorMessages.UnknownServerError())
+              } else if (validPassword) {
+                const token = generateJWTToken(foundUser)
+                resolve({ token, foundUser })
+              } else {
+                reject(ErrorMessages.InvalidLogin())
+              }
+            },
+          )
         }
       } catch (err) {
         console.error(err)

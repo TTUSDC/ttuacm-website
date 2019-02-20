@@ -59,7 +59,9 @@ function MissingToken() {
 }
 
 function NotConnectedToMongo() {
-  const err = new Error('You called a method before connecting to the database. Use `.connect` before calling a method')
+  const err = new Error(
+    'You called a method before connecting to the database. Use `.connect` before calling a method',
+  )
   err.code = 500
   return err
 }
