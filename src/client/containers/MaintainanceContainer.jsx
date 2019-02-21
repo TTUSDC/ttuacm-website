@@ -7,7 +7,7 @@ import useEnvironment from 'hooks/useEnvironment'
 import firebase from 'firebase'
 import Main from 'Main'
 
-const MaintainanceContainer = ({ history }) => {
+function MaintainanceContainer({ history }) {
   const connectionString = useContext(ConnectionString)
   const [env, err] = useEnvironment(connectionString)
 
