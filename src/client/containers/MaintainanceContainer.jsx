@@ -2,19 +2,14 @@ import React, { useContext } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { PropTypes } from 'prop-types'
 import { ConnectionString } from 'context/ConnectionStringContext'
-import MaintenanceScreen from 'MaintenanceScreen.jsx'
+import MaintenanceScreen from 'pages/Maintainance/MaintenanceScreen.jsx'
 import useEnvironment from 'hooks/useEnvironment'
 import firebase from 'firebase'
 import Main from 'Main'
 
-const App = ({ history }) => {
+function MaintainanceContainer({ history }) {
   const connectionString = useContext(ConnectionString)
   const [env, err] = useEnvironment(connectionString)
-
-  if (process.env.NODE_ENV === 'development') {
-    // Changes this is you want to see the MaintenanceScreen
-    return <Main history={history} />
-  }
 
   // Initialize the Firebase App, but only do it if it has not been initialized before
   if (Object.keys(env).length) {
@@ -38,6 +33,11 @@ const App = ({ history }) => {
     return <MaintenanceScreen />
   }
 
+  if (process.env.NODE_ENV === 'development') {
+    // Changes this is you want to see the MaintenanceScreen
+    return <Main history={history} />
+  }
+
   if (env.maintainance !== 'true') {
     return <Main history={history} />
   }
@@ -45,8 +45,8 @@ const App = ({ history }) => {
   return <MaintenanceScreen />
 }
 
-App.propTypes = {
+MaintainanceContainer.propTypes = {
   history: PropTypes.shape({}),
 }
 
-export default App
+export default MaintainanceContainer

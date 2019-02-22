@@ -2,60 +2,63 @@ const mongoose = require('mongoose')
 const functions = require('firebase-functions')
 const ErrorMessages = require('./auth.errors')
 
-const studentSchema = mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+const studentSchema = mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: false,
+    },
+    graduationDate: {
+      type: Date,
+      default: new Date('January 1, 1970 00:00:00'),
+    },
+    hasPaidDues: {
+      type: Boolean,
+      default: false,
+    },
+    googleId: {
+      type: String,
+      default: '',
+    },
+    facebookId: {
+      type: String,
+      default: '',
+    },
+    githubId: {
+      type: String,
+      default: '',
+    },
+    password: {
+      type: String,
+      required: false,
+    },
+    confirmEmailToken: {
+      type: String,
+      default: '',
+    },
+    resetPasswordToken: {
+      type: String,
+      default: '',
+    },
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
+    },
+    verified: {
+      type: Boolean,
+    },
   },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: false,
-  },
-  graduationDate: {
-    type: Date,
-    default: new Date('January 1, 1970 00:00:00'),
-  },
-  hasPaidDues: {
-    type: Boolean,
-    default: false,
-  },
-  googleId: {
-    type: String,
-    default: '',
-  },
-  facebookId: {
-    type: String,
-    default: '',
-  },
-  githubId: {
-    type: String,
-    default: '',
-  },
-  password: {
-    type: String,
-    required: false,
-  },
-  confirmEmailToken: {
-    type: String,
-    default: '',
-  },
-  resetPasswordToken: {
-    type: String,
-    default: '',
-  },
-  resetPasswordExpires: {
-    type: Date,
-    default: null,
-  },
-  verified: {
-    type: Boolean,
-  },
-}, { autoCreate: true })
+  { autoCreate: true },
+)
 
 const CONNECTION_STRING = functions.config().connections.db
 /**
@@ -161,7 +164,9 @@ class AuthModel {
   async updateUserByAttribute(query, update) {
     if (!this.connected) throw ErrorMessages.NotConnectedToMongo()
     try {
-      const user = this.DB.findOneAndUpdate(query, update, { new: true }).exec()
+      const user = this.DB.findOneAndUpdate(query, update, {
+        new: true,
+      }).exec()
       let filteredUser
       if (user !== null) {
         filteredUser = user
@@ -196,7 +201,7 @@ class AuthModel {
     try {
       const users = await this.DB.find()
       if (users !== null) {
-        const data = users.map(user => ({
+        const data = users.map((user) => ({
           firstName: user.firstName,
           lastName: user.lastName,
           classification: user.classification,

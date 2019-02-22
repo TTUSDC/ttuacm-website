@@ -6,8 +6,8 @@ const crypto = require('crypto')
  * @returns {string} JWT Token
  */
 function generateHexToken() {
-  const token = crypto.randomBytes(20);
-  return token.toString('hex');
+  const token = crypto.randomBytes(20)
+  return token.toString('hex')
 }
 
 module.exports = generateHexToken

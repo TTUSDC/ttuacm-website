@@ -191,14 +191,17 @@ router.post('/login', async (req, res) => {
 router.get('/confirm', (req, res) => {
   const ctrl = new AuthController()
   const { token, redirectUrlSuccess, fallback } = req.query
-  ctrl.confirmToken(token).then(() => {
-    const qs = querystring.stringify({ verify: 'success' })
-    res.redirect(302, `${redirectUrlSuccess}/?${qs}`)
-  }).catch((err) => {
-    console.error(err)
-    const qs = querystring.stringify({ err: 'Error Validating Email' })
-    res.redirect(302, `${fallback}/?${qs}`)
-  })
+  ctrl
+    .confirmToken(token)
+    .then(() => {
+      const qs = querystring.stringify({ verify: 'success' })
+      res.redirect(302, `${redirectUrlSuccess}/?${qs}`)
+    })
+    .catch((err) => {
+      console.error(err)
+      const qs = querystring.stringify({ err: 'Error Validating Email' })
+      res.redirect(302, `${fallback}/?${qs}`)
+    })
 })
 
 /**

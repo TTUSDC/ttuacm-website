@@ -22,16 +22,14 @@ const styles = {
 }
 
 const NavBar = ({
-  classes, currentPage, navigateTo, isLoggedIn, toggleLoggedIn,
+  classes, currentPage, navigateTo, isLoggedIn, checkIfLoggedIn,
 }) => {
   useEffect(() => {
-    toggleLoggedIn()
-  }, [])
+    checkIfLoggedIn()
+  })
 
   const handleNavigation = nextPage => () => {
-    if (currentPage !== nextPage) {
-      navigateTo(nextPage)
-    }
+    navigateTo(nextPage)
   }
 
   const handleLogout = () => {
@@ -39,10 +37,10 @@ const NavBar = ({
     if (localStorage.getItem('oauth_user')) firebase.auth().signOut()
 
     // Local Sign Out
+    // TODO(@miggy) remove this shit lol make it all firebase handled
     localStorage.removeItem('token')
     localStorage.removeItem('oauth_user')
 
-    toggleLoggedIn()
     handleNavigation('/')()
   }
 
@@ -75,14 +73,14 @@ const NavBar = ({
 
 NavBar.propTypes = {
   navigateTo: PropTypes.func.isRequired,
-  toggleLoggedIn: PropTypes.func.isRequired,
+  checkIfLoggedIn: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   classes: PropTypes.shape({}),
   currentPage: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = state => ({
-  currentPage: state.router.getIn(['location', 'pathname']),
+  currentPage: state.router.location.pathname,
   isLoggedIn: state.auth.get('isLoggedIn'),
 })
 
@@ -90,7 +88,7 @@ const mapDispatchToProps = dispatch => ({
   navigateTo: (location) => {
     dispatch(push(location))
   },
-  toggleLoggedIn: () => {
+  checkIfLoggedIn: () => {
     dispatch(toggleAuthState())
   },
 })

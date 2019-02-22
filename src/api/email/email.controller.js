@@ -40,7 +40,7 @@ class EmailController {
               pass: account.pass,
             },
             tls: {
-            // do not fail on invalid certs
+              // do not fail on invalid certs
               rejectUnauthorized: false,
             },
           })
@@ -54,7 +54,7 @@ class EmailController {
             pass: functions.config().email.email_password,
           },
           tls: {
-          // do not fail on invalid certs
+            // do not fail on invalid certs
             rejectUnauthorized: false,
           },
         })
@@ -104,8 +104,8 @@ class EmailController {
       from: this.mailbox,
       subject: 'Your password has been changed',
       text:
-        'Hello,\n\n'
-        + 'This is a confirmation that the password for your account has been changed.\n',
+        'Hello,\n\n' +
+        'This is a confirmation that the password for your account has been changed.\n',
     }
     try {
       await this._createTransport()
@@ -131,9 +131,9 @@ class EmailController {
       from: options.email,
       to: this.mailbox,
       subject: 'ACM Question',
-      text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
-        options.topic
-      }\n\nMessage: ${options.message}\n`,
+      text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${
+        options.email
+      }\n\nTopic: ${options.topic}\n\nMessage: ${options.message}\n`,
     }
 
     try {
@@ -158,10 +158,14 @@ class EmailController {
    */
   async sendConfirmationEmail(email, token, fallback, redirectURLSuccess) {
     const querystring = qs.stringify({
-      token, fallback, redirectURLSuccess,
+      token,
+      fallback,
+      redirectURLSuccess,
     })
 
-    const link = `${this.protocol}://${this.host}/api/v2/auth/confirm?${querystring}`
+    const link = `${this.protocol}://${
+      this.host
+    }/api/v2/auth/confirm?${querystring}`
 
     const mailOptions = {
       to: email,

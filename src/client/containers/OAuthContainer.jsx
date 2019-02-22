@@ -21,7 +21,11 @@ function OAuthContainer({ navigateTo, toggleLoggedIn }) {
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
     signInFlow: 'popup',
-    // We will display Google and Facebook as auth providers.
+    /**
+		 * Supported Authentication:
+		 * Google
+		 * Local
+		 */
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     ],

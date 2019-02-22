@@ -3,7 +3,8 @@ const request = require('supertest')
 const chai = require('chai')
 const mongoose = require('mongoose')
 
-let app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
+let app =
+  'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
 
 if (!process.env.CI) {
   console.log('Testing integration outside of CI. Using API_ENDPOINT')
@@ -25,7 +26,7 @@ describe('Auth Integration Tests', () => {
         useNewUrlParser: true,
       })
       await mongoose.connection.dropDatabase()
-    } catch(err) {
+    } catch (err) {
       console.error(err)
       throw err
     }
@@ -41,9 +42,10 @@ describe('Auth Integration Tests', () => {
     await mongoose.connection.dropDatabase()
   })
 
-  it('should be able to connect to the auth service', async () => request(app)
-    .get('/test')
-    .expect(200))
+  it('should be able to connect to the auth service', async () =>
+    request(app)
+      .get('/test')
+      .expect(200))
 
   it('should be able to register a user, verify the email, and login', async () => {
     try {

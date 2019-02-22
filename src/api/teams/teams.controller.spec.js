@@ -11,11 +11,15 @@ describe('Teams Unit Tests', () => {
   let model
   // eslint-disable-next-line
   beforeAll((done) => {
-    mongoose.connect('mongodb://localhost:27017/testing', {
-      useNewUrlParser: true,
-    }, (err) => {
-      done(err)
-    })
+    mongoose.connect(
+      'mongodb://localhost:27017/testing',
+      {
+        useNewUrlParser: true,
+      },
+      (err) => {
+        done(err)
+      },
+    )
   })
 
   beforeEach(() => {
@@ -32,12 +36,7 @@ describe('Teams Unit Tests', () => {
   it('[addMemberOfGroups] should be able to add an email to all the teams without duplicates', async () => {
     const email1 = 'email1'
     const email2 = 'email2'
-    const teams = [
-      'team1',
-      'team2',
-      'team1',
-      'team3',
-    ]
+    const teams = ['team1', 'team2', 'team1', 'team3']
 
     try {
       await ctrl.addMemberOfGroups(teams, email1)
@@ -59,13 +58,9 @@ describe('Teams Unit Tests', () => {
   it('[deleteMemberOfGroups] should be able to remove an email from all the teams', async () => {
     const email1 = 'email1'
     const email2 = 'email2'
-    const teams = [
-      'team1',
-      'team2',
-      'team3',
-    ]
+    const teams = ['team1', 'team2', 'team3']
 
-    const fmtTeams = teams.map(name => Controller.formatGroupName(name))
+    const fmtTeams = teams.map((name) => Controller.formatGroupName(name))
 
     let allTeams
     try {
@@ -90,13 +85,9 @@ describe('Teams Unit Tests', () => {
 
   it('[getActiveGroups] should be able get all teams that a email is a part of', async () => {
     const email = 'email'
-    const teams = [
-      'team1',
-      'team2',
-      'team3',
-    ]
+    const teams = ['team1', 'team2', 'team3']
 
-    const fmtTeams = teams.map(name => Controller.formatGroupName(name))
+    const fmtTeams = teams.map((name) => Controller.formatGroupName(name))
 
     let foundTeams
 

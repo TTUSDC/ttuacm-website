@@ -51,10 +51,10 @@ router.get('/test', (req, res) => {
 router.get('/', membersOnlyRoute, async (req, res) => {
   try {
     if (!req.body.email) throw ErrorMessages.MissingRequestBody()
-    const teams = await (new Controller()).getActiveGroups(req.body.email)
-    res.status(200).json(teams);
+    const teams = await new Controller().getActiveGroups(req.body.email)
+    res.status(200).json(teams)
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err })
   }
 })
 
@@ -80,13 +80,14 @@ router.get('/', membersOnlyRoute, async (req, res) => {
  */
 router.put('/', membersOnlyRoute, async (req, res) => {
   try {
-    if (!req.body.email || !req.body.teams) throw ErrorMessages.MissingRequestBody()
+    if (!req.body.email || !req.body.teams)
+      throw ErrorMessages.MissingRequestBody()
     const { email, teams } = req.body
 
-    await (new Controller()).addMemberOfGroups(teams, email)
-    res.status(200).end();
+    await new Controller().addMemberOfGroups(teams, email)
+    res.status(200).end()
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err })
   }
 })
 
@@ -112,14 +113,15 @@ router.put('/', membersOnlyRoute, async (req, res) => {
  */
 router.delete('/', membersOnlyRoute, async (req, res) => {
   try {
-    if (!req.body.email || !req.body.teams) throw ErrorMessages.MissingRequestBody()
+    if (!req.body.email || !req.body.teams)
+      throw ErrorMessages.MissingRequestBody()
     const { email, teams } = req.body
 
-    await (new Controller()).deleteMemberOfGroups(teams, email)
-    res.status(200).end();
+    await new Controller().deleteMemberOfGroups(teams, email)
+    res.status(200).end()
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json({ err })
   }
 })
 
-module.exports = router;
+module.exports = router

@@ -9,16 +9,8 @@ const renderDescriptions = (
   classes, description, containsAppLink, containsOutLink, handleNavigation,
 ) => (
   (description.map(item => (
-    <Typography
-      className={classes.Description}
-      key={item[0]}
-      variant='body1'
-      color='textSecondary'
-      gutterBottom
-      onClick={handleNavigation(item[0])}
-    >
-      {/* eslint-disable-next-line */}
-      {containsOutLink ? withHref(classes, item[0],item[1]) : containsAppLink ? item[1] : item} 
+    <Typography className={classes.Description} key={item[0]} variant='body1' color='textSecondary' gutterBottom onClick={handleNavigation(item[0])}>
+      {/*eslint-disable-line*/containsOutLink ? withHref(classes, item[0],item[1]) : containsAppLink ? item[1] : item} 
     </Typography>
   )))
 )
@@ -37,25 +29,14 @@ const styles = theme => ({ // eslint-disable-line
   Description: {
     fontSize: '1.7rem',
     fontWeight: '300 !important',
-    cursor: 'pointer',
   },
 })
 
 const FooterTopSection = ({
   title, description, containsAppLink, containsOutLink, handleNavigation, classes = {},
 }) => (
-  <Grid
-    item
-    xs
-    key={title}
-    className={classes.FooterTopSection}
-  >
-    <Typography
-      variant='h5'
-      color='textPrimary'
-      gutterBottom
-      className={classes.Title}
-    >
+  <Grid item xs key={title} className={classes.FooterTopSection}>
+    <Typography variant='h5' color='textPrimary' gutterBottom className={classes.Title}>
       {title}
     </Typography>
     {renderDescriptions(classes, description, containsAppLink, containsOutLink, handleNavigation)}

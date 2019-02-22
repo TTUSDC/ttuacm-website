@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import { ConnectedRouter } from 'connected-react-router/immutable'
 import Footer from 'pages/Footer/Footer.jsx'
 import Routes from 'Routes'
 
@@ -33,11 +34,13 @@ const styles = theme => ({
 })
 
 const SiteContent = ({
-  classes = {},
+  classes = {}, history,
 }) => (
   <div className={classes.SiteContent}>
     <main className={classes.main}>
-      <Routes />
+      <ConnectedRouter history={history}>
+        <Routes />
+      </ConnectedRouter>
     </main>
     <Footer />
   </div>
