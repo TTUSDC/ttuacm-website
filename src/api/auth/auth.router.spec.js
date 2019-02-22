@@ -71,7 +71,10 @@ describe('Auth Integration Tests', () => {
 
       // Confirm the email
       await request(app)
-        .get(`/confirm/${registerBody.body.confirmEmailToken}`)
+        .get('/confirm')
+        .query({
+          token: registerBody.body.confirmEmailToken,
+        })
         .expect(302)
 
       // Login
