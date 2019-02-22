@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router'
+import ReversedAuthRoute from 'components/ReversedAuthRoute'
 
 import {
   AuthenticationPage,
@@ -17,7 +18,7 @@ export default function Routes() {
     <Switch>
       <Route exact path='/' render={() => <Redirect to='/home' />} />
       <Route path='/home' component={LandingPage} />
-      <Route path='/auth' component={AuthenticationPage} />
+      <ReversedAuthRoute path='/auth' component={AuthenticationPage} />
       <Route path='/about' component={AboutUsPage} />
       <Route path='/contact' component={ContactUsPage} />
       <Route path='/teams' component={TeamsPage} />
