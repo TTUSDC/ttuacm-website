@@ -1,10 +1,11 @@
 {
   "baseUrl": "https://acm-texas-tech-web-app-2-beta.firebaseapp.com",
-	"ignoreTestFiles": "**/examples/*",
+  "ignoreTestFiles": "**/examples/*",
   "integrationFolder": "../integration",
-	"env": {
+  "projectId": "2nen7u",
+  "env": {
     "baseUrl": "https://acm-texas-tech-web-app-2-beta.firebaseapp.com",
     "_comment": "This is the staging configuration",
     "API_CONNECTION": "https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net"
-	}
+  }
 }

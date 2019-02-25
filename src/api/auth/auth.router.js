@@ -110,7 +110,7 @@ router.post('/register', async (req, res) => {
     res.status(201).json(filterSensitiveInformation(createdUser))
   } catch (err) {
     console.error(err)
-    res.status(500).json({ err: err.message })
+    res.status(500).json({ err })
   }
 })
 
@@ -239,7 +239,8 @@ router.post('/forgot', async (req, res) => {
 
     res.status(200).json(filterSensitiveInformation(user))
   } catch (err) {
-    res.status(err.code).json({ msg: err.message })
+    console.error(err)
+    res.status(500).json({ err })
   }
 })
 
@@ -323,6 +324,7 @@ router.post('/reset/:token', async (req, res) => {
 
     res.status(200).json(filterSensitiveInformation(user))
   } catch (err) {
+    console.error(err)
     res.status(500).json({ err })
   }
 })
@@ -336,6 +338,7 @@ router.post('/seed', async (req, res) => {
 
     res.status(200).end()
   } catch (err) {
+    console.error(err)
     res.status(500).json({ err })
   }
 })
@@ -350,6 +353,7 @@ router.delete('/seed', async (req, res) => {
 
     res.status(200).end()
   } catch (err) {
+    console.error(err)
     res.status(500).json({ err })
   }
 })

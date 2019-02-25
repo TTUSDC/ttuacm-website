@@ -81,6 +81,7 @@ class AuthModel {
       await mongoose.connect(CONNECTION_STRING, { useNewUrlParser: true })
       this.connected = true
     } catch (err) {
+      console.error(err)
       throw err
     }
   }

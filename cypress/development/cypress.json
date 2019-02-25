@@ -1,10 +1,11 @@
 {
   "baseUrl": "http://localhost:3000",
-	"ignoreTestFiles": "**/examples/*",
+  "ignoreTestFiles": "**/examples/*",
   "integrationFolder": "../integration",
-	"env": {
+  "env": {
     "_comment": "Replace API_CONNECTION with local firebase functions",
     "baseUrl": "http://localhost:3000",
     "API_CONNECTION": "http://localhost:5000/sandbox-206807/us-central1"
-	}
+  },
+  "projectId": "2nen7u"
 }
