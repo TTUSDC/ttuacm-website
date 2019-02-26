@@ -67,6 +67,7 @@ data/
 
 # Client
 # See https://help.github.com/ignore-files/ for more about ignoring files.
+.firebase
 firebaseconfig.json
 .runtimeconfig.json
 .firebaserc

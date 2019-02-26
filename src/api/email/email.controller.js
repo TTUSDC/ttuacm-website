@@ -158,6 +158,7 @@ class EmailController {
    */
   async sendConfirmationEmail(email, token, fallback, redirectURLSuccess) {
     const querystring = qs.stringify({
+      email,
       token,
       fallback,
       redirectURLSuccess,

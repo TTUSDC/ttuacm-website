@@ -25,11 +25,9 @@ function VerifyEmailContainer({ query, navigateTo }) {
       fallback: `${currentLocation}/auth`,
     }).then(() => {
       // TODO show snackbar success
-      console.log('Success')
+      setWaiting(false)
     }).catch((err) => {
       console.error(err)
-      console.log('Something went wrong!')
-    }).finally(() => {
       setWaiting(false)
     })
   }
@@ -38,6 +36,7 @@ function VerifyEmailContainer({ query, navigateTo }) {
     navigateTo('/')
     return null
   }
+
   email = qs.parse(query)['?email']
   token = qs.parse(query).token // eslint-disable-line
   return (
