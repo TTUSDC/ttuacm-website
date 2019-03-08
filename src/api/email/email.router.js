@@ -24,38 +24,6 @@ router.get('/test', (req, res) => {
 })
 
 /**
- * @api {post} /api/v2/email/contact-us Contact Us
- * @apiDescription
- * Sends a question to ACM Email
- *
- * @apiVersion 0.2.0
- *
- * @apiGroup Email
- *
- * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 500 OK
- *
- * @apiParam (Request body) {String} name name
- * @apiParam (Request body) {String} email email
- * @apiParam (Request body) {String} topic topic
- * @apiParam (Request body) {String} message message
- */
-router.post('/contact-us', (req, res) => {
-  const ctrl = new Controller(req.protocol, req.headers.host)
-
-  ctrl
-    .contactUs(req.body)
-    .then(() => res.status(200).json())
-    .catch((err) => {
-      console.error(err)
-      res.status(500).json()
-    })
-})
-
-/**
  * @api {post} /api/v2/email/confirm-email Send Confirmation Email
  * @apiDescription
  * Sends a confirmation email to the user with a link/endpoint

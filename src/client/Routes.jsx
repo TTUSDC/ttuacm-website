@@ -7,7 +7,6 @@ import {
   AboutUsPage,
   LandingPage,
   TeamsPage,
-  ContactUsPage,
   EventsPage,
   NotFoundPage,
   VerifyEmailPage,
@@ -20,7 +19,6 @@ export default function Routes() {
       <Route path='/home' component={LandingPage} />
       <ReversedAuthRoute path='/auth' component={AuthenticationPage} />
       <Route path='/about' component={AboutUsPage} />
-      <Route path='/contact' component={ContactUsPage} />
       <Route path='/teams' component={TeamsPage} />
       <Route path='/events' component={EventsPage} />
       <Route path='/verify' component={VerifyEmailPage} />

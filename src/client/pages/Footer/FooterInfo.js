@@ -4,7 +4,7 @@ export const sections = [
   {
     title: 'ABOUT',
     description: [
-      `The ACM Chapter at Texas Tech University 
+      `The ACM Chapter at Texas Tech University
           creates many
           opportunities for students
           interested in computer science
@@ -27,7 +27,10 @@ export const sections = [
   {
     title: 'CONTACT US',
     description: [
-      ['mailto:acmtexastech@gmail.com', 'acmtexastech@gmail.com'],
+      [
+        'mailto:acmtexastech@gmail.com?subject=I%20Have%20A%20Question!%20Looking%20for%20a%20friend!&body=Name%3A%0ATopic%3A%0AMessage%3A',
+        'acmtexastech@gmail.com',
+      ],
       ['https://goo.gl/maps/B6Wa4RScEDz', '2500 Broadway, Lubbock, TX 79409'],
     ],
     containsAppLink: false,
