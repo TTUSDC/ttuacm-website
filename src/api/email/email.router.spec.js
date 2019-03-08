@@ -25,17 +25,6 @@ describe('Email Integration Tests', () => {
       })
       .expect(200))
 
-  it('should be able to send contact us emails', () =>
-    request(app)
-      .post('/contact-us')
-      .send({
-        name: 'Some Name',
-        email: 'some-email@gmail.com',
-        topic: 'test',
-        message: 'message',
-      })
-      .expect(200))
-
   it('should be able to send reset password emails', () =>
     request(app)
       .post('/reset-password')
