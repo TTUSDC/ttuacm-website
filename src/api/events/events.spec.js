@@ -18,7 +18,7 @@ describe('Email Unit Tests', () => {
     }
   })
 
-  it('[getEvents] should be able to fetch events', async () => {
+  it('[get-events] should be able to fetch events', async () => {
     try {
       const { body } = await request(app)
         .get('/v2/events')

@@ -122,5 +122,8 @@
   },
   "apidoc": {
     "title": "TTUACM API Documentation"
+  },
+  "peerOptionalDependencies": {
+    "kerberos": "1.1.2"
   }
 }
