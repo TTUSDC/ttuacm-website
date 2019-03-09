@@ -39,8 +39,6 @@ jobs:
       skip_cleanup: true
       github_token: "$GITHUB_TOKEN"
       local_dir: docs/
-      on:
-        branch: master
     - provider: firebase
       skip_cleanup: true
       token:
@@ -65,7 +63,9 @@ jobs:
       - node_modules
     install:
     - yarn
+    - yarn run cypress install
     script:
     - yarn test:integration --ci --forceExit
+    - yarn e2e:ci
 notifications:
   email: false

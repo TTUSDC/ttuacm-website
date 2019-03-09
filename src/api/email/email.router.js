@@ -24,37 +24,6 @@ router.get('/test', (req, res) => {
 })
 
 /**
- * @api {post} /api/v2/email/contact-us Contact Us
- * @apiDescription
- * Sends a question to ACM Email
- *
- * @apiVersion 0.2.0
- *
- * @apiGroup Email
- *
- * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 500 OK
- *
- * @apiParam (Request body) {String} name name
- * @apiParam (Request body) {String} email email
- * @apiParam (Request body) {String} topic topic
- * @apiParam (Request body) {String} message message
- */
-router.post('/contact-us', (req, res) => {
-  const ctrl = new Controller(req.protocol, req.headers.host)
-
-  ctrl.contactUs(req.body)
-    .then(() => res.status(200).json())
-    .catch((err) => {
-      console.error(err)
-      res.status(500).json()
-    })
-})
-
-/**
  * @api {post} /api/v2/email/confirm-email Send Confirmation Email
  * @apiDescription
  * Sends a confirmation email to the user with a link/endpoint
@@ -74,17 +43,19 @@ router.post('/contact-us', (req, res) => {
  *
  * @apiParam (Request body) {String} email email
  * @apiParam (Request body) {String} token the user's reset password token
+ * @apiParam (Request body) {String} fallback redirect url when failed
+ * @apiParam (Request body) {String} redirectURLSuccess redirect url when success
  */
-router.post('/confirm-email', (req, res) => {
-  const ctrl = new Controller(req.protocol, req.headers.host)
-  const { email, token } = req.body
-
-  ctrl.sendConfirmationEmail(email, token)
-    .then(() => res.status(200).json())
-    .catch((err) => {
-      console.error(err)
-      res.status(500).json()
-    })
+router.post('/confirm-email', async (req, res) => {
+  const ctrl = new Controller()
+  try {
+    const { email, token, fallback, redirectURLSuccess } = req.body
+    await ctrl.sendConfirmationEmail(email, token, fallback, redirectURLSuccess)
+    res.status(200).json()
+  } catch (err) {
+    console.error(err)
+    res.status(500).json()
+  }
 })
 
 /**
@@ -111,10 +82,11 @@ router.post('/confirm-email', (req, res) => {
  * @apiParam (Request body) {String} token the user's reset password token
  */
 router.post('/reset-password', (req, res) => {
-  const ctrl = new Controller(req.protocol, req.headers.host)
+  const ctrl = new Controller()
   const { email, token } = req.body
 
-  ctrl.sendResetEmail(email, token)
+  ctrl
+    .sendResetEmail(email, token)
     .then(() => res.status(200).json())
     .catch((err) => {
       console.error(err)

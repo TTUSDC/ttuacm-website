@@ -10,8 +10,8 @@ const initialState = IM.fromJS({
 
 const EventsReducer = (state = initialState, action) => {
   let newState = state
-  switch(action) {
-    case(EventsConsts.TOGGLE_ERR):
+  switch (action) {
+    case EventsConsts.TOGGLE_ERR:
       newState = state.set('errorMsg', action.payload.errorMsg)
       break
     default:

@@ -74,7 +74,7 @@ const EventsContainer = ({ classes = {} }) => {
     >
       <EventsSection loading={loading} time={providedTimes.TODAY} events={events} />
       {
-        events.length > 1
+        events.length
           ? (
             <React.Fragment>
               <EventsSection loading={loading} time={providedTimes.TOMORROW} events={events} />

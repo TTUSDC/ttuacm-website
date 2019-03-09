@@ -5,17 +5,18 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import PropTypes from 'prop-types'
 
 export function hasErrors({
-  email, emailError, password, passwordError, confirmPassword, confirmPasswordError, graduationDate,
+  emailError, passwordError, confirmPasswordError, ...form
 }) {
-  return (
-    email === ''
-    || password === ''
-    || confirmPassword === ''
-    || graduationDate === ''
-    || emailError !== null
-    || passwordError !== null
-    || confirmPasswordError !== null
-  )
+  // Form Fields
+  let emptyField = false
+  Object.keys(form).forEach((entry) => {
+    if (form[entry] === '') emptyField = true
+  })
+
+  // Validators
+  const fieldError = (emailError || passwordError || confirmPasswordError)
+
+  return Boolean(emptyField || fieldError)
 }
 
 /**
@@ -28,6 +29,8 @@ const RegistrationForm = ({
   handleSubmit,
   checkForErrors,
   switchForm,
+  firstName = '',
+  lastName = '',
   email = '',
   emailError = null,
   password = '',
@@ -46,6 +49,22 @@ const RegistrationForm = ({
         handleSubmit()
       }}
     >
+      <TextField
+        inputProps={{
+          'data-testid': 'FirstName',
+        }}
+        label='First Name'
+        value={firstName}
+        onChange={e => handleChangeValues(e.target.value, 'firstName')}
+      />
+      <TextField
+        inputProps={{
+          'data-testid': 'LastName',
+        }}
+        label='Last Name'
+        value={lastName}
+        onChange={e => handleChangeValues(e.target.value, 'lastName')}
+      />
       <TextField
         inputProps={{
           'data-testid': 'Email',
@@ -99,7 +118,15 @@ const RegistrationForm = ({
         type='submit'
         disabled={
           hasErrors({
-            email, password, confirmPassword, graduationDate, emailError, passwordError, confirmPasswordError,
+            firstName,
+            lastName,
+            email,
+            password,
+            confirmPassword,
+            graduationDate,
+            emailError,
+            passwordError,
+            confirmPasswordError,
           } || loading)
         }
         variant='contained'
@@ -127,6 +154,8 @@ RegistrationForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   checkForErrors: PropTypes.func.isRequired,
   switchForm: PropTypes.func.isRequired,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
   email: PropTypes.string,
   emailError: PropTypes.shape({}),
   password: PropTypes.string,

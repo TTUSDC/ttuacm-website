@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken')
 const functions = require('firebase-functions')
 
-const secret = process.env.CI ? 'CISecret' : functions.config().auth.session_secret
+const secret = process.env.CI
+  ? 'CISecret'
+  : functions.config().auth.session_secret
 
 /**
  * Generates a JWT
@@ -10,8 +12,7 @@ const secret = process.env.CI ? 'CISecret' : functions.config().auth.session_sec
  * @returns {string} JWT Token
  */
 function generateJWTToken(payload) {
-  const token = jwt.sign({ data: payload },
-    secret, { expiresIn: 604800 }) // 1 week
+  const token = jwt.sign({ data: payload }, secret, { expiresIn: 604800 }) // 1 week
 
   return token !== '' ? token : new Error('Empty JWT Payload')
 }
