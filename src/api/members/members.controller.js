@@ -1,8 +1,8 @@
-const TeamModel = require('./teams.model')
+const MembersModel = require('./members.model')
 
-class TeamController {
+class MembersController {
   constructor() {
-    this.model = new TeamModel()
+    this.model = new MembersModel()
   }
 
   /**
@@ -34,4 +34,4 @@ class TeamController {
   }
 }
 
-module.exports = TeamController
+module.exports = MembersController
