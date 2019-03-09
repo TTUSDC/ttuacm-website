@@ -3,11 +3,11 @@ const request = require('supertest')
 const chai = require('chai')
 const mongoose = require('mongoose')
 
-let app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
+let app = `${process.env.API_ENDPOINT}/api/v2/auth`
 
-if (!process.env.CI) {
-  console.log('Testing integration outside of CI. Using API_ENDPOINT')
-  app = `${process.env.API_ENDPOINT}/api/v2/auth`
+if (process.env.CI) {
+  app = 'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2/auth'
+  console.log('Testing integration inside of CI. Testing in staging')
 }
 
 const connection_string = process.env.DB_CONNECTION
