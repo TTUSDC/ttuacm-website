@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const membersSchema = mongoose.Schema({
   // Email of the User

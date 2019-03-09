@@ -2,7 +2,7 @@ const express = require('express')
 const ErrorMessages = require('./members.errors')
 
 // Controller
-const Controller = require('./members.controller')
+// const Controller = require('./members.controller')
 
 const router = express.Router()
 
@@ -51,7 +51,7 @@ router.get('/', async (req, res) => {
     if (!req.body.email) throw ErrorMessages.MissingRequestBody()
     throw ErrorMessages.NotImplemented()
   } catch (err) {
-    res.status(err.code).json({ err });
+    res.status(err.code).json({ err })
   }
 })
 
@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
     if (!req.body.email) throw ErrorMessages.MissingRequestBody()
     throw ErrorMessages.NotImplemented()
   } catch (err) {
-    res.status(err.code).json({ err });
+    res.status(err.code).json({ err })
   }
 })
 
@@ -103,7 +103,7 @@ router.delete('/', async (req, res) => {
     if (!req.body.email) throw ErrorMessages.MissingRequestBody()
     throw ErrorMessages.NotImplemented()
   } catch (err) {
-    res.status(err.code).json({ err });
+    res.status(err.code).json({ err })
   }
 })
 
@@ -127,11 +127,12 @@ router.delete('/', async (req, res) => {
  */
 router.put('/subscribe', async (req, res) => {
   try {
-    if (!req.body.email || !req.body.groups) throw ErrorMessages.MissingRequestBody()
+    if (!req.body.email || !req.body.groups)
+      throw ErrorMessages.MissingRequestBody()
     if (!Array.isArray(req.body.groups)) throw ErrorMessages.BadInput()
     throw ErrorMessages.NotImplemented()
   } catch (err) {
-    res.status(err.code).json({ err });
+    res.status(err.code).json({ err })
   }
 })
 
@@ -155,11 +156,12 @@ router.put('/subscribe', async (req, res) => {
  */
 router.put('/unsubscribe', async (req, res) => {
   try {
-    if (!req.body.email || !req.body.groups) throw ErrorMessages.MissingRequestBody()
+    if (!req.body.email || !req.body.groups)
+      throw ErrorMessages.MissingRequestBody()
     if (!Array.isArray(req.body.groups)) throw ErrorMessages.BadInput()
     throw ErrorMessages.NotImplemented()
   } catch (err) {
-    res.status(err.code).json({ err });
+    res.status(err.code).json({ err })
   }
 })
 
@@ -187,4 +189,4 @@ router.post('/reset', async (req, res) => {
   }
 })
 
-module.exports = router;
+module.exports = router
