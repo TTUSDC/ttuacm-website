@@ -1,8 +1,8 @@
 const express = require('express')
-const ErrorMessages = require('./members.errors')
+const ErrorMessages = require('./members.errors.js')
 
-// Controller
-// const Controller = require('./members.controller')
+Controller
+const Controller = require('./members.controller')
 
 const router = express.Router()
 
@@ -35,7 +35,7 @@ router.get('/test', (req, res) => {
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *     [
+ *     members : [
  *        "email": String,
  *        "hasPaidDues": Boolean,
  *        "groups": String[]
@@ -43,13 +43,11 @@ router.get('/test', (req, res) => {
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 err.code OK
- *
- * @apiParam (Request body) {String} email email
  */
 router.get('/', async (req, res) => {
   try {
-    if (!req.body.email) throw ErrorMessages.MissingRequestBody()
-    throw ErrorMessages.NotImplemented()
+    const members = await new Controller().getMembers()
+    res.status(201).json({ members })
   } catch (err) {
     res.status(err.code).json({ err })
   }
@@ -75,8 +73,10 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     if (!req.body.email) throw ErrorMessages.MissingRequestBody()
-    throw ErrorMessages.NotImplemented()
+    const newMember = await new Controller().createMember(req.body.email)
+    res.status(201).json({ newMember })
   } catch (err) {
+    console.log(err)
     res.status(err.code).json({ err })
   }
 })
@@ -101,8 +101,10 @@ router.post('/', async (req, res) => {
 router.delete('/', async (req, res) => {
   try {
     if (!req.body.email) throw ErrorMessages.MissingRequestBody()
-    throw ErrorMessages.NotImplemented()
+    await new Controller().deleteMember(req.body.email)
+    res.status(202).end()
   } catch (err) {
+    console.error(err)
     res.status(err.code).json({ err })
   }
 })

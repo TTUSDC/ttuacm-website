@@ -43,4 +43,128 @@ describe('Members Unit Tests', () => {
       throw err
     }
   })
+
+  it('should be able to insert members', async () => {
+    try {
+      const { body } = await request(app)
+        .post('/v2/members')
+        .send({ email: 'email' })
+        .expect(201)
+
+      expect(Array.isArray(body.members)).to.equal(true)
+      expect(body.members.length).to.equal(1)
+      expect(body.members[0].email).to.equal('email')
+      expect(body.members[0].hasPaidDues).to.equal(false)
+      expect(Array.isArray(body.members[0].groups)).to.equal(true)
+      expect(body.members[0].groups.length).to.equal(0)
+    } catch (err) {
+      throw err
+    }
+  })
+
+  it('should be able to get the members in the database that were inserted', async () => {
+    try {
+      await request(app)
+        .post('/v2/members')
+        .send({ email: 'email' })
+
+      const { body } = await request(app)
+        .get('/v2/members')
+        .expect(200)
+
+      expect(Array.isArray(body.members)).to.equal(true)
+      expect(body.members[0].email).to.equal('email')
+    } catch (err) {
+      throw err
+    }
+  })
+
+  it('should be able to delete the members in the database that were inserted', async () => {
+    try {
+      await request(app)
+        .post('/v2/members')
+        .send({ email: 'email' })
+
+      await request(app)
+        .delete('/v2/members')
+        .send({ email: 'email' })
+        .expect(202)
+    } catch (err) {
+      throw err
+    }
+  })
+
+  it('should allow a user to (un)subscribe to a group', async () => {
+    try {
+      await request(app)
+        .post('/v2/members')
+        .send({ email: 'email' })
+
+      const { body: subBody } = await request(app)
+        .put('/v2/members/subscribe')
+        .send({ email: 'email', groups: ['group1'] })
+        .expect(202)
+
+      expect(subBody.member.groups.length).to.equal(1)
+
+      const { body: unsubBody } = await request(app)
+        .put('/v2/members/subscribe')
+        .send({ email: 'email', groups: ['group1'] })
+        .expect(202)
+
+      expect(unsubBody.member.groups.length).to.equal(0)
+    } catch (err) {
+      throw err
+    }
+  })
+
+  // Admins only
+  it('should allow admins to let users pay dues', async () => {
+    try {
+      await request(app)
+        .post('/v2/members')
+        .send({ email: 'email' })
+
+      const { body: duesBody } = await request(app)
+        .patch('/v2/members/dues')
+        .send({ email: 'email' })
+
+      expect(duesBody.email).to.equal('email')
+      expect(duesBody.hasPaidDues).to.equal(true)
+    } catch (err) {
+      throw err
+    }
+  })
+
+  // Admins only
+  it('should allow admins to reset dues and groups', async () => {
+    await request(app)
+      .post('/v2/members')
+      .send({ email: 'email1' })
+    await request(app)
+      .post('/v2/members')
+      .send({ email: 'email2' })
+    await request(app)
+      .post('/v2/members')
+      .send({ email: 'email3' })
+
+    await request(app)
+      .patch('/v2/members/dues')
+      .send({ email: 'email1' })
+    await request(app)
+      .patch('/v2/members/dues')
+      .send({ email: 'email2' })
+    await request(app)
+      .patch('/v2/members/dues')
+      .send({ email: 'email3' })
+
+    const { body } = await request(app).post('/v2/members/reset')
+
+    expect(body.members.length).to.equal(3)
+
+    for (const member of body.members) {
+      expect(member.groups.length).to.equal(0)
+      expect(member.hasPaidDues).to.equal(false)
+    }
+  })
 })

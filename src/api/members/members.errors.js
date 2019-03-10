@@ -34,7 +34,7 @@ function NotImplemented() {
   return err
 }
 
-exports = {
+module.exports = {
   BadInput,
   CreateTeamError,
   MissingRequestBody,
