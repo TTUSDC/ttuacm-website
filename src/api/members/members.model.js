@@ -17,17 +17,39 @@ class MembersModel {
     this.DB = mongoose.model('members', membersSchema)
   }
 
+  async createMember(email) {
+    try {
+      const newMember = new this.DB({ email })
+      await newMember.save()
+
+      return newMember.toObject()
+    } catch (err) {
+      throw err
+    }
+  }
+
+  /**
+   * Finds all members
+   */
+  async getMembers() {
+    try {
+      const query = await this.DB.find({}).exec()
+      return query
+    } catch (err) {
+      throw err
+    }
+  }
+
   /**
    * Finds the member with given email
    *
    * @param {string} email - the email to target
    */
-  async getMember(email) {
+  async getMemberByEmail(email) {
     try {
       const query = await this.DB.find({ email }).exec()
       return query.toObject()
     } catch (err) {
-      console.error(err)
       throw err
     }
   }
@@ -43,11 +65,10 @@ class MembersModel {
     try {
       const doc = await this.DB.find({ email }).exec()
       doc.groups.addToSet(...groupsToAdd)
-      doc.save()
+      await doc.save()
 
       return doc.toObject
     } catch (err) {
-      console.error(err)
       throw err
     }
   }
@@ -63,11 +84,10 @@ class MembersModel {
     try {
       const doc = await this.DB.find({ email }).exec()
       doc.groups.remove(...groupsToDelete)
-      doc.save()
+      await doc.save()
 
       return doc.toObject()
     } catch (err) {
-      console.error(err)
       throw err
     }
   }
@@ -80,7 +100,6 @@ class MembersModel {
       await this.DB.updateMany({}, { $set: { hasPaidDues: false } })
       return
     } catch (err) {
-      console.error(err)
       throw err
     }
   }
@@ -93,7 +112,6 @@ class MembersModel {
       await this.DB.updateMany({}, { $set: { groups: [] } })
       return
     } catch (err) {
-      console.error(err)
       throw err
     }
   }

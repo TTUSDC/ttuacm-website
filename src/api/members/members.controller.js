@@ -6,6 +6,30 @@ class MembersController {
   }
 
   /**
+   * Creates a new member
+   *
+   * @param {string} email - email
+   * @return {object} - the new member object
+   */
+  async createMember(email) {
+    try {
+      const newMember = await this.model.createMember(email)
+      return newMember
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getMembers() {
+    try {
+      const members = await this.model.getMembers()
+      return members
+    } catch (err) {
+      throw err
+    }
+  }
+
+  /**
    * Formats the group name given to match the semester and year
    *
    * @example

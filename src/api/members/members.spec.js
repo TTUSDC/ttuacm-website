@@ -51,12 +51,9 @@ describe('Members Unit Tests', () => {
         .send({ email: 'email' })
         .expect(201)
 
-      expect(Array.isArray(body.members)).to.equal(true)
-      expect(body.members.length).to.equal(1)
-      expect(body.members[0].email).to.equal('email')
-      expect(body.members[0].hasPaidDues).to.equal(false)
-      expect(Array.isArray(body.members[0].groups)).to.equal(true)
-      expect(body.members[0].groups.length).to.equal(0)
+      expect(body.newMember.email).to.equal('email')
+      expect(body.newMember.hasPaidDues).to.equal(false)
+      expect(body.newMember.groups.length).to.equal(0)
     } catch (err) {
       throw err
     }
@@ -70,7 +67,7 @@ describe('Members Unit Tests', () => {
 
       const { body } = await request(app)
         .get('/v2/members')
-        .expect(200)
+        .expect(201)
 
       expect(Array.isArray(body.members)).to.equal(true)
       expect(body.members[0].email).to.equal('email')

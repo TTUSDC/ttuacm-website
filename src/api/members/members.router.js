@@ -1,7 +1,6 @@
 const express = require('express')
 const ErrorMessages = require('./members.errors.js')
 
-Controller
 const Controller = require('./members.controller')
 
 const router = express.Router()
@@ -49,7 +48,8 @@ router.get('/', async (req, res) => {
     const members = await new Controller().getMembers()
     res.status(201).json({ members })
   } catch (err) {
-    res.status(err.code).json({ err })
+    console.error(err)
+    res.status(err.code || 500).json({ err })
   }
 })
 
@@ -76,8 +76,8 @@ router.post('/', async (req, res) => {
     const newMember = await new Controller().createMember(req.body.email)
     res.status(201).json({ newMember })
   } catch (err) {
-    console.log(err)
-    res.status(err.code).json({ err })
+    console.error(err)
+    res.status(err.code || 500).json({ err })
   }
 })
 
@@ -105,7 +105,7 @@ router.delete('/', async (req, res) => {
     res.status(202).end()
   } catch (err) {
     console.error(err)
-    res.status(err.code).json({ err })
+    res.status(err.code || 500).json({ err })
   }
 })
 
@@ -134,7 +134,7 @@ router.put('/subscribe', async (req, res) => {
     if (!Array.isArray(req.body.groups)) throw ErrorMessages.BadInput()
     throw ErrorMessages.NotImplemented()
   } catch (err) {
-    res.status(err.code).json({ err })
+    res.status(err.code || 500).json({ err })
   }
 })
 
@@ -163,7 +163,7 @@ router.put('/unsubscribe', async (req, res) => {
     if (!Array.isArray(req.body.groups)) throw ErrorMessages.BadInput()
     throw ErrorMessages.NotImplemented()
   } catch (err) {
-    res.status(err.code).json({ err })
+    res.status(err.code || 500).json({ err })
   }
 })
 
@@ -187,7 +187,7 @@ router.post('/reset', async (req, res) => {
   try {
     throw ErrorMessages.NotImplemented()
   } catch (err) {
-    res.status(err.code).json({ err })
+    res.status(err.code || 500).json({ err })
   }
 })
 
