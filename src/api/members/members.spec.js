@@ -1,7 +1,7 @@
 require('dotenv').config()
 const request = require('supertest')
 const mongoose = require('mongoose')
-// const { expect } = require('chai')
+const { expect } = require('chai')
 const { app } = require('../../../index.js')
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000 * 60 // eslint-disable-line
