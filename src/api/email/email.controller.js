@@ -118,35 +118,6 @@ class EmailController {
   }
 
   /**
-   * Sends a question to the mailbox
-   *
-   * @param {Object} options options object
-   * @param {string} options.name student name
-   * @param {string} options.email student email
-   * @param {string} options.topic student topic
-   * @param {string} options.message student message
-   */
-  async contactUs(options) {
-    const mailOptions = {
-      from: options.email,
-      to: this.mailbox,
-      subject: 'ACM Question',
-      text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${
-        options.email
-      }\n\nTopic: ${options.topic}\n\nMessage: ${options.message}\n`,
-    }
-
-    try {
-      await this._createTransport()
-      await this.smtpTransporter.sendMail(mailOptions)
-      return null
-    } catch (err) {
-      console.error(err)
-      throw err
-    }
-  }
-
-  /**
    * Sends a confirmation email to the user with a link/endpoint
    * and their token to verify their email
    *

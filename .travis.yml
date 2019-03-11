@@ -65,7 +65,6 @@ jobs:
     - yarn
     - yarn run cypress install
     script:
-    - yarn test:integration --ci --forceExit
     - yarn e2e:ci
 notifications:
   email: false
