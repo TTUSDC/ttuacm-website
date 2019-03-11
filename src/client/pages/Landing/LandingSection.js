@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import WhatWeDoContainer from 'containers/WhatWeDoContainer'
-import UpComingEventCard from 'components/UpComingEventCard'
-import ReadyToGetInvolved from 'components/ReadyToGetInvolved'
+import WhatWeDoContainer from './WhatWeDoContainer'
+import UpComingEventCard from './UpComingEventCard'
+import ReadyToGetInvolved from './ReadyToGetInvolved'
 
 const styles = (theme) => ({
   title: {

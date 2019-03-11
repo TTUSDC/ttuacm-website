@@ -1,5 +1,5 @@
 import React from 'react'
-import WhatWeDoCard from 'components/WhatWeDoCard'
+import WhatWeDoCard from './WhatWeDoCard'
 
 function WhatWeDoContainer() {
   return (
