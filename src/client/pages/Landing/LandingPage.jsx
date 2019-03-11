@@ -1,9 +1,21 @@
 import React from 'react'
+import PageLayout from 'components/PageLayout'
+import LandingSection from './LandingSection'
 
-class LandingPage extends React.Component {
-  render() {
-    return <h1>Landing Page</h1>
+function LandingPage() {
+  const LandingPageInfo = {
+    title: 'ASSOCIATION FOR COMPUTING MACHINERY',
+    info: `TEXAS TECH'S LARGEST
+      COMPUTER SCIENCE STUDENT ORGANIZATION`,
   }
+
+  return (
+    <PageLayout
+      color='#CC0000'
+      headerInfo={LandingPageInfo}
+      content={<LandingSection />}
+    />
+  )
 }
 
-export default LandingPage
+export default LandingPage;
