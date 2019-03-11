@@ -14,6 +14,7 @@ const styles = {
   barDefaults: {
     maxHeight: '64px',
     maxWidth: '100%',
+    background: '#333333',
   },
   root: {
     display: 'flex',
