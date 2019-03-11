@@ -52,10 +52,17 @@ class MembersModel {
     }
   }
 
+  /**
+   * Adds a group to a user's list of subscibed groups (Skips duplicates)
+   *
+   * @param {string} email - the email to target
+   * @param {Array<object>} groups - groups to add
+   */
   async subscribe(email, groups) {
     try {
+      const newGroups = new Set(groups)
       const query = await this.DB.findOne({ email }).exec()
-      query.groups.addToSet(...groups)
+      query.groups.addToSet(...newGroups)
       await query.save()
 
       return query.toObject()
@@ -64,6 +71,12 @@ class MembersModel {
     }
   }
 
+  /**
+   * Removes a group from a user's list of subscibed groups
+   *
+   * @param {string} email - the email to target
+   * @param {Array<object>} groups - groups to remove
+   */
   async unsubscribe(email, groups) {
     try {
       const delGroups = new Set(groups)
@@ -90,7 +103,6 @@ class MembersModel {
    * Pays a users dues
    *
    * @param {Array<string>} email - the email to target
-   * @return {Array<object>} the updated member object
    */
   async payDues(email) {
     try {

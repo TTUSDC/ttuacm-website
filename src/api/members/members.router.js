@@ -211,6 +211,9 @@ router.patch('/dues', async (req, res) => {
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
+ *     results: {
+ *         "modified": Number,
+ *     }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 err.code OK
@@ -218,7 +221,7 @@ router.patch('/dues', async (req, res) => {
 router.post('/reset', async (req, res) => {
   try {
     const results = await new Controller().reset()
-    res.status(200).json({ results })
+    res.status(200).json({ results: { modified: results.nModified } })
   } catch (err) {
     console.error(err)
     res.status(err.code || 500).json({ err })

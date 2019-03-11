@@ -44,7 +44,7 @@ describe('Members Unit Tests', () => {
     }
   })
 
-  it('should be able to insert members', async () => {
+  it('[create-members] should be able to insert members', async () => {
     try {
       const { body } = await request(app)
         .post('/v2/members')
@@ -59,7 +59,7 @@ describe('Members Unit Tests', () => {
     }
   })
 
-  it('should be able to get the members in the database that were inserted', async () => {
+  it('[get-members] should be able to get the members in the database that were inserted', async () => {
     try {
       await request(app)
         .post('/v2/members')
@@ -76,7 +76,7 @@ describe('Members Unit Tests', () => {
     }
   })
 
-  it('should allow a user to (un)subscribe to a group', async () => {
+  it('[subscribe-unsubscribe] should allow a user to (un)subscribe to a group', async () => {
     try {
       await request(app)
         .post('/v2/members')
@@ -95,13 +95,27 @@ describe('Members Unit Tests', () => {
         .expect(202)
 
       expect(unsubBody.member.groups.length).to.equal(0)
+
+      const { body: subBody2 } = await request(app)
+        .put('/v2/members/subscribe')
+        .send({ email: 'email', groups: ['group1', 'group1'] })
+        .expect(202)
+
+      expect(subBody2.member.groups.length).to.equal(1)
+
+      const { body: unsubBody2 } = await request(app)
+        .put('/v2/members/unsubscribe')
+        .send({ email: 'email', groups: ['group1'] })
+        .expect(202)
+
+      expect(unsubBody2.member.groups.length).to.equal(0)
     } catch (err) {
       throw err
     }
   })
 
   // Admins only
-  it('should allow admins to let users pay dues', async () => {
+  it('[pay-dues] should allow admins to let users pay dues', async () => {
     try {
       await request(app)
         .post('/v2/members')
@@ -120,7 +134,7 @@ describe('Members Unit Tests', () => {
   })
 
   // Admins only
-  it('should allow admins to reset dues and groups', async () => {
+  it('[reset-members] should allow admins to reset dues and groups', async () => {
     await request(app)
       .post('/v2/members')
       .send({ email: 'email1' })
@@ -143,7 +157,6 @@ describe('Members Unit Tests', () => {
 
     const { body } = await request(app).post('/v2/members/reset')
 
-    expect(body.results.n).to.equal(3)
-    expect(body.results.ok).to.equal(1)
+    expect(body.results.modified).to.equal(3)
   })
 })
