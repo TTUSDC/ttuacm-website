@@ -33,8 +33,7 @@ class MembersModel {
    */
   async getMembers() {
     try {
-      const query = await this.DB.find({}).exec()
-      return query
+      return await this.DB.find({}).exec()
     } catch (err) {
       throw err
     }
@@ -47,70 +46,73 @@ class MembersModel {
    */
   async getMemberByEmail(email) {
     try {
-      const query = await this.DB.find({ email }).exec()
+      return await this.DB.find({ email }).exec()
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async subscribe(email, groups) {
+    try {
+      const query = await this.DB.findOne({ email }).exec()
+      query.groups.addToSet(...groups)
+      await query.save()
+
       return query.toObject()
     } catch (err) {
       throw err
     }
   }
 
+  async unsubscribe(email, groups) {
+    try {
+      const delGroups = new Set(groups)
+      const query = await this.DB.findOne({ email }).exec()
+      const newGroups = []
+
+      for (const curr of query.groups.toObject()) {
+        if (!delGroups.has(curr[0])) {
+          newGroups.push(curr[0])
+        }
+      }
+
+      return await this.DB.findOneAndUpdate(
+        { email },
+        { groups: newGroups },
+        { new: true },
+      ).exec()
+    } catch (err) {
+      throw err
+    }
+  }
+
   /**
-   * Adds groups to the given email
+   * Pays a users dues
    *
    * @param {Array<string>} email - the email to target
-   * @param {string} groupsToAdd - the groups to add to the user
    * @return {Array<object>} the updated member object
    */
-  async addToUsersGroups(email, groupsToAdd) {
+  async payDues(email) {
     try {
-      const doc = await this.DB.find({ email }).exec()
-      doc.groups.addToSet(...groupsToAdd)
-      await doc.save()
-
-      return doc.toObject
+      return await this.DB.findOneAndUpdate(
+        { email },
+        { $set: { hasPaidDues: true } },
+        { new: true, lean: true },
+      ).exec()
     } catch (err) {
       throw err
     }
   }
 
   /**
-   * Removes groups from a given email
-   *
-   * @param {Array<string>} email - the email to target
-   * @param {string} groupsToDelete - the groups to delete from the user
-   * @return {Array<object>} the updated member object
+   * Resets the hasPaidDues and groups field of all members in the database
    */
-  async removeFromUsersGroups(email, groupsToDelete) {
+  async resetMembers() {
     try {
-      const doc = await this.DB.find({ email }).exec()
-      doc.groups.remove(...groupsToDelete)
-      await doc.save()
-
-      return doc.toObject()
-    } catch (err) {
-      throw err
-    }
-  }
-
-  /**
-   * Resets the hasPaidDues field of all members in the database
-   */
-  async resetHasPaidDues() {
-    try {
-      await this.DB.updateMany({}, { $set: { hasPaidDues: false } })
-      return
-    } catch (err) {
-      throw err
-    }
-  }
-
-  /**
-   * Resets the groups field of all members in the database
-   */
-  async resetGroups() {
-    try {
-      await this.DB.updateMany({}, { $set: { groups: [] } })
-      return
+      return await this.DB.updateMany(
+        {},
+        { $set: { hasPaidDues: false, groups: [] } },
+      )
     } catch (err) {
       throw err
     }

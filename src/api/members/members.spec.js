@@ -51,9 +51,9 @@ describe('Members Unit Tests', () => {
         .send({ email: 'email' })
         .expect(201)
 
-      expect(body.newMember.email).to.equal('email')
-      expect(body.newMember.hasPaidDues).to.equal(false)
-      expect(body.newMember.groups.length).to.equal(0)
+      expect(body.member.email).to.equal('email')
+      expect(body.member.hasPaidDues).to.equal(false)
+      expect(body.member.groups.length).to.equal(0)
     } catch (err) {
       throw err
     }
@@ -76,21 +76,6 @@ describe('Members Unit Tests', () => {
     }
   })
 
-  it('should be able to delete the members in the database that were inserted', async () => {
-    try {
-      await request(app)
-        .post('/v2/members')
-        .send({ email: 'email' })
-
-      await request(app)
-        .delete('/v2/members')
-        .send({ email: 'email' })
-        .expect(202)
-    } catch (err) {
-      throw err
-    }
-  })
-
   it('should allow a user to (un)subscribe to a group', async () => {
     try {
       await request(app)
@@ -99,14 +84,14 @@ describe('Members Unit Tests', () => {
 
       const { body: subBody } = await request(app)
         .put('/v2/members/subscribe')
-        .send({ email: 'email', groups: ['group1'] })
+        .send({ email: 'email', groups: ['group1', 'group2'] })
         .expect(202)
 
-      expect(subBody.member.groups.length).to.equal(1)
+      expect(subBody.member.groups.length).to.equal(2)
 
       const { body: unsubBody } = await request(app)
-        .put('/v2/members/subscribe')
-        .send({ email: 'email', groups: ['group1'] })
+        .put('/v2/members/unsubscribe')
+        .send({ email: 'email', groups: ['group1', 'group2'] })
         .expect(202)
 
       expect(unsubBody.member.groups.length).to.equal(0)
@@ -125,9 +110,10 @@ describe('Members Unit Tests', () => {
       const { body: duesBody } = await request(app)
         .patch('/v2/members/dues')
         .send({ email: 'email' })
+        .expect(202)
 
-      expect(duesBody.email).to.equal('email')
-      expect(duesBody.hasPaidDues).to.equal(true)
+      expect(duesBody.member.email).to.equal('email')
+      expect(duesBody.member.hasPaidDues).to.equal(true)
     } catch (err) {
       throw err
     }
@@ -157,11 +143,7 @@ describe('Members Unit Tests', () => {
 
     const { body } = await request(app).post('/v2/members/reset')
 
-    expect(body.members.length).to.equal(3)
-
-    for (const member of body.members) {
-      expect(member.groups.length).to.equal(0)
-      expect(member.hasPaidDues).to.equal(false)
-    }
+    expect(body.results.n).to.equal(3)
+    expect(body.results.ok).to.equal(1)
   })
 })

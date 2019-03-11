@@ -47,10 +47,14 @@ router.get('/test', (req, res) => {
  * @apiParam (Request body) {String} redirectURLSuccess redirect url when success
  */
 router.post('/confirm-email', async (req, res) => {
-  const ctrl = new Controller()
   try {
     const { email, token, fallback, redirectURLSuccess } = req.body
-    await ctrl.sendConfirmationEmail(email, token, fallback, redirectURLSuccess)
+    new Controller().sendConfirmationEmail(
+      email,
+      token,
+      fallback,
+      redirectURLSuccess,
+    )
     res.status(200).json()
   } catch (err) {
     console.error(err)
@@ -82,16 +86,14 @@ router.post('/confirm-email', async (req, res) => {
  * @apiParam (Request body) {String} token the user's reset password token
  */
 router.post('/reset-password', (req, res) => {
-  const ctrl = new Controller()
-  const { email, token } = req.body
-
-  ctrl
-    .sendResetEmail(email, token)
-    .then(() => res.status(200).json())
-    .catch((err) => {
-      console.error(err)
-      res.status(500).json()
-    })
+  try {
+    const { email, token } = req.body
+    new Controller().sendResetEmail(email, token)
+    res.status(200).end()
+  } catch (err) {
+    console.error(err)
+    res.status(500).json()
+  }
 })
 
 module.exports = router

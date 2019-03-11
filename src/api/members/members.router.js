@@ -64,6 +64,11 @@ router.get('/', async (req, res) => {
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
+ *     member : {
+ *        "email": String,
+ *        "hasPaidDues": Boolean,
+ *        "groups": String[]
+ *     }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 err.code OK
@@ -74,35 +79,7 @@ router.post('/', async (req, res) => {
   try {
     if (!req.body.email) throw ErrorMessages.MissingRequestBody()
     const newMember = await new Controller().createMember(req.body.email)
-    res.status(201).json({ newMember })
-  } catch (err) {
-    console.error(err)
-    res.status(err.code || 500).json({ err })
-  }
-})
-
-/**
- * @api {delete} /api/v2/members Delete Member
- * @apiDescription
- * Deletes a member from the database
- *
- * @apiVersion 0.2.0
- *
- * @apiGroup Members
- *
- * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *
- * @apiErrorExample Error-Response:
- *     HTTP/1.1 err.code OK
- *
- * @apiParam (Request body) {String} email email
- */
-router.delete('/', async (req, res) => {
-  try {
-    if (!req.body.email) throw ErrorMessages.MissingRequestBody()
-    await new Controller().deleteMember(req.body.email)
-    res.status(202).end()
+    res.status(201).json({ member: newMember })
   } catch (err) {
     console.error(err)
     res.status(err.code || 500).json({ err })
@@ -120,6 +97,11 @@ router.delete('/', async (req, res) => {
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
+ *     member : {
+ *        "email": String,
+ *        "hasPaidDues": Boolean,
+ *        "groups": String[]
+ *     }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 err.code OK
@@ -132,8 +114,14 @@ router.put('/subscribe', async (req, res) => {
     if (!req.body.email || !req.body.groups)
       throw ErrorMessages.MissingRequestBody()
     if (!Array.isArray(req.body.groups)) throw ErrorMessages.BadInput()
-    throw ErrorMessages.NotImplemented()
+
+    const updatedMember = await new Controller().subscribe(
+      req.body.email,
+      req.body.groups,
+    )
+    res.status(202).json({ member: updatedMember })
   } catch (err) {
+    console.error(err)
     res.status(err.code || 500).json({ err })
   }
 })
@@ -149,6 +137,11 @@ router.put('/subscribe', async (req, res) => {
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
+ *     member : {
+ *        "email": String,
+ *        "hasPaidDues": Boolean,
+ *        "groups": String[]
+ *     }
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 err.code OK
@@ -161,8 +154,47 @@ router.put('/unsubscribe', async (req, res) => {
     if (!req.body.email || !req.body.groups)
       throw ErrorMessages.MissingRequestBody()
     if (!Array.isArray(req.body.groups)) throw ErrorMessages.BadInput()
-    throw ErrorMessages.NotImplemented()
+
+    const updatedMember = await new Controller().unsubscribe(
+      req.body.email,
+      req.body.groups,
+    )
+    res.status(202).json({ member: updatedMember })
   } catch (err) {
+    res.status(err.code || 500).json({ err })
+  }
+})
+
+/**
+ * @api {patch} /api/v2/members Pay Dues
+ * @apiDescription
+ * Allows a user to pay dues given an email
+ *
+ * @apiVersion 0.2.0
+ *
+ * @apiGroup Members
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     member : {
+ *        "email": String,
+ *        "hasPaidDues": Boolean,
+ *        "groups": String[]
+ *     }
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 err.code OK
+ *
+ * @apiParam (Request body) {String} email email
+ */
+router.patch('/dues', async (req, res) => {
+  try {
+    if (!req.body.email) throw ErrorMessages.MissingRequestBody()
+
+    const updatedMember = await new Controller().payDues(req.body.email)
+    res.status(202).json({ member: updatedMember })
+  } catch (err) {
+    console.error(err)
     res.status(err.code || 500).json({ err })
   }
 })
@@ -185,8 +217,10 @@ router.put('/unsubscribe', async (req, res) => {
  */
 router.post('/reset', async (req, res) => {
   try {
-    throw ErrorMessages.NotImplemented()
+    const results = await new Controller().reset()
+    res.status(200).json({ results })
   } catch (err) {
+    console.error(err)
     res.status(err.code || 500).json({ err })
   }
 })

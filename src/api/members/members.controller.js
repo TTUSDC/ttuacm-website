@@ -13,8 +13,7 @@ class MembersController {
    */
   async createMember(email) {
     try {
-      const newMember = await this.model.createMember(email)
-      return newMember
+      return await this.model.createMember(email)
     } catch (err) {
       throw err
     }
@@ -22,8 +21,39 @@ class MembersController {
 
   async getMembers() {
     try {
-      const members = await this.model.getMembers()
-      return members
+      return await this.model.getMembers()
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async subscribe(email, groups) {
+    try {
+      return await this.model.subscribe(email, groups)
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async unsubscribe(email, groups) {
+    try {
+      return await this.model.unsubscribe(email, groups)
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async payDues(email) {
+    try {
+      return await this.model.payDues(email)
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async reset() {
+    try {
+      return await this.model.resetMembers()
     } catch (err) {
       throw err
     }
