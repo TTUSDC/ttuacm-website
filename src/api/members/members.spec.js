@@ -1,4 +1,21 @@
 require('dotenv').config()
+
+const test = require('firebase-functions-test')()
+
+test.mockConfig({
+  environment: {
+    env: 'testing',
+  },
+  connections: {
+    protocol: 'protocol',
+    host: 'host',
+  },
+  email: {
+    email_username: 'user',
+    email_password: 'pass',
+  },
+})
+
 const request = require('supertest')
 const mongoose = require('mongoose')
 const { expect } = require('chai')
