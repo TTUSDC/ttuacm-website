@@ -1,13 +1,6 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
 import PageLayout from 'components/PageLayout'
 import EventsContainer from 'containers/EventsContainer'
-
-const styles = {
-  container: {
-    backgroundColor: '#333333',
-  },
-}
 
 function EventsPage() {
   const EventsPageInfo = {
@@ -25,4 +18,4 @@ function EventsPage() {
   )
 }
 
-export default withStyles(styles)(EventsPage);
+export default EventsPage;
