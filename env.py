@@ -9,13 +9,7 @@ print('For email username and password, I recommend going to etherial.mail')
 SERVICES = {
     'environment': [
         'env',
-        'session_secret',
-        'apikey',
-        'authdomain',
-        'databaseurl',
-        'projectid',
-        'storagebucket',
-        'messagingsenderid',
+        'session_secret'
     ],
     'email': ['email_username', 'email_password'],
     'connections': ['protocol', 'host', 'db']
@@ -55,7 +49,7 @@ def pick_environment():
 
 def choose_service():
     '''Asks the user what service they want to configure'''
-    svc_choice = input('What service would you like to configure? [environment/email/connection] ')
+    svc_choice = input('What service would you like to configure? [environment/email/connections] ')
     if svc_choice == '':
         exit()
     elif svc_choice not in SERVICES:

@@ -94,6 +94,13 @@
     "sinon-chai": "3.2.0",
     "supertest": "3.3.0"
   },
+  "prettier": {
+    "trailingComma": "all",
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "always",
+    "jsxSingleQuote": true
+  },
   "jest": {
     "verbose": true,
     "testEnvironment": "node",
