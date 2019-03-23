@@ -1,18 +1,26 @@
-import os
+from os import system
 
-os.system('clear')
+system('clear')
 
 print('Thank you for contributing to ACM!')
 print('We will begin by setting up the environment variables')
 print('For email username and password, I recommend going to etherial.mail')
 
+# A map of the api secrets
 SERVICES = {
     'environment': [
         'env',
         'session_secret'
     ],
-    'email': ['email_username', 'email_password'],
-    'connections': ['protocol', 'host', 'db']
+    'email': [
+        'email_username',
+        'email_password'
+    ],
+    'connections': [
+        'protocol',
+        'h',
+        'db'
+    ]
 }
 
 def get_env(env_vars, service):
@@ -22,15 +30,15 @@ def get_env(env_vars, service):
         if val == '':
             print('Leaving old value')
         else:
-            os.system('firebase functions:config:set {}.{}={}'.format(service, env, val))
+            system('firebase functions:config:set {}.{}={}'.format(service, env, val))
 
     print('Done')
-    choice = input('Would you like to save those settings for local development? [Y/n] ')
+    choice = input('Would you like to save th settings for local development? [Y/n] ')
 
     if choice.lower() != 'y':
         exit()
 
-    os.system('firebase functions:config:get > .runtimeconfig.json')
+    system('firebase functions:config:get > .runtimeconfig.json')
 
 def pick_environment():
     '''Lets the user pick an environment'''
@@ -39,15 +47,15 @@ def pick_environment():
 
     if choice == '':
         print('defaulting to dev')
-        os.system('firebase functions:config:set environment.env=dev')
+        system('firebase functions:config:set environment.env=dev')
     elif choice not in choices:
         print('Invalid Option. You must pick either dev or prod')
         exit()
     else:
         print('Setting up {} environment'.format(choice))
-        os.system('firebase functions:config:set environment.env={}'.format(choice))
+        system('firebase functions:config:set environment.env={}'.format(choice))
 
-def choose_service():
+def cho_service():
     '''Asks the user what service they want to configure'''
     svc_choice = input('What service would you like to configure? [environment/email/connections] ')
     if svc_choice == '':
@@ -62,4 +70,4 @@ def choose_service():
 
 if __name__ == '__main__':
     pick_environment()
-    choose_service()
+    cho_service()
