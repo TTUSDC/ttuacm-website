@@ -45,22 +45,25 @@ const EventsContainer = ({ classes = {} }) => {
   if (process.env.NODE_ENV === 'production') {
     // Fetch the events from the API
     useEffect(() => {
-      setLoading(true)
-      // Grabs all the events from the API and maps their times from strings to dates
-      axios.get(`${connectionString}/events`).then(({ data }) => {
-        const allEvents = data.allEvents.map(event => ({
-          ...event,
-          startTime: new Date(event.startTime),
-          endTime: new Date(event.endTime),
-        }))
-        setEvents(allEvents)
-      }).catch((err) => {
-        // TODO set up error handling
-        console.error(err)
-        setEvents([])
-      }).finally(() => {
+      async function fetchEvents() {
+        // Grabs all the events from the API and maps their times from strings to dates
+        try {
+          setLoading(true)
+          const { data } = await axios.get(`${connectionString}/events`)
+          const allEvents = data.allEvents.map(event => ({
+            ...event,
+            startTime: new Date(event.startTime),
+            endTime: new Date(event.endTime),
+          }))
+          setEvents(allEvents)
+        } catch (err) {
+          console.error(err)
+          setEvents([])
+        }
         setLoading(false)
-      })
+      }
+
+      fetchEvents()
     }, [])
   }
 

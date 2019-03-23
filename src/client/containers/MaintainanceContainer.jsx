@@ -1,32 +1,27 @@
 import React, { useContext } from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import { PropTypes } from 'prop-types'
 import { ConnectionString } from 'context/ConnectionStringContext'
 import MaintenanceScreen from 'pages/Maintainance/MaintenanceScreen.jsx'
 import useEnvironment from 'hooks/useEnvironment'
 import firebase from 'firebase'
 import Main from 'Main'
+import firebaseConfig from '../firebase_config.json'
 
 function MaintainanceContainer({ history }) {
   const connectionString = useContext(ConnectionString)
   const [env, err] = useEnvironment(connectionString)
 
   // Initialize the Firebase App, but only do it if it has not been initialized before
-  if (Object.keys(env).length) {
-    const config = {
-      apiKey: env.firebase.api_key,
-      authDomain: env.firebase.auth_domain,
-      databaseURL: env.firebase.database_url,
-      projectId: env.firebase.project_id,
-      storageBucket: env.firebase.storage_bucket,
-      messagingSenderId: env.firebase.message_sender_id,
-    }
-
-    if (firebase.apps.length === 0) firebase.initializeApp(config)
-  } else {
-    // TODO: Make the loading more beautiful
-    return <CircularProgress />
+  const config = {
+    apiKey: firebaseConfig.apiKey,
+    authDomain: firebaseConfig.authDomain,
+    databaseURL: firebaseConfig.databaseURL,
+    projectId: firebaseConfig.projectId,
+    storageBucket: firebaseConfig.storageBucket,
+    messagingSenderId: firebaseConfig.messageSenderId,
   }
+
+  if (firebase.apps.length === 0) firebase.initializeApp(config)
 
   if (err) {
     console.error(err)
