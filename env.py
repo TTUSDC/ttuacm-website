@@ -22,6 +22,7 @@ SERVICES = {
 }
 
 def get_env(env_vars, service):
+    '''Replaces the variables in firebase project'''
     for env in env_vars:
         val = input('{}: '.format(env))
         if val == '':
@@ -54,7 +55,7 @@ def pick_environment():
 
 def choose_service():
     '''Asks the user what service they want to configure'''
-    svc_choice = input('What service would you like to configure? ')
+    svc_choice = input('What service would you like to configure? [environment/email/connection] ')
     if svc_choice == '':
         exit()
     elif svc_choice not in SERVICES:
