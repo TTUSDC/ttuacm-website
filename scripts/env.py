@@ -10,6 +10,7 @@ print('For email username and password, I recommend going to etherial.mail')
 SERVICES = {
     'environment': [
         'env',
+        'maintainance',
         'session_secret'
     ],
     'email': [
@@ -18,7 +19,7 @@ SERVICES = {
     ],
     'connections': [
         'protocol',
-        'h',
+        'host',
         'db'
     ]
 }
@@ -33,7 +34,7 @@ def get_env(env_vars, service):
             system('firebase functions:config:set {}.{}={}'.format(service, env, val))
 
     print('Done')
-    choice = input('Would you like to save th settings for local development? [Y/n] ')
+    choice = input('Would you like to save the settings for local development? [Y/n] ')
 
     if choice.lower() != 'y':
         exit()
@@ -55,7 +56,7 @@ def pick_environment():
         print('Setting up {} environment'.format(choice))
         system('firebase functions:config:set environment.env={}'.format(choice))
 
-def cho_service():
+def choose_service():
     '''Asks the user what service they want to configure'''
     svc_choice = input('What service would you like to configure? [environment/email/connections] ')
     if svc_choice == '':
@@ -70,4 +71,4 @@ def cho_service():
 
 if __name__ == '__main__':
     pick_environment()
-    cho_service()
+    choose_service()
