@@ -5,6 +5,7 @@ import * as axios from 'axios'
 
 import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/styles'
 import { red, black } from '@material-ui/core/colors'
 import { Provider } from 'react-redux'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
@@ -57,9 +58,11 @@ function render() {
     <AppContainer>
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>
-          <ConnectionStringProvider>
-            <MaintainanceContainer history={history} />
-          </ConnectionStringProvider>
+          <ThemeProvider theme={theme}>
+            <ConnectionStringProvider>
+              <MaintainanceContainer history={history} />
+            </ConnectionStringProvider>
+          </ThemeProvider>
         </MuiThemeProvider>
       </Provider>
     </AppContainer>,

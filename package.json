@@ -21,8 +21,9 @@
   },
   "dependencies": {
     "@firebase/app-types": "0.3.2",
-    "@material-ui/core": "3.3.0",
-    "@material-ui/icons": "3.0.1",
+    "@material-ui/core": "3.9.2",
+    "@material-ui/icons": "3.0.2",
+    "@material-ui/styles": "3.0.0-alpha.10",
     "axios": "~0.18.0",
     "bcryptjs": "~2.0",
     "body-parser": "~1.18.3",
