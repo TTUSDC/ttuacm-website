@@ -52,8 +52,8 @@ export default function getStyles(theme, width, align) {
       justifyContent: 'center',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'flex-end',
-      textAlign: 'right',
+      alignItems: 'flex-start',
+      textAlign: 'left',
       padding: 25,
     },
     Tag: {
@@ -64,11 +64,6 @@ export default function getStyles(theme, width, align) {
     Container: {
       justifyContent: 'space-between',
     },
-  }
-
-  if (align !== 'left') {
-    delete curr.Item.alignItems
-    delete curr.Item.textAlign
   }
 
   return curr
