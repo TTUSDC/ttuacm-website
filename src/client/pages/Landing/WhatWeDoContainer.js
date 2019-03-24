@@ -22,7 +22,7 @@ const content = [
   {
     title: 'Our Team',
     text:
-      'We are practicing developers, designers and engineers. Just like you, we enjoy programming and creating awesome products. We want to help you learn interesting technologies and enjoy what you are doing',
+      'Our officers consist of passionate Computer Science students who also want to be engineers. Our goal is to help you realize your passions in Computer Science',
     link: '/about',
     linkTag: 'About Us',
   },

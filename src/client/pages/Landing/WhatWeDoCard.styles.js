@@ -10,6 +10,10 @@ export default function getStyles(theme, width, align) {
   }
 
   if (width > theme.breakpoints.values.md) {
+    imageSize = 200
+  }
+
+  if (width > theme.breakpoints.values.lg) {
     imageSize = 300
   }
 
