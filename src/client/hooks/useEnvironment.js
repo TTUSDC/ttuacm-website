@@ -24,7 +24,7 @@ export default function useEnvironment(connectionString) {
 
   useEffect(() => {
     async function fetchEnv() {
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV === 'development') {
         setEnv(devEnv)
         setErr(null)
       } else {
