@@ -28,7 +28,13 @@ function WhatWeDoCard({ content, align, image, navigateTo }) {
         <Grid style={style.Item} item xs={8}>
           <div style={style.Title}>{content.title} </div>
           <div style={style.Text}>{content.text} </div>
-          <div onClick={() => navigateTo(content.link)} style={style.Tag}>
+          <div
+            tabIndex={0}
+            onKeyUp={() => ({})}
+            role='button'
+            onClick={() => navigateTo(content.link)}
+            style={style.Tag}
+          >
             {content.linkTag}{' '}
           </div>
         </Grid>
