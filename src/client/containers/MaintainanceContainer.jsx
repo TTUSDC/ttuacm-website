@@ -24,11 +24,10 @@ function MaintainanceContainer({ history }) {
   if (firebase.apps.length === 0) firebase.initializeApp(config)
 
   if (err) {
-    console.error(err)
     return <MaintenanceScreen />
   }
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV !== 'production') {
     // Changes this is you want to see the MaintenanceScreen
     return <Main history={history} />
   }
