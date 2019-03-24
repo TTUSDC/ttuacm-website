@@ -6,7 +6,7 @@ import * as axios from 'axios'
 import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
-import { red, black } from '@material-ui/core/colors'
+import { red } from '@material-ui/core/colors'
 import { Provider } from 'react-redux'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { createBrowserHistory } from 'history'
@@ -36,7 +36,9 @@ const theme = createMuiTheme({
   },
   palette: {
     type: 'dark',
-    primary: black,
+    primary: {
+      main: '#D63333',
+    },
     secondary: red,
   },
 })

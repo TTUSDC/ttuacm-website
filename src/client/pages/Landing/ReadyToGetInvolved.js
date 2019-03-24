@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useTheme } from '@material-ui/styles'
 import useWindowSize from 'hooks/useWindowSize'
 import Button from '@material-ui/core/Button'
+import Blur from 'assets/home_page/Blur.png'
 
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
@@ -24,8 +25,9 @@ const getStyle = (theme, windowWidth) => {
       justifyContent: 'center',
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: '#666666',
+      backgroundSize: 'cover',
       padding: '0px 40px',
+      backgroundImage: `url(${Blur})`,
     },
     Button: {
       marginTop: 35,
@@ -56,6 +58,7 @@ function ReadyToGetInvolved({ navigateTo }) {
       <Button
         variant='contained'
         onClick={() => handleNav()}
+        color='primary'
         style={style.Button}
       >
         JOIN US
