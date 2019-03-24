@@ -62,7 +62,6 @@ const PageHeader = ({
 
 PageHeader.propTypes = {
   color: PropTypes.string,
-  classes: PropTypes.shape({}),
   title: PropTypes.string,
   info: PropTypes.string,
 }
