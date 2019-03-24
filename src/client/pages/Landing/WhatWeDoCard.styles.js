@@ -1,4 +1,4 @@
-export default function getStyles(theme, width, align) {
+export default function getStyles(theme, width) {
   let titleSize = theme.typography.h4
   let textSize = theme.typography.body1
   let imageSize = 100
