@@ -2,47 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from '@material-ui/styles'
 import useWindowSize from 'hooks/useWindowSize'
-
-const getStyles = (theme, windowWidth, windowHeight, color) => {
-  let titleSize = theme.typography.h2
-  let infoSize = theme.typography.h6
-  let infoWidth = '61%'
-
-  if (windowWidth < theme.breakpoints.values.sm) {
-    titleSize = theme.typography.h4
-    infoSize = theme.typography.body2
-    infoWidth = '80%'
-  }
-
-  const curr = {
-    PageHeader: {
-      display: 'flex',
-      color: 'white',
-      width: '100%',
-      minHeight: windowHeight - 64,
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'column',
-      textAlign: 'center',
-      backgroundColor: color,
-    },
-    title: {
-      ...titleSize,
-      fontWeight: 'bold',
-    },
-    info: {
-      ...infoSize,
-      display: 'flex',
-      width: infoWidth,
-      margin: 'auto',
-      textAlign: 'center',
-      justifyContent: 'center',
-      wordWrap: 'break-word',
-    },
-  }
-
-  return curr
-}
+import createStyles from './PageHeader.styles'
 
 const PageHeader = ({
   title, info, color,
@@ -50,7 +10,7 @@ const PageHeader = ({
   const theme = useTheme()
   const { width, height } = useWindowSize()
 
-  const classes = getStyles(theme, width, height, color)
+  const classes = createStyles(theme, width, height, color)
 
   return (
     <div style={classes.PageHeader}>
