@@ -1,6 +1,6 @@
 import React from 'react'
-import EventCard from 'components/EventCard'
 import moment from 'moment'
+import EventCard from './EventCard'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const WEEKDAY = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']

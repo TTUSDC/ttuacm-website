@@ -5,7 +5,7 @@ import { ConnectionString } from 'context/ConnectionStringContext'
 import * as axios from 'axios'
 
 let SHOW_MOCK_CALENDAR = true
-if (process.env.NODE_ENV === 'production') SHOW_MOCK_CALENDAR = false
+if (process.env.NODE_ENV !== 'development') SHOW_MOCK_CALENDAR = false
 
 const placeHolder = [
   {
