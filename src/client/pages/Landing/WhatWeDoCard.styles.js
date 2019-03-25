@@ -1,4 +1,4 @@
-export default function getStyles(theme, width) {
+export default function getStyles(theme, width, align) {
   let titleSize = theme.typography.h4
   let textSize = theme.typography.body1
   let imageSize = 100
@@ -62,7 +62,7 @@ export default function getStyles(theme, width) {
       textTransform: 'uppercase',
     },
     Container: {
-      justifyContent: 'space-between',
+      justifyContent: align === 'left' ? 'start' : 'space-between',
     },
   }
 
