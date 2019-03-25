@@ -1,53 +1,39 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
-import useWindowSize from 'hooks/useWindowSize'
-import { useTheme } from '@material-ui/styles'
+import { withStyles } from '@material-ui/core/styles'
 import EventDate from './EventDate'
 import EventContent from './EventContent'
 
 
-function getStyle(theme, width) {
-  let direction = 'row'
-  let cardHeight = '37vh'
-
-  if (width < theme.breakpoints.values.sm) {
-    direction = 'column'
-    cardHeight = '32vh'
-  }
-
-  const curr = {
-    EventsCard: {
-      color: 'white',
-      display: 'flex',
-      flexDirection: direction,
-      flexFlow: direction,
-      alignItems: 'stretch',
-      width: '86vw',
-      height: cardHeight,
-      backgroundColor: '#253F51',
-      margin: '0 auto 2em',
-      padding: '15px 0px',
+const styles = (theme) => ({
+  EventsCard: {
+    color: 'white',
+    display: 'flex',
+    flexDirection: 'row',
+    flexFlow: 'row',
+    alignItems: 'stretch',
+    width: '86vw',
+    height: '37vh',
+    backgroundColor: '#253F51',
+    margin: '0 auto 2em',
+    padding: '15px 0px',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      flexFlow: 'column',
+      height: '32vh',
     },
-  }
-
-  return curr
-}
+  },
+})
 
 const EventCard = ({
-  month, day, weekday, name, timeloc, content,
-}) => {
-  const { width } = useWindowSize()
-  const theme = useTheme()
-  const style = getStyle(theme, width)
-
-  return (
-    <Card style={style.EventsCard}>
-      <EventDate month={month} day={day} weekday={weekday} />
-      <EventContent name={name} timeloc={timeloc} content={content} />
-    </Card>
-  )
-}
+  month, day, weekday, name, timeloc, content, classes,
+}) => (
+  <Card className={classes.EventsCard}>
+    <EventDate month={month} day={day} weekday={weekday} />
+    <EventContent name={name} timeloc={timeloc} content={content} />
+  </Card>
+)
 
 
 EventCard.propTypes = {
@@ -66,4 +52,4 @@ EventCard.propTypes = {
   classes: PropTypes.shape({}),
 }
 
-export default EventCard
+export default withStyles(styles, { withTheme: true })(EventCard)
