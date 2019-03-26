@@ -9,6 +9,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    flex: 3,
     [theme.breakpoints.down('xs')]: {
       textAlign: 'center',
     },

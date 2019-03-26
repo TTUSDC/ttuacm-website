@@ -7,8 +7,7 @@ import { ConnectionString } from 'context/ConnectionStringContext'
 import * as axios from 'axios'
 import MOCK_CALENDAR from '__mocks__/calendar'
 
-const SHOW_MOCK_CALENDAR = true
-// if (process.env.NODE_ENV !== 'development') SHOW_MOCK_CALENDAR = false
+const SHOW_MOCK_CALENDAR = process.env.NODE_ENV === 'development'
 
 const styles = {
   EventsContainer: {
@@ -42,7 +41,7 @@ const EventsContainer = ({ classes = {} }) => {
   const [loading, setLoading] = useState(false)
   const connectionString = useContext(ConnectionString)
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV !== 'development') {
     // Fetch the events from the API
     useEffect(() => {
       async function fetchEvents() {
@@ -66,6 +65,8 @@ const EventsContainer = ({ classes = {} }) => {
       fetchEvents()
     }, [])
   }
+
+  console.log(events)
 
   return (
     <Grid
