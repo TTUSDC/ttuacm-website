@@ -1,34 +1,32 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from '@material-ui/styles'
-import useWindowSize from 'hooks/useWindowSize'
 import Button from '@material-ui/core/Button'
 import Background from 'assets/home_page/Blur.png'
 
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import getStyle from './ReadyToGetInvolved.styles'
+import { withStyles } from '@material-ui/core/styles'
+import styles from './ReadyToGetInvolved.styles'
 
-function ReadyToGetInvolved({ navigateTo }) {
-  const theme = useTheme()
-  const { width } = useWindowSize()
-  const style = getStyle(theme, width, Background)
-
+function ReadyToGetInvolved({ navigateTo, classes }) {
   const handleNav = () => {
     window.scrollTo(0, 0)
     navigateTo('/auth')
   }
 
   return (
-    <div style={style.Container}>
-      <p style={style.Text}>
+    <div
+      className={classes.Container}
+      style={{ backgroundImage: `url(${Background})` }}
+    >
+      <p className={classes.Text}>
         CREATE YOUR ACCOUNT AND JOIN US IN OUR ACTIVITIES
       </p>
       <Button
         variant='contained'
         onClick={() => handleNav()}
         color='primary'
-        style={style.Button}
+        className={classes.Button}
         size='large'
       >
         JOIN US
@@ -39,6 +37,7 @@ function ReadyToGetInvolved({ navigateTo }) {
 
 ReadyToGetInvolved.propTypes = {
   navigateTo: PropTypes.func.isRequired,
+  classes: PropTypes.shape({}),
 }
 
 const mapDispatchToProps = (dispatch) => ({
@@ -50,4 +49,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   () => ({}),
   mapDispatchToProps,
-)(ReadyToGetInvolved)
+)(withStyles(styles, { withTheme: true })(ReadyToGetInvolved))

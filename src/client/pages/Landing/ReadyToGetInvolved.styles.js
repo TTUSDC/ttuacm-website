@@ -1,29 +1,26 @@
-export default function getStyle(theme, windowWidth, picture) {
-  let textSize = theme.typography.h4
-  let containerSize = '35vh'
-
-  if (windowWidth < theme.breakpoints.values.sm) {
-    textSize = theme.typography.h6
-    containerSize = '30vh'
-  }
-
+export default function styles(theme) {
   return {
     Container: {
       textAlign: 'center',
-      height: containerSize,
+      height: '35vh',
       alignItems: 'center',
       justifyContent: 'center',
       display: 'flex',
       flexDirection: 'column',
       backgroundSize: 'cover',
       padding: '0px 40px',
-      backgroundImage: `url(${picture})`,
+      [theme.breakpoints.down('xs')]: {
+        height: '30vh',
+      },
     },
     Button: {
       marginTop: 35,
     },
     Text: {
-      ...textSize,
+      ...theme.typography.h4,
+      [theme.breakpoints.down('xs')]: {
+        ...theme.typography.h6,
+      },
       color: 'white',
       fontWeight: 'bold',
     },

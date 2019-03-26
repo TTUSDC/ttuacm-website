@@ -1,26 +1,31 @@
-export default function getStyles(theme, width, align) {
-  let titleSize = theme.typography.h4
-  let textSize = theme.typography.body1
-  let imageSize = 100
+const imageSize = {
+  xs: 100,
+  sm: 150,
+  md: 200,
+  lg: 300,
+}
 
-  if (width > theme.breakpoints.values.sm) {
-    titleSize = theme.typography.h2
-    textSize = theme.typography.h6
-    imageSize = 150
-  }
-
-  if (width > theme.breakpoints.values.md) {
-    imageSize = 200
-  }
-
-  if (width > theme.breakpoints.values.lg) {
-    imageSize = 300
-  }
-
-  const curr = {
+export default function styles(theme) {
+  return {
     Image: {
-      width: imageSize,
-      height: imageSize,
+      width: imageSize.xs,
+      height: imageSize.xs,
+      [theme.breakpoints.up('md')]: {
+        width: imageSize.lg,
+        height: imageSize.lg,
+      },
+      [theme.breakpoints.up('sm')]: {
+        width: imageSize.md,
+        height: imageSize.md,
+      },
+      [theme.breakpoints.up('xs')]: {
+        width: imageSize.sm,
+        height: imageSize.sm,
+      },
+      [theme.breakpoints.down('xs')]: {
+        width: imageSize.xs,
+        height: imageSize.xs,
+      },
     },
     ImageGrid: {
       display: 'flex',
@@ -40,11 +45,11 @@ export default function getStyles(theme, width, align) {
       backgroundColor: 'white',
     },
     Title: {
-      ...titleSize,
+      ...theme.typography.h4,
       color: '#D63333',
     },
     Text: {
-      ...textSize,
+      ...theme.typography.body1,
       color: '#333333',
       margin: '10px 0px',
     },
@@ -54,17 +59,11 @@ export default function getStyles(theme, width, align) {
       flexDirection: 'column',
       alignItems: 'flex-start',
       textAlign: 'left',
-      padding: 25,
     },
     Tag: {
-      ...textSize,
+      ...theme.typography.body1,
       color: '#D63333',
       textTransform: 'uppercase',
     },
-    Container: {
-      justifyContent: align === 'left' ? 'start' : 'space-between',
-    },
   }
-
-  return curr
 }

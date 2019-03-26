@@ -2,38 +2,41 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
-import { useTheme } from '@material-ui/styles'
-import useWindowSize from 'hooks/useWindowSize'
+import { withStyles } from '@material-ui/core/styles'
 
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import getStyles from './WhatWeDoCard.styles'
+import styles from './WhatWeDoCard.styles'
 
-function WhatWeDoCard({ content, align, image, navigateTo }) {
-  const theme = useTheme()
-  const { width } = useWindowSize()
-  const style = getStyles(theme, width, align)
-
+function WhatWeDoCard({ content, align, image, navigateTo, classes }) {
   return (
-    <Card style={style.Card}>
+    <Card className={classes.Card}>
       <Grid
-        style={style.Container}
+        className={classes.Container}
         container
         spacing={16}
         direction={align !== 'left' ? 'row-reverse' : null}
+        style={{
+          justifyContent: align === 'left' ? 'start' : 'space-between',
+        }}
       >
-        <Grid style={style.ImageGrid} item sm={3} xs={4}>
-          <img alt='sadness' style={style.Image} src={image} />
+        <Grid className={classes.ImageGrid} item sm={3} xs={4}>
+          <img alt='sadness' className={classes.Image} src={image} />
         </Grid>
-        <Grid style={style.Item} item xs={8}>
-          <div style={style.Title}>{content.title} </div>
-          <div style={style.Text}>{content.text} </div>
+        <Grid
+          className={classes.Item}
+          item
+          xs={8}
+          style={{ padding: '0px 30px' }}
+        >
+          <div className={classes.Title}>{content.title} </div>
+          <div className={classes.Text}>{content.text} </div>
           <div
             tabIndex={0}
             onKeyUp={() => ({})}
             role='button'
             onClick={() => navigateTo(content.link)}
-            style={style.Tag}
+            className={classes.Tag}
           >
             {content.linkTag}{' '}
           </div>
@@ -48,6 +51,7 @@ WhatWeDoCard.propTypes = {
   align: PropTypes.string,
   image: PropTypes.string,
   navigateTo: PropTypes.func.isRequired,
+  classes: PropTypes.shape({}),
 }
 
 const mapDispatchToProps = (dispatch) => ({
@@ -59,4 +63,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   () => ({}),
   mapDispatchToProps,
-)(WhatWeDoCard)
+)(withStyles(styles, { withTheme: true })(WhatWeDoCard))
