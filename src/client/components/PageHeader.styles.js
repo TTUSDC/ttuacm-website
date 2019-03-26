@@ -8,6 +8,8 @@ export default function styles(theme) {
       justifyContent: 'center',
       flexDirection: 'column',
       textAlign: 'center',
+      backgroundSize: 'cover',
+      backgroundPosition: 'bottom',
     },
     title: {
       ...theme.typography.h2,
@@ -15,6 +17,8 @@ export default function styles(theme) {
         ...theme.typography.h4,
       },
       fontWeight: 'bold',
+      margin: 'auto',
+      width: '70%',
     },
     info: {
       ...theme.typography.h6,
