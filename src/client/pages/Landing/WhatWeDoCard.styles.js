@@ -46,7 +46,7 @@ export default function styles(theme) {
     },
     Title: {
       ...theme.typography.h4,
-      [theme.breakpoints.up('lg')]: {
+      [theme.breakpoints.up('sm')]: {
         ...theme.typography.h2,
         color: '#D63333',
       },
@@ -54,7 +54,7 @@ export default function styles(theme) {
     },
     Text: {
       ...theme.typography.body1,
-      [theme.breakpoints.up('lg')]: {
+      [theme.breakpoints.up('md')]: {
         ...theme.typography.h5,
         color: '#333333',
       },
@@ -70,7 +70,7 @@ export default function styles(theme) {
     },
     Tag: {
       ...theme.typography.body1,
-      [theme.breakpoints.up('lg')]: {
+      [theme.breakpoints.up('sm')]: {
         ...theme.typography.h5,
         color: '#D63333',
       },
