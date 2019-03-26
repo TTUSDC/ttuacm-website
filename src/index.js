@@ -2,6 +2,7 @@ import React from 'react' // eslint-disable-line
 import ReactDOM from 'react-dom'
 import './client/index.css'
 import * as axios from 'axios'
+import 'typeface-roboto'
 
 import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
