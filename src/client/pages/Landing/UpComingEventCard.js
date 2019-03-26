@@ -24,30 +24,31 @@ function UpcomingEventCard() {
     SHOW_MOCK_CALENDAR ? [MOCK_CALENDAR[0]] : placeHolder,
   )
   const connectionString = useContext(ConnectionString)
+  console.log(events)
 
-  if (process.env.NODE_ENV !== 'development') {
-    // Fetch the events from the API
-    useEffect(() => {
-      // Grabs all the events from the API and maps their times from strings to dates
-      async function fetchEvents() {
-        try {
-          const { data } = await axios.get(`${connectionString}/events`)
-          const allEvents = data.allEvents.map((event) => ({
-            ...event,
-            startTime: new Date(event.startTime),
-            endTime: new Date(event.endTime),
-          }))
-          setEvents(allEvents[0] || [])
-        } catch (err) {
-          // TODO set up error handling
-          console.error(err)
-          setEvents([])
-        }
+  // Fetch the events from the API
+  useEffect(() => {
+    // Grabs all the events from the API and maps their times from strings to dates
+    async function fetchEvents() {
+      try {
+        const { data } = await axios.get(`${connectionString}/events`)
+        const allEvents = data.allEvents.map((event) => ({
+          ...event,
+          startTime: new Date(event.startTime),
+          endTime: new Date(event.endTime),
+        }))
+        setEvents([allEvents[0]] || [])
+      } catch (err) {
+        // TODO set up error handling
+        console.error(err)
+        setEvents([])
       }
+    }
 
+    if (process.env.NODE_ENV !== 'development') {
       fetchEvents()
-    }, [])
-  }
+    }
+  }, [])
 
   return <EventsList events={events} />
 }
