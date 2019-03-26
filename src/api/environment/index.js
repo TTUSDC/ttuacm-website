@@ -44,29 +44,9 @@ router.get('/test', (req, res) => {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *        "auth_provider_x509_cert_url": String,
- *        "auth_uri": String,
- *        "client_x509_cert_url": String,
- *        "private_key": String,
- *        "maintainance": String,
- *        "private_key_id": String,
- *        "project_id": String,
- *        "client_id": String,
- *        "env": String,
- *        "token_uri": String,
- *        "client_email": String,
- *        "type": String
- *        "session_secret": String,
- *        "protocol": String,
- *        "host": String,
- *        "firebase": {
- *          "api_key": String,
- *          "auth_domain": String,
- *          "database_url": String,
- *          "project_id": String,
- *          "storage_bucket": String,
- *          "message_sender_id": String,
- *        }
+ *        "dev": String,
+ *        "maintainance": Boolean,
+ *        "session_secret": Boolean,
  *     }
  *
  * @typedef {function} EnvironmentProvider

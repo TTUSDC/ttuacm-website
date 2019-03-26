@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
-import EventDate from 'components/EventDate'
-import EventContent from 'components/EventContent'
+import { withStyles } from '@material-ui/core/styles'
+import EventDate from './EventDate'
+import EventContent from './EventContent'
 
-const styles = () => ({
+
+const styles = (theme) => ({
   EventsCard: {
     color: 'white',
     display: 'flex',
@@ -16,6 +17,12 @@ const styles = () => ({
     height: '37vh',
     backgroundColor: '#253F51',
     margin: '0 auto 2em',
+    padding: '15px 0px',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      flexFlow: 'column',
+      height: '32vh',
+    },
   },
 })
 
@@ -45,4 +52,4 @@ EventCard.propTypes = {
   classes: PropTypes.shape({}),
 }
 
-export default withStyles(styles)(EventCard);
+export default withStyles(styles, { withTheme: true })(EventCard)

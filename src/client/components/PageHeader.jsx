@@ -1,21 +1,33 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import { useTheme } from '@material-ui/styles'
-import useWindowSize from 'hooks/useWindowSize'
-import createStyles from './PageHeader.styles'
+import { withWindowSize } from 'context/withWindowSize'
+import { withStyles } from '@material-ui/core/styles'
+import Desert from 'assets/shared/desert.png'
+import DesertNight from 'assets/shared/desert-night.png'
+import styles from './PageHeader.styles'
 
 const PageHeader = ({
-  title, info, color,
+  title, info, color, classes,
 }) => {
-  const theme = useTheme()
-  const { width, height } = useWindowSize()
+  const { height } = useContext(withWindowSize)
+  const time = (new Date()).getHours()
+  let backgound = Desert
 
-  const classes = createStyles(theme, width, height, color)
+  if (time < 6 || time > 18)
+    backgound = DesertNight
+
 
   return (
-    <div style={classes.PageHeader}>
-      <div><div style={classes.title}>{title}</div></div>
-      <div><div style={classes.info}>{info}</div></div>
+    <div
+      className={classes.PageHeader}
+      style={{
+        minHeight: height - 64,
+        backgroundImage: `url(${backgound})`,
+        backgroundColor: color,
+      }}
+    >
+      <div><div className={classes.title}>{title}</div></div>
+      <div><div className={classes.info}>{info}</div></div>
     </div>
   )
 }
@@ -24,10 +36,11 @@ PageHeader.propTypes = {
   color: PropTypes.string,
   title: PropTypes.string,
   info: PropTypes.string,
+  classes: PropTypes.shape({}),
 }
 
 PageHeader.defaultProps = {
   color: '#253F51',
 }
 
-export default PageHeader
+export default withStyles(styles, { withTheme: true })(PageHeader)
