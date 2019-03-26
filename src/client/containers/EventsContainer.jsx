@@ -7,8 +7,7 @@ import { ConnectionString } from 'context/ConnectionStringContext'
 import * as axios from 'axios'
 import MOCK_CALENDAR from '__mocks__/calendar'
 
-let SHOW_MOCK_CALENDAR = true
-if (process.env.NODE_ENV !== 'development') SHOW_MOCK_CALENDAR = false
+const SHOW_MOCK_CALENDAR = process.env.NODE_ENV === 'development'
 
 const styles = {
   EventsContainer: {

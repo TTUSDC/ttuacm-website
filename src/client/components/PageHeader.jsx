@@ -26,8 +26,8 @@ const PageHeader = ({
         backgroundColor: color,
       }}
     >
-      <div><div className={classes.title}>{title}</div></div>
-      <div><div className={classes.info}>{info}</div></div>
+      <div className={classes.title}>{title}</div>
+      <div className={classes.info}>{info}</div>
     </div>
   )
 }

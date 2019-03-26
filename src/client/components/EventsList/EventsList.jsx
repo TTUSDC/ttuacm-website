@@ -2,32 +2,28 @@ import React from 'react'
 import moment from 'moment'
 import EventCard from './EventCard'
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-const WEEKDAY = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
 // Returns a list of event cards
-export default function EventsList({ events }) {
+export default function EventsList({ events, time }) {
   if (!events.length) {
     return []
   }
 
   const eventsCards = events.map(({
     startTime, endTime, title, location, description,
-  }) => {
-    const month = MONTHS[startTime.getMonth()]
-    const day = startTime.getDate().toString()
-    const weekday = WEEKDAY[startTime.getDay()]
+  }, i) => {
+    const eventStart = moment(startTime)
+    const eventEnd = moment(endTime)
 
-    const fmtStart = moment(startTime).format('h:mm a')
-    const fmtEnd = moment(endTime).format('h:mm a')
+    const fmtStart = eventStart.format('h:mm a')
+    const fmtEnd = eventEnd.format('h:mm a')
     const timeloc = `${fmtStart} to ${fmtEnd} @ ${location}`
 
     return (
       <EventCard
-        key={`event-${title}`}
-        month={month}
-        day={day}
-        weekday={weekday}
+        key={`event-${title}-${time}-${i - 1}`}
+        month={eventStart.format('MMMM')}
+        day={eventStart.format('D')}
+        weekday={eventStart.format('dddd')}
         name={title}
         timeloc={timeloc}
         content={description}

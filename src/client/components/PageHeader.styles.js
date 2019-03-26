@@ -17,7 +17,6 @@ export default function styles(theme) {
         ...theme.typography.h4,
       },
       fontWeight: 'bold',
-      margin: 'auto',
       width: '70%',
     },
     info: {
@@ -28,7 +27,6 @@ export default function styles(theme) {
         width: '80%',
       },
       display: 'flex',
-      margin: 'auto',
       textAlign: 'center',
       justifyContent: 'center',
       wordWrap: 'break-word',

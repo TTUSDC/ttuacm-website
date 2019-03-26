@@ -14,6 +14,7 @@ const styles = (theme) => {
       justifyContent: 'center',
       textAlign: 'center',
       margin: '0px 20px',
+      flex: 1,
       [theme.breakpoints.down('xs')]: {
         justifyContent: 'space-evenly',
         flexDirection: 'row',

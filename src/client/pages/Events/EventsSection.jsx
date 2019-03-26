@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import moment from 'moment'
 
 import EventsList from 'components/EventsList'
 
@@ -13,38 +14,30 @@ export function filterEvents(time, events) {
   switch (time) {
     case('TODAY'):
       filteredEvents = events.filter((event) => {
-        const today = (new Date()).getDate()
-        const start = event.startTime.getDate()
-        return today === start
+        const eventTime = moment(event.startTime)
+        const today = moment()
+        return eventTime.diff(today, 'days') === 0
       })
       break
     case('TOMORROW'):
       filteredEvents = events.filter((event) => {
-        const tomorrow = (new Date()).getDate() + 1
-        const start = event.startTime.getDate()
-        return tomorrow === start
+        const eventTime = moment(event.startTime)
+        const today = moment()
+        return eventTime.diff(today, 'days') === 1
       })
       break
     case('THIS WEEK'):
-      // Check if date is less than 7 away and start day is greater or equal to today
-      // Week starts on Sunday
       filteredEvents = events.filter((event) => {
-        const now = new Date()
-        const currentDate = now.getDate()
-        const start = event.startTime.getDate()
-        const today = now.getDay()
-        const startDay = event.startTime.getDay()
-        return ((start - currentDate < 7 && start - currentDate >= 0) && (startDay >= today))
+        const currentWeek = moment().week()
+        const eventWeek = moment(event.startTime).week()
+        return currentWeek === eventWeek
       })
       break
     case('THIS MONTH'):
       filteredEvents = events.filter((event) => {
-        const now = new Date()
-        const currentDate = now.getDate()
-        const start = event.startTime.getDate()
-        const thisMonth = now.getMonth()
-        const startMonth = event.startTime.getMonth()
-        return ((start >= currentDate) && (thisMonth === startMonth))
+        const currentMonth = moment().month()
+        const eventMonth = moment(event.startTime).month()
+        return currentMonth === eventMonth
       })
       break
     default:
@@ -76,7 +69,7 @@ const EventsSection = ({
       {
           loading
             ? <CircularProgress />
-            : <EventsList events={filterEvents(time, events)} />
+            : <EventsList time={time} events={filterEvents(time, events)} />
         }
     </div>
   </Grid>
