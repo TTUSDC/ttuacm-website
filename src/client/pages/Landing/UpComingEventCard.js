@@ -23,36 +23,33 @@ function UpcomingEventCard() {
   const [events, setEvents] = useState(
     SHOW_MOCK_CALENDAR ? [MOCK_CALENDAR[0]] : placeHolder,
   )
-  const [loading, setLoading] = useState(false)
   const connectionString = useContext(ConnectionString)
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV !== 'development') {
     // Fetch the events from the API
     useEffect(() => {
-      setLoading(true)
       // Grabs all the events from the API and maps their times from strings to dates
-      axios
-        .get(`${connectionString}/events`)
-        .then(({ data }) => {
+      async function fetchEvents() {
+        try {
+          const { data } = await axios.get(`${connectionString}/events`)
           const allEvents = data.allEvents.map((event) => ({
             ...event,
             startTime: new Date(event.startTime),
             endTime: new Date(event.endTime),
           }))
           setEvents(allEvents[0] || [])
-        })
-        .catch((err) => {
+        } catch (err) {
           // TODO set up error handling
           console.error(err)
           setEvents([])
-        })
-        .finally(() => {
-          setLoading(false)
-        })
+        }
+      }
+
+      fetchEvents()
     }, [])
   }
 
-  return !loading ? <EventsList events={events} /> : null
+  return <EventsList events={events} />
 }
 
 export default UpcomingEventCard
