@@ -3,7 +3,6 @@ import moment from 'moment'
 import EventCard from './EventCard'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-const WEEKDAY = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 // Returns a list of event cards
 export default function EventsList({ events }) {
@@ -12,11 +11,10 @@ export default function EventsList({ events }) {
   }
 
   const eventsCards = events.map(({
-    startTime, endTime, title, location, description,
+    startTime, endTime, title, location, description, day: weekday,
   }) => {
     const month = MONTHS[startTime.getMonth()]
     const day = startTime.getDate().toString()
-    const weekday = WEEKDAY[startTime.getDay()]
 
     const fmtStart = moment(startTime).format('h:mm a')
     const fmtEnd = moment(endTime).format('h:mm a')
