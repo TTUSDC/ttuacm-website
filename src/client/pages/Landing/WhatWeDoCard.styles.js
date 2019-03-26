@@ -46,10 +46,18 @@ export default function styles(theme) {
     },
     Title: {
       ...theme.typography.h4,
+      [theme.breakpoints.up('lg')]: {
+        ...theme.typography.h2,
+        color: '#D63333',
+      },
       color: '#D63333',
     },
     Text: {
       ...theme.typography.body1,
+      [theme.breakpoints.up('lg')]: {
+        ...theme.typography.h5,
+        color: '#333333',
+      },
       color: '#333333',
       margin: '10px 0px',
     },
@@ -62,6 +70,10 @@ export default function styles(theme) {
     },
     Tag: {
       ...theme.typography.body1,
+      [theme.breakpoints.up('lg')]: {
+        ...theme.typography.h5,
+        color: '#D63333',
+      },
       color: '#D63333',
       textTransform: 'uppercase',
     },

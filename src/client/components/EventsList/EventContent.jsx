@@ -8,7 +8,7 @@ const styles = (theme) => ({
   EventContent: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'left',
+    justifyContent: 'center',
     [theme.breakpoints.down('xs')]: {
       textAlign: 'center',
     },
