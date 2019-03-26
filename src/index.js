@@ -29,7 +29,7 @@ setConfig({
 
 const { NODE_ENV } = process.env
 
-if (NODE_ENV === 'development') logger.info('In development mode')
+if (NODE_ENV !== 'production') logger.info('In development mode')
 
 const theme = createMuiTheme({
   typography: {
