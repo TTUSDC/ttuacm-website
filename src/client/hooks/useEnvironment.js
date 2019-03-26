@@ -1,21 +1,14 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const devEnv = {
+  env: 'dev',
+  maintainance: false,
+  session_secret: 'Whatever',
+}
+
 /**
  * Calls the environment provider to get all of the secrets from the API
- *
- * Firebase Secrets Provided
- *
- * - auth_provider_x509_cert_url
- * - auth_uri
- * - client_x509_cert_url
- * - private_key
- * - private_key_id
- * - project_id
- * - token_uri
- * - client_email
- * - client_id
- * - type
  *
  * Other Secrets
  *
@@ -30,15 +23,24 @@ export default function useEnvironment(connectionString) {
   const [err, setErr] = useState(null)
 
   useEffect(() => {
-    if (connectionString) {
-      axios.get(`${connectionString}/environment`).then(({ data }) => {
-        const environment = data
-        setEnv(environment)
-      }).catch((error) => {
-        setErr(error)
-      })
+    async function fetchEnv() {
+      if (process.env.NODE_ENV === 'development') {
+        setEnv(devEnv)
+        setErr(null)
+      } else {
+        try {
+          const { data } = await axios.get(`${connectionString}/environment`)
+          const environment = data
+          setEnv(environment)
+        } catch (error) {
+          console.error(error)
+          setErr(error)
+        }
+      }
     }
-  }, [])
+
+    fetchEnv()
+  }, [connectionString])
 
   return [env, err]
 }

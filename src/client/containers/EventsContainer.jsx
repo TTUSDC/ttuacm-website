@@ -7,8 +7,7 @@ import { ConnectionString } from 'context/ConnectionStringContext'
 import * as axios from 'axios'
 import MOCK_CALENDAR from '__mocks__/calendar'
 
-let SHOW_MOCK_CALENDAR = true
-if (process.env.NODE_ENV === 'production') SHOW_MOCK_CALENDAR = false
+const SHOW_MOCK_CALENDAR = process.env.NODE_ENV === 'development'
 
 const styles = {
   EventsContainer: {
@@ -42,25 +41,28 @@ const EventsContainer = ({ classes = {} }) => {
   const [loading, setLoading] = useState(false)
   const connectionString = useContext(ConnectionString)
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV !== 'development') {
     // Fetch the events from the API
     useEffect(() => {
-      setLoading(true)
-      // Grabs all the events from the API and maps their times from strings to dates
-      axios.get(`${connectionString}/events`).then(({ data }) => {
-        const allEvents = data.allEvents.map(event => ({
-          ...event,
-          startTime: new Date(event.startTime),
-          endTime: new Date(event.endTime),
-        }))
-        setEvents(allEvents)
-      }).catch((err) => {
-        // TODO set up error handling
-        console.error(err)
-        setEvents([])
-      }).finally(() => {
+      async function fetchEvents() {
+        // Grabs all the events from the API and maps their times from strings to dates
+        try {
+          setLoading(true)
+          const { data } = await axios.get(`${connectionString}/events`)
+          const allEvents = data.allEvents.map(event => ({
+            ...event,
+            startTime: new Date(event.startTime),
+            endTime: new Date(event.endTime),
+          }))
+          setEvents(allEvents)
+        } catch (err) {
+          console.error(err)
+          setEvents([])
+        }
         setLoading(false)
-      })
+      }
+
+      fetchEvents()
     }, [])
   }
 
@@ -74,7 +76,7 @@ const EventsContainer = ({ classes = {} }) => {
     >
       <EventsSection loading={loading} time={providedTimes.TODAY} events={events} />
       {
-        events.length > 1
+        events.length
           ? (
             <React.Fragment>
               <EventsSection loading={loading} time={providedTimes.TOMORROW} events={events} />

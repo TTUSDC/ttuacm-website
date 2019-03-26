@@ -7,23 +7,31 @@ import * as jwtDecode from 'jwt-decode'
  * @return [error, boolean for whether or not the user is logged in, current user]
  */
 export default function useLoggedIn() {
-  const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState(null)
   const [error, setError] = useState(null)
 
+  const token = localStorage.getItem('token')
+  const OAuthUser = localStorage.getItem('oauth_user')
+
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      let user = {}
+    if (OAuthUser) {
+      // TODO Should fetch the actual user from mongo
+      setCurrentUser(OAuthUser[0])
+    } else if (token) {
       try {
-        user = jwtDecode(token)
+        const { data: user } = jwtDecode(token)
         setCurrentUser(user)
       } catch (decodeError) {
-        localStorage.setItem('token', undefined)
+        console.error(token)
         console.error(decodeError)
+        localStorage.removeItem('token')
         setError(new Error('Bad Token'))
+        setCurrentUser(null)
       }
+    } else {
+      setCurrentUser(null)
     }
-  })
+  }, [token, OAuthUser])
 
   return [error, Boolean(currentUser), currentUser]
 }

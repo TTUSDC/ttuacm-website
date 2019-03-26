@@ -67,15 +67,25 @@ data/
 
 # Client
 # See https://help.github.com/ignore-files/ for more about ignoring files.
-firebaseconfig.json
+.firebase
+firebase_config.json
+firebase_config.development.json
+firebase_config.staging.json
+firebase_config.production.json
 .runtimeconfig.json
 .firebaserc
+cypress/staging/cypress
+cypress/development/cypress
+
+# API
+service_account.json
 
 # dependencies
 /node_modules
 
 # testing
 /coverage
+cypress/videos
 
 # production
 /build

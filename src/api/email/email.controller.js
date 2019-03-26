@@ -1,5 +1,8 @@
 const nodemailer = require('nodemailer')
 const functions = require('firebase-functions')
+const qs = require('querystring')
+
+const { protocol: apiProtocol, host: apiHost } = functions.config().connections
 
 /**
  * Handles sending emails to students
@@ -11,7 +14,7 @@ class EmailController {
    * @param {string} protocol protocol of host [http, https]
    * @param {string} host host of host [localhost, acmttu.org]
    */
-  constructor(protocol, host) {
+  constructor(protocol = apiProtocol, host = apiHost) {
     if (!protocol) {
       throw new Error('Did not pass a protocol')
     } else if (!host) {
@@ -37,7 +40,7 @@ class EmailController {
               pass: account.pass,
             },
             tls: {
-            // do not fail on invalid certs
+              // do not fail on invalid certs
               rejectUnauthorized: false,
             },
           })
@@ -51,7 +54,7 @@ class EmailController {
             pass: functions.config().email.email_password,
           },
           tls: {
-          // do not fail on invalid certs
+            // do not fail on invalid certs
             rejectUnauthorized: false,
           },
         })
@@ -76,7 +79,7 @@ class EmailController {
         this.protocol
       }://${
         this.host
-      }/api/users/reset/${token}</a>\n\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\n`,
+      }/api/v2/auth/reset/${token}</a>\n\n<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>\n`,
     }
 
     try {
@@ -101,38 +104,9 @@ class EmailController {
       from: this.mailbox,
       subject: 'Your password has been changed',
       text:
-        'Hello,\n\n'
-        + 'This is a confirmation that the password for your account has been changed.\n',
+        'Hello,\n\n' +
+        'This is a confirmation that the password for your account has been changed.\n',
     }
-    try {
-      await this._createTransport()
-      await this.smtpTransporter.sendMail(mailOptions)
-      return null
-    } catch (err) {
-      console.error(err)
-      throw err
-    }
-  }
-
-  /**
-   * Sends a question to the mailbox
-   *
-   * @param {Object} options options object
-   * @param {string} options.name student name
-   * @param {string} options.email student email
-   * @param {string} options.topic student topic
-   * @param {string} options.message student message
-   */
-  async contactUs(options) {
-    const mailOptions = {
-      from: options.email,
-      to: this.mailbox,
-      subject: 'ACM Question',
-      text: `You got a message!\n\nSender: ${options.name}\n\nEmail: ${options.email}\n\nTopic: ${
-        options.topic
-      }\n\nMessage: ${options.message}\n`,
-    }
-
     try {
       await this._createTransport()
       await this.smtpTransporter.sendMail(mailOptions)
@@ -149,18 +123,35 @@ class EmailController {
    *
    * @param {string} email user's email
    * @param {string} token user's HEX token saved in the auth database
+   * @param {string} fallback failure URL
+   * @param {string} redirectURLSuccess success URL
    * @returns {Promise.<null, Error>}
    */
-  async sendConfirmationEmail(email, token) {
+  async sendConfirmationEmail(email, token, fallback, redirectURLSuccess) {
+    const querystring = qs.stringify({
+      email,
+      token,
+      fallback,
+      redirectURLSuccess,
+    })
+
+    const link = `${this.protocol}://${
+      this.host
+    }/api/v2/auth/confirm?${querystring}`
+
     const mailOptions = {
       to: email,
       from: 'Texas Tech ACM',
       subject: 'Welcome to ACM: TTU',
-      html: `<p>Please click on the following link, or paste this into your browser to verify your account:</p>\n\n<a>${
-        this.protocol
-      }://${
-        this.host
-      }/api/users/confirm/${token}</a>\n\n<p>If you did not sign up for an account, please ignore this email.</p>\n`,
+      html: `
+        <p>
+          Please click on the following link, or paste this into your browser to verify your account:
+        </p>\n\n
+        <a>${link}</a>\n\n
+        <p>
+          If you did not sign up for an account, please ignore this email.
+        </p>\n
+      `,
     }
 
     try {

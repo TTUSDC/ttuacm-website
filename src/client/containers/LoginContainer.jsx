@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react'
 import LoginForm from 'components/LoginForm.jsx'
 import { ConnectionString } from 'context/ConnectionStringContext'
+import { toggleAuthState } from 'redux/actions/auth-actions'
 import * as axios from 'axios'
 
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
-export function LoginContainer({ navigateTo, switchForm }) {
+export function LoginContainer({ navigateTo, switchForm, toggleLoggedIn }) {
   const initState = {
     email: '',
     password: '',
@@ -31,13 +32,16 @@ export function LoginContainer({ navigateTo, switchForm }) {
       loading: true,
     })
 
-    axios.post(`${connectionString}/auth/login`, { data: loginFormValues })
+    const body = {
+      email: loginFormValues.email,
+      password: loginFormValues.password,
+    }
+
+    axios.post(`${connectionString}/auth/login`, body)
       .then(({ data }) => {
-        localStorage.setItem('token', data.token)
-        setLoginFormValues({
-          ...loginFormValues,
-          loading: false,
-        })
+        const token = data.token.split(' ')[1]
+        localStorage.setItem('token', token)
+        toggleLoggedIn()
         navigateTo('/events')
       })
       .catch((loginError) => {
@@ -66,6 +70,9 @@ const mapStateToProps = () => ({})
 const mapDispatchToProps = dispatch => ({
   navigateTo: (location) => {
     dispatch(push(location))
+  },
+  toggleLoggedIn: () => {
+    dispatch(toggleAuthState())
   },
 })
 

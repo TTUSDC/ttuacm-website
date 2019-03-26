@@ -44,35 +44,26 @@ router.get('/test', (req, res) => {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *        "auth_provider_x509_cert_url": String,
- *        "auth_uri": String,
- *        "client_x509_cert_url": String,
- *        "private_key": String,
- *        "maintainance": String,
- *        "private_key_id": String,
- *        "project_id": String,
- *        "client_id": String,
  *        "env": String,
- *        "token_uri": String,
- *        "client_email": String,
- *        "type": String
- *        "session_secret": String,
- *        "protocol": String,
- *        "host": String,
+ *        "maintainance": Boolean
  *     }
  *
  * @typedef {function} EnvironmentProvider
  */
 router.get('/', (req, res) => {
-  const { environment, auth, connections } = functions.config()
+  const { environment, connections } = functions.config()
+  delete environment.session_secret
   if (['prod', 'staging'].includes(environment.env)) {
     if (PROTECTED_ENDPOINTS.includes(req.headers.origin)) {
-      environment.session_secret = auth.session_secret
       environment.protocol = connections.protocol
       environment.host = connections.host
       res.json(environment)
     } else {
-      console.error(`${req.headers.origin} does not match https://acm-texas-tech-web-app-2.firebaseapp.com`)
+      console.error(
+        `${
+          req.headers.origin
+        } does not match https://acm-texas-tech-web-app-2.firebaseapp.com`,
+      )
       res.status(401).end()
     }
   } else {

@@ -1,5 +1,7 @@
 function OAuthError() {
-  const err = new Error('There was an error with the the credentials, please refresh manually')
+  const err = new Error(
+    'There was an error with the the credentials, please refresh manually',
+  )
   err.code = 500
   return err
 }

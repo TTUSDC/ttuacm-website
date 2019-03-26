@@ -4,6 +4,7 @@ import RegistrationContainer from 'containers/RegistrationContainer'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
+import OAuthContainer from 'containers/OAuthContainer'
 
 const styles = theme => ({
   root: {
@@ -17,13 +18,16 @@ function AuthenticationPage({ classes = {} }) {
   const [visibleForm, setVisibleForm] = useState('login')
 
   return (
-    <Paper className={classes.root} elevation={1}>
-      {
-        visibleForm === 'login'
-          ? <LoginContainer switchForm={setVisibleForm} />
-          : <RegistrationContainer switchForm={setVisibleForm} />
-      }
-    </Paper>
+    <React.Fragment>
+      <Paper className={classes.root} elevation={1}>
+        {
+          visibleForm === 'login'
+            ? <LoginContainer switchForm={setVisibleForm} />
+            : <RegistrationContainer switchForm={setVisibleForm} />
+        }
+      </Paper>
+      <OAuthContainer />
+    </React.Fragment>
   )
 }
 

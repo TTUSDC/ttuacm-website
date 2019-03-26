@@ -3,10 +3,10 @@ import FooterBottom from './FooterBottom.jsx'
 import FooterTop from './FooterTop.jsx'
 
 const Footer = () => (
-  <div>
+  <footer>
     <FooterTop />
     <FooterBottom />
-  </div>
+  </footer>
 )
 
 export default Footer

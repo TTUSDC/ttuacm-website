@@ -1,36 +1,68 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import Navigation from './Navigation.jsx'
+import firebase from 'firebase'
+import { toggleAuthState } from 'redux/actions/auth-actions'
+import DesktopNavigation from './DesktopNavigation.jsx'
 import Logo from './Logo.jsx'
 
-const NavBar = ({ classes, currentPage, ...props }) => {
+const styles = {
+  barDefaults: {
+    maxHeight: '64px',
+    maxWidth: '100%',
+    background: '#333333',
+  },
+  root: {
+    display: 'flex',
+    maxWidth: '100%',
+  },
+}
+
+const NavBar = ({
+  classes, currentPage, navigateTo, isLoggedIn, checkIfLoggedIn,
+}) => {
+  useEffect(() => {
+    checkIfLoggedIn()
+  })
+
   const handleNavigation = nextPage => () => {
-    props.push(nextPage)
+    navigateTo(nextPage)
   }
 
-  const routeNames = [
-    ['/', 'Home'],
-    ['/about', 'About Us'],
-    ['/events', 'Events'],
-    ['/teams', 'Club'],
-    ['/auth', 'Login'],
-  ]
+  const handleLogout = () => {
+    // OAuth Sign out
+    if (localStorage.getItem('oauth_user')) firebase.auth().signOut()
+
+    // Local Sign Out
+    // TODO(@miggy) remove this shit lol make it all firebase handled
+    localStorage.removeItem('token')
+    localStorage.removeItem('oauth_user')
+
+    handleNavigation('/')()
+  }
 
   return (
     <div className={classes.root}>
-      <AppBar position='static'>
-        <Toolbar>
+      <AppBar
+        position='static'
+        className={classes.barDefaults}
+      >
+        <Toolbar
+          className={classes.barDefaults}
+        >
           <Logo
             handleNavigation={handleNavigation}
             currentPage={currentPage}
           />
-          <Navigation
-            routes={routeNames}
+
+          {/* Desktop Navigation */}
+          <DesktopNavigation
+            isLoggedIn={isLoggedIn}
+            handleLogout={handleLogout}
             handleNavigation={handleNavigation}
             currentPage={currentPage}
           />
@@ -40,20 +72,26 @@ const NavBar = ({ classes, currentPage, ...props }) => {
   )
 }
 
-const styles = {
-  root: {
-    flexGrow: 1,
-  },
-}
-
 NavBar.propTypes = {
-  push: PropTypes.func.isRequired,
+  navigateTo: PropTypes.func.isRequired,
+  checkIfLoggedIn: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
   classes: PropTypes.shape({}),
   currentPage: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = state => ({
   currentPage: state.router.location.pathname,
+  isLoggedIn: state.auth.get('isLoggedIn'),
 })
 
-export default connect(mapStateToProps, { push })(withStyles(styles)(NavBar))
+const mapDispatchToProps = dispatch => ({
+  navigateTo: (location) => {
+    dispatch(push(location))
+  },
+  checkIfLoggedIn: () => {
+    dispatch(toggleAuthState())
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(NavBar))

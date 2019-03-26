@@ -4,16 +4,18 @@ import { AuthConsts } from 'redux/actions/auth-actions'
 
 const initialState = IM.fromJS({
   loading: false,
-  loggedIn: false,
+  isLoggedIn: false,
   errorMsg: '',
 })
 
-
 const AuthReducer = (state = initialState, action) => {
   let newState = state
-  switch(action) {
-    case(AuthConsts.TOGGLE_ERR):
-      newState = state.set('errorMsg', action.payload.errorMsg)
+  switch (action.type) {
+    case AuthConsts.TOGGLE_AUTH_STATE:
+      newState = state.set(
+        'isLoggedIn',
+        ['true', true].includes(action.payload.isLoggedIn),
+      )
       break
     default:
       break

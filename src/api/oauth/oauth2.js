@@ -16,7 +16,9 @@ const TOKEN_PATH = path.resolve(__dirname, 'token.json')
 class OAuthHandler {
   constructor() {
     try {
-      this.credentials = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'credentials.json')))
+      this.credentials = JSON.parse(
+        fs.readFileSync(path.resolve(__dirname, 'credentials.json')),
+      )
     } catch (err) {
       console.error('Cannot read Client Secret')
       process.exit(1)
@@ -46,8 +48,16 @@ class OAuthHandler {
     // Gets the information out of the token
     let token = {}
     // eslint-disable-next-line
-    const { client_secret, client_id, redirect_uris } = this.credentials.installed
-    this.oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0])
+    const {
+      client_secret,
+      client_id,
+      redirect_uris,
+    } = this.credentials.installed
+    this.oAuth2Client = new google.auth.OAuth2(
+      client_id,
+      client_secret,
+      redirect_uris[0],
+    )
 
     // Check if we have previously stored a token.
     try {
