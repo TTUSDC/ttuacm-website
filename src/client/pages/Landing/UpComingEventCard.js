@@ -24,7 +24,6 @@ function UpcomingEventCard() {
     SHOW_MOCK_CALENDAR ? [MOCK_CALENDAR[0]] : placeHolder,
   )
   const connectionString = useContext(ConnectionString)
-  console.log(events)
 
   // Fetch the events from the API
   useEffect(() => {
