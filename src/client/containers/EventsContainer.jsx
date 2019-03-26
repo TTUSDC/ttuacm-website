@@ -66,8 +66,6 @@ const EventsContainer = ({ classes = {} }) => {
     }, [])
   }
 
-  console.log(events)
-
   return (
     <Grid
       container

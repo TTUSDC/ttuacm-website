@@ -69,7 +69,7 @@ const EventsSection = ({
       {
           loading
             ? <CircularProgress />
-            : <EventsList events={filterEvents(time, events)} />
+            : <EventsList time={time} events={filterEvents(time, events)} />
         }
     </div>
   </Grid>
