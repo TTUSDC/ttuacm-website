@@ -45,14 +45,14 @@ router.get('/test', (req, res) => {
  *     HTTP/1.1 200 OK
  *     {
  *        "dev": String,
- *        "maintainance": Boolean,
- *        "session_secret": Boolean,
+ *        "maintainance": Boolean
  *     }
  *
  * @typedef {function} EnvironmentProvider
  */
 router.get('/', (req, res) => {
   const { environment, connections } = functions.config()
+  delete environment.session_secret
   if (['prod', 'staging'].includes(environment.env)) {
     if (PROTECTED_ENDPOINTS.includes(req.headers.origin)) {
       environment.protocol = connections.protocol
