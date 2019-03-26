@@ -1,16 +1,6 @@
 const { google } = require('googleapis')
 const OAuth = require('../oauth/oauth2')
 
-const weekday = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-]
-
 class EventsController {
   constructor() {
     this.oauth = new OAuth()
