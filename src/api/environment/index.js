@@ -44,7 +44,7 @@ router.get('/test', (req, res) => {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *        "dev": String,
+ *        "env": String,
  *        "maintainance": Boolean
  *     }
  *
