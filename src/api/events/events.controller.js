@@ -43,7 +43,6 @@ class EventsController {
                 const start = event.start.dateTime || event.start.date
                 const end = event.end.dateTime || event.end.date
                 const singleEvent = {
-                  day: `${weekday[new Date(start).getDay()]}`,
                   startTime: start,
                   endTime: end,
                   title: event.summary || '',
