@@ -5,7 +5,6 @@ import * as axios from 'axios'
 
 import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import { ThemeProvider } from '@material-ui/styles'
 import { red } from '@material-ui/core/colors'
 import { Provider } from 'react-redux'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
@@ -17,6 +16,7 @@ import thunk from 'redux-thunk'
 import rootReducer from 'redux/reducers.js'
 
 import { ConnectionStringProvider } from 'context/ConnectionStringContext'
+import { WindowSizeProvider } from 'context/withWindowSize'
 import MaintainanceContainer from 'containers/MaintainanceContainer.jsx'
 import logger from './utils/logger'
 
@@ -53,18 +53,19 @@ const store = createStore(
 /**
  * Root of Component Tree
  * Router - connected-react-router
- * Theme = Material UI
+ * Theme - Material UI
+ * ConnectionString
  */
 function render() {
   ReactDOM.render(
     <AppContainer>
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>
-          <ThemeProvider theme={theme}>
-            <ConnectionStringProvider>
+          <ConnectionStringProvider>
+            <WindowSizeProvider>
               <MaintainanceContainer history={history} />
-            </ConnectionStringProvider>
-          </ThemeProvider>
+            </WindowSizeProvider>
+          </ConnectionStringProvider>
         </MuiThemeProvider>
       </Provider>
     </AppContainer>,
