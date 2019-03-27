@@ -53,7 +53,7 @@ router.get('/test', (req, res) => {
 router.get('/', (req, res) => {
   const { environment, connections } = functions.config()
   delete environment.session_secret
-  if (['prod', 'staging'].includes(environment.env)) {
+  if (environment.env !== 'development') {
     if (PROTECTED_ENDPOINTS.includes(req.headers.origin)) {
       environment.protocol = connections.protocol
       environment.host = connections.host
