@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 const styles = (theme) => ({
   root: {
+    fontSize: '1.2rem',
     [theme.breakpoints.down('xs')]: {
       fontSize: '1rem',
     },
