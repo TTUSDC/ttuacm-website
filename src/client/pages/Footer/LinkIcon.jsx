@@ -2,7 +2,7 @@ import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 
-const styles = theme => ({
+const styles = (theme) => ({
   icon: {
     display: 'flex',
     alignSelf: 'center',
@@ -10,9 +10,7 @@ const styles = theme => ({
   },
 })
 
-const LinkIcon = ({
-  classes = {}, src, alt, linkTo,
-}) => (
+const LinkIcon = ({ classes = {}, src, alt, linkTo }) => (
   <div className={classes.icon}>
     <a href={linkTo} target='_blank' rel='noopener noreferrer'>
       <img src={src} alt={alt} height={24} width={24} />

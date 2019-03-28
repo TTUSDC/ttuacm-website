@@ -6,16 +6,31 @@ import PropTypes from 'prop-types'
 import { withHref } from './FooterInfo'
 
 const renderDescriptions = (
-  classes, description, containsAppLink, containsOutLink, handleNavigation,
-) => (
-  (description.map(item => (
-    <Typography className={classes.Description} key={item[0]} variant='body1' color='textSecondary' gutterBottom onClick={handleNavigation(item[0])}>
-      {/*eslint-disable-line*/containsOutLink ? withHref(classes, item[0],item[1]) : containsAppLink ? item[1] : item}
+  classes,
+  description,
+  containsAppLink,
+  containsOutLink,
+  handleNavigation,
+) =>
+  description.map((item) => (
+    <Typography
+      className={classes.Description}
+      key={item[0]}
+      variant='body1'
+      color='textSecondary'
+      gutterBottom
+      onClick={handleNavigation(item[0])}
+    >
+      {/*eslint-disable-line*/ containsOutLink
+        ? withHref(classes, item[0], item[1])
+        : containsAppLink
+        ? item[1]
+        : item}
     </Typography>
-  )))
-)
+  ))
 
-const styles = theme => ({ // eslint-disable-line
+const styles = (theme) => ({
+  // eslint-disable-line
   Title: {
     fontWeight: '500',
     marginBottom: '30px',
@@ -34,13 +49,29 @@ const styles = theme => ({ // eslint-disable-line
 })
 
 const FooterTopSection = ({
-  title, description, containsAppLink, containsOutLink, handleNavigation, classes = {},
+  title,
+  description,
+  containsAppLink,
+  containsOutLink,
+  handleNavigation,
+  classes = {},
 }) => (
   <Grid item xs key={title} className={classes.FooterTopSection}>
-    <Typography variant='h5' color='textPrimary' gutterBottom className={classes.Title}>
+    <Typography
+      variant='h5'
+      color='textPrimary'
+      gutterBottom
+      className={classes.Title}
+    >
       {title}
     </Typography>
-    {renderDescriptions(classes, description, containsAppLink, containsOutLink, handleNavigation)}
+    {renderDescriptions(
+      classes,
+      description,
+      containsAppLink,
+      containsOutLink,
+      handleNavigation,
+    )}
   </Grid>
 )
 

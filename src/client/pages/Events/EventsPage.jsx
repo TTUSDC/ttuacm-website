@@ -11,11 +11,8 @@ function EventsPage() {
   }
 
   return (
-    <PageLayout
-      headerInfo={EventsPageInfo}
-      content={<EventsContainer />}
-    />
+    <PageLayout headerInfo={EventsPageInfo} content={<EventsContainer />} />
   )
 }
 
-export default EventsPage;
+export default EventsPage

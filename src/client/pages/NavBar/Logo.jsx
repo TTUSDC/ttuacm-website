@@ -5,11 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 const Logo = ({ classes = {}, handleNavigation }) => (
   <React.Fragment>
-    <Typography
-      variant='h6'
-      color='inherit'
-      className={classes.grow}
-    >
+    <Typography variant='h6' color='inherit' className={classes.grow}>
       <span
         role='button'
         data-testid='Logo'
@@ -18,7 +14,7 @@ const Logo = ({ classes = {}, handleNavigation }) => (
         onClick={handleNavigation('/')}
         onKeyPress={() => {}}
       >
-            LOGO
+        LOGO
       </span>
     </Typography>
   </React.Fragment>

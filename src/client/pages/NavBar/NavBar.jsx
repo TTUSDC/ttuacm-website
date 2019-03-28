@@ -28,13 +28,17 @@ const styles = {
 }
 
 const NavBar = ({
-  classes, currentPage, navigateTo, isLoggedIn, checkIfLoggedIn,
+  classes,
+  currentPage,
+  navigateTo,
+  isLoggedIn,
+  checkIfLoggedIn,
 }) => {
   useEffect(() => {
     checkIfLoggedIn()
   })
 
-  const handleNavigation = nextPage => () => {
+  const handleNavigation = (nextPage) => () => {
     navigateTo(nextPage)
   }
 
@@ -51,16 +55,8 @@ const NavBar = ({
   }
 
   return (
-    <AppBar
-      position='static'
-      className={classes.barDefaults}
-    >
-      <Grid
-        container
-        wrap='nowrap'
-        justify='space-between'
-        spacing={16}
-      >
+    <AppBar position='static' className={classes.barDefaults}>
+      <Grid container wrap='nowrap' justify='space-between' spacing={16}>
         <Grid className={classes.ImageContainer} item xs={6}>
           <img
             alt='tech building'
@@ -91,12 +87,12 @@ NavBar.propTypes = {
   currentPage: PropTypes.string.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentPage: state.router.location.pathname,
   isLoggedIn: state.auth.get('isLoggedIn'),
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => {
     dispatch(push(location))
   },
@@ -105,4 +101,7 @@ const mapDispatchToProps = dispatch => ({
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(NavBar))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withStyles(styles)(NavBar))

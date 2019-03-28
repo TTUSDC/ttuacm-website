@@ -12,8 +12,7 @@ const style = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  container: {
-  },
+  container: {},
   copyright: {
     display: 'flex',
     flexGrow: 4,

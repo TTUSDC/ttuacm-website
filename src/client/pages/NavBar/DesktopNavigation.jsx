@@ -15,9 +15,12 @@ const routes = [
   ['/teams', 'Teams'],
 ]
 
-
 const DesktopNavigation = ({
-  classes = {}, handleNavigation, currentPage, handleLogout, isLoggedIn,
+  classes = {},
+  handleNavigation,
+  currentPage,
+  handleLogout,
+  isLoggedIn,
 }) => {
   const [currTab, setCurrTab] = useState(0)
 
@@ -32,8 +35,7 @@ const DesktopNavigation = ({
       classes={{ indicator: classes.tabsIndicator }}
       onChange={(e, val) => setCurrTab(val)}
     >
-      {
-      routes.map((route, key) => (
+      {routes.map((route, key) => (
         <Tab
           disableRipple
           key={`${route[0]}-${key + 1}`}
@@ -43,30 +45,25 @@ const DesktopNavigation = ({
           style={route[0] === currentPage ? withBox : {}}
           classes={{ root: classes.DesktopNav, selected: classes.tabSelected }}
         />
-      ))
-    }
-      {
-      isLoggedIn
-        ? (
-          <Tab
-            disableRipple
-            onClick={handleLogout}
-            label='Logout'
-            classes={{ root: classes.DesktopNav, selected: classes.tabSelected }}
-            data-testid='login-logout'
-          />
-        )
-        : (
-          <Tab
-            disableRipple
-            style={currentPage === '/auth' ? withBox : {}}
-            label='Login'
-            onClick={handleNavigation('/auth')}
-            classes={{ root: classes.DesktopNav, selected: classes.tabSelected }}
-            data-testid='login-logout'
-          />
-        )
-    }
+      ))}
+      {isLoggedIn ? (
+        <Tab
+          disableRipple
+          onClick={handleLogout}
+          label='Logout'
+          classes={{ root: classes.DesktopNav, selected: classes.tabSelected }}
+          data-testid='login-logout'
+        />
+      ) : (
+        <Tab
+          disableRipple
+          style={currentPage === '/auth' ? withBox : {}}
+          label='Login'
+          onClick={handleNavigation('/auth')}
+          classes={{ root: classes.DesktopNav, selected: classes.tabSelected }}
+          data-testid='login-logout'
+        />
+      )}
     </Tabs>
   )
 }

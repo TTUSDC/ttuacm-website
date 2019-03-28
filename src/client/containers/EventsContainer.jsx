@@ -19,15 +19,17 @@ const styles = {
   },
 }
 
-const placeHolder = [{
-  day: 'Monday',
-  startTime: new Date(),
-  endTime: new Date(),
-  title: 'No Events Yet! Stay Tuned!',
-  location: '',
-  description: '',
-  recurringEvent: false,
-}]
+const placeHolder = [
+  {
+    day: 'Monday',
+    startTime: new Date(),
+    endTime: new Date(),
+    title: 'No Events Yet! Stay Tuned!',
+    location: '',
+    description: '',
+    recurringEvent: false,
+  },
+]
 
 const EventsContainer = ({ classes = {} }) => {
   const providedTimes = {
@@ -37,7 +39,9 @@ const EventsContainer = ({ classes = {} }) => {
     THIS_MONTH: 'THIS MONTH',
   }
 
-  const [events, setEvents] = useState(SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder)
+  const [events, setEvents] = useState(
+    SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder,
+  )
   const [loading, setLoading] = useState(false)
   const connectionString = useContext(ConnectionString)
 
@@ -49,7 +53,7 @@ const EventsContainer = ({ classes = {} }) => {
         try {
           setLoading(true)
           const { data } = await axios.get(`${connectionString}/events`)
-          const allEvents = data.allEvents.map(event => ({
+          const allEvents = data.allEvents.map((event) => ({
             ...event,
             startTime: new Date(event.startTime),
             endTime: new Date(event.endTime),
@@ -74,18 +78,30 @@ const EventsContainer = ({ classes = {} }) => {
       alignItems='center'
       className={classes.EventsContainer}
     >
-      <EventsSection loading={loading} time={providedTimes.TODAY} events={events} />
-      {
-        events.length
-          ? (
-            <React.Fragment>
-              <EventsSection loading={loading} time={providedTimes.TOMORROW} events={events} />
-              <EventsSection loading={loading} time={providedTimes.THIS_WEEK} events={events} />
-              <EventsSection loading={loading} time={providedTimes.THIS_MONTH} events={events} />
-            </React.Fragment>
-          )
-          : null
-      }
+      <EventsSection
+        loading={loading}
+        time={providedTimes.TODAY}
+        events={events}
+      />
+      {events.length ? (
+        <React.Fragment>
+          <EventsSection
+            loading={loading}
+            time={providedTimes.TOMORROW}
+            events={events}
+          />
+          <EventsSection
+            loading={loading}
+            time={providedTimes.THIS_WEEK}
+            events={events}
+          />
+          <EventsSection
+            loading={loading}
+            time={providedTimes.THIS_MONTH}
+            events={events}
+          />
+        </React.Fragment>
+      ) : null}
     </Grid>
   )
 }

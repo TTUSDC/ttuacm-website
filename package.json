@@ -13,7 +13,7 @@
     "e2e:ci": "cypress run -P ./cypress/staging --record --key $TTUACM_CY_RECORD_KEY",
     "e2e": "cypress open -P ./cypress/development",
     "lint": "eslint src",
-    "fmt": "prettier --write 'src/**/*.js'",
+    "fmt": "prettier --write 'src/**/*.{jsx,js}'",
     "env-config:client": "cp .env.config .env",
     "env-config:api": "node src/utils/env-config.js",
     "env-save:api": "firebase functions:config:get > .runtimeconfig.json",
@@ -121,7 +121,7 @@
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
-      "prettier --write 'src/**/*.js'",
+      "prettier --write 'src/**/*.jsx?'",
       "git add"
     ]
   },

@@ -35,20 +35,20 @@ const styles = (theme) => ({
   },
 })
 
-const EventContent = ({
-  name, timeloc, content, classes,
-}) => (
+const EventContent = ({ name, timeloc, content, classes }) => (
   <CardContent className={classes.EventContent}>
-    <Typography className={classes.name} variant='h4' gutterBottom>{name}</Typography>
-    {
-      content
-        ? (<Typography className={classes.timeloc} variant='body1' gutterBottom>{timeloc}</Typography>)
-        : (
-          <Typography className={classes.timeloc} variant='body1' gutterBottom>
-            More events will show up when the start of the semester approaches
-          </Typography>
-        )
-    }
+    <Typography className={classes.name} variant='h4' gutterBottom>
+      {name}
+    </Typography>
+    {content ? (
+      <Typography className={classes.timeloc} variant='body1' gutterBottom>
+        {timeloc}
+      </Typography>
+    ) : (
+      <Typography className={classes.timeloc} variant='body1' gutterBottom>
+        More events will show up when the start of the semester approaches
+      </Typography>
+    )}
     <Typography className={classes.content}>{content}</Typography>
   </CardContent>
 )

@@ -8,27 +8,27 @@ export default function EventsList({ events, time }) {
     return []
   }
 
-  const eventsCards = events.map(({
-    startTime, endTime, title, location, description,
-  }, i) => {
-    const eventStart = moment(startTime)
-    const eventEnd = moment(endTime)
+  const eventsCards = events.map(
+    ({ startTime, endTime, title, location, description }, i) => {
+      const eventStart = moment(startTime)
+      const eventEnd = moment(endTime)
 
-    const fmtStart = eventStart.format('h:mm a')
-    const fmtEnd = eventEnd.format('h:mm a')
-    const timeloc = `${fmtStart} to ${fmtEnd} @ ${location}`
+      const fmtStart = eventStart.format('h:mm a')
+      const fmtEnd = eventEnd.format('h:mm a')
+      const timeloc = `${fmtStart} to ${fmtEnd} @ ${location}`
 
-    return (
-      <EventCard
-        key={`event-${title}-${time}-${i - 1}`}
-        month={eventStart.format('MMMM')}
-        day={eventStart.format('D')}
-        weekday={eventStart.format('dddd')}
-        name={title}
-        timeloc={timeloc}
-        content={description}
-      />
-    )
-  })
+      return (
+        <EventCard
+          key={`event-${title}-${time}-${i - 1}`}
+          month={eventStart.format('MMMM')}
+          day={eventStart.format('D')}
+          weekday={eventStart.format('dddd')}
+          name={title}
+          timeloc={timeloc}
+          content={description}
+        />
+      )
+    },
+  )
   return eventsCards
 }
