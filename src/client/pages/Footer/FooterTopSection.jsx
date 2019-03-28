@@ -10,7 +10,7 @@ const renderDescriptions = (
 ) => (
   (description.map(item => (
     <Typography className={classes.Description} key={item[0]} variant='body1' color='textSecondary' gutterBottom onClick={handleNavigation(item[0])}>
-      {/*eslint-disable-line*/containsOutLink ? withHref(classes, item[0],item[1]) : containsAppLink ? item[1] : item} 
+      {/*eslint-disable-line*/containsOutLink ? withHref(classes, item[0],item[1]) : containsAppLink ? item[1] : item}
     </Typography>
   )))
 )
@@ -25,9 +25,10 @@ const styles = theme => ({ // eslint-disable-line
     textDecoration: 'none',
   },
   FooterTopSection: {
+    minWidth: 225,
   },
   Description: {
-    fontSize: '1.7rem',
+    fontSize: '1rem',
     fontWeight: '300 !important',
   },
 })

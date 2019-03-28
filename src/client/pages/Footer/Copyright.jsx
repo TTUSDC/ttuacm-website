@@ -1,6 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = (theme) => ({
+  root: {
+    fontSize: '1.2rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1rem',
+    },
+    margin: 10,
+  },
+})
 
 const Copyright = ({ classes = {} }) => (
   <Typography
@@ -15,4 +26,4 @@ Copyright.propTypes = {
   classes: PropTypes.shape({}),
 }
 
-export default Copyright
+export default withStyles(styles)(Copyright)

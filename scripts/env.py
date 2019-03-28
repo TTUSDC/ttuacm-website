@@ -52,6 +52,9 @@ def pick_environment():
     elif choice not in choices:
         print('Invalid Option. You must pick either dev or prod')
         exit()
+    elif choice == 'dev':
+        print('Setting up development environment')
+        system('firebase functions:config:set environment.env=development')
     else:
         print('Setting up {} environment'.format(choice))
         system('firebase functions:config:set environment.env={}'.format(choice))
