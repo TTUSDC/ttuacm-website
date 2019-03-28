@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import Button from '@material-ui/core/Button'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import { withStyles } from '@material-ui/core/styles'
 
 const withBox = {
@@ -9,80 +10,77 @@ const withBox = {
 
 const routes = [
   ['/home', 'Home'],
-  ['/about', 'About Us'],
+  ['/about', 'AboutUs'],
   ['/events', 'Events'],
-  ['/teams', 'Club'],
+  ['/teams', 'Teams'],
 ]
 
-
 const DesktopNavigation = ({
-  classes = {}, handleNavigation, currentPage, handleLogout, isLoggedIn,
-}) => (
-  <React.Fragment>
-    {
-      routes.map((route, key) => (
-        <Button
-          key={`${route[0]}-${key + 1}`}
-          data-testid={route[1]}
-          style={route[0] === currentPage ? withBox : {}}
-          onClick={handleNavigation(`${route[0]}`)}
-          className={classes.DesktopNav}
-        >
-          {route[1]}
-        </Button>
-      ))
-    }
-    {
-      isLoggedIn
-        ? (
-          <Button
-            onClick={handleLogout}
-            className={classes.DesktopNav}
-            data-testid='login-logout'
-          >
-        Logout
-          </Button>
-        )
-        : (
-          <Button
-            style={currentPage === '/auth' ? withBox : {}}
-            onClick={handleNavigation('/auth')}
-            className={classes.DesktopNav}
-            data-testid='login-logout'
-          >
-        Login
-          </Button>
-        )
-    }
-  </React.Fragment>
-)
+  classes = {},
+  handleNavigation,
+  currentPage,
+  handleLogout,
+  isLoggedIn,
+}) => {
+  const [currTab, setCurrTab] = useState(0)
 
-const styles = theme => ({
+  function fmtRouteName(name) {
+    return name.slice(1, name.length)
+  }
+
+  return (
+    <Tabs
+      value={currTab}
+      variant='fullWidth'
+      classes={{ indicator: classes.tabsIndicator }}
+      onChange={(e, val) => setCurrTab(val)}
+    >
+      {routes.map((route, key) => (
+        <Tab
+          disableRipple
+          key={`${route[0]}-${key + 1}`}
+          label={fmtRouteName(route[0])}
+          data-testid={route[1]}
+          onClick={handleNavigation(`${route[0]}`)}
+          style={route[0] === currentPage ? withBox : {}}
+          classes={{ root: classes.DesktopNav, selected: classes.tabSelected }}
+        />
+      ))}
+      {isLoggedIn ? (
+        <Tab
+          disableRipple
+          onClick={handleLogout}
+          label='Logout'
+          classes={{ root: classes.DesktopNav, selected: classes.tabSelected }}
+          data-testid='login-logout'
+        />
+      ) : (
+        <Tab
+          disableRipple
+          style={currentPage === '/auth' ? withBox : {}}
+          label='Login'
+          onClick={handleNavigation('/auth')}
+          classes={{ root: classes.DesktopNav, selected: classes.tabSelected }}
+          data-testid='login-logout'
+        />
+      )}
+    </Tabs>
+  )
+}
+
+const styles = {
   DesktopNav: {
-    textTransform: 'none',
-    fontSize: '1.25rem',
-    boxShadow: 'none',
-    fontWeight: '300',
+    minWidth: 72,
+    border: '0 !important',
     '&:hover': {
-      backgroundColor: 'initial',
-      boxShadow: 'none',
-    },
-    '&:active': {
-      boxShadow: 'none',
-      backgroundColor: 'inital',
-    },
-    '&:focus': {
-      boxShadow: 'none',
-      backgroundColor: 'inital',
-    },
-    [theme.breakpoints.up('sm')]: {
-      display: 'initial',
-    },
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
+      color: 'white',
+      opacity: 1,
     },
   },
-})
+  tabsIndicator: {
+    backgroundColor: 'white',
+  },
+}
 
 DesktopNavigation.propTypes = {
   handleNavigation: PropTypes.func.isRequired,

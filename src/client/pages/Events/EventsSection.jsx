@@ -12,28 +12,28 @@ export function filterEvents(time, events) {
   let filteredEvents = []
 
   switch (time) {
-    case('TODAY'):
+    case 'TODAY':
       filteredEvents = events.filter((event) => {
         const eventTime = moment(event.startTime)
         const today = moment()
         return eventTime.diff(today, 'days') === 0
       })
       break
-    case('TOMORROW'):
+    case 'TOMORROW':
       filteredEvents = events.filter((event) => {
         const eventTime = moment(event.startTime)
         const today = moment()
         return eventTime.diff(today, 'days') === 1
       })
       break
-    case('THIS WEEK'):
+    case 'THIS WEEK':
       filteredEvents = events.filter((event) => {
         const currentWeek = moment().week()
         const eventWeek = moment(event.startTime).week()
         return currentWeek === eventWeek
       })
       break
-    case('THIS MONTH'):
+    case 'THIS MONTH':
       filteredEvents = events.filter((event) => {
         const currentMonth = moment().month()
         const eventMonth = moment(event.startTime).month()
@@ -41,7 +41,9 @@ export function filterEvents(time, events) {
       })
       break
     default:
-      console.error(`Something is wrong with the time that was passed to the function: ${time}`)
+      console.error(
+        `Something is wrong with the time that was passed to the function: ${time}`,
+      )
       filteredEvents = events
   }
 
@@ -49,7 +51,10 @@ export function filterEvents(time, events) {
 }
 
 const EventsSection = ({
-  classes = {}, time, events = [], loading = false,
+  classes = {},
+  time,
+  events = [],
+  loading = false,
 }) => (
   <Grid
     container
@@ -66,11 +71,11 @@ const EventsSection = ({
     </div>
     <div className={classes.Events}>
       {/* List of Events that fall under the given time */}
-      {
-          loading
-            ? <CircularProgress />
-            : <EventsList time={time} events={filterEvents(time, events)} />
-        }
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <EventsList time={time} events={filterEvents(time, events)} />
+      )}
     </div>
   </Grid>
 )

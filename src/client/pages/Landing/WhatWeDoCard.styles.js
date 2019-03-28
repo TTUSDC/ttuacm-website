@@ -25,9 +25,9 @@ export default function styles(theme) {
       ...theme.typography.h4,
       [theme.breakpoints.up('sm')]: {
         ...theme.typography.h2,
-        color: '#D63333',
+        color: theme.palette.primary.main,
       },
-      color: '#D63333',
+      color: theme.palette.primary.main,
     },
     Text: {
       ...theme.typography.body1,
@@ -50,9 +50,9 @@ export default function styles(theme) {
       ...theme.typography.body1,
       [theme.breakpoints.up('sm')]: {
         ...theme.typography.h5,
-        color: '#D63333',
+        color: theme.palette.primary.main,
       },
-      color: '#D63333',
+      color: theme.palette.primary.main,
       textTransform: 'uppercase',
     },
   }

@@ -6,24 +6,21 @@ import Desert from 'assets/shared/desert.png'
 import DesertNight from 'assets/shared/desert-night.png'
 import styles from './PageHeader.styles'
 
-const PageHeader = ({
-  title, info, color, classes,
-}) => {
-  const { height } = useContext(withWindowSize)
-  const time = (new Date()).getHours()
+const PageHeader = ({ title, info, classes }) => {
+  const { width, height } = useContext(withWindowSize)
+  const time = new Date().getHours()
   let backgound = Desert
 
-  if (time < 6 || time > 18)
-    backgound = DesertNight
+  if (time < 6 || time > 18) backgound = DesertNight
 
+  const headerSizeReduction = width > 600 ? 44 : 118
 
   return (
     <div
       className={classes.PageHeader}
       style={{
-        minHeight: height - 64,
+        minHeight: height - headerSizeReduction,
         backgroundImage: `url(${backgound})`,
-        backgroundColor: color,
       }}
     >
       <div className={classes.title}>{title}</div>
@@ -33,14 +30,9 @@ const PageHeader = ({
 }
 
 PageHeader.propTypes = {
-  color: PropTypes.string,
   title: PropTypes.string,
   info: PropTypes.string,
   classes: PropTypes.shape({}),
-}
-
-PageHeader.defaultProps = {
-  color: '#253F51',
 }
 
 export default withStyles(styles, { withTheme: true })(PageHeader)

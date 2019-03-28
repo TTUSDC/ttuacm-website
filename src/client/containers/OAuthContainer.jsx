@@ -22,13 +22,11 @@ function OAuthContainer({ navigateTo, toggleLoggedIn }) {
     // Popup signin flow rather than redirect flow.
     signInFlow: 'popup',
     /**
-		 * Supported Authentication:
-		 * Google
-		 * Local
-		 */
-    signInOptions: [
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    ],
+     * Supported Authentication:
+     * Google
+     * Local
+     */
+    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
     callbacks: {
       // Avoid redirects after sign-in.
       signInSuccessWithAuthResult: () => false,
@@ -45,7 +43,7 @@ OAuthContainer.propTypes = {
   toggleLoggedIn: PropTypes.func.isRequired,
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => {
     dispatch(push(location))
   },
@@ -54,4 +52,7 @@ const mapDispatchToProps = dispatch => ({
   },
 })
 
-export default connect(() => ({}), mapDispatchToProps)(OAuthContainer)
+export default connect(
+  () => ({}),
+  mapDispatchToProps,
+)(OAuthContainer)

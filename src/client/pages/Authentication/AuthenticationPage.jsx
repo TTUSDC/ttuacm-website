@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import OAuthContainer from 'containers/OAuthContainer'
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
@@ -20,11 +20,11 @@ function AuthenticationPage({ classes = {} }) {
   return (
     <React.Fragment>
       <Paper className={classes.root} elevation={1}>
-        {
-          visibleForm === 'login'
-            ? <LoginContainer switchForm={setVisibleForm} />
-            : <RegistrationContainer switchForm={setVisibleForm} />
-        }
+        {visibleForm === 'login' ? (
+          <LoginContainer switchForm={setVisibleForm} />
+        ) : (
+          <RegistrationContainer switchForm={setVisibleForm} />
+        )}
       </Paper>
       <OAuthContainer />
     </React.Fragment>

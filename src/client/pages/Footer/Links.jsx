@@ -18,12 +18,23 @@ const styles = {
   },
 }
 
-
 const Links = ({ classes = {} }) => (
   <div className={classes.socialIcons}>
-    <LinkIcon src={GitHubIconLogoSrc} alt='GitHub' linkTo='https://github.com/TTUSDC/' />
-    <LinkIcon src={SlackIconLogoSrc} alt='Slack' linkTo='http://ttucs.slack.com' />
-    <LinkIcon src={FacebookIconLogoSrc} alt='Facebook' linkTo='https://www.facebook.com/SDCTTU/' />
+    <LinkIcon
+      src={GitHubIconLogoSrc}
+      alt='GitHub'
+      linkTo='https://github.com/TTUSDC/'
+    />
+    <LinkIcon
+      src={SlackIconLogoSrc}
+      alt='Slack'
+      linkTo='http://ttucs.slack.com'
+    />
+    <LinkIcon
+      src={FacebookIconLogoSrc}
+      alt='Facebook'
+      linkTo='https://www.facebook.com/SDCTTU/'
+    />
   </div>
 )
 

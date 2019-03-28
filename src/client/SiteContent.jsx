@@ -6,7 +6,7 @@ import { ConnectedRouter } from 'connected-react-router/immutable'
 import Footer from 'pages/Footer/Footer.jsx'
 import Routes from 'Routes'
 
-const styles = theme => ({
+const styles = (theme) => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
@@ -37,9 +37,7 @@ const styles = theme => ({
   },
 })
 
-const SiteContent = ({
-  classes = {}, history,
-}) => (
+const SiteContent = ({ classes = {}, history }) => (
   <div className={classes.SiteContent}>
     <main className={classes.main}>
       <ConnectedRouter history={history}>

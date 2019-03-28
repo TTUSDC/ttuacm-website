@@ -7,17 +7,17 @@ import PropTypes from 'prop-types'
 import FooterTopSection from './FooterTopSection'
 import { sections } from './FooterInfo'
 
-const styles = ({
+const styles = {
   FooterTop: {
     display: 'flex',
     flexWrap: 'wrap',
     width: '95%',
     margin: '18px auto 30px',
   },
-})
+}
 
 const FooterTop = ({ classes = {}, currentPage, ...props }) => {
-  const handleNavigation = nextPage => () => {
+  const handleNavigation = (nextPage) => () => {
     if (currentPage !== nextPage) {
       props.push(nextPage)
     }
@@ -25,20 +25,18 @@ const FooterTop = ({ classes = {}, currentPage, ...props }) => {
 
   return (
     <Grid container className={classes.FooterTop} spacing={32} direction='row'>
-      {sections.map((
-        {
-          title, description, containsAppLink, containsOutsideLink,
-        },
-      ) => (
-        <FooterTopSection
-          key={title}
-          title={title}
-          description={description}
-          handleNavigation={containsAppLink ? handleNavigation : () => {}}
-          containsAppLink={containsAppLink}
-          containsOutLink={containsOutsideLink}
-        />
-      ))}
+      {sections.map(
+        ({ title, description, containsAppLink, containsOutsideLink }) => (
+          <FooterTopSection
+            key={title}
+            title={title}
+            description={description}
+            handleNavigation={containsAppLink ? handleNavigation : () => {}}
+            containsAppLink={containsAppLink}
+            containsOutLink={containsOutsideLink}
+          />
+        ),
+      )}
     </Grid>
   )
 }
@@ -49,8 +47,11 @@ FooterTop.propTypes = {
   push: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentPage: state.router.location.pathname,
 })
 
-export default connect(mapStateToProps, { push })(withStyles(styles)(FooterTop))
+export default connect(
+  mapStateToProps,
+  { push },
+)(withStyles(styles)(FooterTop))
