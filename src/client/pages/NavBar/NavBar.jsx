@@ -4,7 +4,7 @@ import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
+import Grid from '@material-ui/core/Grid'
 import firebase from 'firebase'
 import { toggleAuthState } from 'redux/actions/auth-actions'
 import DesktopNavigation from './DesktopNavigation.jsx'
@@ -15,10 +15,6 @@ const styles = {
     maxHeight: '64px',
     maxWidth: '100%',
     background: '#333333',
-  },
-  root: {
-    display: 'flex',
-    maxWidth: '100%',
   },
 }
 
@@ -46,29 +42,33 @@ const NavBar = ({
   }
 
   return (
-    <div className={classes.root}>
-      <AppBar
-        position='static'
-        className={classes.barDefaults}
+    <AppBar
+      position='static'
+      className={classes.barDefaults}
+    >
+      <Grid
+        container
+        wrap='nowrap'
+        justify='space-between'
+        spacing={16}
       >
-        <Toolbar
-          className={classes.barDefaults}
-        >
+        <Grid item xs={6}>
           <Logo
             handleNavigation={handleNavigation}
             currentPage={currentPage}
           />
-
-          {/* Desktop Navigation */}
+        </Grid>
+        {/* Desktop Navigation */}
+        <Grid item xs={6}>
           <DesktopNavigation
             isLoggedIn={isLoggedIn}
             handleLogout={handleLogout}
             handleNavigation={handleNavigation}
             currentPage={currentPage}
           />
-        </Toolbar>
-      </AppBar>
-    </div>
+        </Grid>
+      </Grid>
+    </AppBar>
   )
 }
 
