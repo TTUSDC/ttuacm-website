@@ -24,8 +24,8 @@ const renderDescriptions = (
       {/*eslint-disable-line*/ containsOutLink
         ? withHref(classes, item[0], item[1])
         : containsAppLink
-        ? item[1]
-        : item}
+          ? item[1]
+          : item}
     </Typography>
   ))
 
