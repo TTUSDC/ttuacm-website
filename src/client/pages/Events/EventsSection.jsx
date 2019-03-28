@@ -16,14 +16,14 @@ export function filterEvents(time, events) {
       filteredEvents = events.filter((event) => {
         const eventTime = moment(event.startTime)
         const today = moment()
-        return eventTime.diff(today, 'days') === 0
+        return eventTime.dayOfYear() === today.dayOfYear()
       })
       break
     case 'TOMORROW':
       filteredEvents = events.filter((event) => {
         const eventTime = moment(event.startTime)
         const today = moment()
-        return eventTime.diff(today, 'days') === 1
+        return eventTime.dayOfYear() === today.dayOfYear() + 1
       })
       break
     case 'THIS WEEK':
