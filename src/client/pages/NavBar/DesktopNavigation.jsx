@@ -71,7 +71,7 @@ const DesktopNavigation = ({
   )
 }
 
-const styles = theme => ({
+const styles = {
   DesktopNav: {
     minWidth: 72,
     border: '0 !important',
@@ -83,7 +83,7 @@ const styles = theme => ({
   tabsIndicator: {
     backgroundColor: 'white',
   },
-})
+}
 
 DesktopNavigation.propTypes = {
   handleNavigation: PropTypes.func.isRequired,

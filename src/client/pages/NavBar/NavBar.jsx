@@ -9,7 +9,6 @@ import firebase from 'firebase'
 import { toggleAuthState } from 'redux/actions/auth-actions'
 import Tech from 'assets/Tech.png'
 import DesktopNavigation from './DesktopNavigation.jsx'
-import Logo from './Logo.jsx'
 
 const styles = {
   barDefaults: {
@@ -64,6 +63,7 @@ const NavBar = ({
       >
         <Grid className={classes.ImageContainer} item xs={6}>
           <img
+            alt='tech building'
             src={Tech}
             className={classes.img}
             handleNavigation={handleNavigation}
