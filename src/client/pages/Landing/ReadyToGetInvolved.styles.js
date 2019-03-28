@@ -2,13 +2,13 @@ export default function styles(theme) {
   return {
     Container: {
       textAlign: 'center',
-      height: '35vh',
+      minHeight: '35vh',
       alignItems: 'center',
       justifyContent: 'center',
       display: 'flex',
       flexDirection: 'column',
       backgroundSize: 'cover',
-      padding: '0px 40px',
+      padding: '30px 40px',
       [theme.breakpoints.down('xs')]: {
         height: '30vh',
       },

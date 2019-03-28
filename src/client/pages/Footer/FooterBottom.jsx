@@ -18,22 +18,17 @@ const style = {
     display: 'flex',
     flexGrow: 4,
     alignContent: 'space-around',
+    // margin: '18px 30px'
   },
   links: {
     flexGrow: 1,
     flexDirection: 'row',
   },
-  emptyDiv: {
-    width: '4%',
-    maxWidth: '9%',
-  },
-
 }
 
 const FooterBottom = ({ classes = {} }) => (
   <Grid container spacing={24} className={classes.footerBottom}>
     <Grid item className={classes.copyright} xs={9}>
-      <div className={classes.emptyDiv} />
       <Copyright />
     </Grid>
     <Grid item className={classes.links}>

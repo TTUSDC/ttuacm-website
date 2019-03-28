@@ -39,7 +39,7 @@ export default function styles(theme) {
       flexFlow: 'row',
       alignItems: 'stretch',
       width: '86vw',
-      height: '37vh',
+      minHeight: '37vh',
       margin: '0 auto 2em',
       padding: 10,
       backgroundColor: 'white',
@@ -67,6 +67,7 @@ export default function styles(theme) {
       flexDirection: 'column',
       alignItems: 'flex-start',
       textAlign: 'left',
+      margin: '10px 0px',
     },
     Tag: {
       ...theme.typography.body1,

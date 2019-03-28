@@ -11,6 +11,7 @@ const TITLES = [
 const LOCATION = ['IMSE 117', 'IMSE 118', 'IMSE 119']
 
 const DESCRIPTION =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut' +
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut'
 
 const today = moment()

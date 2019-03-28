@@ -14,14 +14,14 @@ const styles = (theme) => ({
     flexFlow: 'row',
     alignItems: 'stretch',
     width: '86vw',
-    height: '37vh',
+    minHeight: '37vh',
     backgroundColor: '#253F51',
     margin: '0 auto 2em',
     padding: '15px 0px',
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column',
       flexFlow: 'column',
-      height: '32vh',
+      minHeight: '32vh',
     },
   },
 })
