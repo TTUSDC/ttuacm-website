@@ -23,7 +23,10 @@ function OAuthContainer({ navigateTo, toggleLoggedIn }) {
     signInFlow: 'popup',
     /**
      * Supported Authentication:
+     * Email
      * Google
+     * GitHub
+     * Facebook
      * Local
      */
     signInOptions: [
