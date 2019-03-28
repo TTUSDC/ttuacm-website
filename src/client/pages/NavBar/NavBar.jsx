@@ -4,11 +4,11 @@ import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
+import Grid from '@material-ui/core/Grid'
 import firebase from 'firebase'
 import { toggleAuthState } from 'redux/actions/auth-actions'
+import Tech from 'assets/Tech.png'
 import DesktopNavigation from './DesktopNavigation.jsx'
-import Logo from './Logo.jsx'
 
 const styles = {
   barDefaults: {
@@ -16,20 +16,29 @@ const styles = {
     maxWidth: '100%',
     background: '#333333',
   },
-  root: {
+  img: {
+    height: 40,
+    width: 'auto',
+    margin: '0px 6px',
+  },
+  ImageContainer: {
     display: 'flex',
-    maxWidth: '100%',
+    alignItems: 'center',
   },
 }
 
 const NavBar = ({
-  classes, currentPage, navigateTo, isLoggedIn, checkIfLoggedIn,
+  classes,
+  currentPage,
+  navigateTo,
+  isLoggedIn,
+  checkIfLoggedIn,
 }) => {
   useEffect(() => {
     checkIfLoggedIn()
   })
 
-  const handleNavigation = nextPage => () => {
+  const handleNavigation = (nextPage) => () => {
     navigateTo(nextPage)
   }
 
@@ -46,29 +55,27 @@ const NavBar = ({
   }
 
   return (
-    <div className={classes.root}>
-      <AppBar
-        position='static'
-        className={classes.barDefaults}
-      >
-        <Toolbar
-          className={classes.barDefaults}
-        >
-          <Logo
+    <AppBar position='static' className={classes.barDefaults}>
+      <Grid container wrap='nowrap' justify='space-between' spacing={16}>
+        <Grid className={classes.ImageContainer} item xs={6}>
+          <img
+            alt='tech building'
+            src={Tech}
+            className={classes.img}
             handleNavigation={handleNavigation}
-            currentPage={currentPage}
           />
-
-          {/* Desktop Navigation */}
+        </Grid>
+        {/* Desktop Navigation */}
+        <Grid item xs={6}>
           <DesktopNavigation
             isLoggedIn={isLoggedIn}
             handleLogout={handleLogout}
             handleNavigation={handleNavigation}
             currentPage={currentPage}
           />
-        </Toolbar>
-      </AppBar>
-    </div>
+        </Grid>
+      </Grid>
+    </AppBar>
   )
 }
 
@@ -80,12 +87,12 @@ NavBar.propTypes = {
   currentPage: PropTypes.string.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentPage: state.router.location.pathname,
   isLoggedIn: state.auth.get('isLoggedIn'),
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => {
     dispatch(push(location))
   },
@@ -94,4 +101,7 @@ const mapDispatchToProps = dispatch => ({
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(NavBar))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withStyles(styles)(NavBar))

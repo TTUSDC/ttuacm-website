@@ -11,9 +11,9 @@ function ReversedAuthRoute({ isLoggedIn, path, component }) {
 }
 
 function mapStateToProps(state) {
-  return ({
+  return {
     isLoggedIn: state.auth.get('isLoggedIn'),
-  })
+  }
 }
 
 ReversedAuthRoute.propTypes = {
@@ -22,4 +22,7 @@ ReversedAuthRoute.propTypes = {
   component: PropTypes.node.isRequired,
 }
 
-export default connect(mapStateToProps, {})(ReversedAuthRoute)
+export default connect(
+  mapStateToProps,
+  {},
+)(ReversedAuthRoute)

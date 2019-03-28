@@ -12,8 +12,8 @@
     "test:unit:debug": "cross-env NODE_ENV=test node --inspect node_modules/.bin/jest --runInBand --testPathPattern='/src/api/*/*'",
     "e2e:ci": "cypress run -P ./cypress/staging --record --key $TTUACM_CY_RECORD_KEY",
     "e2e": "cypress open -P ./cypress/development",
-    "lint": "eslint src",
-    "fmt": "prettier --write 'src/**/*.js'",
+    "lint": "eslint --ext .js --ext .jsx src --fix",
+    "fmt": "prettier --write 'src/**/*.{jsx,js}'",
     "env-config:client": "cp .env.config .env",
     "env-config:api": "node src/utils/env-config.js",
     "env-save:api": "firebase functions:config:get > .runtimeconfig.json",
@@ -120,8 +120,13 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write 'src/**/*.js'",
+    "*.{js,jsx}": [
+      "yarn lint"
+    ],
+    "*.{js,jsx,json,css,md}": [
+      "yarn fmt"
+    ],
+    "*.{js,jsx,json,css,md}": [
       "git add"
     ]
   },

@@ -18,18 +18,21 @@ function VerifyEmailContainer({ query, navigateTo }) {
 
   function resendEmail() {
     setWaiting(true)
-    axios.post(`${connectionString}/email/confirm-email`, {
-      email,
-      token,
-      redirectURLSuccess: `${currentLocation}/home`,
-      fallback: `${currentLocation}/auth`,
-    }).then(() => {
-      // TODO show snackbar success
-      setWaiting(false)
-    }).catch((err) => {
-      console.error(err)
-      setWaiting(false)
-    })
+    axios
+      .post(`${connectionString}/email/confirm-email`, {
+        email,
+        token,
+        redirectURLSuccess: `${currentLocation}/home`,
+        fallback: `${currentLocation}/auth`,
+      })
+      .then(() => {
+        // TODO show snackbar success
+        setWaiting(false)
+      })
+      .catch((err) => {
+        console.error(err)
+        setWaiting(false)
+      })
   }
 
   if (!query) {
@@ -48,7 +51,11 @@ function VerifyEmailContainer({ query, navigateTo }) {
         color='primary'
         onClick={() => resendEmail()}
       >
-        {waiting ? <CircularProgress data-testid='confirm-waiting-symbol' /> : 'Resend Email'}
+        {waiting ? (
+          <CircularProgress data-testid='confirm-waiting-symbol' />
+        ) : (
+          'Resend Email'
+        )}
       </Button>
     </div>
   )
@@ -59,14 +66,17 @@ VerifyEmailContainer.propTypes = {
   navigateTo: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   query: state.router.location.search,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => {
     dispatch(push(location))
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(VerifyEmailContainer)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(VerifyEmailContainer)

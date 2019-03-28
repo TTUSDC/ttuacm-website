@@ -5,7 +5,11 @@ import moment from 'moment'
 import sinon from 'sinon'
 import EventsSection, { filterEvents } from './EventsSection'
 
-sinon.useFakeTimers(moment([2019, 2, 26]).toDate().getTime()) // Tuesday March 26, 2019
+sinon.useFakeTimers(
+  moment([2019, 2, 26])
+    .toDate()
+    .getTime(),
+) // Tuesday March 26, 2019
 
 // We create a mock calendar to assert upon
 const CALENDAR = []
@@ -15,7 +19,7 @@ const today = moment()
 for (let i = 1; i <= 8; i += 1) {
   CALENDAR.push({
     id: i,
-    title: `Test Event ${(Number(i)).toString()}`,
+    title: `Test Event ${Number(i).toString()}`,
     location: 'IMSE 119',
     startTime: today.toDate(),
     endTime: today.toDate(),
@@ -54,19 +58,25 @@ describe('Events Section Component', () => {
 
   describe('Component', () => {
     test('should display the only event for `TODAY`', () => {
-      const { container } = render(<EventsSection time='TODAY' events={CALENDAR} />)
+      const { container } = render(
+        <EventsSection time='TODAY' events={CALENDAR} />,
+      )
       getByText(container, 'TODAY', { exact: false })
       getByText(container, 'Test Event 1', { exact: false })
     })
 
     test('should display the only event for `TOMORROW`', () => {
-      const { container } = render(<EventsSection time='TOMORROW' events={CALENDAR} />)
+      const { container } = render(
+        <EventsSection time='TOMORROW' events={CALENDAR} />,
+      )
       getByText(container, 'TOMORROW', { exact: false })
       getByText(container, 'Test Event 2', { exact: false })
     })
 
     test('should display the events for `THIS WEEK`', () => {
-      const { container } = render(<EventsSection time='THIS WEEK' events={CALENDAR} />)
+      const { container } = render(
+        <EventsSection time='THIS WEEK' events={CALENDAR} />,
+      )
       getByText(container, 'THIS WEEK', { exact: false })
       getByText(container, 'Test Event 1', { exact: false })
       getByText(container, 'Test Event 2', { exact: false })
@@ -75,7 +85,9 @@ describe('Events Section Component', () => {
     })
 
     test('should display the events for `THIS MONTH`', () => {
-      const { container } = render(<EventsSection time='THIS MONTH' events={CALENDAR} />)
+      const { container } = render(
+        <EventsSection time='THIS MONTH' events={CALENDAR} />,
+      )
       getByText(container, 'THIS MONTH', { exact: false })
       for (let i = 1; i < 6; i += 1) {
         getByText(container, `Test Event ${i}`, { exact: false })

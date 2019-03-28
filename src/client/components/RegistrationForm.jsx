@@ -5,7 +5,10 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import PropTypes from 'prop-types'
 
 export function hasErrors({
-  emailError, passwordError, confirmPasswordError, ...form
+  emailError,
+  passwordError,
+  confirmPasswordError,
+  ...form
 }) {
   // Form Fields
   let emptyField = false
@@ -14,7 +17,7 @@ export function hasErrors({
   })
 
   // Validators
-  const fieldError = (emailError || passwordError || confirmPasswordError)
+  const fieldError = emailError || passwordError || confirmPasswordError
 
   return Boolean(emptyField || fieldError)
 }
@@ -55,7 +58,7 @@ const RegistrationForm = ({
         }}
         label='First Name'
         value={firstName}
-        onChange={e => handleChangeValues(e.target.value, 'firstName')}
+        onChange={(e) => handleChangeValues(e.target.value, 'firstName')}
       />
       <TextField
         inputProps={{
@@ -63,7 +66,7 @@ const RegistrationForm = ({
         }}
         label='Last Name'
         value={lastName}
-        onChange={e => handleChangeValues(e.target.value, 'lastName')}
+        onChange={(e) => handleChangeValues(e.target.value, 'lastName')}
       />
       <TextField
         inputProps={{
@@ -71,7 +74,7 @@ const RegistrationForm = ({
         }}
         label='Email'
         value={email}
-        onChange={e => handleChangeValues(e.target.value, 'email')}
+        onChange={(e) => handleChangeValues(e.target.value, 'email')}
         onBlur={() => checkForErrors()}
         error={Boolean(emailError)}
         helperText={emailError ? emailError.message : ''}
@@ -83,7 +86,7 @@ const RegistrationForm = ({
         label='Password'
         type='password'
         value={password}
-        onChange={e => handleChangeValues(e.target.value, 'password')}
+        onChange={(e) => handleChangeValues(e.target.value, 'password')}
         onBlur={() => checkForErrors()}
         error={Boolean(passwordError)}
         helperText={passwordError ? passwordError.message : ''}
@@ -95,7 +98,7 @@ const RegistrationForm = ({
         label='Confirm Your Password'
         type='password'
         value={confirmPassword}
-        onChange={e => handleChangeValues(e.target.value, 'confirmPassword')}
+        onChange={(e) => handleChangeValues(e.target.value, 'confirmPassword')}
         onBlur={() => checkForErrors()}
         error={Boolean(confirmPasswordError)}
         helperText={confirmPasswordError ? confirmPasswordError.message : ''}
@@ -107,7 +110,7 @@ const RegistrationForm = ({
         label='Graduation Date'
         value={graduationDate}
         type='date'
-        onChange={e => handleChangeValues(e.target.value, 'graduationDate')}
+        onChange={(e) => handleChangeValues(e.target.value, 'graduationDate')}
         onBlur={() => checkForErrors()}
         InputLabelProps={{
           shrink: true,
@@ -116,8 +119,8 @@ const RegistrationForm = ({
       <Button
         data-testid='registration-submit-button'
         type='submit'
-        disabled={
-          hasErrors({
+        disabled={hasErrors(
+          {
             firstName,
             lastName,
             email,
@@ -127,23 +130,26 @@ const RegistrationForm = ({
             emailError,
             passwordError,
             confirmPasswordError,
-          } || loading)
-        }
+          } || loading,
+        )}
         variant='contained'
         color='primary'
       >
-        {
-          loading
-            ? <CircularProgress color='secondary' data-testid='sign-up-loading-spinner' />
-            : 'Sign Up'
-        }
+        {loading ? (
+          <CircularProgress
+            color='secondary'
+            data-testid='sign-up-loading-spinner'
+          />
+        ) : (
+          'Sign Up'
+        )}
       </Button>
       <Button
         onClick={() => switchForm('login')}
         data-testid='switch-to-login'
         color='primary'
       >
-          Already have an account?
+        Already have an account?
       </Button>
     </form>
   </div>

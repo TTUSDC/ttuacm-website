@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles'
 import EventDate from './EventDate'
 import EventContent from './EventContent'
 
-
 const styles = (theme) => ({
   EventsCard: {
     color: 'white',
@@ -27,14 +26,19 @@ const styles = (theme) => ({
 })
 
 const EventCard = ({
-  month, day, weekday, name, timeloc, content, classes,
+  month,
+  day,
+  weekday,
+  name,
+  timeloc,
+  content,
+  classes,
 }) => (
   <Card className={classes.EventsCard}>
     <EventDate month={month} day={day} weekday={weekday} />
     <EventContent name={name} timeloc={timeloc} content={content} />
   </Card>
 )
-
 
 EventCard.propTypes = {
   // January-December

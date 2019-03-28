@@ -19,9 +19,7 @@ function WindowSizeProvider({ children = [] }) {
   })
 
   return (
-    <withWindowSize.Provider
-      value={{ width, height }}
-    >
+    <withWindowSize.Provider value={{ width, height }}>
       {children}
     </withWindowSize.Provider>
   )

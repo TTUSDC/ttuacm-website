@@ -5,9 +5,17 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import PropTypes from 'prop-types'
 
 export function hasError({
-  email = '', password = '', loginError = null, passwordError = null,
+  email = '',
+  password = '',
+  loginError = null,
+  passwordError = null,
 }) {
-  return (email === '' || password === '' || loginError !== null || passwordError !== null)
+  return (
+    email === '' ||
+    password === '' ||
+    loginError !== null ||
+    passwordError !== null
+  )
 }
 
 const LoginForm = ({
@@ -35,7 +43,7 @@ const LoginForm = ({
           'data-testid': 'Email',
         }}
         value={email}
-        onChange={e => handleChangeValues(e.target.value, 'email')}
+        onChange={(e) => handleChangeValues(e.target.value, 'email')}
         error={Boolean(loginError)}
       />
       <TextField
@@ -45,31 +53,41 @@ const LoginForm = ({
         }}
         label='Password'
         value={password}
-        onChange={e => handleChangeValues(e.target.value, 'password')}
+        onChange={(e) => handleChangeValues(e.target.value, 'password')}
         error={Boolean(passwordError)}
-        helperText={passwordError ? 'Incorrect username/password combination' : ''}
+        helperText={
+          passwordError ? 'Incorrect username/password combination' : ''
+        }
       />
       <Button
         data-testid='login-submit-button'
-        disabled={hasError({
-          email, password, loginError, passwordError,
-        }) || loading}
+        disabled={
+          hasError({
+            email,
+            password,
+            loginError,
+            passwordError,
+          }) || loading
+        }
         type='submit'
         variant='contained'
         color='primary'
       >
-        {
-          loading
-            ? <CircularProgress color='secondary' data-testid='login-loading-spinner' />
-            : 'Login'
-        }
+        {loading ? (
+          <CircularProgress
+            color='secondary'
+            data-testid='login-loading-spinner'
+          />
+        ) : (
+          'Login'
+        )}
       </Button>
       <Button
         onClick={() => switchForm('registration')}
         data-testid='switch-to-registration'
         color='primary'
       >
-          Create a new account
+        Create a new account
       </Button>
     </form>
   </div>

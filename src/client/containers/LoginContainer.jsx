@@ -37,7 +37,8 @@ export function LoginContainer({ navigateTo, switchForm, toggleLoggedIn }) {
       password: loginFormValues.password,
     }
 
-    axios.post(`${connectionString}/auth/login`, body)
+    axios
+      .post(`${connectionString}/auth/login`, body)
       .then(({ data }) => {
         const token = data.token.split(' ')[1]
         localStorage.setItem('token', token)
@@ -67,7 +68,7 @@ export function LoginContainer({ navigateTo, switchForm, toggleLoggedIn }) {
 
 const mapStateToProps = () => ({})
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => {
     dispatch(push(location))
   },
@@ -76,4 +77,7 @@ const mapDispatchToProps = dispatch => ({
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LoginContainer)

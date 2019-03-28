@@ -47,9 +47,7 @@ const styles = (theme) => {
   return curr
 }
 
-const EventDate = ({
-  month, day, weekday, classes,
-}) => (
+const EventDate = ({ month, day, weekday, classes }) => (
   <div className={classes.date}>
     <Typography className={classes.month}>{month || 'January'}</Typography>
     <Typography className={classes.day}>{day || '1'}</Typography>
@@ -66,6 +64,6 @@ EventDate.propTypes = {
   weekday: PropTypes.string,
   // Styles
   classes: PropTypes.shape({}),
-};
+}
 
 export default withStyles(styles, { withTheme: true })(EventDate)

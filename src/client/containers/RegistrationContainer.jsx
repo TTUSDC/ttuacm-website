@@ -7,20 +7,23 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import qs from 'querystring'
 
-export function checkForErrors({ email = '', password = '', confirmPassword = '' }) {
-  const currentErrors = { }
+export function checkForErrors({
+  email = '',
+  password = '',
+  confirmPassword = '',
+}) {
+  const currentErrors = {}
 
   // Email Error handling
   let emailErrorMsg = ''
-  if(email === '') {
-    emailErrorMsg = '';
-  } else if(/@ttu.edu$/.test(email) !== true) {
-    emailErrorMsg = 'Please use a TTU email address.';
+  if (email === '') {
+    emailErrorMsg = ''
+  } else if (/@ttu.edu$/.test(email) !== true) {
+    emailErrorMsg = 'Please use a TTU email address.'
   }
 
-  currentErrors.emailError = emailErrorMsg !== ''
-    ? new Error(emailErrorMsg)
-    : null
+  currentErrors.emailError =
+    emailErrorMsg !== '' ? new Error(emailErrorMsg) : null
 
   // Password Error handling, ordered by importance
   let passwordErrorMsg = ''
@@ -28,41 +31,39 @@ export function checkForErrors({ email = '', password = '', confirmPassword = ''
     passwordErrorMsg = ''
   } else if (/^[\x00-\x7F]+$/.test(password) !== true) {
     // ASCII only
-    passwordErrorMsg = 'Please use only ASCII characters.';
-  } else if(password.length < 8) {
+    passwordErrorMsg = 'Please use only ASCII characters.'
+  } else if (password.length < 8) {
     // 8 characters long
-    passwordErrorMsg = 'Please use at least 8 characters.';
-  } else if(/[A-Z]/.test(password) !== true) {
+    passwordErrorMsg = 'Please use at least 8 characters.'
+  } else if (/[A-Z]/.test(password) !== true) {
     // 1 uppercase
-    passwordErrorMsg = 'Please use at least one uppercase letter.';
-  } else if(/[a-z]/.test(password) !== true) {
+    passwordErrorMsg = 'Please use at least one uppercase letter.'
+  } else if (/[a-z]/.test(password) !== true) {
     // 1 lowercase
-    passwordErrorMsg = 'Please use at least one lowercase letter.';
-  } else if(/[0-9]/.test(password) !== true) {
+    passwordErrorMsg = 'Please use at least one lowercase letter.'
+  } else if (/[0-9]/.test(password) !== true) {
     // 1 number
-    passwordErrorMsg = 'Please use at least one number.';
-  } else if(/[^A-Za-z0-9]/.test(password) !== true) {
+    passwordErrorMsg = 'Please use at least one number.'
+  } else if (/[^A-Za-z0-9]/.test(password) !== true) {
     // 1 special character
-    passwordErrorMsg = 'Please use at least one special character.';
+    passwordErrorMsg = 'Please use at least one special character.'
   }
 
-  currentErrors.passwordError = passwordErrorMsg !== ''
-    ? new Error(passwordErrorMsg)
-    : null
+  currentErrors.passwordError =
+    passwordErrorMsg !== '' ? new Error(passwordErrorMsg) : null
 
-  let confirmPasswordErrorMsg = '';
+  let confirmPasswordErrorMsg = ''
 
   if (confirmPassword === '') {
     confirmPasswordErrorMsg = ''
   } else if (password === '' || confirmPassword === '') {
-    confirmPasswordErrorMsg = '';
-  } else if(password !== confirmPassword) {
-    confirmPasswordErrorMsg = 'Please enter a matching password.';
+    confirmPasswordErrorMsg = ''
+  } else if (password !== confirmPassword) {
+    confirmPasswordErrorMsg = 'Please enter a matching password.'
   }
 
-  currentErrors.confirmPasswordError = confirmPasswordErrorMsg !== ''
-    ? new Error(confirmPasswordErrorMsg)
-    : null
+  currentErrors.confirmPasswordError =
+    confirmPasswordErrorMsg !== '' ? new Error(confirmPasswordErrorMsg) : null
 
   return currentErrors
 }
@@ -82,7 +83,9 @@ function RegistrationContainer({ navigateTo, switchForm }) {
     loading: false,
   }
 
-  const [registrationFormValues, setRegistrationFormValues] = useState(initState)
+  const [registrationFormValues, setRegistrationFormValues] = useState(
+    initState,
+  )
   const connectionString = useContext(ConnectionString)
 
   const handleChangeValues = (newValue, valueToChange) => {
@@ -97,8 +100,8 @@ function RegistrationContainer({ navigateTo, switchForm }) {
       ...registrationFormValues,
       loading: true,
     })
-    axios.post(`${connectionString}/auth/register`,
-      {
+    axios
+      .post(`${connectionString}/auth/register`, {
         ...registrationFormValues,
         redirectURLSuccess: `${window.location.origin}/home`,
         fallback: `${window.location.origin}/auth`,
@@ -146,10 +149,13 @@ function RegistrationContainer({ navigateTo, switchForm }) {
 
 const mapStateToProps = () => ({})
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => {
     dispatch(push(location))
   },
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegistrationContainer)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(RegistrationContainer)
