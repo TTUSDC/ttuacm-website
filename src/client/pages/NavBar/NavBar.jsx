@@ -7,6 +7,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Grid from '@material-ui/core/Grid'
 import firebase from 'firebase'
 import { toggleAuthState } from 'redux/actions/auth-actions'
+import Tech from 'assets/Tech.png'
 import DesktopNavigation from './DesktopNavigation.jsx'
 import Logo from './Logo.jsx'
 
@@ -15,6 +16,15 @@ const styles = {
     maxHeight: '64px',
     maxWidth: '100%',
     background: '#333333',
+  },
+  img: {
+    height: 40,
+    width: 'auto',
+    margin: '0px 6px',
+  },
+  ImageContainer: {
+    display: 'flex',
+    alignItems: 'center',
   },
 }
 
@@ -52,10 +62,11 @@ const NavBar = ({
         justify='space-between'
         spacing={16}
       >
-        <Grid item xs={6}>
-          <Logo
+        <Grid className={classes.ImageContainer} item xs={6}>
+          <img
+            src={Tech}
+            className={classes.img}
             handleNavigation={handleNavigation}
-            currentPage={currentPage}
           />
         </Grid>
         {/* Desktop Navigation */}
