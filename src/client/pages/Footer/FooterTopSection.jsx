@@ -24,12 +24,12 @@ const renderDescriptions = (
       {/*eslint-disable-line*/ containsOutLink
         ? withHref(classes, item[0], item[1])
         : containsAppLink
-        ? item[1]
-        : item}
+          ? item[1]
+          : item}
     </Typography>
   ))
 
-const styles = (theme) => ({
+const styles = {
   // eslint-disable-line
   Title: {
     fontWeight: '500',
@@ -46,7 +46,7 @@ const styles = (theme) => ({
     fontSize: '1rem',
     fontWeight: '300 !important',
   },
-})
+}
 
 const FooterTopSection = ({
   title,
