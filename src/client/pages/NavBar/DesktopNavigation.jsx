@@ -79,10 +79,6 @@ const styles = theme => ({
       color: 'white',
       opacity: 1,
     },
-    '&$tabSelected': {
-      color: 'white',
-      fontWeight: theme.typography.fontWeightMedium,
-    },
   },
   tabsIndicator: {
     backgroundColor: 'white',
