@@ -10,10 +10,8 @@ import { toggleAuthState } from 'redux/actions/auth-actions'
 import Tech from 'assets/Tech.png'
 import DesktopNavigation from './DesktopNavigation.jsx'
 
-const styles = {
+const styles = (theme) => ({
   barDefaults: {
-    maxHeight: '64px',
-    maxWidth: '100%',
     background: '#333333',
   },
   img: {
@@ -24,8 +22,23 @@ const styles = {
   ImageContainer: {
     display: 'flex',
     alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+      marginTop: '15px',
+    },
   },
-}
+  Tabs: {
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+  },
+  Container: {
+    justifyContent: 'space-between',
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'space-around',
+    },
+  },
+})
 
 const NavBar = ({
   classes,
@@ -56,7 +69,11 @@ const NavBar = ({
 
   return (
     <AppBar position='static' className={classes.barDefaults}>
-      <Grid container wrap='nowrap' justify='space-between' spacing={16}>
+      <Grid
+        container
+        spacing={16}
+        className={classes.Container}
+      >
         <Grid
           className={classes.ImageContainer}
           item
@@ -70,7 +87,11 @@ const NavBar = ({
           />
         </Grid>
         {/* Desktop Navigation */}
-        <Grid item xs={6}>
+        <Grid
+          item
+          xs='auto'
+          className={classes.Tabs}
+        >
           <DesktopNavigation
             isLoggedIn={isLoggedIn}
             handleLogout={handleLogout}
@@ -108,4 +129,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withStyles(styles)(NavBar))
+)(withStyles(styles, { withTheme: true })(NavBar))
