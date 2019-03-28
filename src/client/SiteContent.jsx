@@ -31,6 +31,10 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  SiteContent: {
+    margin: 0,
+    width: '100%',
+  },
 })
 
 const SiteContent = ({

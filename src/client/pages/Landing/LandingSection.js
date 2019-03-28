@@ -1,22 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import WhatWeDoContainer from './WhatWeDoContainer'
 import UpComingEventCard from './UpComingEventCard'
 import ReadyToGetInvolved from './ReadyToGetInvolved'
 
 const styles = (theme) => ({
   title: {
+    [theme.breakpoints.up('md')]: {
+      ...theme.typography.h2,
+      fontWeight: 'bold',
+    },
     color: 'white',
     textAlign: 'center',
-    [theme.breakpoints.up('md')]: {
-      fontSize: '4em',
-    },
+    fontWeight: 'bold',
+    margin: 20,
   },
 })
 
 function Title({ title, classes }) {
-  return <h1 className={classes.title}>{title}</h1>
+  return (
+    <Typography variant='h4' className={classes.title}>
+      {title}
+    </Typography>
+  )
 }
 
 Title.propTypes = {

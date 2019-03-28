@@ -1,31 +1,8 @@
-const imageSize = {
-  xs: 100,
-  sm: 150,
-  md: 200,
-  lg: 300,
-}
-
 export default function styles(theme) {
   return {
     Image: {
-      width: imageSize.xs,
-      height: imageSize.xs,
-      [theme.breakpoints.up('md')]: {
-        width: imageSize.lg,
-        height: imageSize.lg,
-      },
-      [theme.breakpoints.up('sm')]: {
-        width: imageSize.md,
-        height: imageSize.md,
-      },
-      [theme.breakpoints.up('xs')]: {
-        width: imageSize.sm,
-        height: imageSize.sm,
-      },
-      [theme.breakpoints.down('xs')]: {
-        width: imageSize.xs,
-        height: imageSize.xs,
-      },
+      width: '95%',
+      height: 'auto',
     },
     ImageGrid: {
       display: 'flex',
@@ -39,7 +16,7 @@ export default function styles(theme) {
       flexFlow: 'row',
       alignItems: 'stretch',
       width: '86vw',
-      height: '37vh',
+      minHeight: '37vh',
       margin: '0 auto 2em',
       padding: 10,
       backgroundColor: 'white',
@@ -67,6 +44,7 @@ export default function styles(theme) {
       flexDirection: 'column',
       alignItems: 'flex-start',
       textAlign: 'left',
+      margin: '10px 0px',
     },
     Tag: {
       ...theme.typography.body1,
