@@ -5,24 +5,26 @@ import Grid from '@material-ui/core/Grid'
 import Links from './Links.jsx'
 import Copyright from './Copyright.jsx'
 
-const style = {
-  footerBottom: {
-    backgroundColor: 'red',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {},
-  copyright: {
-    display: 'flex',
-    flexGrow: 4,
-    alignContent: 'space-around',
-    // margin: '18px 30px'
-  },
-  links: {
-    flexGrow: 1,
-    flexDirection: 'row',
-  },
+const style = (theme) => {
+  console.log(theme)
+  return ({
+    footerBottom: {
+      backgroundColor: theme.palette.primary.main,
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    container: {},
+    copyright: {
+      display: 'flex',
+      flexGrow: 4,
+      alignContent: 'space-around',
+    },
+    links: {
+      flexGrow: 1,
+      flexDirection: 'row',
+    },
+  })
 }
 
 const FooterBottom = ({ classes = {} }) => (
@@ -40,4 +42,4 @@ FooterBottom.propTypes = {
   classes: PropTypes.shape({}),
 }
 
-export default withStyles(style)(FooterBottom)
+export default withStyles(style, { withTheme: true })(FooterBottom)
