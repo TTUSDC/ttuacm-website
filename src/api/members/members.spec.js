@@ -4,7 +4,7 @@ const test = require('firebase-functions-test')()
 
 test.mockConfig({
   environment: {
-    env: 'testing',
+    env: 'development',
   },
   connections: {
     protocol: 'protocol',
