@@ -57,12 +57,16 @@ const NavBar = ({
   return (
     <AppBar position='static' className={classes.barDefaults}>
       <Grid container wrap='nowrap' justify='space-between' spacing={16}>
-        <Grid className={classes.ImageContainer} item xs={6}>
+        <Grid
+          className={classes.ImageContainer}
+          item
+          xs={6}
+          onClick={handleNavigation('/')}
+        >
           <img
+            className={classes.img}
             alt='tech building'
             src={Tech}
-            className={classes.img}
-            handleNavigation={handleNavigation}
           />
         </Grid>
         {/* Desktop Navigation */}
