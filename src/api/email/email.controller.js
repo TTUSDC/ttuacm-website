@@ -28,7 +28,7 @@ class EmailController {
 
   _createTransport() {
     return new Promise((resolve, reject) => {
-      if (!['prod', 'staging'].includes(functions.config().environment.env)) {
+      if (functions.config().environment.env) {
         nodemailer.createTestAccount((err, account) => {
           if (err) reject(err)
           this.smtpTransporter = nodemailer.createTransport({

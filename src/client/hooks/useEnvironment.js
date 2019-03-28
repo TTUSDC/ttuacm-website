@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const devEnv = {
-  env: 'dev',
+  env: 'development',
   maintainance: false,
   session_secret: 'Whatever',
 }
@@ -24,7 +24,7 @@ export default function useEnvironment(connectionString) {
 
   useEffect(() => {
     async function fetchEnv() {
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV !== 'production') {
         setEnv(devEnv)
         setErr(null)
       } else {
