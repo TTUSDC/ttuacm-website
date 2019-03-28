@@ -14,7 +14,7 @@ const styles = (theme) => ({
     alignItems: 'stretch',
     width: '86vw',
     minHeight: '37vh',
-    backgroundColor: '#253F51',
+    backgroundColor: theme.palette.secondary.main,
     margin: '0 auto 2em',
     padding: '15px 0px',
     [theme.breakpoints.down('xs')]: {

@@ -6,7 +6,6 @@ import 'typeface-roboto'
 
 import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import { red } from '@material-ui/core/colors'
 import { Provider } from 'react-redux'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { createBrowserHistory } from 'history'
@@ -40,7 +39,9 @@ const theme = createMuiTheme({
     primary: {
       main: '#D63333',
     },
-    secondary: red,
+    secondary: {
+      main: '#253F51',
+    },
   },
 })
 
