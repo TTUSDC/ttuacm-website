@@ -1,5 +1,8 @@
 import React from 'react'
 import TeamsList from 'components/TeamsList'
+import Profile from 'assets/teams_page/profile.jpg'
+
+// Import photos into here and serve place them in the right objects
 
 // Edit this to edit the teams
 const TEAMS = []
@@ -12,6 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
       leader: 'Simon Woldemichael',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rhoncus ante risus, et iaculis est tempor et. Maecenas interdum et lorem eget lacinia. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultrices velit fringilla dolor porttitor ultrices. Donec lorem orci, tempus ut pellentesque eget, hendrerit in magna. Cras viverra venenatis sem vitae condimentum. Curabitur vel neque in nulla blandit posuere ut in velit. Mauris sed porta sem.',
       email: '<email goes here>',
+      image: Profile,
       day: ['Monday', 'Tuesday'],
       time: '6pm - 7pm',
     })

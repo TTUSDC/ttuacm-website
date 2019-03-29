@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
-import Profile from 'assets/teams_page/profile.jpg'
 import { withStyles } from '@material-ui/core/styles'
 import CardMedia from '@material-ui/core/CardMedia'
 import classnames from 'classnames'
@@ -31,7 +30,7 @@ const styles = (theme) => ({
   },
 })
 
-function TeamCard({ preventJoin, name, leader, description, email, day, time, classes }) {
+function TeamCard({ preventJoin, name, leader, description, image, email, day, time, classes }) {
   const [open, setOpen] = useState(false)
 
   const handleEmail = () => {
@@ -56,7 +55,7 @@ function TeamCard({ preventJoin, name, leader, description, email, day, time, cl
   return (
     <Card>
       <CardMedia
-        image={Profile}
+        image={image}
         title={name}
         className={classes.Image}
       />
@@ -137,6 +136,7 @@ TeamCard.propTypes = {
   email: PropTypes.string.isRequired,
   day: PropTypes.arrayOf(PropTypes.string).isRequired,
   time: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
   preventJoin: PropTypes.bool.isRequired,
   classes: PropTypes.shape({}),
 }
