@@ -16,20 +16,51 @@ class Firebase {
     app.initializeApp(config);
 
     this.auth = app.auth();
+
+    /**
+     * 0Auth Providers
+     */
+    this.googleProvider = new app.auth.GoogleAuthProvider();
+    this.facebookProvider = new app.auth.FacebookAuthProvider();
+    this.githubProvider = new app.auth.FacebookAuthProvider();
   }
 
-    // *** AUTH ***
+  // *** AUTH ***
+    /**
+     * Email and password
+     */
     doCreateUserWithEmailAndPassword = (email, password) => // eslint-disable-next-line
         this.auth.createUserWithEmailAndPassword(email, password);
 
     doSignInWithEmailAndPassword = (email, password) => // eslint-disable-next-line
         this.auth.signInWithEmailAndPassword(email, password);
 
-    doSignOut = () => this.auth.signOut();
-
     doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
     doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
+
+    /**
+     * Google Login
+     */
+    doSignInWithGoogle = () =>
+      this.auth.signInWithPopup(this.googleProvider);
+
+    /**
+     * Facebook Login
+     */
+    doSignInWithFacebook = () =>
+      this.auth.signInWithPopup(this.facebookProvider);
+
+    /**
+     * GitHub Login
+     */
+    doSignInWithGitHub = () =>
+      this.auth.signInWithPopup(this.githubProvider);
+
+    /**
+     * Sign out
+     */
+    doSignOut = () => this.auth.signOut();
 }
 
 export default Firebase;
