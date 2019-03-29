@@ -3,25 +3,17 @@ import { PropTypes } from 'prop-types'
 import { ConnectionString } from 'context/ConnectionStringContext'
 import MaintenanceScreen from 'pages/Maintainance/MaintenanceScreen.jsx'
 import useEnvironment from 'hooks/useEnvironment'
-import firebase from 'firebase'
+// import firebase from 'firebase'
 import Main from 'Main'
-import firebaseConfig from '../firebase_config.json'
+
 
 function MaintainanceContainer({ history }) {
   const connectionString = useContext(ConnectionString)
   const [env, err] = useEnvironment(connectionString)
 
-  // Initialize the Firebase App, but only do it if it has not been initialized before
-  const config = {
-    apiKey: firebaseConfig.apiKey,
-    authDomain: firebaseConfig.authDomain,
-    databaseURL: firebaseConfig.databaseURL,
-    projectId: firebaseConfig.projectId,
-    storageBucket: firebaseConfig.storageBucket,
-    messagingSenderId: firebaseConfig.messageSenderId,
-  }
-
-  if (firebase.apps.length === 0) firebase.initializeApp(config)
+  // TODO(@madewithsmiles) retrive the firebase instance from the context
+  // and use it in the maintenance container
+  // if (firebase.apps.length === 0) firebase.initializeApp(config)
 
   if (err) {
     return <MaintenanceScreen />
