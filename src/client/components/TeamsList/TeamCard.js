@@ -34,6 +34,10 @@ const styles = (theme) => ({
 function TeamCard({ preventJoin, name, leader, description, email, day, time, classes }) {
   const [open, setOpen] = useState(false)
 
+  const handleEmail = () => {
+    document.getElementById('send-email-tag').click()
+  }
+
   // Turns the array of days to a comma separated string
   const fmtDays = (days) => {
     if (days.length < 1) {
@@ -86,7 +90,7 @@ function TeamCard({ preventJoin, name, leader, description, email, day, time, cl
         </IconButton>
         <IconButton
           aria-label='Email'
-          onClick={() => console.log(`send email to ${email}`)}
+          onClick={handleEmail}
         >
           <EmailIcon />
         </IconButton>
@@ -98,6 +102,14 @@ function TeamCard({ preventJoin, name, leader, description, email, day, time, cl
         >
           <ExpandMoreIcon />
         </IconButton>
+        <a
+          id='send-email-tag'
+          target='_blank'
+          rel='noopener noreferrer'
+          hidden
+          href={`mailto:${email}?Subject=${encodeURIComponent(`Hi! I'm interested in ${name}`)}`}
+        >Send Mail
+        </a>
       </CardActions>
       <Collapse in={open} timeout='auto' unmountOnExit>
         { preventJoin ? (
