@@ -1,3 +1,4 @@
+import firebase from 'firebase'
 import app from 'firebase/app';
 import 'firebase/auth';
 import firebaseConfig from '../../firebase_config.json'
@@ -13,16 +14,18 @@ const config = {
 
 class Firebase {
   constructor() {
-    app.initializeApp(config);
+    if (firebase.apps.length === 0)
+      app.initializeApp(config);
 
     this.auth = app.auth();
 
     /**
      * 0Auth Providers
      */
+    this.emailProvider = new app.auth.EmailAuthProvider();
     this.googleProvider = new app.auth.GoogleAuthProvider();
     this.facebookProvider = new app.auth.FacebookAuthProvider();
-    this.githubProvider = new app.auth.FacebookAuthProvider();
+    this.githubProvider = new app.auth.GithubAuthProvider();
   }
 
   // *** AUTH ***
