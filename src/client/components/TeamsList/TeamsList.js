@@ -13,7 +13,6 @@ const styles = () => ({
 })
 
 function TeamsList({ teams, classes, isLoggedIn }) {
-  console.log(isLoggedIn)
   const teamCards = teams.map((team, i) => (
     <Grid
       key={`${team.name}-${i + 1}`}
