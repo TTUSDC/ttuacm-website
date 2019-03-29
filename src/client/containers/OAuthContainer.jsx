@@ -6,6 +6,8 @@ import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { toggleAuthState } from 'redux/actions/auth-actions'
 
+// Todo: Fix persistence
+
 function OAuthContainer({ navigateTo, toggleLoggedIn }) {
   function handleSignInOAuth(user) {
     if (!user) return

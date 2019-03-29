@@ -13,6 +13,8 @@ import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 
+import Firebase, { FirebaseContext } from 'components/Firebase'
+
 import rootReducer from 'redux/reducers.js'
 
 import { ConnectionStringProvider } from 'context/ConnectionStringContext'
@@ -61,15 +63,17 @@ const store = createStore(
 function render() {
   ReactDOM.render(
     <AppContainer>
-      <Provider store={store}>
-        <MuiThemeProvider theme={theme}>
-          <ConnectionStringProvider>
-            <WindowSizeProvider>
-              <MaintainanceContainer history={history} />
-            </WindowSizeProvider>
-          </ConnectionStringProvider>
-        </MuiThemeProvider>
-      </Provider>
+      <FirebaseContext.Provider value={new Firebase()}>
+        <Provider store={store}>
+          <MuiThemeProvider theme={theme}>
+            <ConnectionStringProvider>
+              <WindowSizeProvider>
+                <MaintainanceContainer history={history} />
+              </WindowSizeProvider>
+            </ConnectionStringProvider>
+          </MuiThemeProvider>
+        </Provider>
+      </FirebaseContext.Provider>
     </AppContainer>,
     document.getElementById('root'),
   )
