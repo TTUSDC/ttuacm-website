@@ -1,28 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
+import { withFirebase } from 'context/Firebase'
 import { Route, Redirect } from 'react-router'
-import { connect } from 'react-redux'
 
-function AuthRoute({ isLoggedIn, path, component }) {
-  if (isLoggedIn) {
+function AuthRoute({ path, component }) {
+  const firebase = useContext(withFirebase)
+
+  if (firebase.isUserLoggedIn()) {
     return <Redirect to='/' />
   }
   return <Route path={path} component={component} />
 }
 
-function mapStateToProps(state) {
-  return {
-    isLoggedIn: state.auth.get('isLoggedIn'),
-  }
-}
 
 AuthRoute.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
   component: PropTypes.node.isRequired,
 }
 
-export default connect(
-  mapStateToProps,
-  {},
-)(AuthRoute)
+export default AuthRoute
