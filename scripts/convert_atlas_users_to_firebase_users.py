@@ -55,17 +55,15 @@ def convert(d: Dict[str,str]) -> Dict[str,str]:
 
 firebase_users = {"users":[]}
 users_list = []
-count = 0
+
 for i,mongo_user in enumerate(lines_of_interest):
-    if count == 5:
-        break
     email = mongo_user['email']
     # It the user has a valid email, and their email has not been already processed, then convert
     if re.fullmatch(r"[^@]+@[^@]+\.[^@]+", email) and email not in emails_set and bool(mongo_user["verified"]):
         emails_set.add(email)
         converted = convert(mongo_user)
         users_list.append(converted)
-    count += 1
+
 
 print(f'{len(users_list)} fields were processed')
 
