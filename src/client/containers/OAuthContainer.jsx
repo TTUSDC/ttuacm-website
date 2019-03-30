@@ -4,18 +4,13 @@ import { withFirebase } from 'context/Firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import { toggleAuthState } from 'redux/actions/auth-actions'
 
-// Todo: Fix persistence
-
-function OAuthContainer({ navigateTo, toggleLoggedIn }) {
+function OAuthContainer({ navigateTo }) {
   const firebase = useContext(withFirebase)
-  console.log({ firebase })
+
   function handleSignInOAuth(user) {
     if (!user) return
 
-    localStorage.setItem('oauth_user', true)
-    toggleLoggedIn()
     navigateTo('/home')
   }
 
@@ -34,10 +29,10 @@ function OAuthContainer({ navigateTo, toggleLoggedIn }) {
      * Local
      */
     signInOptions: [
-      firebase.emailProvider.providerId, // auth.EmailAuthProvider.PROVIDER_ID,
-      firebase.googleProvider.providerId, // auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.githubProvider.providerId, // auth.GithubAuthProvider.PROVIDER_ID,
-      firebase.facebookProvider.providerId, // auth.FacebookAuthProvider.PROVIDER_ID,
+      firebase.emailProvider.providerId,
+      firebase.googleProvider.providerId,
+      firebase.githubProvider.providerId,
+      firebase.facebookProvider.providerId,
     ],
     callbacks: {
       // Avoid redirects after sign-in.
@@ -55,15 +50,11 @@ function OAuthContainer({ navigateTo, toggleLoggedIn }) {
 
 OAuthContainer.propTypes = {
   navigateTo: PropTypes.func.isRequired,
-  toggleLoggedIn: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => {
     dispatch(push(location))
-  },
-  toggleLoggedIn: () => {
-    dispatch(toggleAuthState())
   },
 })
 
