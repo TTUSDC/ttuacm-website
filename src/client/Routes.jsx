@@ -9,7 +9,6 @@ import {
   TeamsPage,
   EventsPage,
   NotFoundPage,
-  VerifyEmailPage,
 } from 'pages'
 
 export default function Routes() {
@@ -21,7 +20,6 @@ export default function Routes() {
       <Route path='/about' component={AboutUsPage} />
       <Route path='/teams' component={TeamsPage} />
       <Route path='/events' component={EventsPage} />
-      <Route path='/verify' component={VerifyEmailPage} />
       <Route component={NotFoundPage} />
     </Switch>
   )
