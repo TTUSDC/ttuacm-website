@@ -45,6 +45,13 @@ const theme = createMuiTheme({
       main: '#253F51',
     },
   },
+  overrides: {
+    MuiPaper: {
+      root: {
+        backgroundColor: 'white',
+      },
+    },
+  },
 })
 
 const history = createBrowserHistory()
