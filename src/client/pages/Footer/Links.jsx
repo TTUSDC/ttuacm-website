@@ -6,17 +6,21 @@ import SlackIconLogoSrc from 'assets/svg/Slack.svg'
 import FacebookIconLogoSrc from 'assets/svg/Facebook.svg'
 import LinkIcon from './LinkIcon'
 
-const styles = {
+const styles = (theme) => ({
   socialIcons: {
     display: 'flex',
     flexWrap: 'wrap',
     flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+    [theme.breakpoints.up('sm')]: {
+      justifyContent: 'flex-end',
+      paddingRight: 10,
+    },
     alignItems: 'center',
     alignContent: 'center',
   },
-}
+})
 
 const Links = ({ classes = {} }) => (
   <div className={classes.socialIcons}>
