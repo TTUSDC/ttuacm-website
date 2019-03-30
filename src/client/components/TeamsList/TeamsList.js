@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
+import { withFirebase } from 'context/Firebase'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import TeamCard from './TeamCard'
 
 const styles = () => ({
@@ -12,7 +12,9 @@ const styles = () => ({
   },
 })
 
-function TeamsList({ teams, classes, isLoggedIn }) {
+function TeamsList({ teams, classes }) {
+  const firebase = useContext(withFirebase)
+
   const teamCards = teams.map((team, i) => (
     <Grid
       key={`${team.name}-${i + 1}`}
@@ -24,7 +26,7 @@ function TeamsList({ teams, classes, isLoggedIn }) {
     >
       <TeamCard
         {...team}
-        preventJoin={!isLoggedIn}
+        preventJoin={!firebase.isUserLoggedIn()}
       />
     </Grid>
   ))
@@ -45,17 +47,10 @@ function TeamsList({ teams, classes, isLoggedIn }) {
 TeamsList.propTypes = {
   teams: PropTypes.arrayOf(PropTypes.shape({})),
   classes: PropTypes.shape({}),
-  isLoggedIn: PropTypes.bool.isRequired,
 }
 
 TeamsList.defaultProps = {
   classes: {},
 }
 
-function mapStateToProps(state) {
-  return {
-    isLoggedIn: state.auth.get('isLoggedIn'),
-  }
-}
-
-export default connect(mapStateToProps, {})(withStyles(styles)(TeamsList))
+export default withStyles(styles)(TeamsList)
