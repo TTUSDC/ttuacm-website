@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router'
 import { connect } from 'react-redux'
 
-function ReversedAuthRoute({ isLoggedIn, path, component }) {
+function AuthRoute({ isLoggedIn, path, component }) {
   if (isLoggedIn) {
     return <Redirect to='/' />
   }
@@ -16,7 +16,7 @@ function mapStateToProps(state) {
   }
 }
 
-ReversedAuthRoute.propTypes = {
+AuthRoute.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
   component: PropTypes.node.isRequired,
@@ -25,4 +25,4 @@ ReversedAuthRoute.propTypes = {
 export default connect(
   mapStateToProps,
   {},
-)(ReversedAuthRoute)
+)(AuthRoute)
