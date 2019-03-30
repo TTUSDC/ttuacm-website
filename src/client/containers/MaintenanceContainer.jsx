@@ -1,19 +1,15 @@
 import React, { useContext } from 'react'
 import { PropTypes } from 'prop-types'
 import { ConnectionString } from 'context/ConnectionStringContext'
-import MaintenanceScreen from 'pages/Maintainance/MaintenanceScreen.jsx'
+import MaintenanceScreen from 'pages/Maintenance/MaintenanceScreen.jsx'
 import useEnvironment from 'hooks/useEnvironment'
 // import firebase from 'firebase'
 import Main from 'Main'
 
 
-function MaintainanceContainer({ history }) {
+function MaintenanceContainer({ history }) {
   const connectionString = useContext(ConnectionString)
   const [env, err] = useEnvironment(connectionString)
-
-  // TODO(@madewithsmiles) retrive the firebase instance from the context
-  // and use it in the maintenance container
-  // if (firebase.apps.length === 0) firebase.initializeApp(config)
 
   if (err) {
     return <MaintenanceScreen />
@@ -31,8 +27,8 @@ function MaintainanceContainer({ history }) {
   return <MaintenanceScreen />
 }
 
-MaintainanceContainer.propTypes = {
+MaintenanceContainer.propTypes = {
   history: PropTypes.shape({}),
 }
 
-export default MaintainanceContainer
+export default MaintenanceContainer
