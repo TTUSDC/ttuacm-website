@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-import LoginContainer from 'containers/LoginContainer'
-import RegistrationContainer from 'containers/RegistrationContainer'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -19,19 +17,11 @@ const styles = (theme) => ({
 })
 
 function AuthenticationPage({ classes = {} }) {
-  const [visibleForm, setVisibleForm] = useState('login')
-
   return (
     <div>
       <Paper className={classes.root} elevation={1}>
-        {visibleForm === 'login' ? (
-          <LoginContainer switchForm={setVisibleForm} />
-        ) : (
-          <RegistrationContainer switchForm={setVisibleForm} />
-        )}
-
+        <OAuthContainer />
       </Paper>
-      <OAuthContainer />
     </div>
   )
 }
