@@ -46,7 +46,10 @@ function OAuthContainer({ navigateTo, toggleLoggedIn }) {
   }
 
   return (
-    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth} />
+    <StyledFirebaseAuth
+      uiConfig={uiConfig}
+      firebaseAuth={firebase.auth}
+    />
   )
 }
 
