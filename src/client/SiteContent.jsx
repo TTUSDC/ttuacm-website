@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { PropTypes } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { ConnectedRouter } from 'connected-react-router/immutable'
-import Footer from 'pages/Footer/Footer.jsx'
+import Footer from 'pages/Footer'
 import Routes from 'Routes'
 
 const styles = (theme) => ({
