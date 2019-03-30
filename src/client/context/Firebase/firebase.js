@@ -22,48 +22,32 @@ class Firebase {
     /**
      * 0Auth Providers
      */
-    this.emailProvider = new app.auth.EmailAuthProvider();
-    this.googleProvider = new app.auth.GoogleAuthProvider();
-    this.facebookProvider = new app.auth.FacebookAuthProvider();
-    this.githubProvider = new app.auth.GithubAuthProvider();
+    this.emailProvider = new app.auth.EmailAuthProvider()
+    this.googleProvider = new app.auth.GoogleAuthProvider()
+    this.facebookProvider = new app.auth.FacebookAuthProvider()
+    this.githubProvider = new app.auth.GithubAuthProvider()
   }
 
-  // *** AUTH ***
-    /**
-     * Email and password
-     */
-    doCreateUserWithEmailAndPassword = (email, password) => // eslint-disable-next-line
-        this.auth.createUserWithEmailAndPassword(email, password);
+  /**
+   * Password reset and update
+   */
+  doPasswordReset = email => this.auth.sendPasswordResetEmail(email)
 
-    doSignInWithEmailAndPassword = (email, password) => // eslint-disable-next-line
-        this.auth.signInWithEmailAndPassword(email, password);
+  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password)
 
-    doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+  /**
+   * User info
+   */
+  isUserLoggedIn = () => this.auth.currentUser !== null
 
-    doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
+  getUserEmail = () => this.auth.currentUser.email
 
-    /**
-     * Google Login
-     */
-    doSignInWithGoogle = () =>
-      this.auth.signInWithPopup(this.googleProvider);
+  getUserName = () => this.auth.currentUser.displayName
 
-    /**
-     * Facebook Login
-     */
-    doSignInWithFacebook = () =>
-      this.auth.signInWithPopup(this.facebookProvider);
-
-    /**
-     * GitHub Login
-     */
-    doSignInWithGitHub = () =>
-      this.auth.signInWithPopup(this.githubProvider);
-
-    /**
-     * Sign out
-     */
-    doSignOut = () => this.auth.signOut();
+  /**
+   * Sign out
+   */
+  doSignOut = () => this.auth.signOut()
 }
 
-export default Firebase;
+export default Firebase
