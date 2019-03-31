@@ -25,7 +25,7 @@ const TEAMS = [
     time: '4:30pm - 6:00pm',
   },
   {
-    name: 'Intro To Python',
+    name: 'Eye for Design',
     leader: 'Nikki Green',
     description: 'Eye for Design shows you how to create responsive and good looking UI/UX using modern technologies. This is essential for anyone who is looking to get into front end or full stack development.',
     email: 'angela.nikki.green@ttu.edu',
