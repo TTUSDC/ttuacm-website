@@ -3,7 +3,6 @@ import { PropTypes } from 'prop-types'
 import { ConnectionString } from 'context/ConnectionStringContext'
 import MaintenanceScreen from 'pages/Maintenance/MaintenanceScreen.jsx'
 import useEnvironment from 'hooks/useEnvironment'
-// import firebase from 'firebase'
 import Main from 'Main'
 
 

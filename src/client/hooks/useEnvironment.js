@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useReducer } from 'react'
 import axios from 'axios'
 
 const devEnv = {
@@ -7,34 +7,34 @@ const devEnv = {
   session_secret: 'Whatever',
 }
 
+function reducer(state, action) {
+  return action
+}
+
 /**
  * Calls the environment provider to get all of the secrets from the API
  *
  * Other Secrets
  *
  * - maintainance: whether or not the app should be in maintainance mode or not
- * - session_secret: session secret for decrypting JWTs
  * - host: URL of API
  * - protocol: protocol of API
  *
  */
 export default function useEnvironment(connectionString) {
-  const [env, setEnv] = useState({})
-  const [err, setErr] = useState(null)
+  const [state, dispatch] = useReducer(reducer, { env: devEnv, err: null })
 
   useEffect(() => {
     async function fetchEnv() {
       if (process.env.NODE_ENV !== 'production') {
-        setEnv(devEnv)
-        setErr(null)
+        dispatch({ env: devEnv, err: null })
       } else {
         try {
           const { data } = await axios.get(`${connectionString}/environment`)
-          const environment = data
-          setEnv(environment)
+          dispatch({ env: data, err: null })
         } catch (error) {
           console.error(error)
-          setErr(error)
+          dispatch({ env: devEnv, err: error })
         }
       }
     }
@@ -42,5 +42,5 @@ export default function useEnvironment(connectionString) {
     fetchEnv()
   }, [connectionString])
 
-  return [env, err]
+  return [state.env, state.err]
 }
