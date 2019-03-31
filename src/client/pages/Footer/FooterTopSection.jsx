@@ -21,11 +21,13 @@ const renderDescriptions = (
       gutterBottom
       onClick={handleNavigation(item[0])}
     >
-      {/*eslint-disable-line*/ containsOutLink
+      {/* eslint-disable */}
+      {containsOutLink
         ? withHref(classes, item[0], item[1])
         : containsAppLink
         ? item[1]
         : item}
+      {/* eslint-enable */}
     </Typography>
   ))
 
