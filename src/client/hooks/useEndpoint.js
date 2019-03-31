@@ -12,11 +12,15 @@ const initState = {
 function reducer(state, action) {
   switch (action.type) {
     case 'start':
-      return { err: null, isLoading: true, data: [{}] }
+      return { err: null, isLoading: true, data: action.payload.default }
     case 'finish':
       return { err: null, isLoading: false, data: action.payload.data }
     case 'error':
-      return { err: action.payload.error, isLoading: false, data: [{}] }
+      return {
+        err: action.payload.error,
+        isLoading: false,
+        data: action.payload.default,
+      }
     default:
       throw new Error(`${action.type} unsupported`)
   }
@@ -60,7 +64,10 @@ export default function useEndpoint(
         data: body,
       })
 
-      dispatch({ type: 'start' })
+      dispatch({
+        type: 'start',
+        payload: { default: defaultOrDevelopmentValues },
+      })
 
       try {
         const { data } = await instance()
