@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import MOCK_CALENDAR from '__mocks__/calendar'
 import EventsList from 'components/EventsList'
-import { ConnectionString } from 'context/ConnectionStringContext'
+import { useConnectionString } from 'context/withConnectionString'
 import * as axios from 'axios'
 
 let SHOW_MOCK_CALENDAR = true
@@ -23,7 +23,7 @@ function UpcomingEventCard() {
   const [events, setEvents] = useState(
     SHOW_MOCK_CALENDAR ? [MOCK_CALENDAR[0]] : placeHolder,
   )
-  const connectionString = useContext(ConnectionString)
+  const connectionString = useConnectionString()
 
   // Fetch the events from the API
   useEffect(() => {

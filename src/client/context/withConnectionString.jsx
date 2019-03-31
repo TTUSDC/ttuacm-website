@@ -1,9 +1,16 @@
-import * as React from 'react'
-import PropTypes from 'prop-types'
+import React, { useContext } from 'react'
 
-const ConnectionString = React.createContext()
+const ConnectionStringContext = React.createContext()
 
-function ConnectionStringProvider({ children = [] }) {
+function useConnectionString() {
+  const connectionString = useContext(ConnectionStringContext)
+  if (!connectionString) {
+    throw new Error('Cannot use `useConnectionString` outside of ConnectionStringProvider')
+  }
+  return connectionString
+}
+
+function ConnectionStringProvider(props) {
   let connectionString = `${
     process.env.REACT_APP_environment_connection
   }/api/v2`
@@ -20,16 +27,8 @@ function ConnectionStringProvider({ children = [] }) {
   }
 
   return (
-    <ConnectionString.Provider value={connectionString}>
-      {children}
-    </ConnectionString.Provider>
+    <ConnectionStringContext.Provider value={connectionString} {...props} />
   )
 }
 
-ConnectionStringProvider.propTypes = {
-  children: PropTypes.element,
-}
-
-const ConnectionStringConsumer = ConnectionString.Consumer
-
-export { ConnectionString, ConnectionStringProvider, ConnectionStringConsumer }
+export { useConnectionString, ConnectionStringProvider }

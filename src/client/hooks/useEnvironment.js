@@ -4,7 +4,8 @@ import axios from 'axios'
 const devEnv = {
   env: 'development',
   maintainance: false,
-  session_secret: 'Whatever',
+  protocol: 'http',
+  host: '<firebase functions url goes here>',
 }
 
 function reducer(state, action) {
@@ -13,13 +14,6 @@ function reducer(state, action) {
 
 /**
  * Calls the environment provider to get all of the secrets from the API
- *
- * Other Secrets
- *
- * - maintainance: whether or not the app should be in maintainance mode or not
- * - host: URL of API
- * - protocol: protocol of API
- *
  */
 export default function useEnvironment(connectionString) {
   const [state, dispatch] = useReducer(reducer, { env: devEnv, err: null })

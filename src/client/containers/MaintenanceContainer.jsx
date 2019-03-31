@@ -1,13 +1,13 @@
-import React, { useContext } from 'react'
-import { PropTypes } from 'prop-types'
-import { ConnectionString } from 'context/ConnectionStringContext'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { useConnectionString } from 'context/withConnectionString'
 import MaintenanceScreen from 'pages/Maintenance/MaintenanceScreen.jsx'
 import useEnvironment from 'hooks/useEnvironment'
 import Main from 'Main'
 
 
 function MaintenanceContainer({ history }) {
-  const connectionString = useContext(ConnectionString)
+  const connectionString = useConnectionString()
   const [env, err] = useEnvironment(connectionString)
 
   if (err) {

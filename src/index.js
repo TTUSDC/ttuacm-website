@@ -6,7 +6,7 @@ import 'typeface-roboto'
 
 import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import { Provider } from 'react-redux'
+import { Provider as ReduxProvider } from 'react-redux'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { createBrowserHistory } from 'history'
 import { createStore, applyMiddleware } from 'redux'
@@ -16,7 +16,7 @@ import thunk from 'redux-thunk'
 import rootReducer from 'redux/reducers.js'
 
 import { FirebaseProvider } from 'context/Firebase'
-import { ConnectionStringProvider } from 'context/ConnectionStringContext'
+import { ConnectionStringProvider } from 'context/withConnectionString'
 import { WindowSizeProvider } from 'context/withWindowSize'
 
 import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
@@ -64,7 +64,7 @@ function render() {
   ReactDOM.render(
     <AppContainer>
       <FirebaseProvider>
-        <Provider store={store}>
+        <ReduxProvider store={store}>
           <MuiThemeProvider theme={theme}>
             <ConnectionStringProvider>
               <WindowSizeProvider>
@@ -72,7 +72,7 @@ function render() {
               </WindowSizeProvider>
             </ConnectionStringProvider>
           </MuiThemeProvider>
-        </Provider>
+        </ReduxProvider>
       </FirebaseProvider>
     </AppContainer>,
     document.getElementById('root'),
