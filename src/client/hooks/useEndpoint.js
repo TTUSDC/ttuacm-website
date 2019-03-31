@@ -28,7 +28,7 @@ function reducer(state, action) {
 
 export default function useEndpoint(
   { body = {}, method = 'get', headers = {}, params = {}, path = '/' },
-  defaultOrDevelopmentValues,
+  defaultOrDevelopmentValues = [{}],
 ) {
   if (process.env.NODE_ENV === 'development')
     return [null, false, defaultOrDevelopmentValues]
