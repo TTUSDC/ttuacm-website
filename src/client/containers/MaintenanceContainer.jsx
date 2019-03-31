@@ -12,9 +12,12 @@ const devEnv = {
 }
 
 function MaintenanceContainer({ history }) {
-  const [err, loading, env] = useEndpoint({
-    path: '/environment',
-  }, devEnv)
+  const [err, loading, env] = useEndpoint(
+    {
+      path: '/environment',
+    },
+    devEnv,
+  )
 
   if (loading) return null
 

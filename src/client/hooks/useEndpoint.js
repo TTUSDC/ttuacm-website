@@ -1,6 +1,7 @@
 import { useReducer, useEffect } from 'react'
-import { useConnectionString } from 'context/withConnectionString'
 import axios from 'axios'
+
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 
 const initState = {
   err: null,
@@ -9,23 +10,44 @@ const initState = {
 }
 
 function reducer(state, action) {
-  switch(action.type) {
-    case ('start'):
+  switch (action.type) {
+    case 'start':
       return { err: null, isLoading: true, data: [{}] }
-    case ('finish'):
+    case 'finish':
       return { err: null, isLoading: false, data: action.payload.data }
-    case ('error'):
+    case 'error':
       return { err: action.payload.error, isLoading: false, data: [{}] }
     default:
       throw new Error(`${action.type} unsupported`)
   }
 }
 
-export default function useEndpoint({ body = {}, method = 'get', headers = {}, params = {}, path = '/' }, defaultOrDevelopmentValues) {
-  if (process.env.NODE_ENV === 'development') return [null, false, defaultOrDevelopmentValues]
-  const connectionString = useConnectionString()
+export default function useEndpoint(
+  { body = {}, method = 'get', headers = {}, params = {}, path = '/' },
+  defaultOrDevelopmentValues,
+) {
+  if (process.env.NODE_ENV === 'development')
+    return [null, false, defaultOrDevelopmentValues]
+  const [state, dispatch] = useReducer(reducer, {
+    ...initState,
+    data: defaultOrDevelopmentValues,
+  })
 
-  const [state, dispatch] = useReducer(reducer, { ...initState, data: defaultOrDevelopmentValues })
+  // Checks where the client should connect to
+  let connectionString = `${
+    process.env.REACT_APP_environment_connection
+  }/api/v2`
+  const { origin } = window.location
+  if (origin === 'https://acm-texas-tech-web-app-2-beta.firebaseapp.com') {
+    connectionString =
+      'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2'
+  } else if (
+    origin === 'https://acm-texas-tech-web-app-2.firebaseapp.com' ||
+    origin.includes('acmttu')
+  ) {
+    connectionString =
+      'https://us-central1-acm-texas-tech-web-app-2.cloudfunctions.net/api/v2'
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -38,7 +60,6 @@ export default function useEndpoint({ body = {}, method = 'get', headers = {}, p
         data: body,
       })
 
-      // Start Fetch
       dispatch({ type: 'start' })
 
       try {

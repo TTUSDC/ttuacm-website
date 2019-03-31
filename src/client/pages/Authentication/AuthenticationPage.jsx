@@ -25,7 +25,8 @@ const styles = (theme) => ({
   root: {
     ...theme.mixins.gutters(),
     display: 'flex',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+      .spacing.unit * 3}px`,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -50,11 +51,7 @@ function AuthenticationPage({ classes = {} }) {
       <div className={classes.main}>
         <Paper className={classes.root} elevation={2}>
           <div className={classes.title}>
-            <Typography
-              variant='h3'
-              component='h3'
-              color='textPrimary'
-            >
+            <Typography variant='h3' component='h3' color='textPrimary'>
               SIGN IN
             </Typography>
           </div>

@@ -29,12 +29,7 @@ function OAuthContainer() {
     },
   }
 
-  return (
-    <StyledFirebaseAuth
-      uiConfig={uiConfig}
-      firebaseAuth={firebase.auth}
-    />
-  )
+  return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth} />
 }
 
 export default OAuthContainer

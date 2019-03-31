@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import MOCK_CALENDAR from '__mocks__/calendar'
 import EventsList from 'components/EventsList'
-import { useConnectionString } from 'context/withConnectionString'
-import * as axios from 'axios'
+import useEndpoint from 'hooks/useEndpoint'
+import moment from 'moment'
 
-let SHOW_MOCK_CALENDAR = true
-if (process.env.NODE_ENV !== 'development') SHOW_MOCK_CALENDAR = false
+const SHOW_MOCK_CALENDAR = process.env.NODE_ENV === 'development'
+
+const today = moment()
 
 const placeHolder = [
   {
-    day: 'Monday',
-    startTime: new Date(),
-    endTime: new Date(),
+    day: today.format('dddd'),
+    startTime: today,
+    endTime: today,
     title: 'No Events Yet! Stay Tuned!',
     location: '',
     description: '',
@@ -20,34 +21,15 @@ const placeHolder = [
 ]
 
 function UpcomingEventCard() {
-  const [events, setEvents] = useState(
-    SHOW_MOCK_CALENDAR ? [MOCK_CALENDAR[0]] : placeHolder,
+  const [err, loading, events] = useEndpoint(
+    {
+      path: '/events',
+    },
+    SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder,
   )
-  const connectionString = useConnectionString()
 
-  // Fetch the events from the API
-  useEffect(() => {
-    // Grabs all the events from the API and maps their times from strings to dates
-    async function fetchEvents() {
-      try {
-        const { data } = await axios.get(`${connectionString}/events`)
-        const allEvents = data.allEvents.map((event) => ({
-          ...event,
-          startTime: new Date(event.startTime),
-          endTime: new Date(event.endTime),
-        }))
-        setEvents([allEvents[0]] || [])
-      } catch (err) {
-        // TODO set up error handling
-        console.error(err)
-        setEvents([])
-      }
-    }
-
-    if (process.env.NODE_ENV !== 'development') {
-      fetchEvents()
-    }
-  }, [])
+  if (err) console.error(err)
+  if (loading) return null
 
   return <EventsList events={events} />
 }

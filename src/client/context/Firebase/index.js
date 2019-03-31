@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Firebase from './firebase'
 
-const withFirebase = React.createContext(null);
+const withFirebase = React.createContext(null)
 
 function FirebaseProvider({ children = [] }) {
   // Used because Firebase may not finish initializing
@@ -14,7 +14,9 @@ function FirebaseProvider({ children = [] }) {
   })
 
   return (
-    <withFirebase.Provider value={{ firebase: new Firebase(), isUserLoggedIn: loggedIn }}>
+    <withFirebase.Provider
+      value={{ firebase: new Firebase(), isUserLoggedIn: loggedIn }}
+    >
       {children}
     </withFirebase.Provider>
   )

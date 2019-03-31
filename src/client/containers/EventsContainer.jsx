@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 import EventsSection from 'pages/Events/EventsSection'
 import MOCK_CALENDAR from '__mocks__/calendar'
 import useEndpoint from 'hooks/useEndpoint'
+import moment from 'moment'
 
 const SHOW_MOCK_CALENDAR = process.env.NODE_ENV === 'development'
 
@@ -18,11 +19,13 @@ const styles = {
   },
 }
 
+const today = moment()
+
 const placeHolder = [
   {
-    day: 'Monday',
-    startTime: new Date(),
-    endTime: new Date(),
+    day: today.format('dddd'),
+    startTime: today,
+    endTime: today,
     title: 'No Events Yet! Stay Tuned!',
     location: '',
     description: '',
@@ -38,9 +41,12 @@ const EventsContainer = ({ classes = {} }) => {
     THIS_MONTH: 'THIS MONTH',
   }
 
-  const [err, loading, events] = useEndpoint({
-    path: '/events',
-  }, SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder)
+  const [err, loading, events] = useEndpoint(
+    {
+      path: '/events',
+    },
+    SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder,
+  )
 
   if (err) console.error(err) // TODO: handle this
 

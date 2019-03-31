@@ -1,6 +1,6 @@
 import firebase from 'firebase'
-import app from 'firebase/app';
-import 'firebase/auth';
+import app from 'firebase/app'
+import 'firebase/auth'
 import firebaseConfig from 'firebase_config.json'
 
 const config = {
@@ -14,10 +14,9 @@ const config = {
 
 class Firebase {
   constructor() {
-    if (firebase.apps.length === 0)
-      app.initializeApp(config);
+    if (firebase.apps.length === 0) app.initializeApp(config)
 
-    this.auth = app.auth();
+    this.auth = app.auth()
 
     /**
      * 0Auth Providers
@@ -31,9 +30,9 @@ class Firebase {
   /**
    * Password reset and update
    */
-  resetPassword = email => this.auth.sendPasswordResetEmail(email)
+  resetPassword = (email) => this.auth.sendPasswordResetEmail(email)
 
-  updatePassword = password => this.auth.currentUser.updatePassword(password)
+  updatePassword = (password) => this.auth.currentUser.updatePassword(password)
 
   /**
    * User info

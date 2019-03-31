@@ -24,10 +24,7 @@ function TeamsList({ teams, classes }) {
       md={4}
       style={{ textAlign: 'left' }}
     >
-      <TeamCard
-        {...team}
-        preventJoin={!isUserLoggedIn}
-      />
+      <TeamCard {...team} preventJoin={!isUserLoggedIn} />
     </Grid>
   ))
 

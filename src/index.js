@@ -1,7 +1,6 @@
 import React from 'react' // eslint-disable-line
 import ReactDOM from 'react-dom'
 import './client/index.css'
-import * as axios from 'axios'
 import 'typeface-roboto'
 
 import { AppContainer, setConfig } from 'react-hot-loader'
@@ -16,21 +15,14 @@ import thunk from 'redux-thunk'
 import rootReducer from 'redux/reducers.js'
 
 import { FirebaseProvider } from 'context/Firebase'
-import { ConnectionStringProvider } from 'context/withConnectionString'
 import { WindowSizeProvider } from 'context/withWindowSize'
 
 import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
-import logger from './utils/logger'
 
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+// So that you can use hooks inside of react-hot-loader
+setConfig({ pureSFC: true })
 
-setConfig({
-  pureSFC: true,
-})
-
-const { NODE_ENV } = process.env
-
-if (NODE_ENV !== 'production') logger.info('In development mode')
+if (process.env.NODE_ENV !== 'production') console.log('In development mode')
 
 const theme = createMuiTheme({
   typography: {
@@ -55,10 +47,10 @@ const store = createStore(
 )
 
 /**
- * Root of Component Tree
- * Router - connected-react-router
- * Theme - Material UI
- * ConnectionString
+ * Context needed for test:
+ * - FirebaseProvider
+ * - MuiThemeProvider
+ * - WindowSizeProvider
  */
 function render() {
   ReactDOM.render(
@@ -66,11 +58,9 @@ function render() {
       <FirebaseProvider>
         <ReduxProvider store={store}>
           <MuiThemeProvider theme={theme}>
-            <ConnectionStringProvider>
-              <WindowSizeProvider>
-                <MaintenanceContainer history={history} />
-              </WindowSizeProvider>
-            </ConnectionStringProvider>
+            <WindowSizeProvider>
+              <MaintenanceContainer history={history} />
+            </WindowSizeProvider>
           </MuiThemeProvider>
         </ReduxProvider>
       </FirebaseProvider>
