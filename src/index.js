@@ -15,9 +15,11 @@ import thunk from 'redux-thunk'
 
 import rootReducer from 'redux/reducers.js'
 
+import { FirebaseProvider } from 'context/Firebase'
 import { ConnectionStringProvider } from 'context/ConnectionStringContext'
 import { WindowSizeProvider } from 'context/withWindowSize'
-import MaintainanceContainer from 'containers/MaintainanceContainer.jsx'
+
+import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
 import logger from './utils/logger'
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
@@ -61,15 +63,17 @@ const store = createStore(
 function render() {
   ReactDOM.render(
     <AppContainer>
-      <Provider store={store}>
-        <MuiThemeProvider theme={theme}>
-          <ConnectionStringProvider>
-            <WindowSizeProvider>
-              <MaintainanceContainer history={history} />
-            </WindowSizeProvider>
-          </ConnectionStringProvider>
-        </MuiThemeProvider>
-      </Provider>
+      <FirebaseProvider>
+        <Provider store={store}>
+          <MuiThemeProvider theme={theme}>
+            <ConnectionStringProvider>
+              <WindowSizeProvider>
+                <MaintenanceContainer history={history} />
+              </WindowSizeProvider>
+            </ConnectionStringProvider>
+          </MuiThemeProvider>
+        </Provider>
+      </FirebaseProvider>
     </AppContainer>,
     document.getElementById('root'),
   )
@@ -79,7 +83,7 @@ render()
 
 if (module.hot) {
   // Reload components
-  module.hot.accept('./client/containers/MaintainanceContainer.jsx', () => {
+  module.hot.accept('./client/containers/MaintenanceContainer.jsx', () => {
     render()
   })
 

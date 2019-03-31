@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
+import { withFirebase } from 'context/Firebase'
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Grid from '@material-ui/core/Grid'
-import firebase from 'firebase'
-import { toggleAuthState } from 'redux/actions/auth-actions'
 import Tech from 'assets/Tech.png'
 import DesktopNavigation from './DesktopNavigation.jsx'
 
@@ -44,12 +43,8 @@ const NavBar = ({
   classes,
   currentPage,
   navigateTo,
-  isLoggedIn,
-  checkIfLoggedIn,
 }) => {
-  useEffect(() => {
-    checkIfLoggedIn()
-  })
+  const firebase = useContext(withFirebase)
 
   const handleNavigation = (nextPage) => () => {
     navigateTo(nextPage)
@@ -57,12 +52,7 @@ const NavBar = ({
 
   const handleLogout = () => {
     // OAuth Sign out
-    if (localStorage.getItem('oauth_user')) firebase.auth().signOut()
-
-    // Local Sign Out
-    // TODO(@miggy) remove this shit lol make it all firebase handled
-    localStorage.removeItem('token')
-    localStorage.removeItem('oauth_user')
+    if (firebase.isUserLoggedIn()) firebase.signOut()
 
     handleNavigation('/')()
   }
@@ -93,7 +83,7 @@ const NavBar = ({
           className={classes.Tabs}
         >
           <DesktopNavigation
-            isLoggedIn={isLoggedIn}
+            isLoggedIn={firebase.isUserLoggedIn()}
             handleLogout={handleLogout}
             handleNavigation={handleNavigation}
             currentPage={currentPage}
@@ -106,23 +96,17 @@ const NavBar = ({
 
 NavBar.propTypes = {
   navigateTo: PropTypes.func.isRequired,
-  checkIfLoggedIn: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
   classes: PropTypes.shape({}),
   currentPage: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = (state) => ({
   currentPage: state.router.location.pathname,
-  isLoggedIn: state.auth.get('isLoggedIn'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => {
     dispatch(push(location))
-  },
-  checkIfLoggedIn: () => {
-    dispatch(toggleAuthState())
   },
 })
 

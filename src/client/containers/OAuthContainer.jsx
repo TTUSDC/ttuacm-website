@@ -1,21 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import firebase from 'firebase'
+import { withFirebase } from 'context/Firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import { toggleAuthState } from 'redux/actions/auth-actions'
 
-function OAuthContainer({ navigateTo, toggleLoggedIn }) {
+function OAuthContainer({ navigateTo }) {
+  const firebase = useContext(withFirebase)
+
   function handleSignInOAuth(user) {
     if (!user) return
 
-    localStorage.setItem('oauth_user', true)
-    toggleLoggedIn()
     navigateTo('/home')
   }
 
-  firebase.auth().onAuthStateChanged(handleSignInOAuth)
+  firebase.auth.onAuthStateChanged(handleSignInOAuth)
 
   // Firebase
   const uiConfig = {
@@ -23,10 +22,18 @@ function OAuthContainer({ navigateTo, toggleLoggedIn }) {
     signInFlow: 'popup',
     /**
      * Supported Authentication:
+     * Email
      * Google
+     * GitHub
+     * Facebook
      * Local
      */
-    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+    signInOptions: [
+      firebase.emailProvider.providerId,
+      firebase.googleProvider.providerId,
+      firebase.githubProvider.providerId,
+      firebase.facebookProvider.providerId,
+    ],
     callbacks: {
       // Avoid redirects after sign-in.
       signInSuccessWithAuthResult: () => false,
@@ -34,21 +41,20 @@ function OAuthContainer({ navigateTo, toggleLoggedIn }) {
   }
 
   return (
-    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+    <StyledFirebaseAuth
+      uiConfig={uiConfig}
+      firebaseAuth={firebase.auth}
+    />
   )
 }
 
 OAuthContainer.propTypes = {
   navigateTo: PropTypes.func.isRequired,
-  toggleLoggedIn: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => {
     dispatch(push(location))
-  },
-  toggleLoggedIn: () => {
-    dispatch(toggleAuthState())
   },
 })
 
