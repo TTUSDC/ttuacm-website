@@ -21,6 +21,7 @@ const styles = (theme) => ({
   ImageContainer: {
     display: 'flex',
     alignItems: 'center',
+    padding: '0px 25px !important',
     [theme.breakpoints.down('sm')]: {
       justifyContent: 'center',
       marginTop: '15px',
