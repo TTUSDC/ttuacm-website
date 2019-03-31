@@ -21,6 +21,7 @@ const styles = (theme) => ({
   ImageContainer: {
     display: 'flex',
     alignItems: 'center',
+    padding: '0px 25px !important',
     [theme.breakpoints.down('sm')]: {
       justifyContent: 'center',
       marginTop: '15px',
@@ -44,7 +45,7 @@ const NavBar = ({
   currentPage,
   navigateTo,
 }) => {
-  const firebase = useContext(withFirebase)
+  const { firebase, isUserLoggedIn } = useContext(withFirebase)
 
   const handleNavigation = (nextPage) => () => {
     navigateTo(nextPage)
@@ -68,7 +69,8 @@ const NavBar = ({
           className={classes.ImageContainer}
           item
           xs={6}
-          onClick={handleNavigation('/')}
+          onClick={handleNavigation('/home')}
+          data-testid='Logo'
         >
           <img
             className={classes.img}
@@ -83,7 +85,7 @@ const NavBar = ({
           className={classes.Tabs}
         >
           <DesktopNavigation
-            isLoggedIn={firebase.isUserLoggedIn()}
+            isLoggedIn={isUserLoggedIn}
             handleLogout={handleLogout}
             handleNavigation={handleNavigation}
             currentPage={currentPage}

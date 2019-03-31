@@ -17,7 +17,7 @@ const styles = (theme) => ({
     alignSelf: 'center',
   },
   Number: {
-    fontSize: '10rem',
+    fontSize: '5rem',
     fontWeight: 'bold',
   },
   Message: {
@@ -40,7 +40,7 @@ const NotFoundPage = ({ classes }) => (
       className={classes.Item}
       item
       xs={12}
-      sm={6}
+      sm={4}
     >
       <Typography className={classes.Number} variant='h1'>
         404
@@ -49,7 +49,7 @@ const NotFoundPage = ({ classes }) => (
     <Grid
       item
       xs={12}
-      sm={3}
+      sm={4}
       className={classes.Item}
     >
       <img src={Cactus} style={{ width: '100%' }} alt='Dead Cactus' />
@@ -57,11 +57,11 @@ const NotFoundPage = ({ classes }) => (
     <Grid
       item
       xs={12}
-      sm={3}
+      sm={4}
       className={classes.Item}
     >
       <Typography className={classes.Message} variant='h5'>
-        Uh Oh! Something happened...
+        Segmentation Fault.
       </Typography>
     </Grid>
   </Grid>

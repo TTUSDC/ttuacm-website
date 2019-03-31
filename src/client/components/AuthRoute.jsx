@@ -4,9 +4,9 @@ import { withFirebase } from 'context/Firebase'
 import { Route, Redirect } from 'react-router'
 
 function AuthRoute({ path, component }) {
-  const firebase = useContext(withFirebase)
+  const { isUserLoggedIn } = useContext(withFirebase)
 
-  if (firebase.isUserLoggedIn()) {
+  if (isUserLoggedIn) {
     return <Redirect to='/' />
   }
   return <Route path={path} component={component} />
@@ -15,7 +15,7 @@ function AuthRoute({ path, component }) {
 
 AuthRoute.propTypes = {
   path: PropTypes.string.isRequired,
-  component: PropTypes.node.isRequired,
+  component: PropTypes.func.isRequired,
 }
 
 export default AuthRoute
