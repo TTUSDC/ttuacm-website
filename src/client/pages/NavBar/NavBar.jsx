@@ -69,6 +69,7 @@ const NavBar = ({
           item
           xs={6}
           onClick={handleNavigation('/home')}
+          data-testid='Logo'
         >
           <img
             className={classes.img}
