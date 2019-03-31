@@ -1,20 +1,9 @@
 import React, { useContext } from 'react'
-import PropTypes from 'prop-types'
 import { withFirebase } from 'context/Firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 
-function OAuthContainer({ navigateTo }) {
-  const firebase = useContext(withFirebase)
-
-  function handleSignInOAuth(user) {
-    if (!user) return
-
-    navigateTo('/home')
-  }
-
-  firebase.auth.onAuthStateChanged(handleSignInOAuth)
+function OAuthContainer() {
+  const { firebase } = useContext(withFirebase)
 
   // Firebase
   const uiConfig = {
@@ -48,17 +37,4 @@ function OAuthContainer({ navigateTo }) {
   )
 }
 
-OAuthContainer.propTypes = {
-  navigateTo: PropTypes.func.isRequired,
-}
-
-const mapDispatchToProps = (dispatch) => ({
-  navigateTo: (location) => {
-    dispatch(push(location))
-  },
-})
-
-export default connect(
-  () => ({}),
-  mapDispatchToProps,
-)(OAuthContainer)
+export default OAuthContainer

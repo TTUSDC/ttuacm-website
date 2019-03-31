@@ -13,7 +13,7 @@ const styles = () => ({
 })
 
 function TeamsList({ teams, classes }) {
-  const firebase = useContext(withFirebase)
+  const { isUserLoggedIn } = useContext(withFirebase)
 
   const teamCards = teams.map((team, i) => (
     <Grid
@@ -26,7 +26,7 @@ function TeamsList({ teams, classes }) {
     >
       <TeamCard
         {...team}
-        preventJoin={!firebase.isUserLoggedIn()}
+        preventJoin={!isUserLoggedIn}
       />
     </Grid>
   ))

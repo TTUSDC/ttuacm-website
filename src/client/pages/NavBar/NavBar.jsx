@@ -44,7 +44,7 @@ const NavBar = ({
   currentPage,
   navigateTo,
 }) => {
-  const firebase = useContext(withFirebase)
+  const { firebase, isUserLoggedIn } = useContext(withFirebase)
 
   const handleNavigation = (nextPage) => () => {
     navigateTo(nextPage)
@@ -68,7 +68,7 @@ const NavBar = ({
           className={classes.ImageContainer}
           item
           xs={6}
-          onClick={handleNavigation('/')}
+          onClick={handleNavigation('/home')}
         >
           <img
             className={classes.img}
@@ -83,7 +83,7 @@ const NavBar = ({
           className={classes.Tabs}
         >
           <DesktopNavigation
-            isLoggedIn={firebase.isUserLoggedIn()}
+            isLoggedIn={isUserLoggedIn}
             handleLogout={handleLogout}
             handleNavigation={handleNavigation}
             currentPage={currentPage}
