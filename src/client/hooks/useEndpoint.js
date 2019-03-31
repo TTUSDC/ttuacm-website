@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useReducer, useEffect } from 'react'
 import { useConnectionString } from 'context/withConnectionString'
 import axios from 'axios'
 
@@ -27,23 +27,30 @@ export default function useEndpoint({ body = {}, method = 'get', headers = {}, p
 
   const [state, dispatch] = useReducer(reducer, { ...initState, data: defaultOrDevelopmentValues })
 
-  const instance = axios.create({
-    baseURL: connectionString,
-    url: path,
-    method: method.toLowerCase(),
-    headers,
-    params,
-    data: body,
-  })
+  useEffect(() => {
+    async function fetchData() {
+      const instance = axios.create({
+        baseURL: connectionString,
+        url: path,
+        method: method.toLowerCase(),
+        headers,
+        params,
+        data: body,
+      })
 
-  // Start Fetch
-  dispatch({ type: 'start' })
+      // Start Fetch
+      dispatch({ type: 'start' })
 
-  instance().then(({ data }) => {
-    dispatch({ type: 'finish', payload: { data } })
-  }).catch((err) => {
-    dispatch({ type: 'error', payload: { error: err } })
-  })
+      try {
+        const { data } = await instance()
+        dispatch({ type: 'finish', payload: { data } })
+      } catch (err) {
+        dispatch({ type: 'error', payload: { error: err } })
+      }
+    }
+
+    fetchData()
+  }, [])
 
   return [state.err, state.isLoading, state.data]
 }
