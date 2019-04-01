@@ -30,7 +30,7 @@ function UpcomingEventCard() {
 
   if (err || loading) return null // TODO handle this later
 
-  return <EventsList events={events.allEvents} />
+  return <EventsList events={[events.allEvents[0]]} />
 }
 
 export default UpcomingEventCard
