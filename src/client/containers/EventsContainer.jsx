@@ -41,14 +41,17 @@ const EventsContainer = ({ classes = {} }) => {
     THIS_MONTH: 'THIS MONTH',
   }
 
-  const [err, loading, events] = useEndpoint(
+  const [err, loading, { allEvents: events }] = useEndpoint(
     {
       path: '/events',
     },
     SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder,
   )
 
-  if (err) console.error(err) // TODO: handle this
+  if (err || loading) {
+    console.error(err)
+    return null
+  }
 
   return (
     <Grid

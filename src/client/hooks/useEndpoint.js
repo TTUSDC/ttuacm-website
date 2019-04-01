@@ -5,14 +5,12 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 
 const initState = {
   err: null,
-  isLoading: false,
+  isLoading: true,
   data: [{}],
 }
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'start':
-      return { err: null, isLoading: true, data: action.payload.default }
     case 'finish':
       return { err: null, isLoading: false, data: action.payload.data }
     case 'error':
@@ -26,17 +24,9 @@ function reducer(state, action) {
   }
 }
 
-export default function useEndpoint(
-  { body = {}, method = 'get', headers = {}, params = {}, path = '/' },
-  defaultOrDevelopmentValues = [{}],
-) {
-  if (process.env.NODE_ENV === 'development')
-    return [null, false, defaultOrDevelopmentValues]
-  const [state, dispatch] = useReducer(reducer, {
-    ...initState,
-    data: defaultOrDevelopmentValues,
-  })
-
+// If you want to make manual calls on the API without using
+// the hook
+export function getEndpoint() {
   // Checks where the client should connect to
   let connectionString = `${
     process.env.REACT_APP_environment_connection
@@ -53,6 +43,22 @@ export default function useEndpoint(
       'https://us-central1-acm-texas-tech-web-app-2.cloudfunctions.net/api/v2'
   }
 
+  return connectionString
+}
+
+export default function useEndpoint(
+  { body = {}, method = 'get', headers = {}, params = {}, path = '/' },
+  defaultOrDevelopmentValues = [{}],
+) {
+  if (process.env.NODE_ENV !== 'development')
+    return [null, false, defaultOrDevelopmentValues]
+  const [state, dispatch] = useReducer(reducer, {
+    ...initState,
+    data: defaultOrDevelopmentValues,
+  })
+
+  const connectionString = getEndpoint()
+
   useEffect(() => {
     async function fetchData() {
       const instance = axios.create({
@@ -64,15 +70,11 @@ export default function useEndpoint(
         data: body,
       })
 
-      dispatch({
-        type: 'start',
-        payload: { default: defaultOrDevelopmentValues },
-      })
-
       try {
         const { data } = await instance()
         dispatch({ type: 'finish', payload: { data } })
       } catch (err) {
+        console.error(err)
         dispatch({ type: 'error', payload: { error: err } })
       }
     }

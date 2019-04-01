@@ -28,10 +28,9 @@ function UpcomingEventCard() {
     SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder,
   )
 
-  if (err) console.error(err)
-  if (loading) return null
+  if (err || loading) return null // TODO handle this later
 
-  return <EventsList events={events} />
+  return <EventsList events={events.allEvents} />
 }
 
 export default UpcomingEventCard
