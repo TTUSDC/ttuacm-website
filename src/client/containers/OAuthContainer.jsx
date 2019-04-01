@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { withFirebase } from 'context/Firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 function OAuthContainer() {
-  const { firebase } = useContext(withFirebase)
+  const { firebase } = withFirebase()
 
   // Firebase
   const uiConfig = {

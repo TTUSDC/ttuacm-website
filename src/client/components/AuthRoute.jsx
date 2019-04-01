@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withFirebase } from 'context/Firebase'
 import { Route, Redirect } from 'react-router'
 
 function AuthRoute({ path, component }) {
-  const { isUserLoggedIn } = useContext(withFirebase)
+  const { isUserLoggedIn } = withFirebase()
 
   if (isUserLoggedIn) {
     return <Redirect to='/' />

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withFirebase } from 'context/Firebase'
 import { push } from 'connected-react-router'
@@ -41,7 +41,7 @@ const styles = (theme) => ({
 })
 
 const NavBar = ({ classes, currentPage, navigateTo }) => {
-  const { firebase, isUserLoggedIn } = useContext(withFirebase)
+  const { firebase, isUserLoggedIn } = withFirebase()
 
   const handleNavigation = (nextPage) => () => {
     navigateTo(nextPage)
