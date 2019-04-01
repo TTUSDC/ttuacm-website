@@ -124,9 +124,7 @@
       "yarn lint"
     ],
     "*.{js,jsx,json,css,md}": [
-      "yarn fmt"
-    ],
-    "*.{js,jsx,json,css,md}": [
+      "yarn fmt",
       "git add"
     ]
   },

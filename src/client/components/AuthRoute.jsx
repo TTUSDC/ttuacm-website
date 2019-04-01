@@ -12,7 +12,6 @@ function AuthRoute({ path, component }) {
   return <Route path={path} component={component} />
 }
 
-
 AuthRoute.propTypes = {
   path: PropTypes.string.isRequired,
   component: PropTypes.func.isRequired,

@@ -8,10 +8,10 @@ import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import Collapse from '@material-ui/core/Collapse'
 import Typography from '@material-ui/core/Typography'
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import EmailIcon from '@material-ui/icons/Email';
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import EmailIcon from '@material-ui/icons/Email'
 import IconButton from '@material-ui/core/IconButton'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const styles = (theme) => ({
   Image: {
@@ -30,7 +30,17 @@ const styles = (theme) => ({
   },
 })
 
-function TeamCard({ preventJoin, name, leader, description, image, email, day, time, classes }) {
+function TeamCard({
+  preventJoin,
+  name,
+  leader,
+  description,
+  image,
+  email,
+  day,
+  time,
+  classes,
+}) {
   const [open, setOpen] = useState(false)
 
   const handleEmail = () => {
@@ -54,28 +64,13 @@ function TeamCard({ preventJoin, name, leader, description, image, email, day, t
 
   return (
     <Card>
-      <CardMedia
-        image={image}
-        title={name}
-        className={classes.Image}
-      />
+      <CardMedia image={image} title={name} className={classes.Image} />
       <CardContent>
-        <Typography
-          variant='h5'
-          style={{ fontWeight: 'bold' }}
-          gutterBottom
-        >
+        <Typography variant='h5' style={{ fontWeight: 'bold' }} gutterBottom>
           {name}
         </Typography>
-        <Typography
-          variant='body1'
-        >
-          Led by {leader}
-        </Typography>
-        <Typography
-          variant='body1'
-          gutterBottom
-        >
+        <Typography variant='body1'>Led by {leader}</Typography>
+        <Typography variant='body1' gutterBottom>
           {fmtDays(day)} @ {time}
         </Typography>
       </CardContent>
@@ -87,10 +82,7 @@ function TeamCard({ preventJoin, name, leader, description, image, email, day, t
         >
           <FavoriteIcon />
         </IconButton>
-        <IconButton
-          aria-label='Email'
-          onClick={handleEmail}
-        >
+        <IconButton aria-label='Email' onClick={handleEmail}>
           <EmailIcon />
         </IconButton>
         <IconButton
@@ -106,22 +98,24 @@ function TeamCard({ preventJoin, name, leader, description, image, email, day, t
           target='_blank'
           rel='noopener noreferrer'
           hidden
-          href={`mailto:${email}?Subject=${encodeURIComponent(`Hi! I'm interested in ${name}`)}`}
-        >Send Mail
+          href={`mailto:${email}?Subject=${encodeURIComponent(
+            `Hi! I'm interested in ${name}`,
+          )}`}
+        >
+          Send Mail
         </a>
       </CardActions>
       <Collapse in={open} timeout='auto' unmountOnExit>
-        { preventJoin ? (
+        {preventJoin ? (
           <CardContent>
             <Typography
               variant='h6'
               style={{ textAlign: 'center', fontWeight: 'bold' }}
             >
-            Please login to sign up for classes
+              Please login to sign up for classes
             </Typography>
           </CardContent>
-        ) : null
-        }
+        ) : null}
         <CardContent>
           <Typography paragraph>{description}</Typography>
         </CardContent>

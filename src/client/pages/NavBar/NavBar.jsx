@@ -40,11 +40,7 @@ const styles = (theme) => ({
   },
 })
 
-const NavBar = ({
-  classes,
-  currentPage,
-  navigateTo,
-}) => {
+const NavBar = ({ classes, currentPage, navigateTo }) => {
   const { firebase, isUserLoggedIn } = useContext(withFirebase)
 
   const handleNavigation = (nextPage) => () => {
@@ -60,11 +56,7 @@ const NavBar = ({
 
   return (
     <AppBar position='static' className={classes.barDefaults}>
-      <Grid
-        container
-        spacing={16}
-        className={classes.Container}
-      >
+      <Grid container spacing={16} className={classes.Container}>
         <Grid
           className={classes.ImageContainer}
           item
@@ -72,18 +64,10 @@ const NavBar = ({
           onClick={handleNavigation('/home')}
           data-testid='Logo'
         >
-          <img
-            className={classes.img}
-            alt='tech building'
-            src={Tech}
-          />
+          <img className={classes.img} alt='tech building' src={Tech} />
         </Grid>
         {/* Desktop Navigation */}
-        <Grid
-          item
-          xs='auto'
-          className={classes.Tabs}
-        >
+        <Grid item xs='auto' className={classes.Tabs}>
           <DesktopNavigation
             isLoggedIn={isUserLoggedIn}
             handleLogout={handleLogout}

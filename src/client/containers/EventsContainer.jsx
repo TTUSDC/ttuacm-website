@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 import EventsSection from 'pages/Events/EventsSection'
-import { ConnectionString } from 'context/ConnectionStringContext'
-import * as axios from 'axios'
 import MOCK_CALENDAR from '__mocks__/calendar'
+import useEndpoint from 'hooks/useEndpoint'
+import moment from 'moment'
 
 const SHOW_MOCK_CALENDAR = process.env.NODE_ENV === 'development'
 
@@ -19,11 +19,13 @@ const styles = {
   },
 }
 
+const today = moment()
+
 const placeHolder = [
   {
-    day: 'Monday',
-    startTime: new Date(),
-    endTime: new Date(),
+    day: today.format('dddd'),
+    startTime: today,
+    endTime: today,
     title: 'No Events Yet! Stay Tuned!',
     location: '',
     description: '',
@@ -39,36 +41,14 @@ const EventsContainer = ({ classes = {} }) => {
     THIS_MONTH: 'THIS MONTH',
   }
 
-  const [events, setEvents] = useState(
+  const [err, loading, events] = useEndpoint(
+    {
+      path: '/events',
+    },
     SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder,
   )
-  const [loading, setLoading] = useState(false)
-  const connectionString = useContext(ConnectionString)
 
-  if (process.env.NODE_ENV !== 'development') {
-    // Fetch the events from the API
-    useEffect(() => {
-      async function fetchEvents() {
-        // Grabs all the events from the API and maps their times from strings to dates
-        try {
-          setLoading(true)
-          const { data } = await axios.get(`${connectionString}/events`)
-          const allEvents = data.allEvents.map((event) => ({
-            ...event,
-            startTime: new Date(event.startTime),
-            endTime: new Date(event.endTime),
-          }))
-          setEvents(allEvents)
-        } catch (err) {
-          console.error(err)
-          setEvents([])
-        }
-        setLoading(false)
-      }
-
-      fetchEvents()
-    }, [])
-  }
+  if (err) console.error(err) // TODO: handle this
 
   return (
     <Grid

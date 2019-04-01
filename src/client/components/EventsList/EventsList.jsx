@@ -9,7 +9,9 @@ export default function EventsList({ events, time }) {
       <EventCard
         key='placeholder'
         month={moment().format('MMMM')}
-        day={moment().add(1, 'days').format('D')}
+        day={moment()
+          .add(1, 'days')
+          .format('D')}
         weekday={moment().format('dddd')}
         name='No events tomorrow!'
       />

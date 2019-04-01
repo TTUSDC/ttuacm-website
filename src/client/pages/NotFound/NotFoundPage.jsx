@@ -31,35 +31,16 @@ const styles = (theme) => ({
 })
 
 const NotFoundPage = ({ classes }) => (
-  <Grid
-    container
-    className={classes.Root}
-    spacing={24}
-  >
-    <Grid
-      className={classes.Item}
-      item
-      xs={12}
-      sm={4}
-    >
+  <Grid container className={classes.Root} spacing={24}>
+    <Grid className={classes.Item} item xs={12} sm={4}>
       <Typography className={classes.Number} variant='h1'>
         404
       </Typography>
     </Grid>
-    <Grid
-      item
-      xs={12}
-      sm={4}
-      className={classes.Item}
-    >
+    <Grid item xs={12} sm={4} className={classes.Item}>
       <img src={Cactus} style={{ width: '100%' }} alt='Dead Cactus' />
     </Grid>
-    <Grid
-      item
-      xs={12}
-      sm={4}
-      className={classes.Item}
-    >
+    <Grid item xs={12} sm={4} className={classes.Item}>
       <Typography className={classes.Message} variant='h5'>
         Segmentation Fault.
       </Typography>

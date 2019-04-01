@@ -1,4 +1,4 @@
-const Debug = require('debug')
+import Debug from 'debug'
 
 /*
  * Logger for browser with ms diffs
@@ -17,4 +17,4 @@ const logger = {
   error: Debug('error'),
 }
 
-module.exports = logger
+export default logger

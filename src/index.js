@@ -1,12 +1,11 @@
 import React from 'react' // eslint-disable-line
 import ReactDOM from 'react-dom'
 import './client/index.css'
-import * as axios from 'axios'
 import 'typeface-roboto'
 
 import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import { Provider } from 'react-redux'
+import { Provider as ReduxProvider } from 'react-redux'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { createBrowserHistory } from 'history'
 import { createStore, applyMiddleware } from 'redux'
@@ -16,21 +15,14 @@ import thunk from 'redux-thunk'
 import rootReducer from 'redux/reducers.js'
 
 import { FirebaseProvider } from 'context/Firebase'
-import { ConnectionStringProvider } from 'context/ConnectionStringContext'
 import { WindowSizeProvider } from 'context/withWindowSize'
 
 import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
-import logger from './utils/logger'
 
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+// So that you can use hooks inside of react-hot-loader
+setConfig({ pureSFC: true })
 
-setConfig({
-  pureSFC: true,
-})
-
-const { NODE_ENV } = process.env
-
-if (NODE_ENV !== 'production') logger.info('In development mode')
+if (process.env.NODE_ENV !== 'production') console.log('In development mode')
 
 const theme = createMuiTheme({
   typography: {
@@ -55,24 +47,22 @@ const store = createStore(
 )
 
 /**
- * Root of Component Tree
- * Router - connected-react-router
- * Theme - Material UI
- * ConnectionString
+ * Context needed for test:
+ * - FirebaseProvider
+ * - MuiThemeProvider
+ * - WindowSizeProvider
  */
 function render() {
   ReactDOM.render(
     <AppContainer>
       <FirebaseProvider>
-        <Provider store={store}>
+        <ReduxProvider store={store}>
           <MuiThemeProvider theme={theme}>
-            <ConnectionStringProvider>
-              <WindowSizeProvider>
-                <MaintenanceContainer history={history} />
-              </WindowSizeProvider>
-            </ConnectionStringProvider>
+            <WindowSizeProvider>
+              <MaintenanceContainer history={history} />
+            </WindowSizeProvider>
           </MuiThemeProvider>
-        </Provider>
+        </ReduxProvider>
       </FirebaseProvider>
     </AppContainer>,
     document.getElementById('root'),

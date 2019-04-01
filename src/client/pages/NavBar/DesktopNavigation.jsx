@@ -11,7 +11,6 @@ const routes = [
   ['/teams', 'Teams'],
 ]
 
-
 const DesktopNavigation = ({
   classes = {},
   handleNavigation,
@@ -23,10 +22,7 @@ const DesktopNavigation = ({
   }
 
   return (
-    <Tabs
-      variant='fullWidth'
-      classes={{ indicator: classes.tabsIndicator }}
-    >
+    <Tabs variant='fullWidth' classes={{ indicator: classes.tabsIndicator }}>
       {routes.map((route, key) => (
         <Tab
           disableRipple
