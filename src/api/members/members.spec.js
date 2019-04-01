@@ -9,6 +9,7 @@ test.mockConfig({
   connections: {
     protocol: 'protocol',
     host: 'host',
+    db: 'mongodb://localhost:27017/testing',
   },
   email: {
     email_username: 'user',
@@ -76,6 +77,29 @@ describe('Members Unit Tests', () => {
     }
   })
 
+  it('[create-members] should not save duplicate members', async () => {
+    try {
+      await request(app)
+        .post('/v2/members')
+        .send({ email: 'email' })
+        .expect(201)
+
+      await request(app)
+        .post('/v2/members')
+        .send({ email: 'email' })
+
+      await request(app)
+        .post('/v2/members')
+        .send({ email: 'email' })
+
+      const { body } = await request(app).get('/v2/members')
+
+      expect(body.members.length).to.equal(1)
+    } catch (err) {
+      throw err
+    }
+  })
+
   it('[get-members] should be able to get the members in the database that were inserted', async () => {
     try {
       await request(app)
@@ -88,6 +112,30 @@ describe('Members Unit Tests', () => {
 
       expect(Array.isArray(body.members)).to.equal(true)
       expect(body.members[0].email).to.equal('email')
+    } catch (err) {
+      throw err
+    }
+  })
+
+  it('[get-members-by-email] should be able to get the members in the database that were inserted by email', async () => {
+    try {
+      const { body: emptyBody } = await request(app)
+        .get('/v2/members/email')
+        .send({ email: 'email' })
+        .expect(200)
+
+      expect(emptyBody.member).to.equal(null)
+
+      await request(app)
+        .post('/v2/members')
+        .send({ email: 'email' })
+
+      const { body: existingBody } = await request(app)
+        .get('/v2/members/email')
+        .send({ email: 'email' })
+        .expect(200)
+
+      expect(existingBody.member.email).to.equal('email')
     } catch (err) {
       throw err
     }

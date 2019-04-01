@@ -4,8 +4,18 @@ import EventCard from './EventCard'
 
 // Returns a list of event cards
 export default function EventsList({ events, time }) {
-  if (!events.length) {
-    return []
+  if (!events.length && time === 'TOMORROW') {
+    return (
+      <EventCard
+        key='placeholder'
+        month={moment().format('MMMM')}
+        day={moment()
+          .add(1, 'days')
+          .format('D')}
+        weekday={moment().format('dddd')}
+        name='No events tomorrow!'
+      />
+    )
   }
 
   const eventsCards = events.map(

@@ -13,7 +13,17 @@ class MembersController {
    */
   async createMember(email) {
     try {
+      const user = await this.model.getMemberByEmail(email)
+      if (user) return null
       return await this.model.createMember(email)
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getMemberByEmail(email) {
+    try {
+      return await this.model.getMemberByEmail(email)
     } catch (err) {
       throw err
     }

@@ -1,21 +1,18 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import firebase from 'firebase'
+import { withFirebase } from 'context/Firebase'
+import { getEndpoint } from 'hooks/useEndpoint'
+import axios from 'axios'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
-import { toggleAuthState } from 'redux/actions/auth-actions'
 
-function OAuthContainer({ navigateTo, toggleLoggedIn }) {
-  function handleSignInOAuth(user) {
-    if (!user) return
+function createUserIfDoesNotExist(user) {
+  if (!user.email || !user.emailVerified) return
+  axios
+    .post(`${getEndpoint()}/members`, { email: user.email })
+    .catch((err) => console.error(err))
+}
 
-    localStorage.setItem('oauth_user', true)
-    toggleLoggedIn()
-    navigateTo('/home')
-  }
-
-  firebase.auth().onAuthStateChanged(handleSignInOAuth)
+function OAuthContainer() {
+  const { firebase } = withFirebase()
 
   // Firebase
   const uiConfig = {
@@ -23,36 +20,28 @@ function OAuthContainer({ navigateTo, toggleLoggedIn }) {
     signInFlow: 'popup',
     /**
      * Supported Authentication:
+     * Email
      * Google
+     * GitHub
+     * Facebook
      * Local
      */
-    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+    signInOptions: [
+      firebase.emailProvider.providerId,
+      firebase.googleProvider.providerId,
+      firebase.githubProvider.providerId,
+      firebase.facebookProvider.providerId,
+    ],
     callbacks: {
       // Avoid redirects after sign-in.
-      signInSuccessWithAuthResult: () => false,
+      signInSuccessWithAuthResult: (data) => {
+        createUserIfDoesNotExist(data.user)
+        return false
+      },
     },
   }
 
-  return (
-    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
-  )
+  return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth} />
 }
 
-OAuthContainer.propTypes = {
-  navigateTo: PropTypes.func.isRequired,
-  toggleLoggedIn: PropTypes.func.isRequired,
-}
-
-const mapDispatchToProps = (dispatch) => ({
-  navigateTo: (location) => {
-    dispatch(push(location))
-  },
-  toggleLoggedIn: () => {
-    dispatch(toggleAuthState())
-  },
-})
-
-export default connect(
-  () => ({}),
-  mapDispatchToProps,
-)(OAuthContainer)
+export default OAuthContainer
