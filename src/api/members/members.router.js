@@ -35,9 +35,11 @@ router.get('/test', (req, res) => {
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
  *     members : [
- *        "email": String,
- *        "hasPaidDues": Boolean,
- *        "groups": String[]
+ *       {
+ *          "email": String,
+ *          "hasPaidDues": Boolean,
+ *          "groups": String[]
+ *       }
  *     ]
  *
  * @apiErrorExample Error-Response:
@@ -47,6 +49,37 @@ router.get('/', async (req, res) => {
   try {
     const members = await new Controller().getMembers()
     res.status(201).json({ members })
+  } catch (err) {
+    console.error(err)
+    res.status(err.code || 500).json({ err })
+  }
+})
+
+/**
+ * @api {get} /api/v2/members Get Member by email
+ * @apiDescription
+ * Gets the member of given email in database
+ *
+ * @apiVersion 0.2.0
+ *
+ * @apiGroup Members
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     members : {
+ *          "email": String,
+ *          "hasPaidDues": Boolean,
+ *          "groups": String[]
+ *    }
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 err.code OK
+ */
+router.get('/email', async (req, res) => {
+  try {
+    if (!req.body.email) throw ErrorMessages.MissingRequestBody()
+    const member = await new Controller().getMemberByEmail(req.body.email)
+    res.status(200).json({ member })
   } catch (err) {
     console.error(err)
     res.status(err.code || 500).json({ err })

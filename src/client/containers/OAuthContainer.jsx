@@ -1,9 +1,18 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { withFirebase } from 'context/Firebase'
+import { getEndpoint } from 'hooks/useEndpoint'
+import axios from 'axios'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
+function createUserIfDoesNotExist(user) {
+  if (!user.email || !user.emailVerified) return
+  axios
+    .post(`${getEndpoint()}/members`, { email: user.email })
+    .catch((err) => console.error(err))
+}
+
 function OAuthContainer() {
-  const { firebase } = useContext(withFirebase)
+  const { firebase } = withFirebase()
 
   // Firebase
   const uiConfig = {
@@ -25,7 +34,10 @@ function OAuthContainer() {
     ],
     callbacks: {
       // Avoid redirects after sign-in.
-      signInSuccessWithAuthResult: () => false,
+      signInSuccessWithAuthResult: (data) => {
+        createUserIfDoesNotExist(data.user)
+        return false
+      },
     },
   }
 

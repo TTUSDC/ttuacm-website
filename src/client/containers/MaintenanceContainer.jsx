@@ -7,8 +7,6 @@ import Main from 'Main'
 const devEnv = {
   env: 'development',
   maintainance: false,
-  protocol: 'http',
-  host: '<firebase functions url goes here>',
 }
 
 function MaintenanceContainer({ history }) {
@@ -19,9 +17,10 @@ function MaintenanceContainer({ history }) {
     devEnv,
   )
 
-  if (loading) return null
-
-  if (err) return <MaintenanceScreen />
+  if (err || loading) {
+    console.error(err)
+    return null
+  }
 
   // Changes this is you want to see the MaintenanceScreen
   if (process.env.NODE_ENV !== 'production') return <Main history={history} />

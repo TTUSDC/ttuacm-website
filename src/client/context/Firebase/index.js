@@ -1,8 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import Firebase from './firebase'
 
-const withFirebase = React.createContext(null)
+const FirebaseContext = React.createContext(null)
+
+function withFirebase() {
+  const firebase = useContext(FirebaseContext)
+  if (!firebase)
+    throw new Error('Cannot use `withFirebase` outside of Provider')
+
+  return firebase
+}
 
 function FirebaseProvider({ children = [] }) {
   // Used because Firebase may not finish initializing
@@ -14,11 +22,9 @@ function FirebaseProvider({ children = [] }) {
   })
 
   return (
-    <withFirebase.Provider
-      value={{ firebase: new Firebase(), isUserLoggedIn: loggedIn }}
-    >
+    <FirebaseContext.Provider value={{ firebase, isUserLoggedIn: loggedIn }}>
       {children}
-    </withFirebase.Provider>
+    </FirebaseContext.Provider>
   )
 }
 
