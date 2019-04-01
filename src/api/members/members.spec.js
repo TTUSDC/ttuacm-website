@@ -9,6 +9,7 @@ test.mockConfig({
   connections: {
     protocol: 'protocol',
     host: 'host',
+    db: 'mongodb://localhost:27017/testing',
   },
   email: {
     email_username: 'user',
