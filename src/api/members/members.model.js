@@ -46,7 +46,7 @@ class MembersModel {
    */
   async getMemberByEmail(email) {
     try {
-      return await this.DB.find({ email }).exec()
+      return await this.DB.findOne({ email }).exec()
     } catch (err) {
       throw err
     }
