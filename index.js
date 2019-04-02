@@ -12,7 +12,6 @@ adminConfig.credential = admin.credential.cert(serviceAccount)
 admin.initializeApp(adminConfig)
 
 const membersApp = require('./src/api/members/members.router')
-const emailApp = require('./src/api/email/email.router')
 const eventsApp = require('./src/api/events/events.router')
 const environmentService = require('./src/api/environment/index')
 
@@ -25,7 +24,6 @@ api.use(bp.json())
 api.use(bp.urlencoded({ extended: false }))
 
 api.use('/v2/members', connectDB, membersApp)
-api.use('/v2/email', emailApp)
 api.use('/v2/events', eventsApp)
 api.use('/v2/environment', environmentService)
 
