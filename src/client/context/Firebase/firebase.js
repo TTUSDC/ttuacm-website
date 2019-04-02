@@ -32,16 +32,32 @@ class Firebase {
    */
   resetPassword = (email) => this.auth.sendPasswordResetEmail(email)
 
-  updatePassword = (password) => this.auth.currentUser.updatePassword(password)
+  updatePassword(password) {
+    if (this.auth.currentUser) {
+      this.auth.currentUser.updatePassword(password)
+    } else {
+      throw new Error(
+        'You just tried to update the password of a user that is not logged in',
+      )
+    }
+  }
 
   /**
    * User info
    */
   isUserLoggedIn = () => this.auth.currentUser !== null
 
-  getUserEmail = () => this.auth.currentUser.email
+  getUserEmail() {
+    if (this.auth.currentUser) return this.auth.currentUser.email
 
-  getUserName = () => this.auth.currentUser.displayName
+    return null
+  }
+
+  getUserName() {
+    if (this.auth.currentUser) return this.auth.currentUser.displayName
+
+    return null
+  }
 
   /**
    * Sign out
