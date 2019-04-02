@@ -45,7 +45,9 @@ const EventsContainer = ({ classes = {} }) => {
     {
       path: '/events',
     },
-    SHOW_MOCK_CALENDAR ? MOCK_CALENDAR : placeHolder,
+    SHOW_MOCK_CALENDAR
+      ? { allEvents: MOCK_CALENDAR }
+      : { allEvents: placeHolder },
   )
 
   if (err || loading) {
