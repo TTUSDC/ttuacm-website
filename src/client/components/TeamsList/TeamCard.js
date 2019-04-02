@@ -16,6 +16,7 @@ import IconButton from '@material-ui/core/IconButton'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { withFirebase } from 'context/Firebase'
 import { getEndpoint } from 'hooks/useEndpoint'
+import { useSnackbar } from 'notistack'
 
 const styles = (theme) => ({
   Image: {
@@ -46,6 +47,7 @@ function TeamCard({
   classes,
 }) {
   const [open, setOpen] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
   const { firebase } = withFirebase()
 
   function handleEmail() {
@@ -53,26 +55,44 @@ function TeamCard({
   }
 
   async function unsubscribe() {
+    if (process.env.NODE_ENV !== 'production') {
+      enqueueSnackbar(`Unsubscribing from ${name}`, { variant: 'success' })
+      return console.log(
+        `Unsubscribing ${firebase.getUserEmail()} from ${name}`,
+      )
+    }
     try {
       await axios.put(`${getEndpoint()}/members/unsubscribe`, {
         email: firebase.getUserEmail(),
         groups: [name],
       })
-      console.log('success')
+      enqueueSnackbar(`Unsubscribing from ${name}`, { variant: 'success' })
+      return null
     } catch (err) {
-      console.error(err)
+      enqueueSnackbar('Error Occured. Please try again later', {
+        variant: 'error',
+      })
+      return console.error(err)
     }
   }
 
   async function subscribe() {
+    if (process.env.NODE_ENV !== 'production') {
+      enqueueSnackbar(`Subscribing to ${name}`, { variant: 'success' })
+      return console.log(`subscribing ${firebase.getUserEmail()} to ${name}`)
+    }
     try {
       await axios.put(`${getEndpoint()}/members/subscribe`, {
         email: firebase.getUserEmail(),
         groups: [name],
       })
-      console.log('success')
+      enqueueSnackbar(`Subscribing to ${name}`, { variant: 'success' })
+      return console.log('success')
     } catch (err) {
-      console.error(err)
+      enqueueSnackbar('Error Occured. Please try again later', {
+        variant: 'error',
+      })
+      return console.error(err)
     }
   }
 
