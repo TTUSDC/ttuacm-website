@@ -79,20 +79,10 @@ class MembersModel {
    */
   async unsubscribe(email, groups) {
     try {
-      const delGroups = new Set(groups)
-      const query = await this.DB.findOne({ email }).exec()
-      const newGroups = []
-
-      for (const curr of query.groups.toObject()) {
-        if (!delGroups.has(curr[0])) {
-          newGroups.push(curr[0])
-        }
-      }
-
       return await this.DB.findOneAndUpdate(
         { email },
-        { groups: newGroups },
-        { new: true },
+        { $pull: { groups: { $in: groups } } },
+        { new: true, safe: true, upsert: true },
       ).exec()
     } catch (err) {
       throw err

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
 import { withStyles } from '@material-ui/core/styles'
@@ -10,8 +11,11 @@ import Collapse from '@material-ui/core/Collapse'
 import Typography from '@material-ui/core/Typography'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import EmailIcon from '@material-ui/icons/Email'
+import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { withFirebase } from 'context/Firebase'
+import { getEndpoint } from 'hooks/useEndpoint'
 
 const styles = (theme) => ({
   Image: {
@@ -32,8 +36,8 @@ const styles = (theme) => ({
 
 function TeamCard({
   preventJoin,
-  name,
-  leader,
+  name, // Name of the group
+  leader, // Name of the leader
   description,
   image,
   email,
@@ -42,13 +46,38 @@ function TeamCard({
   classes,
 }) {
   const [open, setOpen] = useState(false)
+  const { firebase } = withFirebase()
 
-  const handleEmail = () => {
+  function handleEmail() {
     document.getElementById('send-email-tag').click()
   }
 
+  async function unsubscribe() {
+    try {
+      await axios.put(`${getEndpoint()}/members/unsubscribe`, {
+        email: firebase.getUserEmail(),
+        groups: [name],
+      })
+      console.log('success')
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function subscribe() {
+    try {
+      await axios.put(`${getEndpoint()}/members/subscribe`, {
+        email: firebase.getUserEmail(),
+        groups: [name],
+      })
+      console.log('success')
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   // Turns the array of days to a comma separated string
-  const fmtDays = (days) => {
+  function fmtDays(days) {
     if (days.length < 1) {
       throw Error('days.length must be greater than 0')
     }
@@ -78,9 +107,16 @@ function TeamCard({
         <IconButton
           aria-label='Add to groups'
           disabled={preventJoin}
-          onClick={() => console.log('adding group to the user')}
+          onClick={subscribe}
         >
           <FavoriteIcon />
+        </IconButton>
+        <IconButton
+          aria-label='Remove from groups'
+          disabled={preventJoin}
+          onClick={unsubscribe}
+        >
+          <CloseIcon />
         </IconButton>
         <IconButton aria-label='Email' onClick={handleEmail}>
           <EmailIcon />
