@@ -1,6 +1,7 @@
 import React from 'react'
 import { withFirebase } from 'context/Firebase'
 import { getEndpoint } from 'hooks/useEndpoint'
+import { useSnackbar } from 'notistack'
 import axios from 'axios'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
@@ -12,6 +13,7 @@ function createUserIfDoesNotExist(user) {
 }
 
 function OAuthContainer() {
+  const { enqueueSnackbar } = useSnackbar()
   const { firebase } = withFirebase()
 
   // Firebase
@@ -36,6 +38,7 @@ function OAuthContainer() {
       // Avoid redirects after sign-in.
       signInSuccessWithAuthResult: (data) => {
         createUserIfDoesNotExist(data.user)
+        enqueueSnackbar(`Welcome ${data.user.displayName}!`)
         return false
       },
     },

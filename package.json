@@ -40,6 +40,7 @@
     "immutable": "4.0.0-rc.12",
     "moment": "2.23.0",
     "mongoose": "5.2.8",
+    "notistack": "0.6.1",
     "react": "16.8.3",
     "react-app-rewire-hot-loader": "1.0.1",
     "react-app-rewired": "1.5.2",

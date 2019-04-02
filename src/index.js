@@ -16,6 +16,7 @@ import rootReducer from 'redux/reducers.js'
 
 import { FirebaseProvider } from 'context/Firebase'
 import { WindowSizeProvider } from 'context/withWindowSize'
+import { SnackbarProvider } from 'notistack'
 
 import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
 
@@ -55,15 +56,25 @@ const store = createStore(
 function render() {
   ReactDOM.render(
     <AppContainer>
-      <FirebaseProvider>
-        <ReduxProvider store={store}>
-          <MuiThemeProvider theme={theme}>
-            <WindowSizeProvider>
-              <MaintenanceContainer history={history} />
-            </WindowSizeProvider>
-          </MuiThemeProvider>
-        </ReduxProvider>
-      </FirebaseProvider>
+      <SnackbarProvider
+        maxSnack={3}
+        preventDuplicate
+        persist={false}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <FirebaseProvider>
+          <ReduxProvider store={store}>
+            <MuiThemeProvider theme={theme}>
+              <WindowSizeProvider>
+                <MaintenanceContainer history={history} />
+              </WindowSizeProvider>
+            </MuiThemeProvider>
+          </ReduxProvider>
+        </FirebaseProvider>
+      </SnackbarProvider>
     </AppContainer>,
     document.getElementById('root'),
   )
