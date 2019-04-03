@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MaintenanceScreen from 'pages/Maintenance/MaintenanceScreen.jsx'
 import useEndpoint from 'hooks/useEndpoint'
+import { useSnackbar } from 'notistack'
 import Main from 'Main'
 
 const devEnv = {
@@ -10,6 +11,7 @@ const devEnv = {
 }
 
 function MaintenanceContainer({ history }) {
+  const { enqueueSnackbar } = useSnackbar()
   const [err, loading, env] = useEndpoint(
     {
       path: '/environment',
@@ -17,9 +19,12 @@ function MaintenanceContainer({ history }) {
     devEnv,
   )
 
-  if (err || loading) {
+  if (loading) return <MaintenanceScreen />
+
+  if (err) {
     console.error(err)
-    return null
+    enqueueSnackbar('Something went wrong...', { variant: 'error' })
+    return <MaintenanceScreen />
   }
 
   // Changes this is you want to see the MaintenanceScreen
