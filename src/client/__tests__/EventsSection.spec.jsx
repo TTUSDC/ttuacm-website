@@ -3,7 +3,7 @@ import { render, getByText } from 'react-testing-library'
 import { expect } from 'chai'
 import moment from 'moment'
 import sinon from 'sinon'
-import EventsSection, { filterEvents } from './EventsSection'
+import EventsSection, { filterEvents } from 'pages/Events/EventsSection'
 
 sinon.useFakeTimers(
   moment([2019, 2, 26])
