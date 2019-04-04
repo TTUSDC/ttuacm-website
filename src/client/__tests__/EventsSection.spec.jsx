@@ -1,9 +1,10 @@
 import React from 'react'
-import { render, getByText } from 'react-testing-library'
+import { render, getByText, cleanup } from 'react-testing-library'
 import { expect } from 'chai'
 import moment from 'moment'
 import sinon from 'sinon'
 import EventsSection, { filterEvents } from 'pages/Events/EventsSection'
+import AppContext from './utils/AppContext'
 
 sinon.useFakeTimers(
   moment([2019, 2, 26])
@@ -28,6 +29,8 @@ for (let i = 1; i <= 8; i += 1) {
 
   today.add(1, 'days')
 }
+
+afterEach(cleanup)
 
 /**
  * Every event has a startTime that is already a JS Date object
@@ -57,6 +60,13 @@ describe('Events Section Component', () => {
   })
 
   describe('Component', () => {
+    test('should be able to render without errors inside the context', () => {
+      const { container } = render(
+        <EventsSection time='TODAY' events={CALENDAR} />,
+        { wrapper: AppContext },
+      )
+      expect(container).to.exist
+    })
     test('should display the only event for `TODAY`', () => {
       const { container } = render(
         <EventsSection time='TODAY' events={CALENDAR} />,

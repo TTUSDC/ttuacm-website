@@ -37,7 +37,11 @@ function OAuthContainer() {
     callbacks: {
       // Avoid redirects after sign-in.
       signInSuccessWithAuthResult: (data) => {
-        createUserIfDoesNotExist(data.user)
+        if (process.env.NODE_ENV === 'development') {
+          console.log('In Development. Skipping database call')
+        } else {
+          createUserIfDoesNotExist(data.user)
+        }
         enqueueSnackbar(`Welcome ${data.user.displayName}!`)
         return false
       },
