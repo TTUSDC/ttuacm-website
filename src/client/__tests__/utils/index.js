@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { render } from 'react-testing-library'
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { Provider as ReduxProvider } from 'react-redux'
@@ -18,7 +19,7 @@ const theme = createMuiTheme({
   },
 })
 
-export default function AppContext({ children = [] }) {
+function MockProviders({ children }) {
   return (
     <SnackbarProvider
       maxSnack={3}
@@ -39,6 +40,10 @@ export default function AppContext({ children = [] }) {
   )
 }
 
-AppContext.propTypes = {
-  children: PropTypes.element,
+export function renderComponent(children) {
+  return render(children, { wrapper: MockFirebaseProvider })
+}
+
+MockProviders.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.func),
 }

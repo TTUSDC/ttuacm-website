@@ -37,6 +37,6 @@ export function MockFirebaseProvider({ children = [], isLoggedIn = true }) {
 }
 
 MockFirebaseProvider.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.shape({}),
   isLoggedIn: PropTypes.bool,
 }
