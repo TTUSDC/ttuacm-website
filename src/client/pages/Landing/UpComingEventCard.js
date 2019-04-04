@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import MOCK_CALENDAR from '__mocks__/calendar'
 import EventsList from 'components/EventsList'
 import useEndpoint from 'hooks/useEndpoint'
@@ -20,19 +21,23 @@ const placeHolder = [
   },
 ]
 
-function UpcomingEventCard() {
+function UpcomingEventCard({ defaultEvents = placeHolder }) {
   const [err, loading, events] = useEndpoint(
     {
       path: '/events',
     },
     SHOW_MOCK_CALENDAR
       ? { allEvents: MOCK_CALENDAR }
-      : { allEvents: placeHolder },
+      : { allEvents: defaultEvents },
   )
 
   if (err || loading) return null // TODO handle this later
 
   return <EventsList events={[events.allEvents[0]]} />
+}
+
+UpcomingEventCard.propTypes = {
+  defaultEvents: PropTypes.shape({}),
 }
 
 export default UpcomingEventCard
