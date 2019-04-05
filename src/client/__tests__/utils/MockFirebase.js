@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { FirebaseContext } from 'context/Firebase'
 
 export class MockFirebase {
   /**
@@ -24,9 +25,7 @@ export class MockFirebase {
   signOut = () => ({})
 }
 
-export function MockFirebaseProvider({ children = [], isLoggedIn = true }) {
-  const FirebaseContext = React.createContext(null)
-
+export function MockFirebaseProvider({ children = [], isLoggedIn = false }) {
   return (
     <FirebaseContext.Provider
       value={{ firebase: new MockFirebase(), isUserLoggedIn: isLoggedIn }}

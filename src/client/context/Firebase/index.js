@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import Firebase from './firebase'
 
-const FirebaseContext = React.createContext(null)
+export const FirebaseContext = React.createContext(null)
 
 function withFirebase() {
   const firebase = useContext(FirebaseContext)

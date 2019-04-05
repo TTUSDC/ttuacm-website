@@ -16,7 +16,7 @@ import IconButton from '@material-ui/core/IconButton'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { withFirebase } from 'context/Firebase'
 import { getEndpoint } from 'hooks/useEndpoint'
-import { useSnackbar } from 'notistack'
+import useSnackbar from 'hooks/useSnackbar'
 
 const styles = (theme) => ({
   Image: {
@@ -47,8 +47,8 @@ function TeamCard({
   classes,
 }) {
   const [open, setOpen] = useState(false)
-  const { enqueueSnackbar } = useSnackbar()
   const { firebase } = withFirebase()
+  const [SnackBar, enqueueSnackbar] = useSnackbar()
 
   function handleEmail() {
     document.getElementById('send-email-tag').click()
@@ -56,43 +56,35 @@ function TeamCard({
 
   async function unsubscribe() {
     if (process.env.NODE_ENV !== 'production') {
-      enqueueSnackbar(`Unsubscribing from ${name}`, { variant: 'success' })
-      return console.log(
-        `Unsubscribing ${firebase.getUserEmail()} from ${name}`,
-      )
+      enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
     }
     try {
       await axios.put(`${getEndpoint()}/members/unsubscribe`, {
         email: firebase.getUserEmail(),
         groups: [name],
       })
-      enqueueSnackbar(`Unsubscribing from ${name}`, { variant: 'success' })
-      return null
+      enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
+      return
     } catch (err) {
-      enqueueSnackbar('Error Occured. Please try again later', {
-        variant: 'error',
-      })
-      return console.error(err)
+      enqueueSnackbar('Error Occured. Please try again later', 'error')
+      console.error(err)
     }
   }
 
   async function subscribe() {
     if (process.env.NODE_ENV !== 'production') {
-      enqueueSnackbar(`Subscribing to ${name}`, { variant: 'success' })
-      return console.log(`subscribing ${firebase.getUserEmail()} to ${name}`)
+      enqueueSnackbar(`Subscribed to ${name}`, 'success')
     }
     try {
       await axios.put(`${getEndpoint()}/members/subscribe`, {
         email: firebase.getUserEmail(),
         groups: [name],
       })
-      enqueueSnackbar(`Subscribing to ${name}`, { variant: 'success' })
-      return console.log('success')
+      enqueueSnackbar(`Subscribed to ${name}`, 'success')
+      return
     } catch (err) {
-      enqueueSnackbar('Error Occured. Please try again later', {
-        variant: 'error',
-      })
-      return console.error(err)
+      enqueueSnackbar('Error Occured. Please try again later', 'error')
+      console.error(err)
     }
   }
 
@@ -128,6 +120,7 @@ function TeamCard({
           aria-label='Add to groups'
           disabled={preventJoin}
           onClick={subscribe}
+          data-testid={`sub-${email}`}
         >
           <FavoriteIcon />
         </IconButton>
@@ -135,10 +128,16 @@ function TeamCard({
           aria-label='Remove from groups'
           disabled={preventJoin}
           onClick={unsubscribe}
+          data-testid={`unsub-${email}`}
         >
           <CloseIcon />
         </IconButton>
-        <IconButton aria-label='Email' onClick={handleEmail}>
+        <IconButton
+          aria-label='Email'
+          disabled={preventJoin}
+          onClick={handleEmail}
+          data-testid={`email-${email}`}
+        >
           <EmailIcon />
         </IconButton>
         <IconButton
@@ -176,6 +175,7 @@ function TeamCard({
           <Typography paragraph>{description}</Typography>
         </CardContent>
       </Collapse>
+      <SnackBar />
     </Card>
   )
 }
