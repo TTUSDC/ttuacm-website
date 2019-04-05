@@ -57,6 +57,7 @@ function TeamCard({
   async function unsubscribe() {
     if (process.env.NODE_ENV !== 'production') {
       enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
+      return
     }
     try {
       await axios.put(`${getEndpoint()}/members/unsubscribe`, {
@@ -74,6 +75,7 @@ function TeamCard({
   async function subscribe() {
     if (process.env.NODE_ENV !== 'production') {
       enqueueSnackbar(`Subscribed to ${name}`, 'success')
+      return
     }
     try {
       await axios.put(`${getEndpoint()}/members/subscribe`, {
