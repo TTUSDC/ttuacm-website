@@ -7,5 +7,6 @@ then
   echo Setting up firebase config for staging
   sudo cp src/client/firebase_config.staging.json src/client/firebase_config.json
 else
-  echo Not setting up firebase
+  echo Setting up development/testing config
+  sudo cp src/client/firebase_config.development.json src/client/firebase_config.json
 fi
