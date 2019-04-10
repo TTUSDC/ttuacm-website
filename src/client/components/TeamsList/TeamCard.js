@@ -147,6 +147,7 @@ function TeamCard({
             [classes.expandOpen]: open,
           })}
           onClick={() => setOpen(!open)}
+          data-testid={`expand-${email}`}
         >
           <ExpandMoreIcon />
         </IconButton>
@@ -168,6 +169,7 @@ function TeamCard({
             <Typography
               variant='h6'
               style={{ textAlign: 'center', fontWeight: 'bold' }}
+              data-testid={`sign-up-notif-${email}`}
             >
               Please login to sign up for classes
             </Typography>

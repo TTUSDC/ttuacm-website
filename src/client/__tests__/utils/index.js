@@ -17,7 +17,10 @@ const theme = createMuiTheme({
   },
 })
 
-export function renderComponent(children, isLoggedIn = false) {
+export function renderComponent(
+  children,
+  { isLoggedIn } = { isLoggedIn: false },
+) {
   const MockProviders = () => (
     <MockFirebaseProvider isLoggedIn={isLoggedIn}>
       <ReduxProvider store={store(history)}>
