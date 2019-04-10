@@ -1,6 +1,8 @@
 import React from 'react'
 import Profile from 'assets/teams_page/profile.jpg'
 import TeamsList from 'components/TeamsList'
+import { expect } from 'chai'
+import { cleanup } from 'react-testing-library'
 import { renderComponent } from './utils'
 
 const teams = [
@@ -15,6 +17,8 @@ const teams = [
   },
 ]
 
+afterEach(cleanup)
+
 test('should not allow the user to email, (un)subscribe to teams if they are not logged in', () => {
   const { getByTestId } = renderComponent(<TeamsList teams={teams} />)
 
@@ -25,4 +29,16 @@ test('should not allow the user to email, (un)subscribe to teams if they are not
   expect(emailButton.disabled).to.equal(true)
   expect(subButton.disabled).to.equal(true)
   expect(unsubButton.disabled).to.equal(true)
+})
+
+test('should allow the user to email, (un)subscribe to teams if they are logged in', () => {
+  const { getByTestId } = renderComponent(<TeamsList teams={teams} />, true) // logged in
+
+  const emailButton = getByTestId('email-name@email.com')
+  const subButton = getByTestId('sub-name@email.com')
+  const unsubButton = getByTestId('unsub-name@email.com')
+
+  expect(emailButton.disabled).to.equal(false)
+  expect(subButton.disabled).to.equal(false)
+  expect(unsubButton.disabled).to.equal(false)
 })

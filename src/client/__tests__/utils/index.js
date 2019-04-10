@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { render } from 'react-testing-library'
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
@@ -7,7 +6,6 @@ import { Provider as ReduxProvider } from 'react-redux'
 import { createBrowserHistory } from 'history'
 
 import { WindowSizeProvider } from 'context/withWindowSize'
-import { SnackbarProvider } from 'notistack'
 import { store } from 'redux/store'
 import { MockFirebaseProvider } from './MockFirebase'
 
@@ -19,31 +17,15 @@ const theme = createMuiTheme({
   },
 })
 
-function MockProviders({ children }) {
-  return (
-    <SnackbarProvider
-      maxSnack={3}
-      preventDuplicate
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
-      }}
-    >
-      <MockFirebaseProvider>
-        <ReduxProvider store={store(history)}>
-          <MuiThemeProvider theme={theme}>
-            <WindowSizeProvider>{children}</WindowSizeProvider>
-          </MuiThemeProvider>
-        </ReduxProvider>
-      </MockFirebaseProvider>
-    </SnackbarProvider>
+export function renderComponent(children, isLoggedIn = false) {
+  const MockProviders = () => (
+    <MockFirebaseProvider isLoggedIn={isLoggedIn}>
+      <ReduxProvider store={store(history)}>
+        <MuiThemeProvider theme={theme}>
+          <WindowSizeProvider>{children}</WindowSizeProvider>
+        </MuiThemeProvider>
+      </ReduxProvider>
+    </MockFirebaseProvider>
   )
-}
-
-export function renderComponent(children) {
-  return render(children, { wrapper: MockFirebaseProvider })
-}
-
-MockProviders.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.func),
+  return render(children, { wrapper: MockProviders })
 }
