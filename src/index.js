@@ -12,7 +12,6 @@ import rootReducer from 'redux/reducers'
 
 import { FirebaseProvider } from 'context/Firebase'
 import { WindowSizeProvider } from 'context/withWindowSize'
-import { SnackbarProvider } from 'notistack'
 
 import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
 
@@ -47,24 +46,15 @@ const history = createBrowserHistory()
 function render() {
   ReactDOM.render(
     <AppContainer>
-      <SnackbarProvider
-        maxSnack={3}
-        preventDuplicate
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <FirebaseProvider>
-          <ReduxProvider store={store(history)}>
-            <MuiThemeProvider theme={theme}>
-              <WindowSizeProvider>
-                <MaintenanceContainer history={history} />
-              </WindowSizeProvider>
-            </MuiThemeProvider>
-          </ReduxProvider>
-        </FirebaseProvider>
-      </SnackbarProvider>
+      <FirebaseProvider>
+        <ReduxProvider store={store(history)}>
+          <MuiThemeProvider theme={theme}>
+            <WindowSizeProvider>
+              <MaintenanceContainer history={history} />
+            </WindowSizeProvider>
+          </MuiThemeProvider>
+        </ReduxProvider>
+      </FirebaseProvider>
     </AppContainer>,
     document.getElementById('root'),
   )

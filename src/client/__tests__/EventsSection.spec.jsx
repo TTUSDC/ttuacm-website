@@ -1,10 +1,10 @@
 import React from 'react'
-import { render, getByText, cleanup } from 'react-testing-library'
+import { getByText, cleanup } from 'react-testing-library'
 import { expect } from 'chai'
 import moment from 'moment'
 import sinon from 'sinon'
 import EventsSection, { filterEvents } from 'pages/Events/EventsSection'
-import AppContext from './utils/AppContext'
+import { renderComponent } from './utils'
 
 sinon.useFakeTimers(
   moment([2019, 2, 26])
@@ -60,15 +60,8 @@ describe('Events Section Component', () => {
   })
 
   describe('Component', () => {
-    test('should be able to render without errors inside the context', () => {
-      const { container } = render(
-        <EventsSection time='TODAY' events={CALENDAR} />,
-        { wrapper: AppContext },
-      )
-      expect(container).to.exist
-    })
     test('should display the only event for `TODAY`', () => {
-      const { container } = render(
+      const { container } = renderComponent(
         <EventsSection time='TODAY' events={CALENDAR} />,
       )
       getByText(container, 'TODAY', { exact: false })
@@ -76,7 +69,7 @@ describe('Events Section Component', () => {
     })
 
     test('should display the only event for `TOMORROW`', () => {
-      const { container } = render(
+      const { container } = renderComponent(
         <EventsSection time='TOMORROW' events={CALENDAR} />,
       )
       getByText(container, 'TOMORROW', { exact: false })
@@ -84,7 +77,7 @@ describe('Events Section Component', () => {
     })
 
     test('should display the events for `THIS WEEK`', () => {
-      const { container } = render(
+      const { container } = renderComponent(
         <EventsSection time='THIS WEEK' events={CALENDAR} />,
       )
       getByText(container, 'THIS WEEK', { exact: false })
@@ -95,7 +88,7 @@ describe('Events Section Component', () => {
     })
 
     test('should display the events for `THIS MONTH`', () => {
-      const { container } = render(
+      const { container } = renderComponent(
         <EventsSection time='THIS MONTH' events={CALENDAR} />,
       )
       getByText(container, 'THIS MONTH', { exact: false })
