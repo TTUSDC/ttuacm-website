@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-import { useSnackbar } from 'notistack'
+import useSnackbar from 'hooks/useSnackbar'
 import EventsSection from 'pages/Events/EventsSection'
 import MOCK_CALENDAR from '__mocks__/calendar'
 import useEndpoint from 'hooks/useEndpoint'
@@ -35,7 +35,7 @@ const placeHolder = [
 ]
 
 const EventsContainer = ({ classes = {} }) => {
-  const { enqueueSnackbar } = useSnackbar()
+  const [SnackBar, enqueueSnackbar] = useSnackbar()
   const providedTimes = {
     TODAY: 'TODAY',
     TOMORROW: 'TOMORROW',
@@ -52,10 +52,13 @@ const EventsContainer = ({ classes = {} }) => {
       : { allEvents: placeHolder },
   )
 
-  if (err) {
-    enqueueSnackbar('Something went wrong...', { variant: 'error' })
-    console.error(err)
-  }
+  // Makes sure that we don't keep updating the state when an error occurs
+  useEffect(() => {
+    if (err) {
+      enqueueSnackbar('Something went wrong...', 'error')
+      console.error(err)
+    }
+  }, [err])
 
   return (
     <Grid
@@ -89,6 +92,7 @@ const EventsContainer = ({ classes = {} }) => {
           />
         </React.Fragment>
       ) : null}
+      <SnackBar />
     </Grid>
   )
 }

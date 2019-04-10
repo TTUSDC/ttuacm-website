@@ -79,7 +79,6 @@ export default function useSnackbar() {
   })
 
   const handleClick = (msg, variantType) => {
-    dispatch({ type: useSnackbar.types.closeMessage })
     dispatch({
       type: useSnackbar.types.showMessage,
       payload: { message: msg, variant: variantType },
