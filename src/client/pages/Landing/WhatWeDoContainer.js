@@ -32,7 +32,7 @@ function WhatWeDoContainer() {
   return (
     <React.Fragment>
       <WhatWeDoCard content={content[0]} align='left' image={Events} />
-      <WhatWeDoCard content={content[1]} align='right' image={SDC} />
+      <WhatWeDoCard content={content[1]} align='left' image={SDC} />
       <WhatWeDoCard content={content[2]} align='left' image={Team} />
     </React.Fragment>
   )
