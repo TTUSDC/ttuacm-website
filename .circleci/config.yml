@@ -9,8 +9,6 @@ jobs:
 
     steps:
       - checkout
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
@@ -24,7 +22,12 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # Lint
+      - run: openssl enc -aes-256-cbc -K $KEY -v $KEY -in secrets.tar.enc -out secrets.tar -d
+      - run: tar xvf secrets.tar
+      - run: chmod +x scripts/choose_firebase_config.sh
+      - run: scripts/choose_firebase_config.sh
+
+      # Lint and Test
       - run: yarn lint
       - run: yarn test:unit --ci --forceExit
       - run: yarn test:client
