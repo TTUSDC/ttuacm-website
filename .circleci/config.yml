@@ -22,7 +22,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: openssl enc -aes-256-cbc -K $KEY -v $KEY -in secrets.tar.enc -out secrets.tar -d
+      - run: openssl enc -aes-256-cbc -K $KEY -iv $KEY -in secrets.tar.enc -out secrets.tar -d
       - run: tar xvf secrets.tar
       - run: chmod +x scripts/choose_firebase_config.sh
       - run: scripts/choose_firebase_config.sh
