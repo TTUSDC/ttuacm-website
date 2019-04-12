@@ -1,5 +1,4 @@
 if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "next" ]]; then
-  yarn docs
   git config --global user.email $GH_EMAIL
   git config --global user.name $GH_NAME
 
@@ -10,9 +9,9 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "next" ]]; then
   git rm -rf .
   cd ..
 
-  npm run build
+  yarn docs
 
-  cp -a build/. out/.
+  cp -a docs/. out/.
 
   mkdir -p out/.circleci && cp -a .circleci/. out/.circleci/.
   cd out

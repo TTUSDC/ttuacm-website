@@ -42,10 +42,6 @@ jobs:
             yarn test:client
 
       - deploy:
-          name: Deploy to GitHub Pages
-          command: scripts/deploy_pages.sh
-
-      - deploy:
           name: Deploy master to Production
           command: scripts/deploy_prod.sh
 
@@ -56,3 +52,7 @@ jobs:
       - run:
           name: Acceptance Test
           command: scripts/acceptance_test.sh
+
+      - deploy:
+          name: Deploy to GitHub Pages
+          command: scripts/deploy_pages.sh
