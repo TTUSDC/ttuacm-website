@@ -34,7 +34,6 @@ jobs:
             chmod +x scripts/choose_firebase_config.sh
             scripts/choose_firebase_config.sh
 
-
       - run:
           name: Lint and Test API and Client
           command: |
@@ -44,60 +43,16 @@ jobs:
 
       - deploy:
           name: Deploy to GitHub Pages
-          command: |
-            if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "next" ]]; then
-              yarn docs
-              git config --global user.email $GH_EMAIL
-              git config --global user.name $GH_NAME
-
-              git clone $CIRCLE_REPOSITORY_URL out
-
-              cd out
-              git checkout gh-pages || git checkout --orphan gh-pages
-              git rm -rf .
-              cd ..
-
-              npm run build
-
-              cp -a build/. out/.
-
-              mkdir -p out/.circleci && cp -a .circleci/. out/.circleci/.
-              cd out
-
-              git add -A
-              git commit -m "Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
-
-              git push origin gh-pages
-            else
-              echo Skipping deployment to Pages
-            fi
+          command: scripts/deploy_pages.sh
 
       - deploy:
           name: Deploy master to Production
-          command: |
-            if [[ ${CIRCLE_BRANCH} == "master" ]]; then
-              yarn build:client
-              firebase deploy -P acm-texas-tech-web-app-2 --token=$FIREBASE_DEPLOY_TOKEN
-            else
-              echo Skipping deployment to Production
-            fi
+          command: scripts/deploy_prod.sh
 
       - deploy:
           name: Deploy next to Staging
-          command: |
-            if [[ ${CIRCLE_BRANCH} == "next" ]]; then
-              yarn build:client
-              firebase deploy -P acm-texas-tech-web-app-2-beta --token=$FIREBASE_DEPLOY_TOKEN
-            else
-              echo Skipping deployment to Staging
-            fi
+          command: scripts/deploy_staging.sh
 
       - run:
           name: Acceptance Test
-          command: |
-            if [[ ${CIRCLE_BRANCH} == "next" ]]; then
-              yarn run cypress install
-              yarn e2e:ci
-            else
-              echo Skipping Acceptance Test
-            fi
+          command: scripts/acceptance_test.sh
