@@ -26,3 +26,5 @@ jobs:
 
       # Lint
       - run: yarn lint
+      - run: yarn test:unit --ci --forceExit
+      - run: yarn test:client
