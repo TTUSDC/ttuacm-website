@@ -4,6 +4,7 @@ import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
+import useWindowSize from 'context/withWindowSize'
 import FooterTopSection from './FooterTopSection'
 import { sections } from './FooterInfo'
 
@@ -16,16 +17,24 @@ const styles = {
   },
 }
 
-const FooterTop = ({ classes = {}, currentPage, ...props }) => {
+const FooterTop = ({ classes = {}, currentPage, theme, ...props }) => {
   const handleNavigation = (nextPage) => () => {
     if (currentPage !== nextPage) {
       props.push(nextPage)
     }
   }
 
+  const { width } = useWindowSize()
+  let filteredSections = sections
+  if (theme.breakpoints.values.sm > width) {
+    filteredSections = sections.filter(
+      ({ title }) => title.toLowerCase() === 'contact us',
+    )
+  }
+
   return (
     <Grid container className={classes.FooterTop} spacing={32} direction='row'>
-      {sections.map(
+      {filteredSections.map(
         ({ title, description, containsAppLink, containsOutsideLink }) => (
           <FooterTopSection
             key={title}
@@ -45,6 +54,7 @@ FooterTop.propTypes = {
   classes: PropTypes.shape({}),
   currentPage: PropTypes.string.isRequired,
   push: PropTypes.func.isRequired,
+  theme: PropTypes.shape({}).isRequired,
 }
 
 const mapStateToProps = (state) => ({
@@ -54,4 +64,4 @@ const mapStateToProps = (state) => ({
 export default connect(
   mapStateToProps,
   { push },
-)(withStyles(styles)(FooterTop))
+)(withStyles(styles, { withTheme: true })(FooterTop))
