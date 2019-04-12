@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 const withWindowSize = React.createContext()
@@ -29,4 +29,15 @@ WindowSizeProvider.propTypes = {
   children: PropTypes.element,
 }
 
+function useWindowSize() {
+  const ctx = useContext(withWindowSize)
+
+  if (!ctx) {
+    throw new Error('Cannot use `useWindowSize` outside of Provider')
+  }
+
+  return ctx
+}
+
+export default useWindowSize
 export { withWindowSize, WindowSizeProvider }
