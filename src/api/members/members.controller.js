@@ -52,22 +52,6 @@ class MembersController {
       throw err
     }
   }
-
-  async payDues(email) {
-    try {
-      return await this.model.payDues(email)
-    } catch (err) {
-      throw err
-    }
-  }
-
-  async reset() {
-    try {
-      return await this.model.resetMembers()
-    } catch (err) {
-      throw err
-    }
-  }
 }
 
 module.exports = MembersController

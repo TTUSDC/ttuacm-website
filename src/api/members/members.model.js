@@ -88,37 +88,6 @@ class MembersModel {
       throw err
     }
   }
-
-  /**
-   * Pays a users dues
-   *
-   * @param {Array<string>} email - the email to target
-   */
-  async payDues(email) {
-    try {
-      return await this.DB.findOneAndUpdate(
-        { email },
-        { $set: { hasPaidDues: true } },
-        { new: true, lean: true },
-      ).exec()
-    } catch (err) {
-      throw err
-    }
-  }
-
-  /**
-   * Resets the hasPaidDues and groups field of all members in the database
-   */
-  async resetMembers() {
-    try {
-      return await this.DB.updateMany(
-        {},
-        { $set: { hasPaidDues: false, groups: [] } },
-      )
-    } catch (err) {
-      throw err
-    }
-  }
 }
 
 module.exports = MembersModel
