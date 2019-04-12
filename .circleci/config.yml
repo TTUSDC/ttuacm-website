@@ -50,7 +50,13 @@ jobs:
 
       - run:
           name: Acceptance Test
-          command: scripts/acceptance_test.sh
+          command: |
+            if [[ ${CIRCLE_BRANCH} == "next" ]]; then
+              yarn run cypress install
+              yarn e2e:ci
+            else
+              echo Skipping Acceptance Test
+            fi
 
       - deploy:
           name: Deploy to GitHub Pages
