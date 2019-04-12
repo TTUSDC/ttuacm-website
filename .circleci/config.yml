@@ -31,7 +31,6 @@ jobs:
           command: |
             openssl enc -aes-256-cbc -K $KEY -iv $KEY -in secrets.tar.enc -out secrets.tar -d
             tar xvf secrets.tar
-            chmod +x scripts/choose_firebase_config.sh
             scripts/choose_firebase_config.sh
 
       - run:
