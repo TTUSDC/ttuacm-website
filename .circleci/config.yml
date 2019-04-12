@@ -42,44 +42,52 @@ jobs:
             yarn test:unit --ci --forceExit
             yarn test:client
 
-  # Deploy
-  build:
-    branches:
-      only:
-        - master
-        - next
-    docker:
-      - image: circleci/node:8.12
+      - deploy:
+          name: Deploy to GitHub Pages
+          command: |
+            if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "next" ]]; then
+              yarn docs
+              git config --global user.email $GH_EMAIL
+              git config --global user.name $GH_NAME
 
-    working_directory: ~/repo
+              git clone $CIRCLE_REPOSITORY_URL out
 
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+              cd out
+              git checkout gh-pages || git checkout --orphan gh-pages
+              git rm -rf .
+              cd ..
 
-      - run:
-          name: Install Dependencies
-          command: yarn install
+              npm run build
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+              cp -a build/. out/.
+
+              mkdir -p out/.circleci && cp -a .circleci/. out/.circleci/.
+              cd out
+
+              git add -A
+              git commit -m "Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
+
+              git push origin gh-pages
+            else
+              echo Skipping deployment to Pages
+            fi
 
       - deploy:
+          name: Deploy to Production
           command: |
-            openssl enc -aes-256-cbc -K $KEY -iv $KEY -in secrets.tar.enc -out secrets.tar -d
-            tar xvf secrets.tar
-            chmod +x scripts/choose_firebase_config.sh
-            scripts/choose_firebase_config.sh
-            yarn docs
-            yarn build:client
             if ["${CIRCLE_BRANCH} == "master"]; then
+              yarn build:client
               echo "deploy to production"
+            else
+              echo Skipping deployment to Production
             fi
+
+      - deploy:
+          name: Deploy to Staging
+          command: |
             if ["${CIRCLE_BRANCH} == "next"]; then
+              yarn build:client
               echo "deploy to staging"
+            else
+              echo Skipping deployment to Staging
             fi
