@@ -1,6 +1,9 @@
 version: 2
 jobs:
   build:
+    branches:
+      ignore:
+        - master
     docker:
       - image: circleci/node:8.12
       - image: circleci/mongo:3
@@ -38,3 +41,45 @@ jobs:
             yarn lint
             yarn test:unit --ci --forceExit
             yarn test:client
+
+  # Deploy
+  build:
+    branches:
+      only:
+        - master
+        - next
+    docker:
+      - image: circleci/node:8.12
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run:
+          name: Install Dependencies
+          command: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - deploy:
+          command: |
+            openssl enc -aes-256-cbc -K $KEY -iv $KEY -in secrets.tar.enc -out secrets.tar -d
+            tar xvf secrets.tar
+            chmod +x scripts/choose_firebase_config.sh
+            scripts/choose_firebase_config.sh
+            yarn docs
+            yarn build:client
+            if ["${CIRCLE_BRANCH} == "master"]; then
+              echo "deploy to production"
+            fi
+            if ["${CIRCLE_BRANCH} == "next"]; then
+              echo "deploy to staging"
+            fi
