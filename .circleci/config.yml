@@ -75,7 +75,7 @@ jobs:
       - deploy:
           name: Deploy to Production
           command: |
-            if ["${CIRCLE_BRANCH} == "master"]; then
+            if [${CIRCLE_BRANCH} == "master"]; then
               yarn build:client
               echo "deploy to production"
             else
@@ -85,7 +85,7 @@ jobs:
       - deploy:
           name: Deploy to Staging
           command: |
-            if ["${CIRCLE_BRANCH} == "next"]; then
+            if [${CIRCLE_BRANCH} == "next"]; then
               yarn build:client
               echo "deploy to staging"
             else
