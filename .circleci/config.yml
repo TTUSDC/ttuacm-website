@@ -73,21 +73,21 @@ jobs:
             fi
 
       - deploy:
-          name: Deploy to Production
+          name: Deploy master to Production
           command: |
             if [[ ${CIRCLE_BRANCH} == "master" ]]; then
               yarn build:client
-              echo "deploy to production"
+              firebase deploy -P acm-texas-tech-web-app-2 --token=$FIREBASE_DEPLOY_TOKEN
             else
               echo Skipping deployment to Production
             fi
 
       - deploy:
-          name: Deploy to Staging
+          name: Deploy next to Staging
           command: |
             if [[ ${CIRCLE_BRANCH} == "next" ]]; then
               yarn build:client
-              echo "deploy to staging"
+              firebase deploy -P acm-texas-tech-web-app-2-beta --token=$FIREBASE_DEPLOY_TOKEN
             else
               echo Skipping deployment to Staging
             fi
