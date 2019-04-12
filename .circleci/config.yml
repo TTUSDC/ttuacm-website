@@ -91,3 +91,13 @@ jobs:
             else
               echo Skipping deployment to Staging
             fi
+
+      - run:
+          name: Acceptance Test
+          command: |
+            if [[ ${CIRCLE_BRANCH} == "next" ]]; then
+              yarn run cypress install
+              yarn e2e:ci
+            else
+              echo Skipping Acceptance Test
+            fi
