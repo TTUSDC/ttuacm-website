@@ -79,52 +79,11 @@ class MembersModel {
    */
   async unsubscribe(email, groups) {
     try {
-      const delGroups = new Set(groups)
-      const query = await this.DB.findOne({ email }).exec()
-      const newGroups = []
-
-      for (const curr of query.groups.toObject()) {
-        if (!delGroups.has(curr[0])) {
-          newGroups.push(curr[0])
-        }
-      }
-
       return await this.DB.findOneAndUpdate(
         { email },
-        { groups: newGroups },
-        { new: true },
+        { $pull: { groups: { $in: groups } } },
+        { new: true, safe: true, upsert: true },
       ).exec()
-    } catch (err) {
-      throw err
-    }
-  }
-
-  /**
-   * Pays a users dues
-   *
-   * @param {Array<string>} email - the email to target
-   */
-  async payDues(email) {
-    try {
-      return await this.DB.findOneAndUpdate(
-        { email },
-        { $set: { hasPaidDues: true } },
-        { new: true, lean: true },
-      ).exec()
-    } catch (err) {
-      throw err
-    }
-  }
-
-  /**
-   * Resets the hasPaidDues and groups field of all members in the database
-   */
-  async resetMembers() {
-    try {
-      return await this.DB.updateMany(
-        {},
-        { $set: { hasPaidDues: false, groups: [] } },
-      )
     } catch (err) {
       throw err
     }

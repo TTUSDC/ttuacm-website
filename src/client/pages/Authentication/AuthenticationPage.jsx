@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import OAuthContainer from 'containers/OAuthContainer'
+import FirebaseAuthButtons from 'components/FirebaseAuthButtons'
 
 const styles = (theme) => ({
   back: {
@@ -55,7 +55,7 @@ function AuthenticationPage({ classes = {} }) {
               SIGN IN
             </Typography>
           </div>
-          <OAuthContainer />
+          <FirebaseAuthButtons />
         </Paper>
       </div>
     </div>

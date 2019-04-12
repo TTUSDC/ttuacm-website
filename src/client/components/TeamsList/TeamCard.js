@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
 import { withStyles } from '@material-ui/core/styles'
@@ -10,8 +11,12 @@ import Collapse from '@material-ui/core/Collapse'
 import Typography from '@material-ui/core/Typography'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import EmailIcon from '@material-ui/icons/Email'
+import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { withFirebase } from 'context/Firebase'
+import { getEndpoint } from 'hooks/useEndpoint'
+import useSnackbar from 'hooks/useSnackbar'
 
 const styles = (theme) => ({
   Image: {
@@ -32,8 +37,8 @@ const styles = (theme) => ({
 
 function TeamCard({
   preventJoin,
-  name,
-  leader,
+  name, // Name of the group
+  leader, // Name of the leader
   description,
   image,
   email,
@@ -42,13 +47,51 @@ function TeamCard({
   classes,
 }) {
   const [open, setOpen] = useState(false)
+  const { firebase } = withFirebase()
+  const [SnackBar, enqueueSnackbar] = useSnackbar()
 
-  const handleEmail = () => {
+  function handleEmail() {
     document.getElementById('send-email-tag').click()
   }
 
+  async function unsubscribe() {
+    if (process.env.NODE_ENV !== 'production') {
+      enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
+      return
+    }
+    try {
+      await axios.put(`${getEndpoint()}/members/unsubscribe`, {
+        email: firebase.getUserEmail(),
+        groups: [name],
+      })
+      enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
+      return
+    } catch (err) {
+      enqueueSnackbar('Error Occured. Please try again later', 'error')
+      console.error(err)
+    }
+  }
+
+  async function subscribe() {
+    if (process.env.NODE_ENV !== 'production') {
+      enqueueSnackbar(`Subscribed to ${name}`, 'success')
+      return
+    }
+    try {
+      await axios.put(`${getEndpoint()}/members/subscribe`, {
+        email: firebase.getUserEmail(),
+        groups: [name],
+      })
+      enqueueSnackbar(`Subscribed to ${name}`, 'success')
+      return
+    } catch (err) {
+      enqueueSnackbar('Error Occured. Please try again later', 'error')
+      console.error(err)
+    }
+  }
+
   // Turns the array of days to a comma separated string
-  const fmtDays = (days) => {
+  function fmtDays(days) {
     if (days.length < 1) {
       throw Error('days.length must be greater than 0')
     }
@@ -78,11 +121,25 @@ function TeamCard({
         <IconButton
           aria-label='Add to groups'
           disabled={preventJoin}
-          onClick={() => console.log('adding group to the user')}
+          onClick={subscribe}
+          data-testid={`sub-${email}`}
         >
           <FavoriteIcon />
         </IconButton>
-        <IconButton aria-label='Email' onClick={handleEmail}>
+        <IconButton
+          aria-label='Remove from groups'
+          disabled={preventJoin}
+          onClick={unsubscribe}
+          data-testid={`unsub-${email}`}
+        >
+          <CloseIcon />
+        </IconButton>
+        <IconButton
+          aria-label='Email'
+          disabled={preventJoin}
+          onClick={handleEmail}
+          data-testid={`email-${email}`}
+        >
           <EmailIcon />
         </IconButton>
         <IconButton
@@ -90,6 +147,7 @@ function TeamCard({
             [classes.expandOpen]: open,
           })}
           onClick={() => setOpen(!open)}
+          data-testid={`expand-${email}`}
         >
           <ExpandMoreIcon />
         </IconButton>
@@ -111,6 +169,7 @@ function TeamCard({
             <Typography
               variant='h6'
               style={{ textAlign: 'center', fontWeight: 'bold' }}
+              data-testid={`sign-up-notif-${email}`}
             >
               Please login to sign up for classes
             </Typography>
@@ -120,6 +179,7 @@ function TeamCard({
           <Typography paragraph>{description}</Typography>
         </CardContent>
       </Collapse>
+      <SnackBar />
     </Card>
   )
 }

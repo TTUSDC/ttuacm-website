@@ -4,6 +4,7 @@ node_js:
 - '8'
 jobs:
   include:
+# ~~~~~~~~~~~~~~~~~~~~~~~ Testing Stage - Only runs on non-master branches ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
   - stage: test
     if: NOT branch = master
     services:
@@ -12,15 +13,21 @@ jobs:
       yarn: true
       directories:
       - node_modules
+    # Unencrypts the secret files and puts them in the right place.
+    # Chooses a Firebase Config file depending on what branch we are on
     before_install:
     - openssl aes-256-cbc -K $encrypted_2f6d61fcabf9_key -iv $encrypted_2f6d61fcabf9_iv
       -in secrets.tar.enc -out secrets.tar -d
     - tar xvf secrets.tar
-    script:
+    - chmod +x scripts/choose_firebase_config.sh
+    - scripts/choose_firebase_config.sh
+    # Checks if code meets style standards
+    # Tests the api and then the client
     script:
     - yarn lint
     - yarn test:unit --ci --forceExit
     - yarn test:client
+# ~~~~~~~~~~~~~~~~~~~~~~~ Deploy Stage - Only runs on master or next branch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
   - stage: deploy
     if: branch =~ /(master|next)/
     install:
@@ -29,20 +36,25 @@ jobs:
       yarn: true
       directories:
       - node_modules
+    # Unencrypts the secret files and puts them in the right place.
+    # Chooses a Firebase Config file depending on what branch we are on
     before_install:
     - openssl aes-256-cbc -K $encrypted_2f6d61fcabf9_key -iv $encrypted_2f6d61fcabf9_iv
       -in secrets.tar.enc -out secrets.tar -d
     - tar xvf secrets.tar
     - chmod +x scripts/choose_firebase_config.sh
     - scripts/choose_firebase_config.sh
+    # Build the docs and the client from Create React App
     script:
     - yarn docs
     - yarn build:client
+    # Deploy to GitHub Pages
     deploy:
     - provider: pages
       skip_cleanup: true
       github_token: "$GITHUB_TOKEN"
       local_dir: docs/
+    # Deploy to production if on master
     - provider: firebase
       skip_cleanup: true
       token:
@@ -51,6 +63,7 @@ jobs:
       message: Deployed to production
       on:
         branch: master
+    # Deploy to staging if on next
     - provider: firebase
       skip_cleanup: true
       token:
@@ -59,6 +72,7 @@ jobs:
       message: Deployed to staging
       on:
         branch: next
+# ~~~~~~~~~~~~~~~~~~~~~~~ Acceptance Stage - Only runs on next branch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
   - stage: acceptance
     if: branch = next
     cache:

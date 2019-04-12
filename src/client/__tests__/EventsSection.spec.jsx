@@ -1,9 +1,10 @@
 import React from 'react'
-import { render, getByText } from 'react-testing-library'
+import { getByText, cleanup } from 'react-testing-library'
 import { expect } from 'chai'
 import moment from 'moment'
 import sinon from 'sinon'
-import EventsSection, { filterEvents } from './EventsSection'
+import EventsSection, { filterEvents } from 'pages/Events/EventsSection'
+import { renderComponent } from './utils'
 
 sinon.useFakeTimers(
   moment([2019, 2, 26])
@@ -28,6 +29,8 @@ for (let i = 1; i <= 8; i += 1) {
 
   today.add(1, 'days')
 }
+
+afterEach(cleanup)
 
 /**
  * Every event has a startTime that is already a JS Date object
@@ -58,7 +61,7 @@ describe('Events Section Component', () => {
 
   describe('Component', () => {
     test('should display the only event for `TODAY`', () => {
-      const { container } = render(
+      const { container } = renderComponent(
         <EventsSection time='TODAY' events={CALENDAR} />,
       )
       getByText(container, 'TODAY', { exact: false })
@@ -66,7 +69,7 @@ describe('Events Section Component', () => {
     })
 
     test('should display the only event for `TOMORROW`', () => {
-      const { container } = render(
+      const { container } = renderComponent(
         <EventsSection time='TOMORROW' events={CALENDAR} />,
       )
       getByText(container, 'TOMORROW', { exact: false })
@@ -74,7 +77,7 @@ describe('Events Section Component', () => {
     })
 
     test('should display the events for `THIS WEEK`', () => {
-      const { container } = render(
+      const { container } = renderComponent(
         <EventsSection time='THIS WEEK' events={CALENDAR} />,
       )
       getByText(container, 'THIS WEEK', { exact: false })
@@ -85,7 +88,7 @@ describe('Events Section Component', () => {
     })
 
     test('should display the events for `THIS MONTH`', () => {
-      const { container } = render(
+      const { container } = renderComponent(
         <EventsSection time='THIS MONTH' events={CALENDAR} />,
       )
       getByText(container, 'THIS MONTH', { exact: false })

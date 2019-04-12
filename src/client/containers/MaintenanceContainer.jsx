@@ -17,9 +17,11 @@ function MaintenanceContainer({ history }) {
     devEnv,
   )
 
-  if (err || loading) {
+  if (loading) return <MaintenanceScreen />
+
+  if (err) {
     console.error(err)
-    return null
+    return <MaintenanceScreen />
   }
 
   // Changes this is you want to see the MaintenanceScreen

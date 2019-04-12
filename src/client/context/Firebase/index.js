@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import Firebase from './firebase'
 
-const FirebaseContext = React.createContext(null)
+export const FirebaseContext = React.createContext(null)
 
 function withFirebase() {
   const firebase = useContext(FirebaseContext)
@@ -12,17 +12,22 @@ function withFirebase() {
   return firebase
 }
 
-function FirebaseProvider({ children = [] }) {
+function FirebaseProvider({ children = [], firebase }) {
   // Used because Firebase may not finish initializing
   // Must listen for the auth state change and change states appropriately
   const [loggedIn, setLoggedIn] = useState(false)
-  const firebase = new Firebase()
-  firebase.auth.onAuthStateChanged((user) => {
+  let defaultFirebase = firebase
+  if (!defaultFirebase) {
+    defaultFirebase = new Firebase()
+  }
+  defaultFirebase.auth.onAuthStateChanged((user) => {
     setLoggedIn(user !== null)
   })
 
   return (
-    <FirebaseContext.Provider value={{ firebase, isUserLoggedIn: loggedIn }}>
+    <FirebaseContext.Provider
+      value={{ firebase: defaultFirebase, isUserLoggedIn: loggedIn }}
+    >
       {children}
     </FirebaseContext.Provider>
   )
@@ -30,6 +35,7 @@ function FirebaseProvider({ children = [] }) {
 
 FirebaseProvider.propTypes = {
   children: PropTypes.element,
+  firebase: PropTypes.func,
 }
 
 export { withFirebase, FirebaseProvider }
