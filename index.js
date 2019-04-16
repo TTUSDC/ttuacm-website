@@ -5,7 +5,8 @@ const bp = require('body-parser')
 const cors = require('cors')({ origin: true })
 const firebase = require('firebase-functions')
 const serviceAccount = require('./service_account.json')
-// const connectDB = require('./src/utils/db-connect')
+
+console.log(process.env.FIREBASE_CONFIG)
 
 const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
 adminConfig.credential = admin.credential.cert(serviceAccount)
