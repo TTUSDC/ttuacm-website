@@ -117,7 +117,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\nmember : {\n   \"email\": String,\n   \"hasPaidDues\": Boolean,\n   \"groups\": String[]\n}",
+          "content": "HTTP/1.1 200 OK\nmember : {\n   \"email\": String,\n   \"hasPaidDues\": Boolean,\n   \"groups\": String\n}",
           "type": "json"
         }
       ]
@@ -143,10 +143,10 @@
           },
           {
             "group": "Request body",
-            "type": "String[]",
+            "type": "String",
             "optional": false,
-            "field": "groups",
-            "description": "<p>groups</p>"
+            "field": "group",
+            "description": "<p>group</p>"
           }
         ]
       }
@@ -243,48 +243,6 @@
     "name": "GetApiV2MembersTest"
   },
   {
-    "type": "post",
-    "url": "/api/v2/members",
-    "title": "Create Member",
-    "description": "<p>Creates a member in the database</p>",
-    "version": "0.2.0",
-    "group": "Members",
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\nmember : {\n   \"email\": String,\n   \"hasPaidDues\": Boolean,\n   \"groups\": String[]\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 err.code OK",
-          "type": "json"
-        }
-      ]
-    },
-    "parameter": {
-      "fields": {
-        "Request body": [
-          {
-            "group": "Request body",
-            "type": "String",
-            "optional": false,
-            "field": "email",
-            "description": "<p>email</p>"
-          }
-        ]
-      }
-    },
-    "filename": "src/api/members/members.router.js",
-    "groupTitle": "Members",
-    "name": "PostApiV2Members"
-  },
-  {
     "type": "put",
     "url": "/api/v2/members",
     "title": "Unsubscribe to a group",
@@ -295,7 +253,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\nmember : {\n   \"email\": String,\n   \"hasPaidDues\": Boolean,\n   \"groups\": String[]\n}",
+          "content": "HTTP/1.1 200 OK\nmember : {\n   \"email\": String,\n   \"hasPaidDues\": Boolean,\n   \"group\": String\n}",
           "type": "json"
         }
       ]
@@ -321,10 +279,10 @@
           },
           {
             "group": "Request body",
-            "type": "String[]",
+            "type": "String",
             "optional": false,
-            "field": "groups",
-            "description": "<p>groups</p>"
+            "field": "group",
+            "description": "<p>group</p>"
           }
         ]
       }
