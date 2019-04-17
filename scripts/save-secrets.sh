@@ -1,1 +1,1 @@
-tar cvf secrets.tar service_account.json src/client/firebase_config.development.json src/client/firebase_config.staging.json src/client/firebase_config.production.json src/api/oauth/credentials.json src/api/oauth/token.json
+tar cvf secrets.tar service_account.development.json service_account.staging.json service_account.production.json src/client/firebase_config.development.json src/client/firebase_config.staging.json src/client/firebase_config.production.json src/api/oauth/credentials.json src/api/oauth/token.json
