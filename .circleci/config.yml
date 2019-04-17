@@ -48,16 +48,6 @@ jobs:
           name: Deploy next to Staging
           command: scripts/deploy_staging.sh
 
-      - run:
-          name: Acceptance Test
-          command: |
-            if [[ ${CIRCLE_BRANCH} == "next" ]]; then
-              yarn run cypress install
-              yarn e2e:ci
-            else
-              echo Skipping Acceptance Test
-            fi
-
       - deploy:
           name: Deploy to GitHub Pages
           command: scripts/deploy_pages.sh
