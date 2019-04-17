@@ -1,4 +1,4 @@
-if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "next" ]]; then
+if [[ ${CIRCLE_BRANCH} == "master" ]]; then
   git config --global user.email $GH_EMAIL
   git config --global user.name $GH_NAME
 
