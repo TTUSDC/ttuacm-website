@@ -1,15 +1,6 @@
 import React from 'react'
 import { withFirebase } from 'context/Firebase'
-import { getEndpoint } from 'hooks/useEndpoint'
-import axios from 'axios'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-
-function createUserIfDoesNotExist(user) {
-  if (!user.email || !user.emailVerified) return
-  axios
-    .post(`${getEndpoint()}/members`, { email: user.email })
-    .catch((err) => console.error(err))
-}
 
 function OAuthContainer() {
   const { firebase } = withFirebase()
@@ -34,14 +25,7 @@ function OAuthContainer() {
     ],
     callbacks: {
       // Avoid redirects after sign-in.
-      signInSuccessWithAuthResult: (data) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('In Development. Skipping database call')
-        } else {
-          createUserIfDoesNotExist(data.user)
-        }
-        return false
-      },
+      signInSuccessWithAuthResult: () => false,
     },
   }
 
