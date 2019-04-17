@@ -41,3 +41,12 @@ module.exports.createNewUser = functions.auth.user().onCreate((user) => {
       groups: [],
     })
 })
+
+// Deletes user in the database if they ever get deleted
+module.exports.deleteExistingUser = functions.auth.user().onDelete((user) => {
+  admin
+    .firestore()
+    .collection('members')
+    .doc(user.email)
+    .delete()
+})
