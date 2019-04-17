@@ -1,31 +1,11 @@
-const mongoose = require('mongoose')
-
-const membersSchema = mongoose.Schema({
-  // Email of the User
-  email: { type: String, required: true, unique: true },
-  // Whether or not the user has paid dues
-  hasPaidDues: { type: Boolean, default: false },
-  // Groups that the user is a member of
-  groups: { type: [Array], default: [] },
-})
+const admin = require('firebase-admin')
 
 class MembersModel {
   /**
    * Creates DB instance of the teams collection
    */
   constructor() {
-    this.DB = mongoose.model('members', membersSchema)
-  }
-
-  async createMember(email) {
-    try {
-      const newMember = new this.DB({ email })
-      await newMember.save()
-
-      return newMember.toObject()
-    } catch (err) {
-      throw err
-    }
+    this.DB = admin.firestore().collection('members')
   }
 
   /**
@@ -33,7 +13,13 @@ class MembersModel {
    */
   async getMembers() {
     try {
-      return await this.DB.find({}).exec()
+      const results = []
+      const snapshot = await this.DB.get()
+      snapshot.forEach((doc) => {
+        const { hasPaidDues, groups } = doc.data()
+        results.push({ email: doc.id, hasPaidDues, groups })
+      })
+      return results
     } catch (err) {
       throw err
     }
@@ -46,7 +32,12 @@ class MembersModel {
    */
   async getMemberByEmail(email) {
     try {
-      return await this.DB.findOne({ email }).exec()
+      const userRef = await this.DB.doc(email)
+      const user = await userRef.get()
+
+      if (!user.exists) return null
+
+      return user.data()
     } catch (err) {
       throw err
     }
@@ -56,16 +47,14 @@ class MembersModel {
    * Adds a group to a user's list of subscibed groups (Skips duplicates)
    *
    * @param {string} email - the email to target
-   * @param {Array<object>} groups - groups to add
+   * @param {string} group - groups to add
    */
-  async subscribe(email, groups) {
+  async subscribe(email, group) {
     try {
-      const newGroups = new Set(groups)
-      const query = await this.DB.findOne({ email }).exec()
-      query.groups.addToSet(...newGroups)
-      await query.save()
-
-      return query.toObject()
+      await this.DB.doc(email).update({
+        groups: admin.firestore.FieldValue.arrayUnion(group),
+      })
+      return
     } catch (err) {
       throw err
     }
@@ -75,15 +64,14 @@ class MembersModel {
    * Removes a group from a user's list of subscibed groups
    *
    * @param {string} email - the email to target
-   * @param {Array<object>} groups - groups to remove
+   * @param {string} group - group to remove
    */
-  async unsubscribe(email, groups) {
+  async unsubscribe(email, group) {
     try {
-      return await this.DB.findOneAndUpdate(
-        { email },
-        { $pull: { groups: { $in: groups } } },
-        { new: true, safe: true, upsert: true },
-      ).exec()
+      await this.DB.doc(email).update({
+        groups: admin.firestore.FieldValue.arrayRemove(group),
+      })
+      return
     } catch (err) {
       throw err
     }

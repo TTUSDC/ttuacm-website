@@ -1,0 +1,54 @@
+version: 2
+jobs:
+  build:
+    branches:
+      ignore:
+        - master
+        - gh-pages
+    docker:
+      - image: circleci/node:8.12
+      - image: cypress/base:8
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run:
+          name: Install Dependencies
+          command: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Decrypt Files
+          command: |
+            openssl enc -aes-256-cbc -K $KEY -iv $KEY -in secrets.tar.enc -out secrets.tar -d
+            tar xvf secrets.tar
+            scripts/choose_firebase_config.sh
+
+      - run:
+          name: Lint and Test API and Client
+          command: |
+            yarn lint
+            yarn test:unit --ci --forceExit
+            yarn test:client
+
+      - deploy:
+          name: Deploy master to Production
+          command: scripts/deploy_prod.sh
+
+      - deploy:
+          name: Deploy next to Staging
+          command: scripts/deploy_staging.sh
+
+      - deploy:
+          name: Deploy to GitHub Pages
+          command: scripts/deploy_pages.sh

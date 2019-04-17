@@ -62,7 +62,7 @@ function TeamCard({
     try {
       await axios.put(`${getEndpoint()}/members/unsubscribe`, {
         email: firebase.getUserEmail(),
-        groups: [name],
+        group: name,
       })
       enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
       return
@@ -80,7 +80,7 @@ function TeamCard({
     try {
       await axios.put(`${getEndpoint()}/members/subscribe`, {
         email: firebase.getUserEmail(),
-        groups: [name],
+        group: name,
       })
       enqueueSnackbar(`Subscribed to ${name}`, 'success')
       return

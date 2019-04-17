@@ -1,24 +1,22 @@
+const moment = require('moment')
 const MembersModel = require('./members.model')
+
+function formatGroupName(group) {
+  // calculate the season
+  let season = 'Fall'
+  if (moment().dayOfYear() < 213) {
+    // August 1
+    season = 'Spring'
+  }
+
+  const year = moment().year()
+
+  return `${group} - ${season} - ${year}`
+}
 
 class MembersController {
   constructor() {
     this.model = new MembersModel()
-  }
-
-  /**
-   * Creates a new member
-   *
-   * @param {string} email - email
-   * @return {object} - the new member object
-   */
-  async createMember(email) {
-    try {
-      const user = await this.model.getMemberByEmail(email)
-      if (user) return null
-      return await this.model.createMember(email)
-    } catch (err) {
-      throw err
-    }
   }
 
   async getMemberByEmail(email) {
@@ -37,17 +35,17 @@ class MembersController {
     }
   }
 
-  async subscribe(email, groups) {
+  async subscribe(email, group) {
     try {
-      return await this.model.subscribe(email, groups)
+      return await this.model.subscribe(email, formatGroupName(group))
     } catch (err) {
       throw err
     }
   }
 
-  async unsubscribe(email, groups) {
+  async unsubscribe(email, group) {
     try {
-      return await this.model.unsubscribe(email, groups)
+      return await this.model.unsubscribe(email, formatGroupName(group))
     } catch (err) {
       throw err
     }

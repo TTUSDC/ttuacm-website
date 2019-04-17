@@ -78,7 +78,7 @@ cypress/staging/cypress
 cypress/development/cypress
 
 # API
-service_account.json
+service_account*.json
 
 # dependencies
 /node_modules
