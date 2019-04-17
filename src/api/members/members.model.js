@@ -43,42 +43,39 @@ class MembersModel {
     }
   }
 
-  // /**
-  //  * Adds a group to a user's list of subscibed groups (Skips duplicates)
-  //  *
-  //  * @param {string} email - the email to target
-  //  * @param {Array<object>} groups - groups to add
-  //  */
-  // async subscribe(email, groups) {
-  //   try {
-  //     const newGroups = new Set(groups)
-  //     const query = await this.DB.findOne({ email }).exec()
-  //     query.groups.addToSet(...newGroups)
-  //     await query.save()
-  //
-  //     return query.toObject()
-  //   } catch (err) {
-  //     throw err
-  //   }
-  // }
-  //
-  // /**
-  //  * Removes a group from a user's list of subscibed groups
-  //  *
-  //  * @param {string} email - the email to target
-  //  * @param {Array<object>} groups - groups to remove
-  //  */
-  // async unsubscribe(email, groups) {
-  //   try {
-  //     return await this.DB.findOneAndUpdate(
-  //       { email },
-  //       { $pull: { groups: { $in: groups } } },
-  //       { new: true, safe: true, upsert: true },
-  //     ).exec()
-  //   } catch (err) {
-  //     throw err
-  //   }
-  // }
+  /**
+   * Adds a group to a user's list of subscibed groups (Skips duplicates)
+   *
+   * @param {string} email - the email to target
+   * @param {string} group - groups to add
+   */
+  async subscribe(email, group) {
+    try {
+      await this.DB.doc(email).update({
+        groups: admin.firestore.FieldValue.arrayUnion(group),
+      })
+      return
+    } catch (err) {
+      throw err
+    }
+  }
+
+  /**
+   * Removes a group from a user's list of subscibed groups
+   *
+   * @param {string} email - the email to target
+   * @param {string} group - group to remove
+   */
+  async unsubscribe(email, group) {
+    try {
+      await this.DB.doc(email).update({
+        groups: admin.firestore.FieldValue.arrayRemove(group),
+      })
+      return
+    } catch (err) {
+      throw err
+    }
+  }
 }
 
 module.exports = MembersModel

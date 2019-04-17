@@ -6,8 +6,6 @@ const cors = require('cors')({ origin: true })
 const firebase = require('firebase-functions')
 const serviceAccount = require('./service_account.json')
 
-console.log(process.env.FIREBASE_CONFIG)
-
 const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
 adminConfig.credential = admin.credential.cert(serviceAccount)
 admin.initializeApp(adminConfig)
@@ -39,7 +37,7 @@ module.exports.createNewUser = functions.auth.user().onCreate((user) => {
     .collection('members')
     .doc(user.email)
     .set({
-      hasPaid: false,
-      groups: {},
+      hasPaidDues: false,
+      groups: [],
     })
 })

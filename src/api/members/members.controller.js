@@ -20,22 +20,22 @@ class MembersController {
       throw err
     }
   }
-  //
-  // async subscribe(email, groups) {
-  //   try {
-  //     return await this.model.subscribe(email, groups)
-  //   } catch (err) {
-  //     throw err
-  //   }
-  // }
-  //
-  // async unsubscribe(email, groups) {
-  //   try {
-  //     return await this.model.unsubscribe(email, groups)
-  //   } catch (err) {
-  //     throw err
-  //   }
-  // }
+
+  async subscribe(email, groups) {
+    try {
+      return await this.model.subscribe(email, groups)
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async unsubscribe(email, groups) {
+    try {
+      return await this.model.unsubscribe(email, groups)
+    } catch (err) {
+      throw err
+    }
+  }
 }
 
 module.exports = MembersController
