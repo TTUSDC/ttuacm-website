@@ -20,7 +20,6 @@ SERVICES = {
     'connections': [
         'protocol',
         'host',
-        'db'
     ]
 }
 
