@@ -40,6 +40,7 @@ module.exports.createNewUser = functions.auth.user().onCreate((user) => {
       hasPaidDues: false,
       groups: [],
     })
+  return 1
 })
 
 // Deletes user in the database if they ever get deleted
@@ -49,4 +50,6 @@ module.exports.deleteExistingUser = functions.auth.user().onDelete((user) => {
     .collection('members')
     .doc(user.email)
     .delete()
+
+  return 1
 })
