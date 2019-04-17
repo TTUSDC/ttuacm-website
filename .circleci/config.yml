@@ -3,11 +3,9 @@ jobs:
   build:
     branches:
       ignore:
-        - master
         - gh-pages
     docker:
       - image: circleci/node:8.12
-      - image: cypress/base:8
 
     working_directory: ~/repo
 
