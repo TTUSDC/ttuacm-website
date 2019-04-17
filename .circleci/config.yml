@@ -3,10 +3,8 @@ jobs:
   build:
     branches:
       ignore:
-        - master
     docker:
       - image: circleci/node:8.12
-      - image: cypress/base:8
 
     working_directory: ~/repo
 
