@@ -42,7 +42,7 @@ module.exports.createNewUser = functions.auth.user().onCreate((user) => {
       permissions: {
         admin: 0,
         officer: 0,
-        member: 0,
+        member: 1,
       },
     })
   return 1
