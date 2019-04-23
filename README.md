@@ -1,10 +1,11 @@
-# TTUACM Website v2 - Coming in Fall 2019 [![Build Status](https://travis-ci.org/TTUSDC/ttuacm-website.svg?branch=next)](https://travis-ci.org/TTUSDC/ttuacm-website)
+# TTUACM Website v2 - Coming in Fall 2019
 
 ### Contributing:
-  Please contact us at [acmtexastech@gmail.com](mailto:acmtexastech@gmail.com) for more information on how to contribute to this project.
 
-  - [Contributing page](https://github.com/TTUSDC/ttuacm-website/blob/master/.github/.CONTRIBUTING.md)
+Please contact us at [acmtexastech@gmail.com](mailto:acmtexastech@gmail.com) for more information on how to contribute to this project.
 
-  - [Documentation page](https://TTUSDC.github.io/ttuacm-website/)
+- [Contributing page](https://github.com/TTUSDC/ttuacm-website/blob/master/.github/.CONTRIBUTING.md)
 
-  - [Beta](https://acm-texas-tech-web-app-2-beta.firebaseapp.com)
+- [Documentation page](https://TTUSDC.github.io/ttuacm-website/)
+
+- [Beta](https://acm-texas-tech-web-app-2-beta.firebaseapp.com)
