@@ -39,6 +39,11 @@ module.exports.createNewUser = functions.auth.user().onCreate((user) => {
     .set({
       hasPaidDues: false,
       groups: [],
+      permissions: {
+        admin: 0,
+        officer: 0,
+        member: 1,
+      },
     })
   return 1
 })

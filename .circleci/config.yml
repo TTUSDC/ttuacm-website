@@ -3,7 +3,6 @@ jobs:
   build:
     branches:
       ignore:
-        - gh-pages
     docker:
       - image: circleci/node:8.12
 
