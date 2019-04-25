@@ -50,8 +50,8 @@ export default function useEndpoint(
   { body = {}, method = 'get', headers = {}, params = {}, path = '/' },
   defaultOrDevelopmentValues = [{}],
 ) {
-  if (['development', 'test'].includes(process.env.NODE_ENV))
-    return [null, false, defaultOrDevelopmentValues]
+  // if (['development', 'test'].includes(process.env.NODE_ENV))
+  //   return [null, false, defaultOrDevelopmentValues]
   const [state, dispatch] = useReducer(reducer, {
     ...initState,
     data: defaultOrDevelopmentValues,
