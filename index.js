@@ -26,9 +26,52 @@ api.use(bp.urlencoded({ extended: false }))
 api.use('/v2/members', membersApp)
 api.use('/v2/events', eventsApp)
 api.use('/v2/environment', environmentService)
+api.post('/v2/users', async (req, res) => {
+  if (!req.body.email) res.status(500).end()
+  else {
+    const doc = await admin
+      .firestore()
+      .collection('members')
+      .doc(req.body.email)
+      .get()
+
+    if (!doc.exists)
+      admin
+        .firestore()
+        .collection('members')
+        .doc(req.body.email)
+        .set({
+          hasPaidDues: false,
+          groups: [],
+          permissions: {
+            admin: 0,
+            officer: 0,
+            member: 1,
+          },
+        })
+    res.status(201).end()
+  }
+})
 
 module.exports.app = api
 module.exports.api = functions.https.onRequest(api)
+
+module.exports.createNewUser = functions.auth.user().onCreate((user) => {
+  admin
+    .firestore()
+    .collection('members')
+    .doc(user.email)
+    .set({
+      hasPaidDues: false,
+      groups: [],
+      permissions: {
+        admin: 0,
+        officer: 0,
+        member: 1,
+      },
+    })
+  return 1
+})
 
 // Creates a new user in the database after every login
 module.exports.createNewUser = functions.auth.user().onCreate((user) => {

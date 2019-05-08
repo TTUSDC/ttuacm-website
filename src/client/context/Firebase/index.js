@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
+import { getEndpoint } from 'hooks/useEndpoint'
 import Firebase from './firebase'
 
 export const FirebaseContext = React.createContext(null)
@@ -20,8 +22,13 @@ function FirebaseProvider({ children = [], firebase }) {
   if (!defaultFirebase) {
     defaultFirebase = new Firebase()
   }
-  defaultFirebase.auth.onAuthStateChanged((user) => {
+  defaultFirebase.auth.onAuthStateChanged(async (user) => {
     setLoggedIn(user !== null)
+    if (!['development', 'test'].includes(process.env.NODE_ENV) && user) {
+      await axios.post(`${getEndpoint()}/users`, {
+        email: user.email,
+      })
+    }
   })
 
   return (
