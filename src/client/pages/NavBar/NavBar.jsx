@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Grid from '@material-ui/core/Grid'
-import Tech from 'assets/Tech.png'
+import Typography from '@material-ui/core/Typography'
 import DesktopNavigation from './DesktopNavigation.jsx'
 
 const styles = (theme) => ({
@@ -54,6 +54,8 @@ const NavBar = ({ classes, currentPage, navigateTo }) => {
     handleNavigation('/')()
   }
 
+  const username = firebase.getUserName() ? firebase.getUserName() : 'Guest'
+
   return (
     <AppBar position='static' className={classes.barDefaults}>
       <Grid container spacing={16} className={classes.Container}>
@@ -64,7 +66,7 @@ const NavBar = ({ classes, currentPage, navigateTo }) => {
           onClick={handleNavigation('/home')}
           data-testid='Logo'
         >
-          <img className={classes.img} alt='tech building' src={Tech} />
+          <Typography variant='body1'>{username}</Typography>
         </Grid>
         {/* Desktop Navigation */}
         <Grid item xs='auto' className={classes.Tabs}>
