@@ -26,25 +26,24 @@ class EventsController {
           (err, res) => {
             if (err) reject(err)
             const events = res.data.items
-            if (events.length) {
-              allEvents = events.map((event) => {
-                // Will store all of the events and return
-                // Maps all of the numbers to days
-                const start = event.start.dateTime || event.start.date
-                const end = event.end.dateTime || event.end.date
-                const singleEvent = {
-                  startTime: start,
-                  endTime: end,
-                  title: event.summary || '',
-                  location: event.location || 'TBA',
-                  description: event.description || '',
-                  recurringEvent: Boolean(event.recurringEventId),
-                }
-                return singleEvent
-              })
-            } else {
-              console.log('No upcoming events found.')
-            }
+            if (!events.length) console.log('No Events Available')
+
+            allEvents = events.map((event) => {
+              // Will store all of the events and return
+              // Maps all of the numbers to days
+              const start = event.start.dateTime || event.start.date
+              const end = event.end.dateTime || event.end.date
+              const singleEvent = {
+                startTime: start,
+                endTime: end,
+                title: event.summary || '',
+                location: event.location || 'TBA',
+                description: event.description || '',
+                recurringEvent: Boolean(event.recurringEventId),
+              }
+              return singleEvent
+            })
+
             resolve(allEvents)
           },
         )

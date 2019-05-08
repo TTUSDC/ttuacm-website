@@ -1,64 +1,49 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import FirebaseAuthButtons from 'components/FirebaseAuthButtons'
+import Tech from 'assets/Tech.png'
 
 const styles = (theme) => ({
-  back: {
-    backgroundColor: '#CCCCCC', // So we can play with the background
-  },
   main: {
-    width: 'auto',
-    display: 'block',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    marginTop: theme.spacing.unit * 4,
-    marginBottom: theme.spacing.unit * 4,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
+    width: '86vw',
+    minHeight: '73vh',
+    margin: 'auto',
   },
-  root: {
-    ...theme.mixins.gutters(),
-    display: 'flex',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-      .spacing.unit * 3}px`,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
-    backgroundColor: '#253F51',
-  },
-  title: {
-    [theme.breakpoints.down('xs')]: {
-      ...theme.typography.h4,
+  TechContainer: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
     },
-    fontWeight: 'bold',
-    width: '70%',
-    margin: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
-    display: 'flex',
-    justifyContent: 'center',
+    margin: 'auto',
+  },
+  Tech: {
+    width: '100%',
+  },
+  Buttons: {
+    margin: 'auto',
   },
 })
 
 function AuthenticationPage({ classes = {} }) {
   return (
-    <div className={classes.back}>
-      <div className={classes.main}>
-        <Paper className={classes.root} elevation={2}>
-          <div className={classes.title}>
-            <Typography variant='h3' component='h3' color='textPrimary'>
-              SIGN IN
-            </Typography>
-          </div>
-          <FirebaseAuthButtons />
-        </Paper>
-      </div>
-    </div>
+    <Grid container spacing={24} className={classes.main}>
+      <Grid item xs={12} md={4} className={classes.Buttons}>
+        <Typography
+          style={{ textAlign: 'center' }}
+          variant='h3'
+          component='h3'
+          color='textPrimary'
+        >
+          Welcome!
+        </Typography>
+        <FirebaseAuthButtons />
+      </Grid>
+      <Grid className={classes.TechContainer} item xs={8}>
+        <img className={classes.Tech} src={Tech} alt='' />
+      </Grid>
+    </Grid>
   )
 }
 
@@ -66,4 +51,4 @@ AuthenticationPage.propTypes = {
   classes: PropTypes.shape({}),
 }
 
-export default withStyles(styles)(AuthenticationPage)
+export default withStyles(styles, { withTheme: true })(AuthenticationPage)
