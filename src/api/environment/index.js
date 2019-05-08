@@ -5,6 +5,7 @@ const cors = require('cors')
 const PROTECTED_ENDPOINTS = [
   'https://acm-texas-tech-web-app-2-beta.firebaseapp.com',
   'https://acm-texas-tech-web-app-2.firebaseapp.com',
+  'https://acmttu.org',
 ]
 
 const router = express.Router()
