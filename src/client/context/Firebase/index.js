@@ -18,13 +18,20 @@ function FirebaseProvider({ children = [], firebase }) {
   // Used because Firebase may not finish initializing
   // Must listen for the auth state change and change states appropriately
   const [loggedIn, setLoggedIn] = useState(false)
+  const [emailVerified, setEmailVerified] = useState(true)
   let defaultFirebase = firebase
   if (!defaultFirebase) {
     defaultFirebase = new Firebase()
   }
+
   defaultFirebase.auth.onAuthStateChanged(async (user) => {
+    setEmailVerified(user && user.emailVerified)
     setLoggedIn(user !== null)
-    if (!['development', 'test'].includes(process.env.NODE_ENV) && user) {
+    if (
+      !['development', 'test'].includes(process.env.NODE_ENV) &&
+      user &&
+      user.emailVerified
+    ) {
       await axios.post(`${getEndpoint()}/users`, {
         email: user.email,
       })
@@ -33,7 +40,11 @@ function FirebaseProvider({ children = [], firebase }) {
 
   return (
     <FirebaseContext.Provider
-      value={{ firebase: defaultFirebase, isUserLoggedIn: loggedIn }}
+      value={{
+        firebase: defaultFirebase,
+        isUserLoggedIn: loggedIn,
+        isVerified: emailVerified,
+      }}
     >
       {children}
     </FirebaseContext.Provider>

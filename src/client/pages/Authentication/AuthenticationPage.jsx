@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import FirebaseAuthButtons from 'components/FirebaseAuthButtons'
 import Tech from 'assets/Tech.png'
+import firebase from 'firebase'
+import useSnackbar from 'hooks/useSnackbar'
 
 const styles = (theme) => ({
   main: {
@@ -23,10 +27,73 @@ const styles = (theme) => ({
   },
   Buttons: {
     margin: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  FormPrompts: {
+    cursor: 'pointer',
+    margin: '10px 0px',
+  },
+  SendEmailButton: {
+    width: '60%',
+  },
+  EmailForm: {
+    width: '60%',
   },
 })
 
+function reducer(state, { payload, type }) {
+  switch (type) {
+    case 'show-email':
+      return { showEmailPrompt: true, email: '', err: null }
+    case 'change-email':
+      return { ...state, email: payload, err: null }
+    case 'finish-send-email':
+      return { showEmailPrompt: false, email: '', err: null }
+    case 'error':
+      return { ...state, err: payload }
+    default:
+      console.error('Bad action')
+      return state
+  }
+}
+
+const initState = {
+  showEmailPrompt: false,
+  email: '',
+  err: null,
+}
+
 function AuthenticationPage({ classes = {} }) {
+  const [state, dispatch] = useReducer(reducer, initState)
+  const [SnackBar, enqueueSnackbar] = useSnackbar()
+
+  function handleEmailChange(e) {
+    dispatch({ type: 'change-email', payload: e.target.value })
+  }
+
+  async function resetPassword() {
+    try {
+      await firebase.auth().sendPasswordResetEmail(state.email)
+      dispatch({ type: 'finish-send-email' })
+    } catch (err) {
+      let message = 'Unknown Error'
+      switch (err.code) {
+        case 'auth/user-not-found':
+          message = 'This user does not exist. Please register'
+          break
+        case 'auth/invalid-email':
+          message = 'This is not a proper email'
+          break
+        default:
+          break
+      }
+      enqueueSnackbar(message, 'error')
+      dispatch({ type: 'error', payload: message })
+    }
+  }
+
   return (
     <Grid container spacing={24} className={classes.main}>
       <Grid item xs={12} md={4} className={classes.Buttons}>
@@ -39,10 +106,48 @@ function AuthenticationPage({ classes = {} }) {
           Welcome!
         </Typography>
         <FirebaseAuthButtons />
+        {state.showEmailPrompt ? (
+          <React.Fragment>
+            <TextField
+              label='Email'
+              className={classes.EmailForm}
+              value={state.email}
+              onChange={handleEmailChange}
+              margin='normal'
+            />
+            <Button
+              onClick={resetPassword}
+              variant='contained'
+              className={classes.SendEmailButton}
+            >
+              Send Email
+            </Button>
+            <Typography
+              style={{ textAlign: 'center' }}
+              className={classes.FormPrompts}
+              variant='body2'
+              color='textPrimary'
+              onClick={() => dispatch({ type: 'finish-send-email' })}
+            >
+              Hide
+            </Typography>
+          </React.Fragment>
+        ) : (
+          <Typography
+            style={{ textAlign: 'center' }}
+            className={classes.FormPrompts}
+            variant='body1'
+            color='textPrimary'
+            onClick={() => dispatch({ type: 'show-email' })}
+          >
+            Forgot Password?
+          </Typography>
+        )}
       </Grid>
       <Grid className={classes.TechContainer} item xs={8}>
         <img className={classes.Tech} src={Tech} alt='' />
       </Grid>
+      <SnackBar />
     </Grid>
   )
 }

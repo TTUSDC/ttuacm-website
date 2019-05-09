@@ -37,6 +37,7 @@ function FirebaseAuthButtons() {
 
   return (
     <StyledFirebaseAuth
+      uiCallback={(ui) => console.log(ui)}
       style={style.main}
       uiConfig={uiConfig}
       firebaseAuth={firebase.auth}
