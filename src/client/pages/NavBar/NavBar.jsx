@@ -1,4 +1,5 @@
 import React from 'react'
+import firebaseInstance from 'firebase'
 import PropTypes from 'prop-types'
 import { withFirebase } from 'context/Firebase'
 import { push } from 'connected-react-router'
@@ -7,6 +8,7 @@ import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import useSnackbar from 'hooks/useSnackbar'
 import DesktopNavigation from './DesktopNavigation.jsx'
 
 const styles = (theme) => ({
@@ -41,7 +43,8 @@ const styles = (theme) => ({
 })
 
 const NavBar = ({ classes, currentPage, navigateTo }) => {
-  const { firebase, isUserLoggedIn } = withFirebase()
+  const { firebase, isUserLoggedIn, isVerified } = withFirebase()
+  const [SnackBar, enqueueSnackbar] = useSnackbar()
 
   const handleNavigation = (nextPage) => () => {
     navigateTo(nextPage)
@@ -54,6 +57,16 @@ const NavBar = ({ classes, currentPage, navigateTo }) => {
     handleNavigation('/')()
   }
 
+  async function sendEmailVerification() {
+    try {
+      await firebaseInstance.auth().currentUser.sendEmailVerification()
+      enqueueSnackbar('Success! Please check your email', 'success')
+    } catch (err) {
+      console.error(err)
+      enqueueSnackbar('Error sending email... Please try again later', 'error')
+    }
+  }
+
   const username = firebase.getUserName() ? firebase.getUserName() : 'Guest'
 
   return (
@@ -62,11 +75,18 @@ const NavBar = ({ classes, currentPage, navigateTo }) => {
         <Grid
           className={classes.ImageContainer}
           item
-          xs={6}
-          onClick={handleNavigation('/home')}
+          xs={16}
           data-testid='Logo'
         >
-          <Typography variant='body1'>{username}</Typography>
+          {isVerified === false ? (
+            <Typography onClick={sendEmailVerification} variant='body1'>
+              Click To Send Email Verification
+            </Typography>
+          ) : (
+            <Typography onClick={handleNavigation('/home')} variant='body1'>
+              {username}
+            </Typography>
+          )}
         </Grid>
         {/* Desktop Navigation */}
         <Grid item xs='auto' className={classes.Tabs}>
@@ -78,6 +98,7 @@ const NavBar = ({ classes, currentPage, navigateTo }) => {
           />
         </Grid>
       </Grid>
+      <SnackBar />
     </AppBar>
   )
 }
