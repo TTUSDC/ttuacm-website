@@ -54,6 +54,7 @@ export default function styles(theme) {
       },
       color: theme.palette.primary.main,
       textTransform: 'uppercase',
+      cursor: 'pointer',
     },
   }
 }
