@@ -1,18 +1,17 @@
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { withStyles } from '@material-ui/core/styles'
 import { Router } from '@reach/router'
-import {
-  AboutUsPage,
-  AuthenticationPage,
-  EventsPage,
-  LandingPage,
-  NotFoundPage,
-  TeamsPage,
-} from 'client/pages'
 import Footer from 'client/pages/Footer'
 import NavBar from 'client/pages/NavBar/NavBar.jsx'
 import { PropTypes } from 'prop-types'
 import React from 'react'
+
+import AboutUsPage from './AboutUs/AboutUsPage'
+import AuthenticationPage from './Authentication/AuthenticationPage'
+import EventsPage from './Events/EventsPage'
+import LandingPage from './Landing/LandingPage'
+import NotFoundPage from './NotFound/NotFoundPage'
+import TeamsPage from './Teams/TeamsPage'
 
 const styles = (theme) => ({
   Main: {

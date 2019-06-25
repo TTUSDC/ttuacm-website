@@ -1,7 +1,8 @@
-import React, { useState, useContext } from 'react'
-import PropTypes from 'prop-types'
 import axios from 'axios'
-import { getEndpoint } from 'client/hooks/useEndpoint'
+import { getEndpoint } from 'client/services/useEndpoint'
+import PropTypes from 'prop-types'
+import React, { useContext, useState } from 'react'
+
 import Firebase from './firebase'
 
 export const FirebaseContext = React.createContext(null)
