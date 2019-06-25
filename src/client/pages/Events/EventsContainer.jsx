@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-import useSnackbar from 'client/hooks/useSnackbar'
-import EventsSection from 'client/pages/Events/EventsSection'
 import MOCK_CALENDAR from 'client/__mocks__/calendar'
-import useEndpoint from 'client/hooks/useEndpoint'
+import EventsSection from 'client/pages/Events/EventsSection'
+import useEndpoint from 'client/services/useEndpoint'
+import useSnackbar from 'client/services/useSnackbar'
 import moment from 'moment'
+import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
 
 const SHOW_MOCK_CALENDAR = process.env.NODE_ENV === 'development'
 

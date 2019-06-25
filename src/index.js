@@ -2,9 +2,9 @@ import './client/index.css'
 import 'typeface-roboto'
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import MaintenanceContainer from 'client/containers/MaintenanceContainer.jsx'
-import { FirebaseProvider } from 'client/context/Firebase'
-import { WindowSizeProvider } from 'client/context/withWindowSize'
+import Pages from 'client/pages/Pages.jsx'
+import { FirebaseProvider } from 'client/services/withFirebase'
+import { WindowSizeProvider } from 'client/services/withWindowSize'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -46,14 +46,13 @@ const render = (Component) => {
   )
 }
 
-render(MaintenanceContainer)
+render(Pages)
 
 if (module.hot) {
   // Reload components
-  module.hot.accept('./client/containers/MaintenanceContainer.jsx', () => {
+  module.hot.accept('./client/pages/Pages.jsx', () => {
     // eslint-disable-next-line global-require
-    const NextApp = require('./client/containers/MaintenanceContainer.jsx')
-      .default
+    const NextApp = require('./client/pages/Pages.jsx').default
     render(NextApp)
   })
 }

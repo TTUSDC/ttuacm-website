@@ -1,6 +1,6 @@
 import React from 'react'
-import PageLayout from 'client/components/PageLayout'
-import EventsContainer from 'client/containers/EventsContainer'
+import PageLayout from 'client/pages/PageLayout'
+import EventsContainer from './EventsContainer'
 
 function EventsPage() {
   const EventsPageInfo = {

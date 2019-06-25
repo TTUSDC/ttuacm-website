@@ -1,8 +1,9 @@
-import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-import { withFirebase } from 'client/context/Firebase'
+import { withFirebase } from 'client/services/withFirebase'
 import PropTypes from 'prop-types'
+import React from 'react'
+
 import TeamCard from './TeamCard'
 
 const styles = () => ({

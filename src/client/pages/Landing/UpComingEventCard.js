@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import MOCK_CALENDAR from 'client/__mocks__/calendar'
-import EventsList from 'client/components/EventsList'
-import useEndpoint from 'client/hooks/useEndpoint'
+import EventsList from 'client/pages/Events/EventsList'
+import useEndpoint from 'client/services/useEndpoint'
 import moment from 'moment'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const SHOW_MOCK_CALENDAR = process.env.NODE_ENV === 'development'
 

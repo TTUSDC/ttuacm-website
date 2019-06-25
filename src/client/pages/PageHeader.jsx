@@ -1,10 +1,43 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import useWindowSize from 'client/context/withWindowSize'
+import useWindowSize from 'client/services/withWindowSize'
 import { withStyles } from '@material-ui/core/styles'
 import Desert from 'client/assets/shared/desert.png'
 import DesertNight from 'client/assets/shared/desert-night.png'
-import styles from './PageHeader.styles'
+
+const styles = (theme) => ({
+  PageHeader: {
+    display: 'flex',
+    color: 'white',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    textAlign: 'center',
+    backgroundSize: 'cover',
+    backgroundPosition: 'bottom',
+  },
+  title: {
+    ...theme.typography.h2,
+    [theme.breakpoints.down('xs')]: {
+      ...theme.typography.h4,
+    },
+    fontWeight: 'bold',
+    width: '70%',
+  },
+  info: {
+    ...theme.typography.h6,
+    width: '61%',
+    [theme.breakpoints.down('xs')]: {
+      ...theme.typography.body2,
+      width: '80%',
+    },
+    display: 'flex',
+    textAlign: 'center',
+    justifyContent: 'center',
+    wordWrap: 'break-word',
+  },
+})
 
 const PageHeader = ({ title, info, classes }) => {
   const { width, height } = useWindowSize()

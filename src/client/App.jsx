@@ -1,6 +1,6 @@
-import Main from 'client/Main'
+import Pages from 'client/pages/Pages'
 import useEndpoint from 'client/hooks/useEndpoint'
-import MaintenanceScreen from 'client/pages/Maintenance/MaintenanceScreen.jsx'
+import MaintenanceScreen from 'client/pages/Maintenance/MaintenanceScreen'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -25,9 +25,9 @@ function MaintenanceContainer() {
   }
 
   // Changes this is you want to see the MaintenanceScreen
-  if (process.env.NODE_ENV !== 'production') return <Main />
+  if (process.env.NODE_ENV !== 'production') return <Pages />
 
-  if (env.maintainance !== 'true') return <Main />
+  if (env.maintainance !== 'true') return <Pages />
 
   return <MaintenanceScreen />
 }
