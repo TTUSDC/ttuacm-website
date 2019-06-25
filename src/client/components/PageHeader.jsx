@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import useWindowSize from 'context/withWindowSize'
+import useWindowSize from 'client/context/withWindowSize'
 import { withStyles } from '@material-ui/core/styles'
-import Desert from 'assets/shared/desert.png'
-import DesertNight from 'assets/shared/desert-night.png'
+import Desert from 'client/assets/shared/desert.png'
+import DesertNight from 'client/assets/shared/desert-night.png'
 import styles from './PageHeader.styles'
 
 const PageHeader = ({ title, info, classes }) => {

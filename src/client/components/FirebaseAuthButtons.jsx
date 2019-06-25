@@ -1,5 +1,5 @@
 import React from 'react'
-import { withFirebase } from 'context/Firebase'
+import { withFirebase } from 'client/context/Firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 const style = {
@@ -37,7 +37,6 @@ function FirebaseAuthButtons() {
 
   return (
     <StyledFirebaseAuth
-      uiCallback={(ui) => console.log(ui)}
       style={style.main}
       uiConfig={uiConfig}
       firebaseAuth={firebase.auth}

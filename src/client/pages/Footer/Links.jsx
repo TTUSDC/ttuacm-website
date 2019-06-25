@@ -1,9 +1,9 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import GitHubIconLogoSrc from 'assets/svg/GitHub.svg'
-import SlackIconLogoSrc from 'assets/svg/Slack.svg'
-import FacebookIconLogoSrc from 'assets/svg/Facebook.svg'
+import GitHubIconLogoSrc from 'client/assets/svg/GitHub.svg'
+import SlackIconLogoSrc from 'client/assets/svg/Slack.svg'
+import FacebookIconLogoSrc from 'client/assets/svg/Facebook.svg'
 import LinkIcon from './LinkIcon'
 
 const styles = (theme) => ({

@@ -1,6 +1,6 @@
 import React from 'react'
-import TeamsList from 'components/TeamsList'
-import Profile from 'assets/teams_page/profile.jpg'
+import TeamsList from 'client/components/TeamsList'
+import Profile from 'client/assets/teams_page/profile.jpg'
 
 // Import photos into here and serve place them in the right objects
 

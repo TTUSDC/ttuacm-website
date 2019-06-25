@@ -1,14 +1,16 @@
-import React, { useReducer } from 'react'
-import PropTypes from 'prop-types'
-import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
-import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
+import { withStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import FirebaseAuthButtons from 'components/FirebaseAuthButtons'
-import Tech from 'assets/Tech.png'
+import { navigate } from '@reach/router'
+import Tech from 'client/assets/Tech.png'
+import FirebaseAuthButtons from 'client/components/FirebaseAuthButtons'
+import { withFirebase } from 'client/context/Firebase'
 import firebase from 'firebase'
-import useSnackbar from 'hooks/useSnackbar'
+import useSnackbar from 'client/hooks/useSnackbar'
+import PropTypes from 'prop-types'
+import React, { useReducer } from 'react'
 
 const styles = (theme) => ({
   main: {
@@ -68,6 +70,7 @@ const initState = {
 function AuthenticationPage({ classes = {} }) {
   const [state, dispatch] = useReducer(reducer, initState)
   const [SnackBar, enqueueSnackbar] = useSnackbar()
+  const { isUserLoggedIn } = withFirebase()
 
   function handleEmailChange(e) {
     dispatch({ type: 'change-email', payload: e.target.value })
@@ -93,6 +96,8 @@ function AuthenticationPage({ classes = {} }) {
       dispatch({ type: 'error', payload: message })
     }
   }
+
+  if (isUserLoggedIn) navigate('/')
 
   return (
     <Grid container spacing={24} className={classes.main}>

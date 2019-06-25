@@ -14,9 +14,9 @@ import EmailIcon from '@material-ui/icons/Email'
 import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { withFirebase } from 'context/Firebase'
-import { getEndpoint } from 'hooks/useEndpoint'
-import useSnackbar from 'hooks/useSnackbar'
+import { withFirebase } from 'client/context/Firebase'
+import { getEndpoint } from 'client/hooks/useEndpoint'
+import useSnackbar from 'client/hooks/useSnackbar'
 
 const styles = (theme) => ({
   Image: {

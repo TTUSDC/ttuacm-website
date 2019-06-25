@@ -1,7 +1,7 @@
 import React from 'react'
-import Events from 'assets/home_page/Events.gif'
-import SDC from 'assets/home_page/SDC.gif'
-import Team from 'assets/home_page/Team.gif'
+import Events from 'client/assets/home_page/Events.gif'
+import SDC from 'client/assets/home_page/SDC.gif'
+import Team from 'client/assets/home_page/Team.gif'
 import WhatWeDoCard from './WhatWeDoCard'
 
 const content = [

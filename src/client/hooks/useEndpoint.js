@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useReducer, useEffect } from 'react'
 import axios from 'axios'
 
@@ -80,7 +81,7 @@ export default function useEndpoint(
     }
 
     fetchData()
-  }, [])
+  }, [connectionString, path, body, headers, params, method])
 
   return [state.err, state.isLoading, state.data]
 }

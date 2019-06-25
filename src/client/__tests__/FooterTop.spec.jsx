@@ -1,5 +1,5 @@
 import React from 'react'
-import FooterTop from 'pages/Footer/FooterTop'
+import FooterTop from 'client/pages/Footer/FooterTop'
 import { expect } from 'chai'
 import { cleanup, act } from 'react-testing-library'
 import { renderComponent } from './utils'
