@@ -1,9 +1,10 @@
-import React from 'react'
-import { getByText, cleanup } from 'react-testing-library'
 import { expect } from 'chai'
-import moment from 'moment'
-import sinon from 'sinon'
 import EventsSection, { filterEvents } from 'client/pages/Events/EventsSection'
+import moment from 'moment'
+import React from 'react'
+import { cleanup, getByText } from 'react-testing-library'
+import sinon from 'sinon'
+
 import { renderComponent } from './utils'
 
 sinon.useFakeTimers(
