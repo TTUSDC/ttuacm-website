@@ -35,7 +35,7 @@ jobs:
           name: Lint and Test API and Client
           command: |
             yarn lint
-            yarn test:unit --ci --forceExit
+            yarn test:unit --ci --forceExit --passWithNoTests # No API Tests :(
             yarn test:client
 
       - deploy:
