@@ -5,12 +5,13 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { navigate } from '@reach/router'
 import Tech from 'client/assets/Tech.png'
-import FirebaseAuthButtons from 'client/components/FirebaseAuthButtons'
-import { withFirebase } from 'client/context/Firebase'
+import useSnackbar from 'client/services/useSnackbar'
+import { withFirebase } from 'client/services/withFirebase'
 import firebase from 'firebase'
-import useSnackbar from 'client/hooks/useSnackbar'
 import PropTypes from 'prop-types'
 import React, { useReducer } from 'react'
+
+import FirebaseAuthButtons from './FirebaseAuthButtons'
 
 const styles = (theme) => ({
   main: {
