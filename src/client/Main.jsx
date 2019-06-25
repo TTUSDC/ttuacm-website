@@ -47,8 +47,8 @@ const Main = ({ classes = {} }) => (
           <AboutUsPage path='/about' />
           <TeamsPage path='/teams' />
           <EventsPage path='/events' />
-          <NotFoundPage default />
           <AuthenticationPage path='/auth' />
+          <NotFoundPage default />
         </Router>
       </main>
       <Footer />
