@@ -37,7 +37,7 @@ function UpcomingEventCard({ defaultEvents = placeHolder }) {
 }
 
 UpcomingEventCard.propTypes = {
-  defaultEvents: PropTypes.shape({}),
+  defaultEvents: PropTypes.arrayOf(PropTypes.shape({})),
 }
 
 export default UpcomingEventCard
