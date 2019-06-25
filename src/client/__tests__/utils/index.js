@@ -2,14 +2,9 @@ import React from 'react'
 import { render } from 'react-testing-library'
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import { Provider as ReduxProvider } from 'react-redux'
-import { createBrowserHistory } from 'history'
 
-import { WindowSizeProvider } from 'context/withWindowSize'
-import { store } from 'redux/store'
+import { WindowSizeProvider } from 'client/context/withWindowSize'
 import { MockFirebaseProvider } from './MockFirebase'
-
-const history = createBrowserHistory()
 
 const theme = createMuiTheme({
   typography: {
@@ -23,11 +18,9 @@ export function renderComponent(
 ) {
   const MockProviders = () => (
     <MockFirebaseProvider isLoggedIn={isLoggedIn}>
-      <ReduxProvider store={store(history)}>
-        <MuiThemeProvider theme={theme}>
-          <WindowSizeProvider>{children}</WindowSizeProvider>
-        </MuiThemeProvider>
-      </ReduxProvider>
+      <MuiThemeProvider theme={theme}>
+        <WindowSizeProvider>{children}</WindowSizeProvider>
+      </MuiThemeProvider>
     </MockFirebaseProvider>
   )
   return render(children, { wrapper: MockProviders })

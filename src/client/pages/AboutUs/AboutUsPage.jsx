@@ -1,5 +1,5 @@
 import React from 'react'
-import PageLayout from 'components/PageLayout'
+import PageLayout from 'client/components/PageLayout'
 import AboutUsSection from './AboutUsSection'
 
 function AboutUsPage() {

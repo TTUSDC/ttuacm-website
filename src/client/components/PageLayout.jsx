@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
-import PageHeader from 'components/PageHeader'
+import PageHeader from 'client/components/PageHeader'
 
 export default function PageLayout({ headerInfo, content, color }) {
   return (

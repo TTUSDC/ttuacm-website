@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import { getEndpoint } from 'hooks/useEndpoint'
+import { getEndpoint } from 'client/hooks/useEndpoint'
 import Firebase from './firebase'
 
 export const FirebaseContext = React.createContext(null)
 
 function withFirebase() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const firebase = useContext(FirebaseContext)
   if (!firebase)
     throw new Error('Cannot use `withFirebase` outside of Provider')
@@ -25,16 +26,20 @@ function FirebaseProvider({ children = [], firebase }) {
   }
 
   defaultFirebase.auth.onAuthStateChanged(async (user) => {
-    setEmailVerified(user && user.emailVerified)
-    setLoggedIn(user !== null)
+    setEmailVerified(!!user && user.emailVerified)
+    setLoggedIn(!!user)
     if (
       !['development', 'test'].includes(process.env.NODE_ENV) &&
       user &&
       user.emailVerified
     ) {
-      await axios.post(`${getEndpoint()}/users`, {
-        email: user.email,
-      })
+      try {
+        await axios.post(`${getEndpoint()}/users`, {
+          email: user.email,
+        })
+      } catch (err) {
+        console.error(err)
+      }
     }
   })
 

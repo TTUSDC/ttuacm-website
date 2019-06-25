@@ -5,9 +5,9 @@
   "description": "ACM TTU Website",
   "scripts": {
     "serve:api": "echo 'Run `firebase functions:shell`'",
-    "serve:client": "cross-env NODE_PATH=src/client react-app-rewired start",
-    "build:client": "cross-env NODE_PATH=src/client react-app-rewired build",
-    "test:client": "cross-env NODE_PATH=src/client react-app-rewired test --env=jsdom --testPathPattern=/*/*.spec.jsx",
+    "serve:client": "cross-env react-scripts start",
+    "build:client": "cross-env react-scripts build",
+    "test:client": "cross-env react-scripts test --env=jsdom --testPathPattern='/*.spec.jsx'",
     "test:unit": "cross-env NODE_ENV=test jest --runInBand --testPathPattern='/src/api/*/*'",
     "test:unit:debug": "cross-env NODE_ENV=test node --inspect node_modules/.bin/jest --runInBand --testPathPattern='/src/api/*/*'",
     "e2e:ci": "cypress run -P ./cypress/staging --record --key $TTUACM_CY_RECORD_KEY",
@@ -23,9 +23,9 @@
     "@firebase/app-types": "0.3.2",
     "@material-ui/core": "3.9.2",
     "@material-ui/icons": "3.0.2",
+    "@reach/router": "1.2.1",
     "axios": "~0.18.0",
     "body-parser": "~1.18.3",
-    "connected-react-router": "4.3",
     "cors": "2.8.4",
     "dotenv": "6.1.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -36,26 +36,13 @@
     "firebase-admin": "7.2.0",
     "firebase-functions": "2.3.0",
     "googleapis": "27",
-    "history": "4.7.2",
-    "immutable": "4.0.0-rc.12",
     "mdi-react": "^5.3.0",
     "moment": "2.23.0",
-    "notistack": "0.6.1",
     "react": "16.8.3",
-    "react-app-rewire-hot-loader": "1.0.1",
-    "react-app-rewired": "1.5.2",
     "react-dom": "16.8.3",
     "react-firebaseui": "3.1.2",
-    "react-hot-loader": "4.3.4",
-    "react-redux": "5.1.0",
-    "react-router": "4.3.1",
-    "react-router-dom": "4.3.1",
-    "react-router-redux": "4.0.8",
-    "react-scripts": "1.1.4",
+    "react-scripts": "3.0.1",
     "react-transition-group": "2.4.0",
-    "redux": "4.0.1",
-    "redux-devtools-extension": "2.13.5",
-    "redux-immutable": "^4.0.0",
     "typeface-roboto": "0.0.54"
   },
   "private": true,
@@ -69,7 +56,6 @@
     "cypress": "3.1.5",
     "esdoc": "1.1.0",
     "esdoc-standard-plugin": "1.0.0",
-    "eslint": "5.9.0",
     "eslint-plugin-chai-friendly": "0.4.1",
     "eslint-plugin-react": "7.11.1",
     "firebase-functions-test": "0.1.5",
@@ -89,17 +75,6 @@
     "singleQuote": true,
     "arrowParens": "always",
     "jsxSingleQuote": true
-  },
-  "jest": {
-    "verbose": true,
-    "testEnvironment": "node",
-    "setupFiles": [
-      "raf/polyfill"
-    ],
-    "moduleDirectories": [
-      "<rootDir>node_modules",
-      "<rootDir>src"
-    ]
   },
   "husky": {
     "hooks": {
@@ -123,5 +98,17 @@
   },
   "peerOptionalDependencies": {
     "kerberos": "1.1.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

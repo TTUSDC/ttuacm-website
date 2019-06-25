@@ -1,7 +1,6 @@
 import React from 'react'
-import { hot } from 'react-hot-loader'
 import './Maintenance.css'
-import Cactus from 'assets/not_found_page/cactus.svg'
+import Cactus from 'client/assets/not_found_page/cactus.svg'
 
 const MaintenanceScreen = () => (
   <div
@@ -17,4 +16,4 @@ const MaintenanceScreen = () => (
   </div>
 )
 
-export default hot(module)(MaintenanceScreen)
+export default MaintenanceScreen

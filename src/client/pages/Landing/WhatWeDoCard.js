@@ -1,14 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
+import { navigate } from '@reach/router'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 import styles from './WhatWeDoCard.styles'
 
-function WhatWeDoCard({ content, align, image, navigateTo, classes }) {
+function WhatWeDoCard({ content, align, image, classes }) {
   return (
     <Card className={classes.Card}>
       <Grid
@@ -35,7 +34,7 @@ function WhatWeDoCard({ content, align, image, navigateTo, classes }) {
             tabIndex={0}
             onKeyUp={() => ({})}
             role='button'
-            onClick={() => navigateTo(content.link)}
+            onClick={() => navigate(content.link)}
             className={classes.Tag}
           >
             {content.linkTag}{' '}
@@ -50,17 +49,7 @@ WhatWeDoCard.propTypes = {
   content: PropTypes.shape({}),
   align: PropTypes.string,
   image: PropTypes.string,
-  navigateTo: PropTypes.func.isRequired,
   classes: PropTypes.shape({}),
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  navigateTo: (location) => {
-    dispatch(push(location))
-  },
-})
-
-export default connect(
-  () => ({}),
-  mapDispatchToProps,
-)(withStyles(styles, { withTheme: true })(WhatWeDoCard))
+export default withStyles(styles, { withTheme: true })(WhatWeDoCard)

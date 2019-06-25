@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-import useSnackbar from 'hooks/useSnackbar'
-import EventsSection from 'pages/Events/EventsSection'
-import MOCK_CALENDAR from '__mocks__/calendar'
-import useEndpoint from 'hooks/useEndpoint'
+import useSnackbar from 'client/hooks/useSnackbar'
+import EventsSection from 'client/pages/Events/EventsSection'
+import MOCK_CALENDAR from 'client/__mocks__/calendar'
+import useEndpoint from 'client/hooks/useEndpoint'
 import moment from 'moment'
 
 const SHOW_MOCK_CALENDAR = process.env.NODE_ENV === 'development'
@@ -58,7 +58,7 @@ const EventsContainer = ({ classes = {} }) => {
       enqueueSnackbar('Something went wrong...', 'error')
       console.error(err)
     }
-  }, [err])
+  }, [err, enqueueSnackbar])
 
   return (
     <Grid

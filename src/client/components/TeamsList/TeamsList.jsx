@@ -1,7 +1,7 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-import { withFirebase } from 'context/Firebase'
+import { withFirebase } from 'client/context/Firebase'
 import PropTypes from 'prop-types'
 import TeamCard from './TeamCard'
 

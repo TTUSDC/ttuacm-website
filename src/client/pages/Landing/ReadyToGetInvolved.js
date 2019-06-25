@@ -1,17 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
-import Background from 'assets/home_page/Blur.png'
-
-import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 import { withStyles } from '@material-ui/core/styles'
+import { navigate } from '@reach/router'
+import Background from 'client/assets/home_page/Blur.png'
+import PropTypes from 'prop-types'
+import React from 'react'
+
 import styles from './ReadyToGetInvolved.styles'
 
-function ReadyToGetInvolved({ navigateTo, classes }) {
+function ReadyToGetInvolved({ classes }) {
   const handleNav = () => {
     window.scrollTo(0, 0)
-    navigateTo('/auth')
+    navigate('/auth')
   }
 
   return (
@@ -36,17 +35,7 @@ function ReadyToGetInvolved({ navigateTo, classes }) {
 }
 
 ReadyToGetInvolved.propTypes = {
-  navigateTo: PropTypes.func.isRequired,
   classes: PropTypes.shape({}),
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  navigateTo: (location) => {
-    dispatch(push(location))
-  },
-})
-
-export default connect(
-  () => ({}),
-  mapDispatchToProps,
-)(withStyles(styles, { withTheme: true })(ReadyToGetInvolved))
+export default withStyles(styles, { withTheme: true })(ReadyToGetInvolved)
