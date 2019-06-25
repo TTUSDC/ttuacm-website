@@ -1,12 +1,18 @@
-import React from 'react'
-import { PropTypes } from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import NavBar from 'pages/NavBar/NavBar.jsx'
-import { connect } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router/immutable'
-import Routes from 'Routes'
+import { withStyles } from '@material-ui/core/styles'
+import { Router } from '@reach/router'
+import {
+  AboutUsPage,
+  AuthenticationPage,
+  EventsPage,
+  LandingPage,
+  NotFoundPage,
+  TeamsPage,
+} from 'pages'
 import Footer from 'pages/Footer'
+import NavBar from 'pages/NavBar/NavBar.jsx'
+import { PropTypes } from 'prop-types'
+import React from 'react'
 
 const styles = (theme) => ({
   Main: {
@@ -29,15 +35,21 @@ const styles = (theme) => ({
   },
 })
 
-const Main = ({ classes = {}, history }) => (
+const Main = ({ classes = {} }) => (
   <div className={classes.Main}>
     <CssBaseline />
     <NavBar />
     <div className={classes.SiteContent}>
       <main className={classes.Router}>
-        <ConnectedRouter history={history}>
-          <Routes />
-        </ConnectedRouter>
+        <Router primary={false}>
+          <LandingPage path='/' />
+          <LandingPage path='/home' />
+          <AboutUsPage path='/about' />
+          <TeamsPage path='/teams' />
+          <EventsPage path='/events' />
+          <NotFoundPage default />
+          <AuthenticationPage path='/auth' />
+        </Router>
       </main>
       <Footer />
     </div>
@@ -49,4 +61,4 @@ Main.propTypes = {
   history: PropTypes.shape({}),
 }
 
-export default connect()(withStyles(styles)(Main))
+export default withStyles(styles)(Main)

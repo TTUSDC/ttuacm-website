@@ -1,19 +1,13 @@
-import React from 'react' // eslint-disable-line
-import ReactDOM from 'react-dom'
 import './client/index.css'
 import 'typeface-roboto'
 
-import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import { Provider as ReduxProvider } from 'react-redux'
-import { createBrowserHistory } from 'history'
-import { store } from 'redux/store'
-import rootReducer from 'redux/reducers'
-
+import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
 import { FirebaseProvider } from 'context/Firebase'
 import { WindowSizeProvider } from 'context/withWindowSize'
-
-import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { AppContainer, setConfig } from 'react-hot-loader'
 
 // So that you can use hooks inside of react-hot-loader
 setConfig({ pureSFC: true })
@@ -35,8 +29,6 @@ const theme = createMuiTheme({
   },
 })
 
-const history = createBrowserHistory()
-
 /**
  * Context needed for test:
  * - FirebaseProvider
@@ -47,13 +39,11 @@ function render() {
   ReactDOM.render(
     <AppContainer>
       <FirebaseProvider>
-        <ReduxProvider store={store(history)}>
-          <MuiThemeProvider theme={theme}>
-            <WindowSizeProvider>
-              <MaintenanceContainer history={history} />
-            </WindowSizeProvider>
-          </MuiThemeProvider>
-        </ReduxProvider>
+        <MuiThemeProvider theme={theme}>
+          <WindowSizeProvider>
+            <MaintenanceContainer />
+          </WindowSizeProvider>
+        </MuiThemeProvider>
       </FirebaseProvider>
     </AppContainer>,
     document.getElementById('root'),
@@ -66,10 +56,5 @@ if (module.hot) {
   // Reload components
   module.hot.accept('./client/containers/MaintenanceContainer.jsx', () => {
     render()
-  })
-
-  // Reload reducers
-  module.hot.accept('./client/redux/reducers.js', () => {
-    store.replaceReducer(rootReducer(history))
   })
 }

@@ -25,16 +25,20 @@ function FirebaseProvider({ children = [], firebase }) {
   }
 
   defaultFirebase.auth.onAuthStateChanged(async (user) => {
-    setEmailVerified(user && user.emailVerified)
-    setLoggedIn(user !== null)
+    setEmailVerified(!!user && user.emailVerified)
+    setLoggedIn(!!user)
     if (
       !['development', 'test'].includes(process.env.NODE_ENV) &&
       user &&
       user.emailVerified
     ) {
-      await axios.post(`${getEndpoint()}/users`, {
-        email: user.email,
-      })
+      try {
+        await axios.post(`${getEndpoint()}/users`, {
+          email: user.email,
+        })
+      } catch (err) {
+        console.error(err)
+      }
     }
   })
 

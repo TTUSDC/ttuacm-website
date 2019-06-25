@@ -1,12 +1,12 @@
-import React from 'react'
 import Grid from '@material-ui/core/Grid'
-import { push } from 'connected-react-router'
-import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
+import { navigate, Location } from '@reach/router'
 import useWindowSize from 'context/withWindowSize'
-import FooterTopSection from './FooterTopSection'
+import PropTypes from 'prop-types'
+import React from 'react'
+
 import { sections } from './FooterInfo'
+import FooterTopSection from './FooterTopSection'
 
 const styles = {
   FooterTop: {
@@ -17,13 +17,7 @@ const styles = {
   },
 }
 
-const FooterTop = ({ classes = {}, currentPage, theme, ...props }) => {
-  const handleNavigation = (nextPage) => () => {
-    if (currentPage !== nextPage) {
-      props.push(nextPage)
-    }
-  }
-
+function FooterTop({ classes = {}, theme }) {
   const { width } = useWindowSize()
   let filteredSections = sections
   if (theme.breakpoints.values.sm > width) {
@@ -33,35 +27,49 @@ const FooterTop = ({ classes = {}, currentPage, theme, ...props }) => {
   }
 
   return (
-    <Grid container className={classes.FooterTop} spacing={32} direction='row'>
-      {filteredSections.map(
-        ({ title, description, containsAppLink, containsOutsideLink }) => (
-          <FooterTopSection
-            key={title}
-            title={title}
-            description={description}
-            handleNavigation={containsAppLink ? handleNavigation : () => {}}
-            containsAppLink={containsAppLink}
-            containsOutLink={containsOutsideLink}
-          />
-        ),
-      )}
-    </Grid>
+    <Location>
+      {({ location }) => {
+        const handleNavigation = (nextPage) => () => {
+          if (location.pathname !== nextPage) {
+            navigate(nextPage)
+          }
+        }
+        return (
+          <Grid
+            container
+            className={classes.FooterTop}
+            spacing={32}
+            direction='row'
+          >
+            {filteredSections.map(
+              ({
+                title,
+                description,
+                containsAppLink,
+                containsOutsideLink,
+              }) => (
+                <FooterTopSection
+                  key={title}
+                  title={title}
+                  description={description}
+                  handleNavigation={
+                    containsAppLink ? handleNavigation : () => {}
+                  }
+                  containsAppLink={containsAppLink}
+                  containsOutLink={containsOutsideLink}
+                />
+              ),
+            )}
+          </Grid>
+        )
+      }}
+    </Location>
   )
 }
 
 FooterTop.propTypes = {
   classes: PropTypes.shape({}),
-  currentPage: PropTypes.string.isRequired,
-  push: PropTypes.func.isRequired,
   theme: PropTypes.shape({}).isRequired,
 }
 
-const mapStateToProps = (state) => ({
-  currentPage: state.router.location.pathname,
-})
-
-export default connect(
-  mapStateToProps,
-  { push },
-)(withStyles(styles, { withTheme: true })(FooterTop))
+export default withStyles(styles, { withTheme: true })(FooterTop)
