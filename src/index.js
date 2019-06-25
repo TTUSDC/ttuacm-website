@@ -2,15 +2,11 @@ import './client/index.css'
 import 'typeface-roboto'
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
-import { FirebaseProvider } from 'context/Firebase'
-import { WindowSizeProvider } from 'context/withWindowSize'
+import MaintenanceContainer from 'client/containers/MaintenanceContainer.jsx'
+import { FirebaseProvider } from 'client/context/Firebase'
+import { WindowSizeProvider } from 'client/context/withWindowSize'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { AppContainer, setConfig } from 'react-hot-loader'
-
-// So that you can use hooks inside of react-hot-loader
-setConfig({ pureSFC: true })
 
 if (process.env.NODE_ENV !== 'production') console.log('In development mode')
 
@@ -29,32 +25,35 @@ const theme = createMuiTheme({
   },
 })
 
+const rootEl = document.getElementById('root')
+
 /**
  * Context needed for test:
  * - FirebaseProvider
  * - MuiThemeProvider
  * - WindowSizeProvider
  */
-function render() {
+const render = (Component) => {
   ReactDOM.render(
-    <AppContainer>
-      <FirebaseProvider>
-        <MuiThemeProvider theme={theme}>
-          <WindowSizeProvider>
-            <MaintenanceContainer />
-          </WindowSizeProvider>
-        </MuiThemeProvider>
-      </FirebaseProvider>
-    </AppContainer>,
-    document.getElementById('root'),
+    <FirebaseProvider>
+      <MuiThemeProvider theme={theme}>
+        <WindowSizeProvider>
+          <Component />
+        </WindowSizeProvider>
+      </MuiThemeProvider>
+    </FirebaseProvider>,
+    rootEl,
   )
 }
 
-render()
+render(MaintenanceContainer)
 
 if (module.hot) {
   // Reload components
   module.hot.accept('./client/containers/MaintenanceContainer.jsx', () => {
-    render()
+    // eslint-disable-next-line global-require
+    const NextApp = require('./client/containers/MaintenanceContainer.jsx')
+      .default
+    render(NextApp)
   })
 }

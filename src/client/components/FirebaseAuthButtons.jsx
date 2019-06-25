@@ -1,5 +1,5 @@
 import React from 'react'
-import { withFirebase } from 'context/Firebase'
+import { withFirebase } from 'client/context/Firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 const style = {

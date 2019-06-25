@@ -6,7 +6,7 @@ import { Typography } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import moment from 'moment'
 
-import EventsList from 'components/EventsList'
+import EventsList from 'client/components/EventsList'
 
 export function filterEvents(time, events) {
   let filteredEvents = []

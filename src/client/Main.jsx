@@ -8,9 +8,9 @@ import {
   LandingPage,
   NotFoundPage,
   TeamsPage,
-} from 'pages'
-import Footer from 'pages/Footer'
-import NavBar from 'pages/NavBar/NavBar.jsx'
+} from 'client/pages'
+import Footer from 'client/pages/Footer'
+import NavBar from 'client/pages/NavBar/NavBar.jsx'
 import { PropTypes } from 'prop-types'
 import React from 'react'
 

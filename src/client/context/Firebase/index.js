@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import { getEndpoint } from 'hooks/useEndpoint'
+import { getEndpoint } from 'client/hooks/useEndpoint'
 import Firebase from './firebase'
 
 export const FirebaseContext = React.createContext(null)
 
 function withFirebase() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const firebase = useContext(FirebaseContext)
   if (!firebase)
     throw new Error('Cannot use `withFirebase` outside of Provider')

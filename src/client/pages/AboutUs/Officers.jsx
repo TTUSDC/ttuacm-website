@@ -1,4 +1,4 @@
-import ProfilePicture from 'assets/profile-square.jpg'
+import ProfilePicture from 'client/assets/profile-square.jpg'
 
 const OFFICERS = [
   {

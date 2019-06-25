@@ -1,6 +1,6 @@
-import useEndpoint from 'hooks/useEndpoint'
-import Main from 'Main'
-import MaintenanceScreen from 'pages/Maintenance/MaintenanceScreen.jsx'
+import Main from 'client/Main'
+import useEndpoint from 'client/hooks/useEndpoint'
+import MaintenanceScreen from 'client/pages/Maintenance/MaintenanceScreen.jsx'
 import PropTypes from 'prop-types'
 import React from 'react'
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Cactus from 'assets/not_found_page/cactus.svg'
+import Cactus from 'client/assets/not_found_page/cactus.svg'
 
 const styles = (theme) => ({
   Root: {

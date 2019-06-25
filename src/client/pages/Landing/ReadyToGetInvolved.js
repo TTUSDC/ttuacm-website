@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
 import { navigate } from '@reach/router'
-import Background from 'assets/home_page/Blur.png'
+import Background from 'client/assets/home_page/Blur.png'
 import PropTypes from 'prop-types'
 import React from 'react'
 

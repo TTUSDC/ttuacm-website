@@ -1,7 +1,7 @@
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 import { navigate, Location } from '@reach/router'
-import useWindowSize from 'context/withWindowSize'
+import useWindowSize from 'client/context/withWindowSize'
 import PropTypes from 'prop-types'
 import React from 'react'
 
