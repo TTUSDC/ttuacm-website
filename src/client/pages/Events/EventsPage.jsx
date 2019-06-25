@@ -7,7 +7,7 @@ function EventsPage() {
     title: 'EVENTS',
     info: `Many events are organized throughout the semester.
       From companies' info sessions to simple workshops,
-      we offer you many opportunities to become successful in your studies`,
+      we offer you many opportunities to become successful in your studies and your career`,
   }
 
   return (
