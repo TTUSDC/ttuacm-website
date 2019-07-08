@@ -21,22 +21,28 @@ function FirebaseProvider({ children = [], firebase }) {
   // Must listen for the auth state change and change states appropriately
   const [loggedIn, setLoggedIn] = useState(false)
   const [emailVerified, setEmailVerified] = useState(true)
+  const [currentUser, setCurrentUser] = useState(null)
   let defaultFirebase = firebase
   if (!defaultFirebase) {
     defaultFirebase = new Firebase()
   }
 
+  // When a new user is logged in, we want to make sure that they have
+  // a profile in the database that is separate from their Firebase Auth
+  // information. We use the Firebase UID as the UID in the profile
   defaultFirebase.auth.onAuthStateChanged(async (user) => {
     setEmailVerified(!!user && user.emailVerified)
     setLoggedIn(!!user)
-    if (
-      !['development', 'test'].includes(process.env.NODE_ENV) &&
-      user &&
-      user.emailVerified
-    ) {
+    setCurrentUser(user)
+    if (!['development', 'test'].includes(process.env.NODE_ENV) && user) {
       try {
-        await axios.post(`${getEndpoint()}/users`, {
-          email: user.email,
+        // eslint-disable-next-line prefer-const
+        let [firstName, ...lastName] = user.displayName.split(' ')
+        lastName = lastName.join(' ')
+
+        await axios.post(`${getEndpoint()}/members/${user.uid}`, {
+          firstName,
+          lastName,
         })
       } catch (err) {
         console.error(err)
@@ -47,6 +53,7 @@ function FirebaseProvider({ children = [], firebase }) {
   return (
     <FirebaseContext.Provider
       value={{
+        currentUser,
         firebase: defaultFirebase,
         isUserLoggedIn: loggedIn,
         isVerified: emailVerified,

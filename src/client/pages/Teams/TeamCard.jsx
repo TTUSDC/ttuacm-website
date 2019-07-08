@@ -38,6 +38,7 @@ const styles = (theme) => ({
 function TeamCard({
   preventJoin,
   name, // Name of the group
+  groupId,
   leader, // Name of the leader
   description,
   image,
@@ -47,7 +48,7 @@ function TeamCard({
   classes,
 }) {
   const [open, setOpen] = useState(false)
-  const { firebase } = withFirebase()
+  const { currentUser } = withFirebase()
   const [SnackBar, enqueueSnackbar] = useSnackbar()
 
   function handleEmail() {
@@ -55,15 +56,10 @@ function TeamCard({
   }
 
   async function unsubscribe() {
-    if (process.env.NODE_ENV !== 'production') {
-      enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
-      return
-    }
     try {
-      await axios.put(`${getEndpoint()}/members/unsubscribe`, {
-        email: firebase.getUserEmail(),
-        group: name,
-      })
+      await axios.delete(
+        `${getEndpoint()}/sdc/groups/${groupId}/users/${currentUser.uid}`,
+      )
       enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
       return
     } catch (err) {
@@ -73,15 +69,10 @@ function TeamCard({
   }
 
   async function subscribe() {
-    if (process.env.NODE_ENV !== 'production') {
-      enqueueSnackbar(`Subscribed to ${name}`, 'success')
-      return
-    }
     try {
-      await axios.put(`${getEndpoint()}/members/subscribe`, {
-        email: firebase.getUserEmail(),
-        group: name,
-      })
+      await axios.put(
+        `${getEndpoint()}/sdc/groups/${groupId}/users/${currentUser.uid}`,
+      )
       enqueueSnackbar(`Subscribed to ${name}`, 'success')
       return
     } catch (err) {
@@ -185,6 +176,7 @@ function TeamCard({
 }
 TeamCard.propTypes = {
   name: PropTypes.string.isRequired,
+  groupId: PropTypes.string.isRequired,
   leader: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,

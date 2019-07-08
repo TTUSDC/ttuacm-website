@@ -8,6 +8,7 @@ import TeamsList from './TeamsList'
 // Edit this to edit the teams
 const TEAMS = [
   {
+    groupId: '1',
     name: 'Intro To Python',
     leader: 'Audrey Cooper',
     description:
@@ -18,6 +19,7 @@ const TEAMS = [
     time: '6:15pm - 7:30pm',
   },
   {
+    groupId: '2',
     name: 'Applied Algorithms',
     leader: 'Miggy Reyes',
     description:
@@ -28,6 +30,7 @@ const TEAMS = [
     time: '4:30pm - 6:00pm',
   },
   {
+    groupId: '3',
     name: 'Eye for Design',
     leader: 'Nikki Green',
     description:
