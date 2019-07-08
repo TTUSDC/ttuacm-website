@@ -34,7 +34,7 @@ class ACMService {
   async getEntityById(id) {
     try {
       const snapshot = await this.DB.doc(id).get()
-      return snapshot.docs.map((doc) => doc.data())
+      return snapshot.data()
     } catch (err) {
       throw err
     }
@@ -48,17 +48,23 @@ class ACMService {
    * @param {Array<Array<string, string>>} queries - array of key value pairs used for query
    * @param {number} limit - the amount of documents to return. Defaults to no limit
    */
-  async getEntitiesByAttributes(queries, limit = Number.MAX_VALUE) {
+  async getEntitiesByAttributes(queries, limit = 1) {
     try {
-      const query = this.DB
+      let query = this.DB
 
       queries.forEach(([attributeName, attributeValue]) => {
-        query.where(attributeName, '==', attributeValue)
+        query = query.where(attributeName, '==', attributeValue)
       })
 
-      const snapshot = query.limit(limit).get()
+      let snapshot
 
-      if (snapshot.empty) return null
+      // If a limit is set, use it, otherwise return everything
+      if (limit > 1) {
+        snapshot = await query.limit(limit).get()
+      } else {
+        snapshot = await query.get()
+      }
+
       return snapshot.docs.map((doc) => doc.data())
     } catch (err) {
       throw err
@@ -72,7 +78,7 @@ class ACMService {
    */
   async createEntity(id = uuid(), entity) {
     try {
-      return await this.DB.doc(id).set(entity)
+      return await this.DB.doc(id).set(Object.assign({}, entity))
     } catch (err) {
       throw err
     }

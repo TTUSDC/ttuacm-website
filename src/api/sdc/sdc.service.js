@@ -11,13 +11,13 @@ class SdcService extends ACMService {
   /**
    * Adds a group to a user's list of subscribed groups (Skips duplicates)
    *
-   * @param {string} memberId - the id to target
-   * @param {string} groupId - groups to add
+   * @param {string} groupId - groupId to target
+   * @param {string} memberId - the memberId to add
    */
-  async subscribe(memberId, groupId) {
+  async subscribe(groupId, memberId) {
     try {
-      await this.DB.doc(memberId).update({
-        groups: this.admin.firestore.FieldValue.arrayUnion(groupId),
+      await this.DB.doc(groupId).update({
+        activeStudents: this.admin.firestore.FieldValue.arrayUnion(memberId),
       })
       return
     } catch (err) {
@@ -28,13 +28,13 @@ class SdcService extends ACMService {
   /**
    * Removes a group from a user's list of subscibed groups
    *
-   * @param {string} memberId - the id to target
-   * @param {string} groupId - group to remove
+   * @param {string} groupId - groupId to target
+   * @param {string} memberId - the memberId to add
    */
-  async unsubscribe(memberId, groupId) {
+  async unsubscribe(groupId, memberId) {
     try {
-      await this.DB.doc(memberId).update({
-        groups: this.admin.firestore.FieldValue.arrayRemove(groupId),
+      await this.DB.doc(groupId).update({
+        activeStudents: this.admin.firestore.FieldValue.arrayRemove(memberId),
       })
       return
     } catch (err) {

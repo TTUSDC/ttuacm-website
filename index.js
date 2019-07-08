@@ -26,10 +26,6 @@ api.use(cors)
 api.use(bp.json())
 api.use(bp.urlencoded({ extended: false }))
 
-api.use('/test', (req, res) => {
-  console.log(req)
-  res.send('test!')
-})
 api.use('/members', MemberController)
 api.use('/sdc', SdcController)
 api.use('/events', eventsApp)

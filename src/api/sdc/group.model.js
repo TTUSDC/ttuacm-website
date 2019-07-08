@@ -10,6 +10,8 @@ class Group extends ACMModel {
     this.description = ''
     // Every group has team leads. These are the people who will run the group directly
     this.teamLeadIds = []
+    // A collection of students that want to be a part of the Software development group
+    this.activeStudents = []
   }
 }
 

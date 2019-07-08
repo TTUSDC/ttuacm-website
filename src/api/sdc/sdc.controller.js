@@ -12,7 +12,35 @@ class SdcController extends ACMController {
 
   instantiateRoutes() {
     /**
-     * @api {post} /api/v2/sdc/groups/:group_id' Get a group by Id
+     * @api {get} /api/sdc/groups' Get All Groups
+     * @apiDescription
+     * Gets all the groups
+     *
+     * @apiVersion 0.3.0
+     *
+     * @apiGroup SDC
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *    [
+     *      Group
+     *    ]
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 err.code OK
+     */
+    this.router.get('/groups', async (req, res) => {
+      try {
+        const groups = await this.service.getEntities()
+        res.status(200).json(groups)
+      } catch (err) {
+        console.error(err)
+        res.status(err.code || 500).end()
+      }
+    })
+
+    /**
+     * @api {get} /api/sdc/groups/:group_id' Get a group by Id
      * @apiDescription
      * Gets a group by their ID
      *
@@ -40,7 +68,35 @@ class SdcController extends ACMController {
     })
 
     /**
-     * @api {post} /api/v2/sdc/groups/:group_id' Create a group
+     * @api {delete} /api/sdc/groups/:group_id' Delete a group by Id
+     * @apiDescription
+     * Delete a group by their ID
+     *
+     * @apiVersion 0.3.0
+     *
+     * @apiGroup SDC
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *    {
+     *      Group
+     *    }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 err.code OK
+     */
+    this.router.delete('/groups/:group_id', async (req, res) => {
+      try {
+        const group = await this.service.deleteEntityById(req.params.group_id)
+        res.status(200).json(group)
+      } catch (err) {
+        console.error(err)
+        res.status(err.code || 500).end()
+      }
+    })
+
+    /**
+     * @api {post} /api/sdc/groups/:group_id' Create a group
      * @apiDescription
      * Creates a new group
      *
@@ -79,7 +135,7 @@ class SdcController extends ACMController {
     })
 
     /**
-     * @api {get} /api/v2/sdc/users/:user_id/groups/:group_id' Subscribe to a group
+     * @api {get} /api/sdc/groups/:group_id/users/:user_id' Subscribe to a group
      * @apiDescription
      * Subscribes a member to a group
      *
@@ -96,13 +152,13 @@ class SdcController extends ACMController {
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 err.code OK
      */
-    this.router.get('/users/:user_id/groups/:group_id', async (req, res) => {
+    this.router.put('/groups/:group_id/users/:user_id', async (req, res) => {
       try {
         const updatedMember = await this.service.subscribe(
-          req.params.user_id,
           req.params.group_id,
+          req.params.user_id,
         )
-        res.status(202).json(updatedMember)
+        res.status(200).json(updatedMember)
       } catch (err) {
         console.error(err)
         res.status(err.code || 500).end()
@@ -110,7 +166,7 @@ class SdcController extends ACMController {
     })
 
     /**
-     * @api {delete} /api/v2/sdc/users/:user_id/groups/:group_id' Unsubscribe to a group
+     * @api {delete} /api/sdc/groups/:group_id/users/:user_id' Unsubscribe to a group
      * @apiDescription
      * Unsubscribes a member to a group
      *
@@ -127,11 +183,11 @@ class SdcController extends ACMController {
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 err.code OK
      */
-    this.router.delete('/users/:user_id/groups/:group_id', async (req, res) => {
+    this.router.delete('/groups/:group_id/users/:user_id', async (req, res) => {
       try {
         const updatedMember = await this.service.unsubscribe(
-          req.params.user_id,
           req.params.group_id,
+          req.params.user_id,
         )
         res.status(200).json(updatedMember)
       } catch (err) {
