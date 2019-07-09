@@ -17,7 +17,7 @@ jobs:
 
       - run:
           name: Install Dependencies
-          command: yarn install
+          command: npm install
 
       - save_cache:
           paths:
@@ -34,9 +34,9 @@ jobs:
       - run:
           name: Lint and Test API and Client
           command: |
-            yarn lint
-            yarn test:unit --ci --forceExit --passWithNoTests # No API Tests :(
-            yarn test:client
+            npm run lint
+            npm run test:unit --ci --forceExit --passWithNoTests # No API Tests :(
+            npm run test:client
 
       - deploy:
           name: Deploy master to Production

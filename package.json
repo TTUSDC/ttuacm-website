@@ -4,6 +4,7 @@
   "license": "MIT",
   "description": "ACM TTU Website",
   "scripts": {
+    "start:dev": "firebase serve",
     "serve:api": "firebase serve --only functions",
     "serve:client": "cross-env react-scripts start",
     "build:client": "cross-env react-scripts build",
@@ -84,10 +85,10 @@
   },
   "lint-staged": {
     "*.{js,jsx}": [
-      "yarn lint"
+      "npm run lint"
     ],
     "*.{js,jsx,json,css,md}": [
-      "yarn fmt",
+      "npm run fmt",
       "git add"
     ]
   },
