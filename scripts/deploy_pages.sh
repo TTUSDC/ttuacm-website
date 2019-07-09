@@ -9,7 +9,7 @@ if [[ ${CIRCLE_BRANCH} == "master" ]]; then
   git rm -rf .
   cd ..
 
-  yarn docs
+  npm run docs
 
   cp -a docs/. out/.
 

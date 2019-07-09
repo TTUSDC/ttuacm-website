@@ -1,4 +1,4 @@
-# TTUACM Website v2 - Fall 2019
+# TTUACM Website v2
 
 ### Contributing:
 
