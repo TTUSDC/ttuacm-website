@@ -108,16 +108,16 @@
   },
   {
     "type": "delete",
-    "url": "/api/v2/members",
-    "title": "Subscribe to a group",
-    "description": "<p>Subscribes a member to a group</p>",
-    "version": "0.2.0",
+    "url": "/api/members/:user_id",
+    "title": "Delete Member",
+    "description": "<p>Deletes the member with matching id The ID is the same as the firebase uid</p>",
+    "version": "0.3.0",
     "group": "Members",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\nmember : {\n   \"email\": String,\n   \"hasPaidDues\": Boolean,\n   \"groups\": String\n}",
+          "content": "HTTP/1.1 200 OK\nMember",
           "type": "json"
         }
       ]
@@ -131,42 +131,22 @@
         }
       ]
     },
-    "parameter": {
-      "fields": {
-        "Request body": [
-          {
-            "group": "Request body",
-            "type": "String",
-            "optional": false,
-            "field": "email",
-            "description": "<p>email</p>"
-          },
-          {
-            "group": "Request body",
-            "type": "String",
-            "optional": false,
-            "field": "group",
-            "description": "<p>group</p>"
-          }
-        ]
-      }
-    },
-    "filename": "src/api/members/members.router.js",
+    "filename": "src/api/members/members.controller.js",
     "groupTitle": "Members",
-    "name": "DeleteApiV2Members"
+    "name": "DeleteApiMembersUser_id"
   },
   {
     "type": "get",
-    "url": "/api/v2/members",
+    "url": "/api/members?[attributeName=attributeValue]?limit",
     "title": "Get Members",
-    "description": "<p>Gets all of the members in database</p>",
+    "description": "<p>Gets all of the members in database You can pass optional query parametes in the URL as well</p>",
     "version": "0.2.0",
     "group": "Members",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\nmembers : [\n  {\n     \"email\": String,\n     \"hasPaidDues\": Boolean,\n     \"groups\": String[]\n  }\n]",
+          "content": "HTTP/1.1 200 OK\n[Members]",
           "type": "json"
         }
       ]
@@ -180,22 +160,22 @@
         }
       ]
     },
-    "filename": "src/api/members/members.router.js",
+    "filename": "src/api/members/members.controller.js",
     "groupTitle": "Members",
-    "name": "GetApiV2Members"
+    "name": "GetApiMembersAttributenameAttributevalueLimit"
   },
   {
     "type": "get",
-    "url": "/api/v2/members",
-    "title": "Get Member by email",
-    "description": "<p>Gets the member of given email in database</p>",
-    "version": "0.2.0",
+    "url": "/api/members/:user_id",
+    "title": "Get Members",
+    "description": "<p>Gets the member with the matching id The ID is the same as the firebase uid</p>",
+    "version": "0.3.0",
     "group": "Members",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n members : {\n      \"email\": String,\n      \"hasPaidDues\": Boolean,\n      \"groups\": String[]\n}",
+          "content": "HTTP/1.1 200 OK\nMember",
           "type": "json"
         }
       ]
@@ -209,22 +189,22 @@
         }
       ]
     },
-    "filename": "src/api/members/members.router.js",
+    "filename": "src/api/members/members.controller.js",
     "groupTitle": "Members",
-    "name": "GetApiV2Members"
+    "name": "GetApiMembersUser_id"
   },
   {
-    "type": "get",
-    "url": "/api/v2/members/test",
-    "title": "Test Route",
-    "description": "<p>Test route to check if the API is properly connected</p>",
+    "type": "post",
+    "url": "/api/members/:user_id",
+    "title": "Create Member",
+    "description": "<p>Creates the member with an id The ID is the same as the firebase uid</p>",
+    "version": "0.3.0",
     "group": "Members",
-    "version": "0.2.0",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK",
+          "content": "HTTP/1.1 200 OK\nMember",
           "type": "json"
         }
       ]
@@ -233,27 +213,172 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found",
+          "content": "HTTP/1.1 err.code OK",
           "type": "json"
         }
       ]
     },
-    "filename": "src/api/members/members.router.js",
+    "filename": "src/api/members/members.controller.js",
     "groupTitle": "Members",
-    "name": "GetApiV2MembersTest"
+    "name": "PostApiMembersUser_id"
   },
   {
-    "type": "put",
-    "url": "/api/v2/members",
+    "type": "delete",
+    "url": "/api/sdc/groups/:group_id'",
+    "title": "Delete a group by Id",
+    "description": "<p>Delete a group by their ID</p>",
+    "version": "0.3.0",
+    "group": "SDC",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n{\n  Group\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 err.code OK",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/api/sdc/sdc.controller.js",
+    "groupTitle": "SDC",
+    "name": "DeleteApiSdcGroupsGroup_id"
+  },
+  {
+    "type": "delete",
+    "url": "/api/sdc/groups/:group_id/users/:user_id'",
     "title": "Unsubscribe to a group",
     "description": "<p>Unsubscribes a member to a group</p>",
-    "version": "0.2.0",
-    "group": "Members",
+    "version": "0.3.0",
+    "group": "SDC",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\nmember : {\n   \"email\": String,\n   \"hasPaidDues\": Boolean,\n   \"group\": String\n}",
+          "content": " HTTP/1.1 200 OK\n{\n  SdcMember\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 err.code OK",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/api/sdc/sdc.controller.js",
+    "groupTitle": "SDC",
+    "name": "DeleteApiSdcGroupsGroup_idUsersUser_id"
+  },
+  {
+    "type": "get",
+    "url": "/api/sdc/groups'",
+    "title": "Get All Groups",
+    "description": "<p>Gets all the groups</p>",
+    "version": "0.3.0",
+    "group": "SDC",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n[\n  Group\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 err.code OK",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/api/sdc/sdc.controller.js",
+    "groupTitle": "SDC",
+    "name": "GetApiSdcGroups"
+  },
+  {
+    "type": "get",
+    "url": "/api/sdc/groups/:group_id'",
+    "title": "Get a group by Id",
+    "description": "<p>Gets a group by their ID</p>",
+    "version": "0.3.0",
+    "group": "SDC",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n{\n  Group\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 err.code OK",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/api/sdc/sdc.controller.js",
+    "groupTitle": "SDC",
+    "name": "GetApiSdcGroupsGroup_id"
+  },
+  {
+    "type": "get",
+    "url": "/api/sdc/groups/:group_id/users/:user_id'",
+    "title": "Subscribe to a group",
+    "description": "<p>Subscribes a member to a group</p>",
+    "version": "0.3.0",
+    "group": "SDC",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n{\n  SdcMember\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 err.code OK",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/api/sdc/sdc.controller.js",
+    "groupTitle": "SDC",
+    "name": "GetApiSdcGroupsGroup_idUsersUser_id"
+  },
+  {
+    "type": "post",
+    "url": "/api/sdc/groups/:group_id'",
+    "title": "Create a group",
+    "description": "<p>Creates a new group</p>",
+    "version": "0.3.0",
+    "group": "SDC",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n{\n  Group\n}",
           "type": "json"
         }
       ]
@@ -272,14 +397,7 @@
         "Request body": [
           {
             "group": "Request body",
-            "type": "String",
-            "optional": false,
-            "field": "email",
-            "description": "<p>email</p>"
-          },
-          {
-            "group": "Request body",
-            "type": "String",
+            "type": "Object",
             "optional": false,
             "field": "group",
             "description": "<p>group</p>"
@@ -287,8 +405,8 @@
         ]
       }
     },
-    "filename": "src/api/members/members.router.js",
-    "groupTitle": "Members",
-    "name": "PutApiV2Members"
+    "filename": "src/api/sdc/sdc.controller.js",
+    "groupTitle": "SDC",
+    "name": "PostApiSdcGroupsGroup_id"
   }
 ]
