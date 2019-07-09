@@ -1,12 +1,14 @@
+import Profile from 'client/assets/teams_page/profile.jpg'
 import React from 'react'
-import TeamsList from 'components/TeamsList'
-import Profile from 'assets/teams_page/profile.jpg'
+
+import TeamsList from './TeamsList'
 
 // Import photos into here and serve place them in the right objects
 
 // Edit this to edit the teams
 const TEAMS = [
   {
+    groupId: '1',
     name: 'Intro To Python',
     leader: 'Audrey Cooper',
     description:
@@ -17,6 +19,7 @@ const TEAMS = [
     time: '6:15pm - 7:30pm',
   },
   {
+    groupId: '2',
     name: 'Applied Algorithms',
     leader: 'Miggy Reyes',
     description:
@@ -27,6 +30,7 @@ const TEAMS = [
     time: '4:30pm - 6:00pm',
   },
   {
+    groupId: '3',
     name: 'Eye for Design',
     leader: 'Nikki Green',
     description:

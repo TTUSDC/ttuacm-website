@@ -1,12 +1,12 @@
-import React from 'react'
-import Grid from '@material-ui/core/Grid'
-import { withStyles } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Grid from '@material-ui/core/Grid'
+import { withStyles } from '@material-ui/core/styles'
 import moment from 'moment'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import EventsList from 'components/EventsList'
+import EventsList from './EventsList'
 
 export function filterEvents(time, events) {
   let filteredEvents = []

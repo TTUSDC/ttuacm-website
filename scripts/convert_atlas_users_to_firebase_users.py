@@ -8,10 +8,10 @@ import json
 # ************************ PARSE ARGS *
 
 parser = argparse.ArgumentParser(description="Converts a MongoDB Atlas json file to a Firebase Auth json file ready to be imported")
-parser.add_argument('-i', metavar='--input-name', type=str, nargs=1, 
+parser.add_argument('-i', metavar='--input-name', type=str, nargs=1,
                     help='a string (with quotes) representing the filename of the input file', required=True)
 
-parser.add_argument('-o', metavar='--output-name', type=str, nargs=1, 
+parser.add_argument('-o', metavar='--output-name', type=str, nargs=1,
                     help='a string (with quotes) representing the filename of the output file', required=True)
 
 args = parser.parse_args()
@@ -41,6 +41,7 @@ emails_set = set()
 with open(fname, "r") as f:
     for line in f.readlines():
         line_dict = json.loads(line)
+        # if line_dict["googleId"] == "" or line_dict["facebookId"] == "" or line_dict["githubId"] == "":
         lines_of_interest.append(line_dict)
 
 def convert(d: Dict[str,str]) -> Dict[str,str]:
@@ -55,15 +56,14 @@ def convert(d: Dict[str,str]) -> Dict[str,str]:
 
 firebase_users = {"users":[]}
 users_list = []
-
 for i,mongo_user in enumerate(lines_of_interest):
     email = mongo_user['email']
-    # It the user has a valid email, and their email has not been already processed, then convert
     if re.fullmatch(r"[^@]+@[^@]+\.[^@]+", email) and email not in emails_set and bool(mongo_user["verified"]):
+        if not mongo_user["password"]:
+            continue
         emails_set.add(email)
         converted = convert(mongo_user)
         users_list.append(converted)
-
 
 print(f'{len(users_list)} fields were processed')
 

@@ -1,7 +1,8 @@
-import React from 'react'
-import FooterTop from 'pages/Footer/FooterTop'
 import { expect } from 'chai'
-import { cleanup, act } from 'react-testing-library'
+import FooterTop from 'client/pages/Footer/FooterTop'
+import React from 'react'
+import { act, cleanup } from 'react-testing-library'
+
 import { renderComponent } from './utils'
 
 afterEach(cleanup)

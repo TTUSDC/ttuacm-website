@@ -1,15 +1,15 @@
-import React from 'react'
+import Pages from 'client/pages/Pages'
+import useEndpoint from 'client/hooks/useEndpoint'
+import MaintenanceScreen from 'client/pages/Maintenance/MaintenanceScreen'
 import PropTypes from 'prop-types'
-import MaintenanceScreen from 'pages/Maintenance/MaintenanceScreen.jsx'
-import useEndpoint from 'hooks/useEndpoint'
-import Main from 'Main'
+import React from 'react'
 
 const devEnv = {
   env: 'development',
   maintainance: false,
 }
 
-function MaintenanceContainer({ history }) {
+function MaintenanceContainer() {
   const [err, loading, env] = useEndpoint(
     {
       path: '/environment',
@@ -25,9 +25,9 @@ function MaintenanceContainer({ history }) {
   }
 
   // Changes this is you want to see the MaintenanceScreen
-  if (process.env.NODE_ENV !== 'production') return <Main history={history} />
+  if (process.env.NODE_ENV !== 'production') return <Pages />
 
-  if (env.maintainance !== 'true') return <Main history={history} />
+  if (env.maintainance !== 'true') return <Pages />
 
   return <MaintenanceScreen />
 }

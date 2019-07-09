@@ -1,5 +1,5 @@
 import React from 'react'
-import PageLayout from 'components/PageLayout'
+import PageLayout from 'client/pages/PageLayout'
 import LandingSection from './LandingSection'
 
 function LandingPage() {

@@ -1,8 +1,9 @@
+import { expect } from 'chai'
+import UpcomingEventCard from 'client/pages/Landing/UpComingEventCard'
+import moment from 'moment'
 import React from 'react'
 import { queryByText } from 'react-testing-library'
-import { expect } from 'chai'
-import UpcomingEventCard from 'pages/Landing/UpComingEventCard'
-import moment from 'moment'
+
 import { renderComponent } from './utils'
 
 const today = moment()

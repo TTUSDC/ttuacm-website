@@ -1,64 +1,160 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
+import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import FirebaseAuthButtons from 'components/FirebaseAuthButtons'
+import { navigate } from '@reach/router'
+import Tech from 'client/assets/Tech.png'
+import useSnackbar from 'client/services/useSnackbar'
+import { withFirebase } from 'client/services/withFirebase'
+import firebase from 'firebase'
+import PropTypes from 'prop-types'
+import React, { useReducer } from 'react'
+
+import FirebaseAuthButtons from './FirebaseAuthButtons'
 
 const styles = (theme) => ({
-  back: {
-    backgroundColor: '#CCCCCC', // So we can play with the background
-  },
   main: {
-    width: 'auto',
-    display: 'block',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    marginTop: theme.spacing.unit * 4,
-    marginBottom: theme.spacing.unit * 4,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
+    width: '86vw',
+    minHeight: '73vh',
+    margin: 'auto',
   },
-  root: {
-    ...theme.mixins.gutters(),
+  TechContainer: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+    margin: 'auto',
+  },
+  Tech: {
+    width: '100%',
+  },
+  Buttons: {
+    margin: 'auto',
     display: 'flex',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-      .spacing.unit * 3}px`,
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
-    alignContent: 'center',
-    backgroundColor: '#253F51',
   },
-  title: {
-    [theme.breakpoints.down('xs')]: {
-      ...theme.typography.h4,
-    },
-    fontWeight: 'bold',
-    width: '70%',
-    margin: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
-    display: 'flex',
-    justifyContent: 'center',
+  FormPrompts: {
+    cursor: 'pointer',
+    margin: '10px 0px',
+  },
+  SendEmailButton: {
+    width: '60%',
+  },
+  EmailForm: {
+    width: '60%',
   },
 })
 
+function reducer(state, { payload, type }) {
+  switch (type) {
+    case 'show-email':
+      return { showEmailPrompt: true, email: '', err: null }
+    case 'change-email':
+      return { ...state, email: payload, err: null }
+    case 'finish-send-email':
+      return { showEmailPrompt: false, email: '', err: null }
+    case 'error':
+      return { ...state, err: payload }
+    default:
+      console.error('Bad action')
+      return state
+  }
+}
+
+const initState = {
+  showEmailPrompt: false,
+  email: '',
+  err: null,
+}
+
 function AuthenticationPage({ classes = {} }) {
+  const [state, dispatch] = useReducer(reducer, initState)
+  const [SnackBar, enqueueSnackbar] = useSnackbar()
+  const { isUserLoggedIn } = withFirebase()
+
+  function handleEmailChange(e) {
+    dispatch({ type: 'change-email', payload: e.target.value })
+  }
+
+  async function resetPassword() {
+    try {
+      await firebase.auth().sendPasswordResetEmail(state.email)
+      dispatch({ type: 'finish-send-email' })
+    } catch (err) {
+      let message = 'Unknown Error'
+      switch (err.code) {
+        case 'auth/user-not-found':
+          message = 'This user does not exist. Please register'
+          break
+        case 'auth/invalid-email':
+          message = 'This is not a proper email'
+          break
+        default:
+          break
+      }
+      enqueueSnackbar(message, 'error')
+      dispatch({ type: 'error', payload: message })
+    }
+  }
+
+  if (isUserLoggedIn) navigate('/')
+
   return (
-    <div className={classes.back}>
-      <div className={classes.main}>
-        <Paper className={classes.root} elevation={2}>
-          <div className={classes.title}>
-            <Typography variant='h3' component='h3' color='textPrimary'>
-              SIGN IN
+    <Grid container spacing={24} className={classes.main}>
+      <Grid item xs={12} md={4} className={classes.Buttons}>
+        <Typography
+          style={{ textAlign: 'center' }}
+          variant='h3'
+          component='h3'
+          color='textPrimary'
+        >
+          Welcome!
+        </Typography>
+        <FirebaseAuthButtons />
+        {state.showEmailPrompt ? (
+          <React.Fragment>
+            <TextField
+              label='Email'
+              className={classes.EmailForm}
+              value={state.email}
+              onChange={handleEmailChange}
+              margin='normal'
+            />
+            <Button
+              onClick={resetPassword}
+              variant='contained'
+              className={classes.SendEmailButton}
+            >
+              Send Email
+            </Button>
+            <Typography
+              style={{ textAlign: 'center' }}
+              className={classes.FormPrompts}
+              variant='body2'
+              color='textPrimary'
+              onClick={() => dispatch({ type: 'finish-send-email' })}
+            >
+              Hide
             </Typography>
-          </div>
-          <FirebaseAuthButtons />
-        </Paper>
-      </div>
-    </div>
+          </React.Fragment>
+        ) : (
+          <Typography
+            style={{ textAlign: 'center' }}
+            className={classes.FormPrompts}
+            variant='body1'
+            color='textPrimary'
+            onClick={() => dispatch({ type: 'show-email' })}
+          >
+            Forgot Password?
+          </Typography>
+        )}
+      </Grid>
+      <Grid className={classes.TechContainer} item xs={8}>
+        <img className={classes.Tech} src={Tech} alt='' />
+      </Grid>
+      <SnackBar />
+    </Grid>
   )
 }
 
@@ -66,4 +162,4 @@ AuthenticationPage.propTypes = {
   classes: PropTypes.shape({}),
 }
 
-export default withStyles(styles)(AuthenticationPage)
+export default withStyles(styles, { withTheme: true })(AuthenticationPage)

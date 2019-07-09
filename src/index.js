@@ -1,22 +1,12 @@
-import React from 'react' // eslint-disable-line
-import ReactDOM from 'react-dom'
 import './client/index.css'
 import 'typeface-roboto'
 
-import { AppContainer, setConfig } from 'react-hot-loader'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import { Provider as ReduxProvider } from 'react-redux'
-import { createBrowserHistory } from 'history'
-import { store } from 'redux/store'
-import rootReducer from 'redux/reducers'
-
-import { FirebaseProvider } from 'context/Firebase'
-import { WindowSizeProvider } from 'context/withWindowSize'
-
-import MaintenanceContainer from 'containers/MaintenanceContainer.jsx'
-
-// So that you can use hooks inside of react-hot-loader
-setConfig({ pureSFC: true })
+import Pages from 'client/pages/Pages.jsx'
+import { FirebaseProvider } from 'client/services/withFirebase'
+import { WindowSizeProvider } from 'client/services/withWindowSize'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 if (process.env.NODE_ENV !== 'production') console.log('In development mode')
 
@@ -35,7 +25,7 @@ const theme = createMuiTheme({
   },
 })
 
-const history = createBrowserHistory()
+const rootEl = document.getElementById('root')
 
 /**
  * Context needed for test:
@@ -43,33 +33,26 @@ const history = createBrowserHistory()
  * - MuiThemeProvider
  * - WindowSizeProvider
  */
-function render() {
+const render = (Component) => {
   ReactDOM.render(
-    <AppContainer>
-      <FirebaseProvider>
-        <ReduxProvider store={store(history)}>
-          <MuiThemeProvider theme={theme}>
-            <WindowSizeProvider>
-              <MaintenanceContainer history={history} />
-            </WindowSizeProvider>
-          </MuiThemeProvider>
-        </ReduxProvider>
-      </FirebaseProvider>
-    </AppContainer>,
-    document.getElementById('root'),
+    <FirebaseProvider>
+      <MuiThemeProvider theme={theme}>
+        <WindowSizeProvider>
+          <Component />
+        </WindowSizeProvider>
+      </MuiThemeProvider>
+    </FirebaseProvider>,
+    rootEl,
   )
 }
 
-render()
+render(Pages)
 
 if (module.hot) {
   // Reload components
-  module.hot.accept('./client/containers/MaintenanceContainer.jsx', () => {
-    render()
-  })
-
-  // Reload reducers
-  module.hot.accept('./client/redux/reducers.js', () => {
-    store.replaceReducer(rootReducer(history))
+  module.hot.accept('./client/pages/Pages.jsx', () => {
+    // eslint-disable-next-line global-require
+    const NextApp = require('./client/pages/Pages.jsx').default
+    render(NextApp)
   })
 }

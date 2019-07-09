@@ -1,8 +1,14 @@
+import { withFirebase } from 'client/services/withFirebase'
 import React from 'react'
-import { withFirebase } from 'context/Firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
-function OAuthContainer() {
+const style = {
+  main: {
+    margin: 0,
+  },
+}
+
+function FirebaseAuthButtons() {
   const { firebase } = withFirebase()
 
   // Firebase
@@ -29,7 +35,13 @@ function OAuthContainer() {
     },
   }
 
-  return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth} />
+  return (
+    <StyledFirebaseAuth
+      style={style.main}
+      uiConfig={uiConfig}
+      firebaseAuth={firebase.auth}
+    />
+  )
 }
 
-export default OAuthContainer
+export default FirebaseAuthButtons

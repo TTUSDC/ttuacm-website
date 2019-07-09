@@ -1,22 +1,22 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import PropTypes from 'prop-types'
 import Card from '@material-ui/core/Card'
-import { withStyles } from '@material-ui/core/styles'
-import CardMedia from '@material-ui/core/CardMedia'
-import classnames from 'classnames'
-import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
 import Collapse from '@material-ui/core/Collapse'
-import Typography from '@material-ui/core/Typography'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import EmailIcon from '@material-ui/icons/Email'
-import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import CloseIcon from '@material-ui/icons/Close'
+import EmailIcon from '@material-ui/icons/Email'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { withFirebase } from 'context/Firebase'
-import { getEndpoint } from 'hooks/useEndpoint'
-import useSnackbar from 'hooks/useSnackbar'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import axios from 'axios'
+import classnames from 'classnames'
+import { getEndpoint } from 'client/services/useEndpoint'
+import useSnackbar from 'client/services/useSnackbar'
+import { withFirebase } from 'client/services/withFirebase'
+import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 
 const styles = (theme) => ({
   Image: {
@@ -38,6 +38,7 @@ const styles = (theme) => ({
 function TeamCard({
   preventJoin,
   name, // Name of the group
+  groupId,
   leader, // Name of the leader
   description,
   image,
@@ -47,7 +48,7 @@ function TeamCard({
   classes,
 }) {
   const [open, setOpen] = useState(false)
-  const { firebase } = withFirebase()
+  const { currentUser } = withFirebase()
   const [SnackBar, enqueueSnackbar] = useSnackbar()
 
   function handleEmail() {
@@ -55,15 +56,10 @@ function TeamCard({
   }
 
   async function unsubscribe() {
-    if (process.env.NODE_ENV !== 'production') {
-      enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
-      return
-    }
     try {
-      await axios.put(`${getEndpoint()}/members/unsubscribe`, {
-        email: firebase.getUserEmail(),
-        group: name,
-      })
+      await axios.delete(
+        `${getEndpoint()}/sdc/groups/${groupId}/users/${currentUser.uid}`,
+      )
       enqueueSnackbar(`Unsubscribed from ${name}`, 'success')
       return
     } catch (err) {
@@ -73,15 +69,10 @@ function TeamCard({
   }
 
   async function subscribe() {
-    if (process.env.NODE_ENV !== 'production') {
-      enqueueSnackbar(`Subscribed to ${name}`, 'success')
-      return
-    }
     try {
-      await axios.put(`${getEndpoint()}/members/subscribe`, {
-        email: firebase.getUserEmail(),
-        group: name,
-      })
+      await axios.put(
+        `${getEndpoint()}/sdc/groups/${groupId}/users/${currentUser.uid}`,
+      )
       enqueueSnackbar(`Subscribed to ${name}`, 'success')
       return
     } catch (err) {
@@ -185,6 +176,7 @@ function TeamCard({
 }
 TeamCard.propTypes = {
   name: PropTypes.string.isRequired,
+  groupId: PropTypes.string.isRequired,
   leader: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,

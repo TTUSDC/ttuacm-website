@@ -1,6 +1,6 @@
-import React from 'react'
+import { FirebaseContext } from 'client/services/withFirebase'
 import PropTypes from 'prop-types'
-import { FirebaseContext } from 'context/Firebase'
+import React from 'react'
 
 export class MockFirebase {
   /**

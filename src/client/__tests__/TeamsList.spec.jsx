@@ -1,8 +1,9 @@
-import React from 'react'
-import Profile from 'assets/teams_page/profile.jpg'
-import TeamsList from 'components/TeamsList'
 import { expect } from 'chai'
+import Profile from 'client/assets/teams_page/profile.jpg'
+import TeamsList from 'client/pages/Teams/TeamsList'
+import React from 'react'
 import { cleanup, fireEvent, waitForElement } from 'react-testing-library'
+
 import { renderComponent } from './utils'
 
 const teams = [

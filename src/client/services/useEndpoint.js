@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useReducer, useEffect } from 'react'
 import axios from 'axios'
 
@@ -28,19 +29,17 @@ function reducer(state, action) {
 // the hook
 export function getEndpoint() {
   // Checks where the client should connect to
-  let connectionString = `${
-    process.env.REACT_APP_environment_connection
-  }/api/v2`
+  let connectionString = `${process.env.REACT_APP_environment_connection}/api`
   const { origin } = window.location
   if (origin === 'https://acm-texas-tech-web-app-2-beta.firebaseapp.com') {
     connectionString =
-      'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api/v2'
+      'https://us-central1-acm-texas-tech-web-app-2-beta.cloudfunctions.net/api'
   } else if (
     origin === 'https://acm-texas-tech-web-app-2.firebaseapp.com' ||
     origin.includes('acmttu')
   ) {
     connectionString =
-      'https://us-central1-acm-texas-tech-web-app-2.cloudfunctions.net/api/v2'
+      'https://us-central1-acm-texas-tech-web-app-2.cloudfunctions.net/api'
   }
 
   return connectionString
@@ -80,7 +79,7 @@ export default function useEndpoint(
     }
 
     fetchData()
-  }, [])
+  }, [connectionString, path, body, headers, params, method])
 
   return [state.err, state.isLoading, state.data]
 }
