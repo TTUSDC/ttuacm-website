@@ -28,6 +28,11 @@
       "docs"
     ]
   },
+  "emulators": {
+    "firestore": {
+      "port": "5002"
+    }
+  },
   "storage": {
     "rules": "storage.rules"
   }
