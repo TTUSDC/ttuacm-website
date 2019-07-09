@@ -10,7 +10,10 @@ const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
 adminConfig.credential = admin.credential.cert(serviceAccount)
 admin.initializeApp(adminConfig)
 
-const membersApp = require('./src/api/members/members.router')
+const Member = require('./src/api/members/members.model')
+const MemberService = require('./src/api/members/members.service')
+const MemberController = require('./src/api/members/members.controller')
+const SdcController = require('./src/api/sdc/sdc.controller')
 const eventsApp = require('./src/api/events/events.router')
 const environmentService = require('./src/api/environment/index')
 
@@ -23,81 +26,46 @@ api.use(cors)
 api.use(bp.json())
 api.use(bp.urlencoded({ extended: false }))
 
-api.use('/v2/members', membersApp)
-api.use('/v2/events', eventsApp)
-api.use('/v2/environment', environmentService)
-api.post('/v2/users', async (req, res) => {
-  if (!req.body.email) res.status(500).end()
-  else {
-    const doc = await admin
-      .firestore()
-      .collection('members')
-      .doc(req.body.email)
-      .get()
-
-    if (!doc.exists)
-      admin
-        .firestore()
-        .collection('members')
-        .doc(req.body.email)
-        .set({
-          hasPaidDues: false,
-          groups: [],
-          permissions: {
-            admin: 0,
-            officer: 0,
-            member: 1,
-          },
-        })
-    res.status(201).end()
-  }
-})
+api.use('/members', MemberController)
+api.use('/sdc', SdcController)
+api.use('/events', eventsApp)
+api.use('/environment', environmentService)
 
 module.exports.app = api
 module.exports.api = functions.https.onRequest(api)
 
-module.exports.createNewUser = functions.auth.user().onCreate((user) => {
-  admin
-    .firestore()
-    .collection('members')
-    .doc(user.email)
-    .set({
-      hasPaidDues: false,
-      groups: [],
-      permissions: {
-        admin: 0,
-        officer: 0,
-        member: 1,
-      },
-    })
-  return 1
-})
-
 // Creates a new user in the database after every login
-module.exports.createNewUser = functions.auth.user().onCreate((user) => {
-  admin
-    .firestore()
-    .collection('members')
-    .doc(user.email)
-    .set({
-      hasPaidDues: false,
-      groups: [],
-      permissions: {
-        admin: 0,
-        officer: 0,
-        member: 1,
-      },
-    })
-  return 1
+module.exports.createNewUser = functions.auth.user().onCreate(async (user) => {
+  const svc = new MemberService()
+  const newMember = new Member()
+
+  // eslint-disable-next-line prefer-const
+  let [firstName, ...lastName] = user.displayName.split(' ')
+  lastName = lastName.join(' ')
+
+  newMember.firstName = firstName
+  newMember.lastName = lastName
+
+  try {
+    await svc.createEntity(user.uid, newMember)
+    return 0
+  } catch (err) {
+    console.error(err)
+    return 1
+  }
 })
 
 // Deletes user in the database if they ever get deleted
-module.exports.deleteExistingUser = functions.auth.user().onDelete((user) => {
-  admin
-    .firestore()
-    .collection('members')
-    .doc(user.email)
-    .delete()
+module.exports.deleteExistingUser = functions.auth
+  .user()
+  .onDelete(async (user) => {
+    const svc = new MemberService()
 
-  return 1
-})
+    try {
+      await svc.deleteEntityById(user.uid)
+      return 0
+    } catch (err) {
+      console.error(err)
+      return 1
+    }
+  })
