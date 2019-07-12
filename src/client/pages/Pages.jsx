@@ -12,6 +12,7 @@ import EventsPage from './Events/EventsPage'
 import LandingPage from './Landing/LandingPage'
 import NotFoundPage from './NotFound/NotFoundPage'
 import TeamsPage from './Teams/TeamsPage'
+import Console from './Console/Console'
 
 const styles = (theme) => ({
   Main: {
@@ -47,6 +48,7 @@ const Main = ({ classes = {} }) => (
           <TeamsPage path='/teams' />
           <EventsPage path='/events' />
           <AuthenticationPage path='/auth' />
+          <Console path='/console' />
           <NotFoundPage default />
         </Router>
       </main>

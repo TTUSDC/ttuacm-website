@@ -9,6 +9,7 @@ const routes = [
   ['/about', 'AboutUs'],
   ['/events', 'Events'],
   ['/teams', 'Teams'],
+  ['/console', 'Console'],
 ]
 
 const DesktopNavigation = ({
