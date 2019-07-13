@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import SideBar from './components/layout/SideNavBar'
+import Body from './components/layout/ConsoleBody'
 
 class Console extends Component {
   render() {
     return (
       <div>
-        <SideBar />
+        <Body />
       </div>
     )
   }

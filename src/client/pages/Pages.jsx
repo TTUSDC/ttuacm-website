@@ -48,8 +48,8 @@ const Main = ({ classes = {} }) => (
           <TeamsPage path='/teams' />
           <EventsPage path='/events' />
           <AuthenticationPage path='/auth' />
-          <Console path='/console' />
           <NotFoundPage default />
+          <Console path='/auth' default />
         </Router>
       </main>
       <Footer />
