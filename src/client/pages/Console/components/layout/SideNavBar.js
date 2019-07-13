@@ -91,7 +91,7 @@ class ConsoleMenu extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant='h6' color='inherit' noWrap>
-              Responsive drawer
+              ACM Console
             </Typography>
           </Toolbar>
         </AppBar>
