@@ -11,7 +11,7 @@ export class PieChart extends Component {
         {(percentage) => (
           <CircularProgressbar
             value={percentage}
-            text={`${percentage * 300}`}
+            text={`${(percentage * 300) / 100}`}
             styles={buildStyles({
               pathTransitionDuration: 0.15,
             })}
