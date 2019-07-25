@@ -49,7 +49,7 @@ const Main = ({ classes = {} }) => (
           <EventsPage path='/events' />
           <AuthenticationPage path='/auth' />
           <NotFoundPage default />
-          <Console path='/auth' default />
+          <Console path='/console' />
         </Router>
       </main>
       <Footer />

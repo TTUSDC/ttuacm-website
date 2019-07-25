@@ -6,13 +6,12 @@ import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 import Hidden from '@material-ui/core/Hidden'
 import IconButton from '@material-ui/core/IconButton'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
 import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
+import { MenuItem, MenuList } from '@material-ui/core'
+import Dashboard from '../dashboard/Dashboard'
 
 const drawerWidth = 350
 
@@ -58,21 +57,28 @@ class ConsoleMenu extends React.Component {
   }
 
   render() {
-    const { classes, theme } = this.props
+    const { classes, theme, children } = this.props
 
     const drawer = (
       <div>
         <div className={classes.toolbar} />
         <Divider />
-        <List>
-          {['Home', 'Members', 'Officers', 'Events', 'Committees'].map(
-            (text) => (
-              <ListItem button key={text}>
-                <ListItemText primary={text} />
-              </ListItem>
-            ),
-          )}
-        </List>
+        <MenuList>
+          <a href='/console' style={{ textDecoration: 'none' }}>
+            <MenuItem>
+              <Typography variant='title' color='inherit' noWrap>
+                Home
+              </Typography>
+            </MenuItem>
+          </a>
+          <a href='/console/members' style={{ textDecoration: 'none' }}>
+            <MenuItem>Members</MenuItem>
+          </a>
+          <a href='/console/officers' style={{ textDecoration: 'none' }}>
+            <MenuItem>Officers</MenuItem>
+          </a>
+        </MenuList>
+
         <Divider />
       </div>
     )
@@ -90,7 +96,7 @@ class ConsoleMenu extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant='h6' color='inherit' noWrap>
+            <Typography variant='title' color='inherit' noWrap>
               ACM Console
             </Typography>
           </Toolbar>
@@ -108,6 +114,7 @@ class ConsoleMenu extends React.Component {
                 paper: classes.drawerPaper,
               }}
             >
+              {Dashboard}
               {drawer}
             </Drawer>
           </Hidden>
@@ -123,9 +130,10 @@ class ConsoleMenu extends React.Component {
             </Drawer>
           </Hidden>
         </nav>
+
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <h1>Hello world</h1>
+          {children}
         </main>
       </div>
     )
@@ -135,6 +143,7 @@ ConsoleMenu.propTypes = {
   classes: PropTypes.isRequired,
   container: PropTypes.isRequired,
   theme: PropTypes,
+  children: PropTypes,
 }
 
 export default withStyles(styles, { withTheme: true })(ConsoleMenu)

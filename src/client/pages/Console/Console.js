@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
-import Body from './components/layout/ConsoleBody'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Home from './pages/ConsoleHome'
 
 class Console extends Component {
   render() {
     return (
-      <div>
-        <Body />
-      </div>
+      <Router>
+        <div>
+          <Switch>
+            <Route path='/' component={Home} />
+          </Switch>
+        </div>
+      </Router>
     )
   }
 }
