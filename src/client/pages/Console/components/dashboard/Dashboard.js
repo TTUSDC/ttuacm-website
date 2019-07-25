@@ -17,9 +17,14 @@ export default function Dashboard() {
             }}
           >
             <NumberOfMembers percentage={100} totalMembers={300} />
-            <Typography variant='h3' style={{ color: 'black' }}>
-              ACM Members
-            </Typography>
+            <div className='progressBar' style={{ paddingTop: 30 }}>
+              <Typography
+                variant='h6'
+                style={{ color: 'black', textEmphasis: 'true' }}
+              >
+                ACM Paying Members
+              </Typography>
+            </div>
           </Paper>
         </Grid>
         <Grid item xs={6}>
@@ -31,9 +36,14 @@ export default function Dashboard() {
             }}
           >
             <NumberOfMembers percentage={40} totalMembers={300} />
-            <Typography variant='h3' style={{ color: 'black' }}>
-              ACM Paying Members
-            </Typography>
+            <div className='progressBar' style={{ paddingTop: 30 }}>
+              <Typography
+                variant='h6'
+                style={{ color: 'black', textEmphasis: 'true' }}
+              >
+                ACM Paying Members
+              </Typography>
+            </div>
           </Paper>
         </Grid>
       </Grid>
