@@ -16,7 +16,7 @@ export default function Dashboard() {
               backgroundColor: 'white',
             }}
           >
-            <NumberOfMembers percentage={100} />
+            <NumberOfMembers percentage={100} totalMembers={300} />
             <Typography variant='h3' style={{ color: 'black' }}>
               ACM Members
             </Typography>
@@ -30,7 +30,7 @@ export default function Dashboard() {
               backgroundColor: 'white',
             }}
           >
-            <NumberOfMembers percentage={40} />
+            <NumberOfMembers percentage={40} totalMembers={300} />
             <Typography variant='h3' style={{ color: 'black' }}>
               ACM Paying Members
             </Typography>

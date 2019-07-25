@@ -1,31 +1,14 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-class AdaptiveAnimation extends React.Component {
-  static defaultProps = {
-    interval: 1000,
-  }
+// If you don't have a version of React that supports
+// hooks, you can use a class-based version of this
+// component in ProgressProviderUsingClass.js
+const ProgressProvider = ({ valueStart, valueEnd, children }) => {
+  const [value, setValue] = React.useState(valueStart)
+  React.useEffect(() => {
+    setValue(valueEnd)
+  }, [valueEnd])
 
-  state = {
-    valuesIndex: 0,
-  }
-
-  componentDidMount() {
-    setInterval(() => {
-      this.setState({
-        valuesIndex: (this.state.valuesIndex + 1) % this.props.values.length,
-      })
-    }, this.props.interval)
-  }
-
-  render() {
-    return this.props.children(this.props.values[this.state.valuesIndex])
-  }
+  return children(value)
 }
-
-AdaptiveAnimation.propTypes = {
-  values: PropTypes,
-  children: PropTypes,
-  interval: PropTypes,
-}
-export default AdaptiveAnimation
+export default ProgressProvider
