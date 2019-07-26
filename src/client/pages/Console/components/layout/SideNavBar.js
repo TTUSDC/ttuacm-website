@@ -13,7 +13,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { MenuItem, MenuList } from '@material-ui/core'
 import Dashboard from '../dashboard/Dashboard'
 
-const drawerWidth = 350
+const drawerWidth = 300
 
 const styles = (theme) => ({
   root: {
@@ -23,6 +23,7 @@ const styles = (theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0,
+      color: 'black',
     },
   },
   appBar: {
@@ -38,11 +39,14 @@ const styles = (theme) => ({
     },
   },
   toolbar: theme.mixins.toolbar,
+
   drawerPaper: {
     width: drawerWidth,
+    padding: 20,
+    backgroundColor: 'black',
   },
   content: {
-    flexGrow: 1,
+    flexGrow: 3,
     padding: theme.spacing.unit * 3,
   },
 })
@@ -65,21 +69,41 @@ class ConsoleMenu extends React.Component {
         <Divider />
         <MenuList>
           <a href='/console' style={{ textDecoration: 'none' }}>
-            <MenuItem>
-              <Typography variant='title' color='inherit' noWrap>
+            <MenuItem style={{ padding: 30 }}>
+              <Typography variant='h4' color='inherit' align='center' noWrap>
                 Home
               </Typography>
             </MenuItem>
           </a>
           <a href='/console/members' style={{ textDecoration: 'none' }}>
-            <MenuItem>Members</MenuItem>
+            <MenuItem style={{ padding: 30 }}>
+              <Typography variant='h4' color='inherit' align='center' noWrap>
+                Members
+              </Typography>
+            </MenuItem>
           </a>
           <a href='/console/officers' style={{ textDecoration: 'none' }}>
-            <MenuItem>Officers</MenuItem>
+            <MenuItem style={{ padding: 30 }}>
+              <Typography variant='h4' color='inherit' align='center' noWrap>
+                Officers
+              </Typography>
+            </MenuItem>
+          </a>
+          <a href='/console/committees' style={{ textDecoration: 'none' }}>
+            <MenuItem style={{ padding: 30 }}>
+              <Typography variant='h4' color='inherit' align='center' noWrap>
+                Committees
+              </Typography>
+            </MenuItem>
+          </a>
+          <a href='/console/events' style={{ textDecoration: 'none' }}>
+            <MenuItem style={{ padding: 30 }}>
+              <Typography variant='h4' color='inherit' align='center' noWrap>
+                Events
+              </Typography>
+            </MenuItem>
           </a>
         </MenuList>
-
-        <Divider />
       </div>
     )
 
@@ -96,9 +120,6 @@ class ConsoleMenu extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant='title' color='inherit' noWrap>
-              ACM Console
-            </Typography>
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
