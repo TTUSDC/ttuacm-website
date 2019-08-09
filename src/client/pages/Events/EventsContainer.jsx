@@ -60,6 +60,8 @@ const EventsContainer = ({ classes = {} }) => {
     }
   }, [err, enqueueSnackbar])
 
+  if (err || loading) return null // TODO handle this later
+
   return (
     <Grid
       container
