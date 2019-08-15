@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import MUIDataTable from 'mui-datatables'
+import { Grid, Typography } from '@material-ui/core'
 
 const options = {
   filterType: 'multiselect',
@@ -10,8 +11,19 @@ export class TableView extends Component {
   render() {
     return (
       <div>
+        <Grid container spacing={12}>
+          <Grid item xs={4} />
+          <Grid item xs={4} style={{ padding: 50 }}>
+            <Typography
+              variant='h2'
+              style={{ color: 'black', textEmphasis: 'true' }}
+            >
+              {this.props.tableType}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} />
+        </Grid>
         <MUIDataTable
-          title={`${this.props.tableType} List`}
           data={this.props.data}
           columns={this.props.columns}
           options={options}

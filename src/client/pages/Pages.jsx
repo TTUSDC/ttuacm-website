@@ -53,16 +53,16 @@ const Main = ({ classes = {} }) => (
           <TeamsPage path='/teams' />
           <EventsPage path='/events' />
           <AuthenticationPage path='/auth' />
-          <NotFoundPage default />
           <Home path='/console' />
           <Members path='/console/members' />
           <Officers path='/console/officers' />
           <Events path='/console/events' />
           <Committees path='/console/committees' />
+          <NotFoundPage default />
         </Router>
       </main>
-      <Footer />
     </div>
+    <Footer />
   </div>
 )
 
