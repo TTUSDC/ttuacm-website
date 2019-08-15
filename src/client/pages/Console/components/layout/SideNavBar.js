@@ -11,7 +11,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 import { MenuItem, MenuList } from '@material-ui/core'
-import Dashboard from '../dashboard/Dashboard'
 import Logo from '../../../../assets/Tech.png'
 
 const drawerWidth = 240
@@ -139,7 +138,7 @@ class ConsoleMenu extends React.Component {
           <Hidden smUp implementation='css'>
             <Drawer
               container={this.props.container}
-              variant='permanent'
+              variant='temporary'
               anchor={theme.direction === 'rtl' ? 'right' : 'left'}
               open={this.state.mobileOpen}
               onClose={this.handleDrawerToggle}
@@ -147,7 +146,6 @@ class ConsoleMenu extends React.Component {
                 paper: classes.drawerPaper,
               }}
             >
-              {Dashboard}
               {drawer}
             </Drawer>
           </Hidden>
