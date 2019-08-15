@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 import { MenuItem, MenuList } from '@material-ui/core'
 import Dashboard from '../dashboard/Dashboard'
+import Logo from '../../../../assets/Tech.png'
 
 const drawerWidth = 300
 
@@ -51,6 +52,14 @@ const styles = (theme) => ({
   },
 })
 
+const logoStyle = {
+  height: 100,
+  width: drawerWidth - 10,
+  paddingRight: 10,
+  marginRight: 20,
+  objectFit: 'contain',
+}
+
 class ConsoleMenu extends React.Component {
   state = {
     mobileOpen: false,
@@ -66,39 +75,42 @@ class ConsoleMenu extends React.Component {
     const drawer = (
       <div>
         <div className={classes.toolbar} />
+        <div className='logo'>
+          <img src={Logo} alt='Logo' style={logoStyle} />
+        </div>
         <Divider />
         <MenuList>
           <a href='/console' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h4' color='inherit' align='center' noWrap>
+              <Typography variant='h5' color='inherit' align='center' noWrap>
                 Home
               </Typography>
             </MenuItem>
           </a>
           <a href='/console/members' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h4' color='inherit' align='center' noWrap>
+              <Typography variant='h5' color='inherit' align='center' noWrap>
                 Members
               </Typography>
             </MenuItem>
           </a>
           <a href='/console/officers' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h4' color='inherit' align='center' noWrap>
+              <Typography variant='h5' color='inherit' align='center' noWrap>
                 Officers
               </Typography>
             </MenuItem>
           </a>
           <a href='/console/committees' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h4' color='inherit' align='center' noWrap>
+              <Typography variant='h5' color='inherit' align='center' noWrap>
                 Committees
               </Typography>
             </MenuItem>
           </a>
           <a href='/console/events' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h4' color='inherit' align='center' noWrap>
+              <Typography variant='h5' color='inherit' align='center' noWrap>
                 Events
               </Typography>
             </MenuItem>
