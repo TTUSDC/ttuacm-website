@@ -40,35 +40,43 @@ const styles = (theme) => ({
   },
 })
 
-const Main = ({ classes = {} }) => (
+const Main = ({ classes }) => (
   <div className={classes.Main}>
     <CssBaseline />
-    <NavBar />
+    {window.location.href.indexOf('console') <= -1 && <NavBar />}
     <div className={classes.SiteContent}>
-      <main className={classes.Router}>
-        <Router primary={false}>
-          <LandingPage path='/' />
-          <LandingPage path='/home' />
-          <AboutUsPage path='/about' />
-          <TeamsPage path='/teams' />
-          <EventsPage path='/events' />
-          <AuthenticationPage path='/auth' />
-          <Home path='/console' />
-          <Members path='/console/members' />
-          <Officers path='/console/officers' />
-          <Events path='/console/events' />
-          <Committees path='/console/committees' />
-          <NotFoundPage default />
-        </Router>
-      </main>
+      <MainRouter classes={classes} />
     </div>
-    <Footer />
+    {window.location.href.indexOf('console') <= -1 && <Footer />}
   </div>
+)
+
+const MainRouter = ({ classes = {} }) => (
+  <main className={classes.Router}>
+    <Router primary={false}>
+      <LandingPage path='/' />
+      <LandingPage path='/home' />
+      <AboutUsPage path='/about' />
+      <TeamsPage path='/teams' />
+      <EventsPage path='/events' />
+      <AuthenticationPage path='/auth' />
+      <Home path='/console' />
+      <Members path='/console/members' />
+      <Officers path='/console/officers' />
+      <Events path='/console/events' />
+      <Committees path='/console/committees' />
+      <NotFoundPage default />
+    </Router>
+  </main>
 )
 
 Main.propTypes = {
   classes: PropTypes.shape({}),
   history: PropTypes.shape({}),
+}
+
+MainRouter.propTypes = {
+  classes: PropTypes.shape({}),
 }
 
 export default withStyles(styles)(Main)
