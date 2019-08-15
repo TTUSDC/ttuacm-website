@@ -14,7 +14,7 @@ import { MenuItem, MenuList } from '@material-ui/core'
 import Dashboard from '../dashboard/Dashboard'
 import Logo from '../../../../assets/Tech.png'
 
-const drawerWidth = 300
+const drawerWidth = 240
 
 const styles = (theme) => ({
   root: {
@@ -54,7 +54,7 @@ const styles = (theme) => ({
 
 const logoStyle = {
   height: 100,
-  width: drawerWidth - 10,
+  width: drawerWidth - 30,
   paddingRight: 10,
   marginRight: 20,
   objectFit: 'contain',
@@ -82,35 +82,35 @@ class ConsoleMenu extends React.Component {
         <MenuList>
           <a href='/console' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h5' color='inherit' align='center' noWrap>
+              <Typography variant='h6' color='inherit' align='center' noWrap>
                 Home
               </Typography>
             </MenuItem>
           </a>
           <a href='/console/members' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h5' color='inherit' align='center' noWrap>
+              <Typography variant='h6' color='inherit' align='center' noWrap>
                 Members
               </Typography>
             </MenuItem>
           </a>
           <a href='/console/officers' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h5' color='inherit' align='center' noWrap>
+              <Typography variant='h6' color='inherit' align='center' noWrap>
                 Officers
               </Typography>
             </MenuItem>
           </a>
           <a href='/console/committees' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h5' color='inherit' align='center' noWrap>
+              <Typography variant='h6' color='inherit' align='center' noWrap>
                 Committees
               </Typography>
             </MenuItem>
           </a>
           <a href='/console/events' style={{ textDecoration: 'none' }}>
             <MenuItem style={{ padding: 30 }}>
-              <Typography variant='h5' color='inherit' align='center' noWrap>
+              <Typography variant='h6' color='inherit' align='center' noWrap>
                 Events
               </Typography>
             </MenuItem>
@@ -139,7 +139,7 @@ class ConsoleMenu extends React.Component {
           <Hidden smUp implementation='css'>
             <Drawer
               container={this.props.container}
-              variant='temporary'
+              variant='permanent'
               anchor={theme.direction === 'rtl' ? 'right' : 'left'}
               open={this.state.mobileOpen}
               onClose={this.handleDrawerToggle}

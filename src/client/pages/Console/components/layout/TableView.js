@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
 
 const CustomTableCell = withStyles((theme) => ({
   head: {
@@ -105,36 +106,42 @@ function CustomizedTable(props) {
   const { classes } = props
 
   return (
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <CustomTableCell align='right'>Name</CustomTableCell>
-            <CustomTableCell align='right'>Paying Member</CustomTableCell>
-            <CustomTableCell align='right'>Committees</CustomTableCell>
-            <CustomTableCell align='right'>Officer</CustomTableCell>
-            <CustomTableCell align='right'>Active</CustomTableCell>
-            <CustomTableCell align='right'>Email </CustomTableCell>
-            <CustomTableCell align='right'>Events Attended</CustomTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow className={classes.row} key={row.id}>
-              <CustomTableCell align='right'>{row.Name}</CustomTableCell>
-              <CustomTableCell align='right'>{row.Paying}</CustomTableCell>
-              <CustomTableCell align='right'>{row.Committees}</CustomTableCell>
-              <CustomTableCell align='right'>{row.Officer}</CustomTableCell>
-              <CustomTableCell align='right'>{row.Active}</CustomTableCell>
-              <CustomTableCell align='right'>{row.Email}</CustomTableCell>
-              <CustomTableCell align='right'>
-                {row.eventsAttended}
-              </CustomTableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Paper>
+    <Grid container spacing={30}>
+      <Grid item xs={3}>
+        <Paper>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <CustomTableCell align='right'>Name</CustomTableCell>
+                <CustomTableCell align='right'>Paying Member</CustomTableCell>
+                <CustomTableCell align='right'>Committees</CustomTableCell>
+                <CustomTableCell align='right'>Officer</CustomTableCell>
+                <CustomTableCell align='right'>Active</CustomTableCell>
+                <CustomTableCell align='right'>Email </CustomTableCell>
+                <CustomTableCell align='right'>Events Attended</CustomTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow className={classes.row} key={row.id}>
+                  <CustomTableCell align='right'>{row.Name}</CustomTableCell>
+                  <CustomTableCell align='right'>{row.Paying}</CustomTableCell>
+                  <CustomTableCell align='right'>
+                    {row.Committees}
+                  </CustomTableCell>
+                  <CustomTableCell align='right'>{row.Officer}</CustomTableCell>
+                  <CustomTableCell align='right'>{row.Active}</CustomTableCell>
+                  <CustomTableCell align='right'>{row.Email}</CustomTableCell>
+                  <CustomTableCell align='right'>
+                    {row.eventsAttended}
+                  </CustomTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Grid>
+    </Grid>
   )
 }
 
