@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
+import SideNavBar from '../components/layout/SideNavBar'
 
 export class ConsoleCommittees extends Component {
   render() {
-    return <div>Hello, from ConsoleCommittees</div>
+    return (
+      <div>
+        <SideNavBar>Hello</SideNavBar>
+      </div>
+    )
   }
 }
 

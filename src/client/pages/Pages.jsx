@@ -12,7 +12,12 @@ import EventsPage from './Events/EventsPage'
 import LandingPage from './Landing/LandingPage'
 import NotFoundPage from './NotFound/NotFoundPage'
 import TeamsPage from './Teams/TeamsPage'
-import Console from './Console/Console'
+
+import Home from './Console/pages/ConsoleHome'
+import Members from './Console/pages/ConsoleMembers'
+import Officers from './Console/pages/ConsoleOfficers'
+import Events from './Console/pages/ConsoleEvents'
+import Committees from './Console/pages/ConsoleCommittees'
 
 const styles = (theme) => ({
   Main: {
@@ -49,7 +54,11 @@ const Main = ({ classes = {} }) => (
           <EventsPage path='/events' />
           <AuthenticationPage path='/auth' />
           <NotFoundPage default />
-          <Console path='/console' />
+          <Home path='/console' />
+          <Members path='/console/members' />
+          <Officers path='/console/officers' />
+          <Events path='/console/events' />
+          <Committees path='/console/committees' />
         </Router>
       </main>
       <Footer />
