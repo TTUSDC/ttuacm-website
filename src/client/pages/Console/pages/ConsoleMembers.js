@@ -10,7 +10,7 @@ const bodyStyle = {
 export class ConsoleMembers extends Component {
   state = {
     hasError: false,
-    columns: ['name', 'email', 'isPaying', 'isOfficer', 'committees'],
+    columns: ['Name', 'Email', 'Paying Member', 'Active', 'Committees'],
     rows: [],
   }
 
@@ -56,7 +56,7 @@ export class ConsoleMembers extends Component {
               object.name,
               object.email,
               object.isPaying,
-              object.isOfficer,
+              object.isActive,
               object.committees,
             ])}
           />
