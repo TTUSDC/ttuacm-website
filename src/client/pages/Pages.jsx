@@ -13,6 +13,12 @@ import LandingPage from './Landing/LandingPage'
 import NotFoundPage from './NotFound/NotFoundPage'
 import TeamsPage from './Teams/TeamsPage'
 
+import Home from './Console/pages/ConsoleHome'
+import Members from './Console/pages/ConsoleMembers'
+import Officers from './Console/pages/ConsoleOfficers'
+import Events from './Console/pages/ConsoleEvents'
+import Committees from './Console/pages/ConsoleCommittees'
+
 const styles = (theme) => ({
   Main: {
     display: 'flex',
@@ -34,30 +40,43 @@ const styles = (theme) => ({
   },
 })
 
-const Main = ({ classes = {} }) => (
+const Main = ({ classes }) => (
   <div className={classes.Main}>
     <CssBaseline />
-    <NavBar />
+    {window.location.href.indexOf('console') <= -1 && <NavBar />}
     <div className={classes.SiteContent}>
-      <main className={classes.Router}>
-        <Router primary={false}>
-          <LandingPage path='/' />
-          <LandingPage path='/home' />
-          <AboutUsPage path='/about' />
-          <TeamsPage path='/teams' />
-          <EventsPage path='/events' />
-          <AuthenticationPage path='/auth' />
-          <NotFoundPage default />
-        </Router>
-      </main>
-      <Footer />
+      <MainRouter classes={classes} />
     </div>
+    {window.location.href.indexOf('console') <= -1 && <Footer />}
   </div>
+)
+
+const MainRouter = ({ classes = {} }) => (
+  <main className={classes.Router}>
+    <Router primary={false}>
+      <LandingPage path='/' />
+      <LandingPage path='/home' />
+      <AboutUsPage path='/about' />
+      <TeamsPage path='/teams' />
+      <EventsPage path='/events' />
+      <AuthenticationPage path='/auth' />
+      <Home path='/console' />
+      <Members path='/console/members' />
+      <Officers path='/console/officers' />
+      <Events path='/console/events' />
+      <Committees path='/console/committees' />
+      <NotFoundPage default />
+    </Router>
+  </main>
 )
 
 Main.propTypes = {
   classes: PropTypes.shape({}),
   history: PropTypes.shape({}),
+}
+
+MainRouter.propTypes = {
+  classes: PropTypes.shape({}),
 }
 
 export default withStyles(styles)(Main)

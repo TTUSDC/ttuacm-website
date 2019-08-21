@@ -28,6 +28,7 @@ class MembersController extends ACMController {
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 err.code OK
      */
+
     this.router.get('/', async (req, res) => {
       try {
         // Grabs all of the attributes to match and exclude the `limit` param
@@ -108,6 +109,7 @@ class MembersController extends ACMController {
 
         newMember.firstName = req.body.firstName
         newMember.lastName = req.body.lastName
+        newMember.email = req.body.email
 
         const savedMember = await this.service.createEntity(
           req.params.user_id,

@@ -11,10 +11,14 @@ const ACMModel = require('../shared/acm.model')
 class Member extends ACMModel {
   constructor() {
     super()
-
     this.firstName = ''
     this.lastName = ''
     this.hasPaidDues = false
+    this.committees = []
+    this.officer = false
+    this.active = true
+    this.eventsAttended = {}
+    this.email = ''
   }
 }
 

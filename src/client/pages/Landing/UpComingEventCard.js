@@ -33,7 +33,8 @@ function UpcomingEventCard({ defaultEvents = placeHolder }) {
 
   if (err || loading) return null // TODO handle this later
 
-  return <EventsList events={[events.allEvents[0]]} />
+  const displayedEvents = [events.allEvents[0]] || placeHolder
+  return <EventsList events={displayedEvents} />
 }
 
 UpcomingEventCard.propTypes = {
