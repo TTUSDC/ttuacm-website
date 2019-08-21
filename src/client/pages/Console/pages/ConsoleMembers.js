@@ -1,3 +1,4 @@
+/* eslint-disable chai-friendly/no-unused-expressions */
 import React, { Component } from 'react'
 import axios from 'axios'
 import SideNavBar from '../components/layout/SideNavBar'
@@ -17,14 +18,6 @@ export class ConsoleMembers extends Component {
   componentWillMount() {
     this.fetchData()
   }
-
-  // filterData(response) {
-  //   response.forEach((object) => {
-  //     this.setState({ rows: this.state.rows
-  //       .push([object.name, object.email, object.isPaying, object.isOfficer, object.committees]),
-  //     })
-  //   })
-  // }
 
   fetchData() {
     axios
