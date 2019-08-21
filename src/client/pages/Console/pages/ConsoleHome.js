@@ -1,28 +1,28 @@
 import React, { Component } from 'react'
-import { Grid, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import SideBar from '../components/layout/SideNavBar'
 import Dashboard from '../components/dashboard/Dashboard'
 
 const bodystyle = {
   backgroundColor: 'white',
 }
+
 export class ConsoleBody extends Component {
   render() {
     return (
       <div style={bodystyle}>
         <SideBar>
-          <Grid container spacing={12}>
-            <Grid item xs={4} />
-            <Grid item xs={4} style={{ padding: 10 }}>
-              <Typography
-                variant='h2'
-                style={{ color: 'black', textEmphasis: 'true' }}
-              >
-                Dashboard
-              </Typography>
-            </Grid>
-            <Grid item xs={4} />
-          </Grid>
+          <Typography
+            variant='h2'
+            style={{
+              color: 'black',
+              textEmphasis: 'true',
+              textAlign: 'center',
+              padding: 25,
+            }}
+          >
+            Dashboard
+          </Typography>
           <Dashboard />
         </SideBar>
       </div>
