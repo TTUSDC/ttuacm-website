@@ -37,7 +37,7 @@
     "firebase": "6.2.4",
     "firebase-admin": "7",
     "firebase-functions": "2",
-    "googleapis": "27",
+    "googleapis": "39",
     "mdi-react": "^5.3.0",
     "moment": "2.23.0",
     "react": "16.8.3",
